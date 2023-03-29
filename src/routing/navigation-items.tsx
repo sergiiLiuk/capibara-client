@@ -18,18 +18,25 @@ export function NavigationItems(): SiteNavigationItem[] {
   return useMemo(
     () => [
       {
-        key: "overview",
+        key: "dashboard",
         type: "route" as const,
-        name: "Overview",
+        name: "Dashboard",
         icon: undefined,
         route: RouteName.DASHBOARD,
       },
       {
-        key: "company",
+        key: "companies",
         type: "route" as const,
-        name: "Company",
+        name: "Companies",
         icon: undefined,
-        route: RouteName.COMPANY_PAGE,
+        route: RouteName.COMPANIES,
+      },
+      {
+        key: "people",
+        type: "route" as const,
+        name: "People",
+        icon: undefined,
+        route: RouteName.PEOPLE,
       },
     ],
     [scope]

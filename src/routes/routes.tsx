@@ -1,7 +1,9 @@
 import React from "react";
 import { AppRouteDefinition, RouteName } from "../routing/route.types";
-import { companyDetailPageRoutes } from "./company/company-page.route";
+import { companiesRoutes } from "./company/companies.route";
+
 import { notFoundRoute } from "./not-found/not-found.route";
+import { peopleRoutes } from "./person/people.route";
 
 export function createRoutes(options: {
   dashboard: React.ComponentType;
@@ -12,7 +14,8 @@ export function createRoutes(options: {
       path: "",
       element: <options.dashboard />,
     },
-    ...companyDetailPageRoutes,
+    ...companiesRoutes,
+    ...peopleRoutes,
 
     notFoundRoute,
   ];

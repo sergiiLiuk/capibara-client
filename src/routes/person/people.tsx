@@ -1,14 +1,10 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-// import { Outlet } from "../../routing/outlet";
+import { Outlet } from "react-router-dom";
 
 export default function Companies() {
   return (
     <div>
-      <p>Companies</p>
-      <Link to="/" className="underline">
-        Go to dashboard
-      </Link>
+      <p>People</p>
       <React.Suspense fallback={<div>Loading.. </div>}>
         {<Outlet />}
       </React.Suspense>

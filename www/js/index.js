@@ -2419,9 +2419,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React19 = require_react();
+          var React22 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4026,7 +4026,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React19.Children.forEach(props.children, function(child) {
+                  React22.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12473,7 +12473,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React19.Component().refs;
+          var emptyRefsObject = new React22.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26141,36 +26141,69 @@
     }
   });
 
-  // src/routes/company/company.tsx
-  var company_exports = {};
-  __export(company_exports, {
+  // src/routes/company/companies.tsx
+  var companies_exports = {};
+  __export(companies_exports, {
     default: () => Companies
   });
   function Companies() {
-    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("p", null, "Companies"), /* @__PURE__ */ import_react31.default.createElement(Link, { to: "/", className: "underline" }, "Go to dashboard"), /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Suspense, { fallback: /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react31.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("p", null, "Companies"), /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Suspense, { fallback: /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react31.default.createElement(Outlet, null)));
   }
   var import_react31;
-  var init_company = __esm({
-    "src/routes/company/company.tsx"() {
+  var init_companies = __esm({
+    "src/routes/company/companies.tsx"() {
       "use strict";
       import_react31 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
-  // src/routes/company/overview-tab.tsx
-  var overview_tab_exports = {};
-  __export(overview_tab_exports, {
-    default: () => OverviewTab
+  // src/routes/company/tabs/company-overview-tab.tsx
+  var company_overview_tab_exports = {};
+  __export(company_overview_tab_exports, {
+    default: () => CompanyOverviewTab
   });
-  function OverviewTab() {
+  function CompanyOverviewTab() {
     return /* @__PURE__ */ import_react32.default.createElement("div", null, "Company overview tab");
   }
   var import_react32;
-  var init_overview_tab = __esm({
-    "src/routes/company/overview-tab.tsx"() {
+  var init_company_overview_tab = __esm({
+    "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
       import_react32 = __toESM(require_react(), 1);
+    }
+  });
+
+  // src/routes/person/people.tsx
+  var people_exports = {};
+  __export(people_exports, {
+    default: () => Companies3
+  });
+  function Companies3() {
+    return /* @__PURE__ */ import_react36.default.createElement("div", null, /* @__PURE__ */ import_react36.default.createElement("p", null, "People"), /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Suspense, { fallback: /* @__PURE__ */ import_react36.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react36.default.createElement(Outlet, null)));
+  }
+  var import_react36;
+  var init_people = __esm({
+    "src/routes/person/people.tsx"() {
+      "use strict";
+      import_react36 = __toESM(require_react(), 1);
+      init_dist2();
+    }
+  });
+
+  // src/routes/person/tabs/people-overview-tab.tsx
+  var people_overview_tab_exports = {};
+  __export(people_overview_tab_exports, {
+    default: () => PeopleOverviewTab
+  });
+  function PeopleOverviewTab() {
+    return /* @__PURE__ */ import_react37.default.createElement("div", null, "People overview tab");
+  }
+  var import_react37;
+  var init_people_overview_tab = __esm({
+    "src/routes/person/tabs/people-overview-tab.tsx"() {
+      "use strict";
+      import_react37 = __toESM(require_react(), 1);
     }
   });
 
@@ -26180,19 +26213,19 @@
     default: () => Dashboard
   });
   function Dashboard() {
-    return /* @__PURE__ */ import_react37.default.createElement("div", null, /* @__PURE__ */ import_react37.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react37.default.createElement(Link, { to: "/company", className: "underline" }, "Go to companies"));
+    return /* @__PURE__ */ import_react40.default.createElement("div", null, /* @__PURE__ */ import_react40.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react40.default.createElement(Link, { to: "/company", className: "underline" }, "Go to companies"));
   }
-  var import_react37;
+  var import_react40;
   var init_dashboard = __esm({
     "src/routes/dashboard.tsx"() {
       "use strict";
-      import_react37 = __toESM(require_react(), 1);
+      import_react40 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/index.tsx
-  var import_react38 = __toESM(require_react(), 1);
+  var import_react41 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
@@ -30134,18 +30167,25 @@
     return (0, import_react25.useMemo)(
       () => [
         {
-          key: "overview",
+          key: "dashboard",
           type: "route",
-          name: "Overview",
+          name: "Dashboard",
           icon: void 0,
           route: "/" /* DASHBOARD */
         },
         {
-          key: "company",
+          key: "companies",
           type: "route",
-          name: "Company",
+          name: "Companies",
           icon: void 0,
-          route: "COMPANY_PAGE" /* COMPANY_PAGE */
+          route: "COMPANIES" /* COMPANIES */
+        },
+        {
+          key: "people",
+          type: "route",
+          name: "People",
+          icon: void 0,
+          route: "PEOPLE" /* PEOPLE */
         }
       ],
       [scope]
@@ -30257,28 +30297,28 @@
   }
 
   // src/routes/routes.tsx
-  var import_react36 = __toESM(require_react(), 1);
+  var import_react39 = __toESM(require_react(), 1);
 
-  // src/routes/company/company-page.route.tsx
+  // src/routes/company/companies.route.tsx
   var import_react33 = __toESM(require_react(), 1);
-  var CompanyPage = import_react33.default.lazy(() => Promise.resolve().then(() => (init_company(), company_exports)));
-  var OverviewTab2 = import_react33.default.lazy(() => Promise.resolve().then(() => (init_overview_tab(), overview_tab_exports)));
+  var Companies2 = import_react33.default.lazy(() => Promise.resolve().then(() => (init_companies(), companies_exports)));
+  var OverviewTab = import_react33.default.lazy(() => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports)));
   function Container(props) {
     const data = [];
     return /* @__PURE__ */ import_react33.default.createElement(props.component, { data });
   }
-  var companyDetailPageRoutes = [
+  var companiesRoutes = [
     {
-      name: "COMPANY_PAGE" /* COMPANY_PAGE */,
-      path: "company",
-      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: CompanyPage })
+      name: "COMPANIES" /* COMPANIES */,
+      path: "companies",
+      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: Companies2 })
+    },
+    {
+      name: "COMPANY_PAGE_OVERVIEW_TAB" /* COMPANY_PAGE_OVERVIEW_TAB */,
+      parent: "COMPANIES" /* COMPANIES */,
+      path: "companies/:id",
+      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: OverviewTab })
     }
-    // {
-    //   name: RouteName.COMPANY_PAGE_OVERVIEW_TAB,
-    //   parent: RouteName.COMPANY_PAGE,
-    //   path: "company/:id",
-    //   element: <Container component={OverviewTab} />,
-    // },
   ];
 
   // src/routes/not-found/not-found.route.tsx
@@ -30297,15 +30337,38 @@
     element: /* @__PURE__ */ import_react35.default.createElement(NotFoundPage, null)
   };
 
+  // src/routes/person/people.route.tsx
+  var import_react38 = __toESM(require_react(), 1);
+  var People = import_react38.default.lazy(() => Promise.resolve().then(() => (init_people(), people_exports)));
+  var OverviewTab2 = import_react38.default.lazy(() => Promise.resolve().then(() => (init_people_overview_tab(), people_overview_tab_exports)));
+  function Container2(props) {
+    const data = [];
+    return /* @__PURE__ */ import_react38.default.createElement(props.component, { data });
+  }
+  var peopleRoutes = [
+    {
+      name: "PEOPLE" /* PEOPLE */,
+      path: "people",
+      element: /* @__PURE__ */ import_react38.default.createElement(Container2, { component: People })
+    },
+    {
+      name: "PERSON_PAGE_OVERVIEW_TAB" /* PERSON_PAGE_OVERVIEW_TAB */,
+      parent: "PEOPLE" /* PEOPLE */,
+      path: "people/:id",
+      element: /* @__PURE__ */ import_react38.default.createElement(Container2, { component: OverviewTab2 })
+    }
+  ];
+
   // src/routes/routes.tsx
   function createRoutes(options) {
     return [
       {
         name: "/" /* DASHBOARD */,
         path: "",
-        element: /* @__PURE__ */ import_react36.default.createElement(options.dashboard, null)
+        element: /* @__PURE__ */ import_react39.default.createElement(options.dashboard, null)
       },
-      ...companyDetailPageRoutes,
+      ...companiesRoutes,
+      ...peopleRoutes,
       notFoundRoute
     ];
   }
@@ -30321,10 +30384,10 @@
       () => location.reload()
     );
   }
-  var dashboard = import_react38.default.lazy(() => Promise.resolve().then(() => (init_dashboard(), dashboard_exports)));
+  var dashboard = import_react41.default.lazy(() => Promise.resolve().then(() => (init_dashboard(), dashboard_exports)));
   var routes = [...createRoutes({ dashboard })];
   root.render(
-    /* @__PURE__ */ import_react38.default.createElement(import_react38.default.StrictMode, null, /* @__PURE__ */ import_react38.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react38.default.createElement(AppRouterProvider, { routes }, /* @__PURE__ */ import_react38.default.createElement(App, null))))
+    /* @__PURE__ */ import_react41.default.createElement(import_react41.default.StrictMode, null, /* @__PURE__ */ import_react41.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react41.default.createElement(AppRouterProvider, { routes }, /* @__PURE__ */ import_react41.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:
