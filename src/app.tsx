@@ -15,14 +15,5 @@ export default function App() {
       {status === "LOGGED_IN" && <Layout />}
       {status === "LOGGED_OUT" && <LoginForm />}
     </>
-    // <Routes>
-    //   <Route path="/" element={<Layout />}>
-    //     <Route index element={<Dashboard />} />
-    //     <Route path="login" element={<div>Login page</div>} />
-    //     <Route path="companies" element={<Companies />} />
-    //     <Route path="settings" element={<Settings />} />
-    //     <Route path="*" element={<NotFoundPage />} />
-    //   </Route>
-    // </Routes>
   );
 }

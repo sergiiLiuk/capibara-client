@@ -10,13 +10,13 @@ function Container(props: {
   component: React.ComponentType<{ data: any }>;
   showError?: boolean;
 }) {
-  const { id } = useParams<"id">();
-  if (id === undefined) return null;
-
+  // const { id } = useParams<"id">();
+  // if (id === undefined) return null;
+  const data: any = [];
   //   const { data, isLoading } = api.useWorkflowData({ id });
-  const { data, isLoading } = { data: [], isLoading: false };
-  if (isLoading) return <div>Loading..</div>;
-  if (data === undefined) return props.showError ? <div>Error</div> : null;
+  // const { data, isLoading } = { data: [], isLoading: false };
+  // if (isLoading) return <div>Loading..</div>;
+  // if (data === undefined) return props.showError ? <div>Error</div> : null;
 
   return <props.component data={data} />;
 }
@@ -24,14 +24,13 @@ function Container(props: {
 export const companyDetailPageRoutes: AppRouteDefinition[] = [
   {
     name: RouteName.COMPANY_PAGE,
-    path: "company/:id",
+    path: "company",
     element: <Container component={CompanyPage} />,
   },
-
-  {
-    name: RouteName.COMPANY_PAGE_OVERVIEW_TAB,
-    parent: RouteName.COMPANY_PAGE,
-    path: "",
-    element: <Container component={OverviewTab} />,
-  },
+  // {
+  //   name: RouteName.COMPANY_PAGE_OVERVIEW_TAB,
+  //   parent: RouteName.COMPANY_PAGE,
+  //   path: "company/:id",
+  //   element: <Container component={OverviewTab} />,
+  // },
 ];

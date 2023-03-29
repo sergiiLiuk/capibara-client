@@ -5,7 +5,7 @@ import App from "./app";
 import { createRoutes } from "./routes/routes";
 
 import { AppRouteDefinition } from "./routing/route.types";
-import { AppRouterProvider } from "./routing/router-provider";
+import { AppRouterProvider } from "./routing/router-context";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Failed to find the root element");

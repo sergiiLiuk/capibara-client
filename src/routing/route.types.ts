@@ -1,5 +1,5 @@
 export enum RouteName {
-  "DASHBOARD" = "DASHBOARD",
+  "DASHBOARD" = "/",
 
   "ADMIN_PAGE" = "ADMIN_PAGE",
 
@@ -21,7 +21,7 @@ export interface AppRouteDefinition {
   parent?: RouteName;
 
   /** An empty string denotes an index route. */
-  path: "";
+  path: any;
   element: React.ReactNode;
 }
 

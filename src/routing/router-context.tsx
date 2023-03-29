@@ -18,9 +18,6 @@ export function AppRouterProvider({ routes, children }: Props) {
   return (
     <AppRouterContext.Provider value={value}>
       {children}
-      {/* <RouteTitleProvider> */}
-      {/* <RouteTitleUpdaterProvider>{children}</RouteTitleUpdaterProvider> */}
-      {/* </RouteTitleProvider> */}
     </AppRouterContext.Provider>
   );
 }

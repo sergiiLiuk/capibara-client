@@ -2,10 +2,39 @@
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
+  var __defProps = Object.defineProperties;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
   var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a3, b3) => {
+    for (var prop in b3 ||= {})
+      if (__hasOwnProp.call(b3, prop))
+        __defNormalProp(a3, prop, b3[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b3)) {
+        if (__propIsEnum.call(b3, prop))
+          __defNormalProp(a3, prop, b3[prop]);
+      }
+    return a3;
+  };
+  var __spreadProps = (a3, b3) => __defProps(a3, __getOwnPropDescs(b3));
+  var __objRest = (source, exclude) => {
+    var target = {};
+    for (var prop in source)
+      if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+        target[prop] = source[prop];
+    if (source != null && __getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(source)) {
+        if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+          target[prop] = source[prop];
+      }
+    return target;
+  };
   var __esm = (fn, res) => function __init() {
     return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
   };
@@ -1120,7 +1149,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo4(create, deps) {
+          function useMemo5(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1891,7 +1920,7 @@
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect4;
-          exports.useMemo = useMemo4;
+          exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
           exports.useRef = useRef3;
           exports.useState = useState4;
@@ -2390,9 +2419,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React18 = require_react();
+          var React19 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React18.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -3997,7 +4026,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React18.Children.forEach(props.children, function(child) {
+                  React19.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12444,7 +12473,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React18.Component().refs;
+          var emptyRefsObject = new React19.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24305,6 +24334,15 @@
     }, [basename, navigator2, routePathnamesJson, locationPathname]);
     return navigate;
   }
+  function useOutlet(context) {
+    let outlet = React.useContext(RouteContext).outlet;
+    if (outlet) {
+      return /* @__PURE__ */ React.createElement(OutletContext.Provider, {
+        value: context
+      }, outlet);
+    }
+    return outlet;
+  }
   function useParams() {
     let {
       matches
@@ -24560,6 +24598,9 @@
       true ? warning(false, message) : void 0;
     }
   }
+  function Outlet(props) {
+    return useOutlet(props.context);
+  }
   function Router(_ref4) {
     let {
       basename: basenameProp = "/",
@@ -24613,7 +24654,7 @@
       value: locationContext
     }));
   }
-  var React, is, useState2, useEffect2, useLayoutEffect2, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot, canUseDOM, isServerEnvironment, shim, useSyncExternalStore, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
+  var React, is, useState2, useEffect2, useLayoutEffect2, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot, canUseDOM, isServerEnvironment, shim, useSyncExternalStore, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, OutletContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
   var init_dist = __esm({
     "node_modules/react-router/dist/index.js"() {
       init_router();
@@ -24663,6 +24704,7 @@
       if (true) {
         RouteErrorContext.displayName = "RouteError";
       }
+      OutletContext = /* @__PURE__ */ React.createContext(null);
       RenderErrorBoundary = class extends React.Component {
         constructor(props) {
           super(props);
@@ -26105,13 +26147,13 @@
     default: () => Companies
   });
   function Companies() {
-    return /* @__PURE__ */ import_react29.default.createElement("div", null, /* @__PURE__ */ import_react29.default.createElement("p", null, "Companies"), /* @__PURE__ */ import_react29.default.createElement(Link, { to: "/", className: "underline" }, "Go to dashboard"));
+    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("p", null, "Companies"), /* @__PURE__ */ import_react31.default.createElement(Link, { to: "/", className: "underline" }, "Go to dashboard"), /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Suspense, { fallback: /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react31.default.createElement(Outlet, null)));
   }
-  var import_react29;
+  var import_react31;
   var init_company = __esm({
     "src/routes/company/company.tsx"() {
       "use strict";
-      import_react29 = __toESM(require_react(), 1);
+      import_react31 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -26122,13 +26164,13 @@
     default: () => OverviewTab
   });
   function OverviewTab() {
-    return /* @__PURE__ */ import_react30.default.createElement("div", null, "Company overview tab");
+    return /* @__PURE__ */ import_react32.default.createElement("div", null, "Company overview tab");
   }
-  var import_react30;
+  var import_react32;
   var init_overview_tab = __esm({
     "src/routes/company/overview-tab.tsx"() {
       "use strict";
-      import_react30 = __toESM(require_react(), 1);
+      import_react32 = __toESM(require_react(), 1);
     }
   });
 
@@ -26138,30 +26180,30 @@
     default: () => Dashboard
   });
   function Dashboard() {
-    return /* @__PURE__ */ import_react35.default.createElement("div", null, /* @__PURE__ */ import_react35.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react35.default.createElement(Link, { to: "/companies", className: "underline" }, "Go to companies"));
+    return /* @__PURE__ */ import_react37.default.createElement("div", null, /* @__PURE__ */ import_react37.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react37.default.createElement(Link, { to: "/company", className: "underline" }, "Go to companies"));
   }
-  var import_react35;
+  var import_react37;
   var init_dashboard = __esm({
     "src/routes/dashboard.tsx"() {
       "use strict";
-      import_react35 = __toESM(require_react(), 1);
+      import_react37 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/index.tsx
-  var import_react36 = __toESM(require_react(), 1);
+  var import_react38 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react28 = __toESM(require_react(), 1);
+  var import_react30 = __toESM(require_react(), 1);
 
   // src/components/layout.tsx
-  var import_react26 = __toESM(require_react(), 1);
+  var import_react28 = __toESM(require_react(), 1);
   init_dist2();
 
-  // src/routing/router-provider.tsx
+  // src/routing/router-context.tsx
   var import_react = __toESM(require_react(), 1);
 
   // src/routing/route.model.tsx
@@ -26244,7 +26286,7 @@
     }
   };
 
-  // src/routing/router-provider.tsx
+  // src/routing/router-context.tsx
   var AppRouterContext = (0, import_react.createContext)(null);
   function AppRouterProvider({ routes: routes2, children }) {
     const value = (0, import_react.useMemo)(
@@ -30081,89 +30123,187 @@
   }
 
   // src/components/sidebar.tsx
-  var import_react25 = __toESM(require_react(), 1);
+  var import_react27 = __toESM(require_react(), 1);
+  init_dist2();
   var import_classnames = __toESM(require_classnames(), 1);
+
+  // src/routing/navigation-items.tsx
+  var import_react25 = __toESM(require_react(), 1);
+  function NavigationItems() {
+    const scope = {};
+    return (0, import_react25.useMemo)(
+      () => [
+        {
+          key: "overview",
+          type: "route",
+          name: "Overview",
+          icon: void 0,
+          route: "/" /* DASHBOARD */
+        },
+        {
+          key: "company",
+          type: "route",
+          name: "Company",
+          icon: void 0,
+          route: "COMPANY_PAGE" /* COMPANY_PAGE */
+        }
+      ],
+      [scope]
+    );
+  }
+
+  // src/routing/use-get-route-path.ts
+  init_dist2();
+
+  // src/routing/router.ts
+  init_dist2();
+  function useRouteQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  function useRouteHash() {
+    return new URLSearchParams(useLocation().hash);
+  }
+
+  // src/routing/use-get-route-path.ts
+  function useGetRoutePath() {
+    const appRoutes = useAppRoutes();
+    const currentParams = useParams();
+    const currentSearch = useRouteQuery();
+    const currentHash = useRouteHash();
+    return ({ to, params, search, hash, keep }) => {
+      const route = appRoutes.byName[to];
+      if (!route)
+        return null;
+      const mergedParams = keep ? __spreadValues(__spreadValues({}, currentParams), params) : params;
+      const mergedSearch = keep ? mergeParams(currentSearch, search) : search;
+      const mergedHash = keep ? mergeParams(currentHash, hash) : hash;
+      return route.getPath({
+        params: mergedParams,
+        search: mergedSearch,
+        hash: mergedHash
+      });
+    };
+  }
+  function mergeParams(current, patch) {
+    if (!patch)
+      return current;
+    const uPatch = patch instanceof URLSearchParams ? patch : new URLSearchParams(patch);
+    const merged = new URLSearchParams(current);
+    for (const [key, value] of uPatch.entries())
+      merged.set(key, value);
+    return merged;
+  }
+
+  // src/components/link.tsx
+  var import_react26 = __toESM(require_react(), 1);
+  init_dist2();
+  var Link2 = import_react26.default.forwardRef(function Link3(props, ref) {
+    const _a = props, { to, params, search, hash, keep, children } = _a, rest = __objRest(_a, ["to", "params", "search", "hash", "keep", "children"]);
+    const getRoutePath = useGetRoutePath();
+    const path = getRoutePath({ to, params, search, hash, keep });
+    if (!path)
+      return import_react26.default.createElement("span", __spreadProps(__spreadValues({}, rest), { ref }), children);
+    return import_react26.default.createElement(
+      Link,
+      __spreadProps(__spreadValues({}, rest), { to: path, ref }),
+      children
+    );
+  });
+
+  // src/components/sidebar.tsx
   function Sidebar() {
-    return /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, "Capibara"), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
+    const items = NavigationItems();
+    return /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, "Capibara"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react27.default.createElement(SidebarLink, { key: link.key, item: link }))), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
   }
   var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
+  function SidebarLink({ item }) {
+    const { pathname } = useLocation();
+    const getRoutePath = useGetRoutePath();
+    const path = getRoutePath({ to: item.route, params: item.params });
+    return path ? /* @__PURE__ */ import_react27.default.createElement(
+      Link2,
+      __spreadValues({
+        className: (0, import_classnames.default)(
+          pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
+          linkClasses
+        )
+      }, {
+        to: item.route,
+        params: item.params,
+        onClick: () => {
+        }
+      }),
+      /* @__PURE__ */ import_react27.default.createElement("div", null, " ", item.name)
+    ) : /* @__PURE__ */ import_react27.default.createElement("span", null, "No link");
+  }
 
   // src/components/layout.tsx
   function Layout() {
     const routes2 = useAppRoutes();
     const route = useRoutes(routes2.toRouteObjects());
-    console.log(route);
-    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react26.default.createElement(Sidebar, null), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react26.default.createElement(Header, null), /* @__PURE__ */ import_react26.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, route)));
+    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react28.default.createElement(Sidebar, null), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react28.default.createElement(Header, null), /* @__PURE__ */ import_react28.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Suspense, { fallback: /* @__PURE__ */ import_react28.default.createElement("div", null, "Loding...") }, route))));
   }
 
   // src/components/login-form.tsx
-  var import_react27 = __toESM(require_react(), 1);
+  var import_react29 = __toESM(require_react(), 1);
   function LoginForm() {
-    return /* @__PURE__ */ import_react27.default.createElement("div", null, "Login form");
+    return /* @__PURE__ */ import_react29.default.createElement("div", null, "Login form");
   }
 
   // src/app.tsx
   function App() {
     const { status } = { status: "LOGGED_IN" };
-    return /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Fragment, null, status === "LOGGED_IN" && /* @__PURE__ */ import_react28.default.createElement(Layout, null), status === "LOGGED_OUT" && /* @__PURE__ */ import_react28.default.createElement(LoginForm, null));
+    return /* @__PURE__ */ import_react30.default.createElement(import_react30.default.Fragment, null, status === "LOGGED_IN" && /* @__PURE__ */ import_react30.default.createElement(Layout, null), status === "LOGGED_OUT" && /* @__PURE__ */ import_react30.default.createElement(LoginForm, null));
   }
 
   // src/routes/routes.tsx
-  var import_react34 = __toESM(require_react(), 1);
+  var import_react36 = __toESM(require_react(), 1);
 
   // src/routes/company/company-page.route.tsx
-  var import_react31 = __toESM(require_react(), 1);
-  init_dist2();
-  var CompanyPage = import_react31.default.lazy(() => Promise.resolve().then(() => (init_company(), company_exports)));
-  var OverviewTab2 = import_react31.default.lazy(() => Promise.resolve().then(() => (init_overview_tab(), overview_tab_exports)));
+  var import_react33 = __toESM(require_react(), 1);
+  var CompanyPage = import_react33.default.lazy(() => Promise.resolve().then(() => (init_company(), company_exports)));
+  var OverviewTab2 = import_react33.default.lazy(() => Promise.resolve().then(() => (init_overview_tab(), overview_tab_exports)));
   function Container(props) {
-    const { id } = useParams();
-    if (id === void 0)
-      return null;
-    const { data, isLoading } = { data: [], isLoading: false };
-    if (isLoading)
-      return /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading..");
-    if (data === void 0)
-      return props.showError ? /* @__PURE__ */ import_react31.default.createElement("div", null, "Error") : null;
-    return /* @__PURE__ */ import_react31.default.createElement(props.component, { data });
+    const data = [];
+    return /* @__PURE__ */ import_react33.default.createElement(props.component, { data });
   }
   var companyDetailPageRoutes = [
     {
       name: "COMPANY_PAGE" /* COMPANY_PAGE */,
-      path: "company/:id",
-      element: /* @__PURE__ */ import_react31.default.createElement(Container, { component: CompanyPage })
-    },
-    {
-      name: "COMPANY_PAGE_OVERVIEW_TAB" /* COMPANY_PAGE_OVERVIEW_TAB */,
-      parent: "COMPANY_PAGE" /* COMPANY_PAGE */,
-      path: "",
-      element: /* @__PURE__ */ import_react31.default.createElement(Container, { component: OverviewTab2 })
+      path: "company",
+      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: CompanyPage })
     }
+    // {
+    //   name: RouteName.COMPANY_PAGE_OVERVIEW_TAB,
+    //   parent: RouteName.COMPANY_PAGE,
+    //   path: "company/:id",
+    //   element: <Container component={OverviewTab} />,
+    // },
   ];
 
   // src/routes/not-found/not-found.route.tsx
-  var import_react33 = __toESM(require_react(), 1);
+  var import_react35 = __toESM(require_react(), 1);
 
   // src/routes/not-found/not-found.tsx
-  var import_react32 = __toESM(require_react(), 1);
+  var import_react34 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react32.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react34.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/not-found/not-found.route.tsx
   var notFoundRoute = {
     name: "NOT_FOUND" /* NOT_FOUND */,
     path: "*",
-    element: /* @__PURE__ */ import_react33.default.createElement(NotFoundPage, null)
+    element: /* @__PURE__ */ import_react35.default.createElement(NotFoundPage, null)
   };
 
   // src/routes/routes.tsx
   function createRoutes(options) {
     return [
       {
-        name: "DASHBOARD" /* DASHBOARD */,
+        name: "/" /* DASHBOARD */,
         path: "",
-        element: /* @__PURE__ */ import_react34.default.createElement(options.dashboard, null)
+        element: /* @__PURE__ */ import_react36.default.createElement(options.dashboard, null)
       },
       ...companyDetailPageRoutes,
       notFoundRoute
@@ -30181,10 +30321,10 @@
       () => location.reload()
     );
   }
-  var dashboard = import_react36.default.lazy(() => Promise.resolve().then(() => (init_dashboard(), dashboard_exports)));
+  var dashboard = import_react38.default.lazy(() => Promise.resolve().then(() => (init_dashboard(), dashboard_exports)));
   var routes = [...createRoutes({ dashboard })];
   root.render(
-    /* @__PURE__ */ import_react36.default.createElement(import_react36.default.StrictMode, null, /* @__PURE__ */ import_react36.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react36.default.createElement(AppRouterProvider, { routes }, /* @__PURE__ */ import_react36.default.createElement(App, null))))
+    /* @__PURE__ */ import_react38.default.createElement(import_react38.default.StrictMode, null, /* @__PURE__ */ import_react38.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react38.default.createElement(AppRouterProvider, { routes }, /* @__PURE__ */ import_react38.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:
