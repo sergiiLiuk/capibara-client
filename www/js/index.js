@@ -2,9 +2,7 @@
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
-  var __defProps = Object.defineProperties;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getOwnPropSymbols = Object.getOwnPropertySymbols;
   var __getProtoOf = Object.getPrototypeOf;
@@ -21,19 +19,6 @@
           __defNormalProp(a3, prop, b3[prop]);
       }
     return a3;
-  };
-  var __spreadProps = (a3, b3) => __defProps(a3, __getOwnPropDescs(b3));
-  var __objRest = (source, exclude) => {
-    var target = {};
-    for (var prop in source)
-      if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-        target[prop] = source[prop];
-    if (source != null && __getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(source)) {
-        if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-          target[prop] = source[prop];
-      }
-    return target;
   };
   var __esm = (fn, res) => function __init() {
     return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
@@ -61,6 +46,2310 @@
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
+  var __async = (__this, __arguments, generator) => {
+    return new Promise((resolve, reject) => {
+      var fulfilled = (value) => {
+        try {
+          step(generator.next(value));
+        } catch (e3) {
+          reject(e3);
+        }
+      };
+      var rejected = (value) => {
+        try {
+          step(generator.throw(value));
+        } catch (e3) {
+          reject(e3);
+        }
+      };
+      var step = (x2) => x2.done ? resolve(x2.value) : Promise.resolve(x2.value).then(fulfilled, rejected);
+      step((generator = generator.apply(__this, __arguments)).next());
+    });
+  };
+
+  // node_modules/@tanstack/query-core/build/lib/subscribable.mjs
+  var Subscribable;
+  var init_subscribable = __esm({
+    "node_modules/@tanstack/query-core/build/lib/subscribable.mjs"() {
+      Subscribable = class {
+        constructor() {
+          this.listeners = [];
+          this.subscribe = this.subscribe.bind(this);
+        }
+        subscribe(listener3) {
+          this.listeners.push(listener3);
+          this.onSubscribe();
+          return () => {
+            this.listeners = this.listeners.filter((x2) => x2 !== listener3);
+            this.onUnsubscribe();
+          };
+        }
+        hasListeners() {
+          return this.listeners.length > 0;
+        }
+        onSubscribe() {
+        }
+        onUnsubscribe() {
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/utils.mjs
+  function noop() {
+    return void 0;
+  }
+  function functionalUpdate(updater, input) {
+    return typeof updater === "function" ? updater(input) : updater;
+  }
+  function isValidTimeout(value) {
+    return typeof value === "number" && value >= 0 && value !== Infinity;
+  }
+  function timeUntilStale(updatedAt, staleTime) {
+    return Math.max(updatedAt + (staleTime || 0) - Date.now(), 0);
+  }
+  function parseQueryArgs(arg1, arg2, arg3) {
+    if (!isQueryKey(arg1)) {
+      return arg1;
+    }
+    if (typeof arg2 === "function") {
+      return {
+        ...arg3,
+        queryKey: arg1,
+        queryFn: arg2
+      };
+    }
+    return {
+      ...arg2,
+      queryKey: arg1
+    };
+  }
+  function parseFilterArgs(arg1, arg2, arg3) {
+    return isQueryKey(arg1) ? [{
+      ...arg2,
+      queryKey: arg1
+    }, arg3] : [arg1 || {}, arg2];
+  }
+  function matchQuery(filters, query) {
+    const {
+      type = "all",
+      exact,
+      fetchStatus,
+      predicate,
+      queryKey,
+      stale
+    } = filters;
+    if (isQueryKey(queryKey)) {
+      if (exact) {
+        if (query.queryHash !== hashQueryKeyByOptions(queryKey, query.options)) {
+          return false;
+        }
+      } else if (!partialMatchKey(query.queryKey, queryKey)) {
+        return false;
+      }
+    }
+    if (type !== "all") {
+      const isActive = query.isActive();
+      if (type === "active" && !isActive) {
+        return false;
+      }
+      if (type === "inactive" && isActive) {
+        return false;
+      }
+    }
+    if (typeof stale === "boolean" && query.isStale() !== stale) {
+      return false;
+    }
+    if (typeof fetchStatus !== "undefined" && fetchStatus !== query.state.fetchStatus) {
+      return false;
+    }
+    if (predicate && !predicate(query)) {
+      return false;
+    }
+    return true;
+  }
+  function matchMutation(filters, mutation) {
+    const {
+      exact,
+      fetching,
+      predicate,
+      mutationKey
+    } = filters;
+    if (isQueryKey(mutationKey)) {
+      if (!mutation.options.mutationKey) {
+        return false;
+      }
+      if (exact) {
+        if (hashQueryKey(mutation.options.mutationKey) !== hashQueryKey(mutationKey)) {
+          return false;
+        }
+      } else if (!partialMatchKey(mutation.options.mutationKey, mutationKey)) {
+        return false;
+      }
+    }
+    if (typeof fetching === "boolean" && mutation.state.status === "loading" !== fetching) {
+      return false;
+    }
+    if (predicate && !predicate(mutation)) {
+      return false;
+    }
+    return true;
+  }
+  function hashQueryKeyByOptions(queryKey, options) {
+    const hashFn = (options == null ? void 0 : options.queryKeyHashFn) || hashQueryKey;
+    return hashFn(queryKey);
+  }
+  function hashQueryKey(queryKey) {
+    return JSON.stringify(queryKey, (_2, val) => isPlainObject(val) ? Object.keys(val).sort().reduce((result, key) => {
+      result[key] = val[key];
+      return result;
+    }, {}) : val);
+  }
+  function partialMatchKey(a3, b3) {
+    return partialDeepEqual(a3, b3);
+  }
+  function partialDeepEqual(a3, b3) {
+    if (a3 === b3) {
+      return true;
+    }
+    if (typeof a3 !== typeof b3) {
+      return false;
+    }
+    if (a3 && b3 && typeof a3 === "object" && typeof b3 === "object") {
+      return !Object.keys(b3).some((key) => !partialDeepEqual(a3[key], b3[key]));
+    }
+    return false;
+  }
+  function replaceEqualDeep(a3, b3) {
+    if (a3 === b3) {
+      return a3;
+    }
+    const array = isPlainArray(a3) && isPlainArray(b3);
+    if (array || isPlainObject(a3) && isPlainObject(b3)) {
+      const aSize = array ? a3.length : Object.keys(a3).length;
+      const bItems = array ? b3 : Object.keys(b3);
+      const bSize = bItems.length;
+      const copy = array ? [] : {};
+      let equalItems = 0;
+      for (let i5 = 0; i5 < bSize; i5++) {
+        const key = array ? i5 : bItems[i5];
+        copy[key] = replaceEqualDeep(a3[key], b3[key]);
+        if (copy[key] === a3[key]) {
+          equalItems++;
+        }
+      }
+      return aSize === bSize && equalItems === aSize ? a3 : copy;
+    }
+    return b3;
+  }
+  function shallowEqualObjects(a3, b3) {
+    if (a3 && !b3 || b3 && !a3) {
+      return false;
+    }
+    for (const key in a3) {
+      if (a3[key] !== b3[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function isPlainArray(value) {
+    return Array.isArray(value) && value.length === Object.keys(value).length;
+  }
+  function isPlainObject(o9) {
+    if (!hasObjectPrototype(o9)) {
+      return false;
+    }
+    const ctor = o9.constructor;
+    if (typeof ctor === "undefined") {
+      return true;
+    }
+    const prot = ctor.prototype;
+    if (!hasObjectPrototype(prot)) {
+      return false;
+    }
+    if (!prot.hasOwnProperty("isPrototypeOf")) {
+      return false;
+    }
+    return true;
+  }
+  function hasObjectPrototype(o9) {
+    return Object.prototype.toString.call(o9) === "[object Object]";
+  }
+  function isQueryKey(value) {
+    return Array.isArray(value);
+  }
+  function sleep(timeout) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  }
+  function scheduleMicrotask(callback) {
+    sleep(0).then(callback);
+  }
+  function getAbortController() {
+    if (typeof AbortController === "function") {
+      return new AbortController();
+    }
+    return;
+  }
+  function replaceData(prevData, data, options) {
+    if (options.isDataEqual != null && options.isDataEqual(prevData, data)) {
+      return prevData;
+    } else if (typeof options.structuralSharing === "function") {
+      return options.structuralSharing(prevData, data);
+    } else if (options.structuralSharing !== false) {
+      return replaceEqualDeep(prevData, data);
+    }
+    return data;
+  }
+  var isServer;
+  var init_utils = __esm({
+    "node_modules/@tanstack/query-core/build/lib/utils.mjs"() {
+      isServer = typeof window === "undefined" || "Deno" in window;
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/focusManager.mjs
+  var FocusManager, focusManager;
+  var init_focusManager = __esm({
+    "node_modules/@tanstack/query-core/build/lib/focusManager.mjs"() {
+      init_subscribable();
+      init_utils();
+      FocusManager = class extends Subscribable {
+        constructor() {
+          super();
+          this.setup = (onFocus) => {
+            if (!isServer && window.addEventListener) {
+              const listener3 = () => onFocus();
+              window.addEventListener("visibilitychange", listener3, false);
+              window.addEventListener("focus", listener3, false);
+              return () => {
+                window.removeEventListener("visibilitychange", listener3);
+                window.removeEventListener("focus", listener3);
+              };
+            }
+            return;
+          };
+        }
+        onSubscribe() {
+          if (!this.cleanup) {
+            this.setEventListener(this.setup);
+          }
+        }
+        onUnsubscribe() {
+          if (!this.hasListeners()) {
+            var _this$cleanup;
+            (_this$cleanup = this.cleanup) == null ? void 0 : _this$cleanup.call(this);
+            this.cleanup = void 0;
+          }
+        }
+        setEventListener(setup) {
+          var _this$cleanup2;
+          this.setup = setup;
+          (_this$cleanup2 = this.cleanup) == null ? void 0 : _this$cleanup2.call(this);
+          this.cleanup = setup((focused) => {
+            if (typeof focused === "boolean") {
+              this.setFocused(focused);
+            } else {
+              this.onFocus();
+            }
+          });
+        }
+        setFocused(focused) {
+          this.focused = focused;
+          if (focused) {
+            this.onFocus();
+          }
+        }
+        onFocus() {
+          this.listeners.forEach((listener3) => {
+            listener3();
+          });
+        }
+        isFocused() {
+          if (typeof this.focused === "boolean") {
+            return this.focused;
+          }
+          if (typeof document === "undefined") {
+            return true;
+          }
+          return [void 0, "visible", "prerender"].includes(document.visibilityState);
+        }
+      };
+      focusManager = new FocusManager();
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/onlineManager.mjs
+  var OnlineManager, onlineManager;
+  var init_onlineManager = __esm({
+    "node_modules/@tanstack/query-core/build/lib/onlineManager.mjs"() {
+      init_subscribable();
+      init_utils();
+      OnlineManager = class extends Subscribable {
+        constructor() {
+          super();
+          this.setup = (onOnline) => {
+            if (!isServer && window.addEventListener) {
+              const listener3 = () => onOnline();
+              window.addEventListener("online", listener3, false);
+              window.addEventListener("offline", listener3, false);
+              return () => {
+                window.removeEventListener("online", listener3);
+                window.removeEventListener("offline", listener3);
+              };
+            }
+            return;
+          };
+        }
+        onSubscribe() {
+          if (!this.cleanup) {
+            this.setEventListener(this.setup);
+          }
+        }
+        onUnsubscribe() {
+          if (!this.hasListeners()) {
+            var _this$cleanup;
+            (_this$cleanup = this.cleanup) == null ? void 0 : _this$cleanup.call(this);
+            this.cleanup = void 0;
+          }
+        }
+        setEventListener(setup) {
+          var _this$cleanup2;
+          this.setup = setup;
+          (_this$cleanup2 = this.cleanup) == null ? void 0 : _this$cleanup2.call(this);
+          this.cleanup = setup((online) => {
+            if (typeof online === "boolean") {
+              this.setOnline(online);
+            } else {
+              this.onOnline();
+            }
+          });
+        }
+        setOnline(online) {
+          this.online = online;
+          if (online) {
+            this.onOnline();
+          }
+        }
+        onOnline() {
+          this.listeners.forEach((listener3) => {
+            listener3();
+          });
+        }
+        isOnline() {
+          if (typeof this.online === "boolean") {
+            return this.online;
+          }
+          if (typeof navigator === "undefined" || typeof navigator.onLine === "undefined") {
+            return true;
+          }
+          return navigator.onLine;
+        }
+      };
+      onlineManager = new OnlineManager();
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/retryer.mjs
+  function defaultRetryDelay(failureCount) {
+    return Math.min(1e3 * 2 ** failureCount, 3e4);
+  }
+  function canFetch(networkMode) {
+    return (networkMode != null ? networkMode : "online") === "online" ? onlineManager.isOnline() : true;
+  }
+  function isCancelledError(value) {
+    return value instanceof CancelledError;
+  }
+  function createRetryer(config2) {
+    let isRetryCancelled = false;
+    let failureCount = 0;
+    let isResolved = false;
+    let continueFn;
+    let promiseResolve;
+    let promiseReject;
+    const promise = new Promise((outerResolve, outerReject) => {
+      promiseResolve = outerResolve;
+      promiseReject = outerReject;
+    });
+    const cancel = (cancelOptions) => {
+      if (!isResolved) {
+        reject(new CancelledError(cancelOptions));
+        config2.abort == null ? void 0 : config2.abort();
+      }
+    };
+    const cancelRetry = () => {
+      isRetryCancelled = true;
+    };
+    const continueRetry = () => {
+      isRetryCancelled = false;
+    };
+    const shouldPause = () => !focusManager.isFocused() || config2.networkMode !== "always" && !onlineManager.isOnline();
+    const resolve = (value) => {
+      if (!isResolved) {
+        isResolved = true;
+        config2.onSuccess == null ? void 0 : config2.onSuccess(value);
+        continueFn == null ? void 0 : continueFn();
+        promiseResolve(value);
+      }
+    };
+    const reject = (value) => {
+      if (!isResolved) {
+        isResolved = true;
+        config2.onError == null ? void 0 : config2.onError(value);
+        continueFn == null ? void 0 : continueFn();
+        promiseReject(value);
+      }
+    };
+    const pause = () => {
+      return new Promise((continueResolve) => {
+        continueFn = (value) => {
+          const canContinue = isResolved || !shouldPause();
+          if (canContinue) {
+            continueResolve(value);
+          }
+          return canContinue;
+        };
+        config2.onPause == null ? void 0 : config2.onPause();
+      }).then(() => {
+        continueFn = void 0;
+        if (!isResolved) {
+          config2.onContinue == null ? void 0 : config2.onContinue();
+        }
+      });
+    };
+    const run = () => {
+      if (isResolved) {
+        return;
+      }
+      let promiseOrValue;
+      try {
+        promiseOrValue = config2.fn();
+      } catch (error) {
+        promiseOrValue = Promise.reject(error);
+      }
+      Promise.resolve(promiseOrValue).then(resolve).catch((error) => {
+        var _config$retry, _config$retryDelay;
+        if (isResolved) {
+          return;
+        }
+        const retry = (_config$retry = config2.retry) != null ? _config$retry : 3;
+        const retryDelay = (_config$retryDelay = config2.retryDelay) != null ? _config$retryDelay : defaultRetryDelay;
+        const delay = typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
+        const shouldRetry = retry === true || typeof retry === "number" && failureCount < retry || typeof retry === "function" && retry(failureCount, error);
+        if (isRetryCancelled || !shouldRetry) {
+          reject(error);
+          return;
+        }
+        failureCount++;
+        config2.onFail == null ? void 0 : config2.onFail(failureCount, error);
+        sleep(delay).then(() => {
+          if (shouldPause()) {
+            return pause();
+          }
+          return;
+        }).then(() => {
+          if (isRetryCancelled) {
+            reject(error);
+          } else {
+            run();
+          }
+        });
+      });
+    };
+    if (canFetch(config2.networkMode)) {
+      run();
+    } else {
+      pause().then(run);
+    }
+    return {
+      promise,
+      cancel,
+      continue: () => {
+        const didContinue = continueFn == null ? void 0 : continueFn();
+        return didContinue ? promise : Promise.resolve();
+      },
+      cancelRetry,
+      continueRetry
+    };
+  }
+  var CancelledError;
+  var init_retryer = __esm({
+    "node_modules/@tanstack/query-core/build/lib/retryer.mjs"() {
+      init_focusManager();
+      init_onlineManager();
+      init_utils();
+      CancelledError = class {
+        constructor(options) {
+          this.revert = options == null ? void 0 : options.revert;
+          this.silent = options == null ? void 0 : options.silent;
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/logger.mjs
+  var defaultLogger;
+  var init_logger = __esm({
+    "node_modules/@tanstack/query-core/build/lib/logger.mjs"() {
+      defaultLogger = console;
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/notifyManager.mjs
+  function createNotifyManager() {
+    let queue = [];
+    let transactions = 0;
+    let notifyFn = (callback) => {
+      callback();
+    };
+    let batchNotifyFn = (callback) => {
+      callback();
+    };
+    const batch = (callback) => {
+      let result;
+      transactions++;
+      try {
+        result = callback();
+      } finally {
+        transactions--;
+        if (!transactions) {
+          flush();
+        }
+      }
+      return result;
+    };
+    const schedule = (callback) => {
+      if (transactions) {
+        queue.push(callback);
+      } else {
+        scheduleMicrotask(() => {
+          notifyFn(callback);
+        });
+      }
+    };
+    const batchCalls = (callback) => {
+      return (...args) => {
+        schedule(() => {
+          callback(...args);
+        });
+      };
+    };
+    const flush = () => {
+      const originalQueue = queue;
+      queue = [];
+      if (originalQueue.length) {
+        scheduleMicrotask(() => {
+          batchNotifyFn(() => {
+            originalQueue.forEach((callback) => {
+              notifyFn(callback);
+            });
+          });
+        });
+      }
+    };
+    const setNotifyFunction = (fn) => {
+      notifyFn = fn;
+    };
+    const setBatchNotifyFunction = (fn) => {
+      batchNotifyFn = fn;
+    };
+    return {
+      batch,
+      batchCalls,
+      schedule,
+      setNotifyFunction,
+      setBatchNotifyFunction
+    };
+  }
+  var notifyManager;
+  var init_notifyManager = __esm({
+    "node_modules/@tanstack/query-core/build/lib/notifyManager.mjs"() {
+      init_utils();
+      notifyManager = createNotifyManager();
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/removable.mjs
+  var Removable;
+  var init_removable = __esm({
+    "node_modules/@tanstack/query-core/build/lib/removable.mjs"() {
+      init_utils();
+      Removable = class {
+        destroy() {
+          this.clearGcTimeout();
+        }
+        scheduleGc() {
+          this.clearGcTimeout();
+          if (isValidTimeout(this.cacheTime)) {
+            this.gcTimeout = setTimeout(() => {
+              this.optionalRemove();
+            }, this.cacheTime);
+          }
+        }
+        updateCacheTime(newCacheTime) {
+          this.cacheTime = Math.max(this.cacheTime || 0, newCacheTime != null ? newCacheTime : isServer ? Infinity : 5 * 60 * 1e3);
+        }
+        clearGcTimeout() {
+          if (this.gcTimeout) {
+            clearTimeout(this.gcTimeout);
+            this.gcTimeout = void 0;
+          }
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/query.mjs
+  function getDefaultState(options) {
+    const data = typeof options.initialData === "function" ? options.initialData() : options.initialData;
+    const hasData = typeof data !== "undefined";
+    const initialDataUpdatedAt = hasData ? typeof options.initialDataUpdatedAt === "function" ? options.initialDataUpdatedAt() : options.initialDataUpdatedAt : 0;
+    return {
+      data,
+      dataUpdateCount: 0,
+      dataUpdatedAt: hasData ? initialDataUpdatedAt != null ? initialDataUpdatedAt : Date.now() : 0,
+      error: null,
+      errorUpdateCount: 0,
+      errorUpdatedAt: 0,
+      fetchFailureCount: 0,
+      fetchFailureReason: null,
+      fetchMeta: null,
+      isInvalidated: false,
+      status: hasData ? "success" : "loading",
+      fetchStatus: "idle"
+    };
+  }
+  var Query;
+  var init_query = __esm({
+    "node_modules/@tanstack/query-core/build/lib/query.mjs"() {
+      init_utils();
+      init_logger();
+      init_notifyManager();
+      init_retryer();
+      init_removable();
+      Query = class extends Removable {
+        constructor(config2) {
+          super();
+          this.abortSignalConsumed = false;
+          this.defaultOptions = config2.defaultOptions;
+          this.setOptions(config2.options);
+          this.observers = [];
+          this.cache = config2.cache;
+          this.logger = config2.logger || defaultLogger;
+          this.queryKey = config2.queryKey;
+          this.queryHash = config2.queryHash;
+          this.initialState = config2.state || getDefaultState(this.options);
+          this.state = this.initialState;
+          this.scheduleGc();
+        }
+        get meta() {
+          return this.options.meta;
+        }
+        setOptions(options) {
+          this.options = {
+            ...this.defaultOptions,
+            ...options
+          };
+          this.updateCacheTime(this.options.cacheTime);
+        }
+        optionalRemove() {
+          if (!this.observers.length && this.state.fetchStatus === "idle") {
+            this.cache.remove(this);
+          }
+        }
+        setData(newData, options) {
+          const data = replaceData(this.state.data, newData, this.options);
+          this.dispatch({
+            data,
+            type: "success",
+            dataUpdatedAt: options == null ? void 0 : options.updatedAt,
+            manual: options == null ? void 0 : options.manual
+          });
+          return data;
+        }
+        setState(state, setStateOptions) {
+          this.dispatch({
+            type: "setState",
+            state,
+            setStateOptions
+          });
+        }
+        cancel(options) {
+          var _this$retryer;
+          const promise = this.promise;
+          (_this$retryer = this.retryer) == null ? void 0 : _this$retryer.cancel(options);
+          return promise ? promise.then(noop).catch(noop) : Promise.resolve();
+        }
+        destroy() {
+          super.destroy();
+          this.cancel({
+            silent: true
+          });
+        }
+        reset() {
+          this.destroy();
+          this.setState(this.initialState);
+        }
+        isActive() {
+          return this.observers.some((observer) => observer.options.enabled !== false);
+        }
+        isDisabled() {
+          return this.getObserversCount() > 0 && !this.isActive();
+        }
+        isStale() {
+          return this.state.isInvalidated || !this.state.dataUpdatedAt || this.observers.some((observer) => observer.getCurrentResult().isStale);
+        }
+        isStaleByTime(staleTime = 0) {
+          return this.state.isInvalidated || !this.state.dataUpdatedAt || !timeUntilStale(this.state.dataUpdatedAt, staleTime);
+        }
+        onFocus() {
+          var _this$retryer2;
+          const observer = this.observers.find((x2) => x2.shouldFetchOnWindowFocus());
+          if (observer) {
+            observer.refetch({
+              cancelRefetch: false
+            });
+          }
+          (_this$retryer2 = this.retryer) == null ? void 0 : _this$retryer2.continue();
+        }
+        onOnline() {
+          var _this$retryer3;
+          const observer = this.observers.find((x2) => x2.shouldFetchOnReconnect());
+          if (observer) {
+            observer.refetch({
+              cancelRefetch: false
+            });
+          }
+          (_this$retryer3 = this.retryer) == null ? void 0 : _this$retryer3.continue();
+        }
+        addObserver(observer) {
+          if (this.observers.indexOf(observer) === -1) {
+            this.observers.push(observer);
+            this.clearGcTimeout();
+            this.cache.notify({
+              type: "observerAdded",
+              query: this,
+              observer
+            });
+          }
+        }
+        removeObserver(observer) {
+          if (this.observers.indexOf(observer) !== -1) {
+            this.observers = this.observers.filter((x2) => x2 !== observer);
+            if (!this.observers.length) {
+              if (this.retryer) {
+                if (this.abortSignalConsumed) {
+                  this.retryer.cancel({
+                    revert: true
+                  });
+                } else {
+                  this.retryer.cancelRetry();
+                }
+              }
+              this.scheduleGc();
+            }
+            this.cache.notify({
+              type: "observerRemoved",
+              query: this,
+              observer
+            });
+          }
+        }
+        getObserversCount() {
+          return this.observers.length;
+        }
+        invalidate() {
+          if (!this.state.isInvalidated) {
+            this.dispatch({
+              type: "invalidate"
+            });
+          }
+        }
+        fetch(options, fetchOptions) {
+          var _this$options$behavio, _context$fetchOptions;
+          if (this.state.fetchStatus !== "idle") {
+            if (this.state.dataUpdatedAt && fetchOptions != null && fetchOptions.cancelRefetch) {
+              this.cancel({
+                silent: true
+              });
+            } else if (this.promise) {
+              var _this$retryer4;
+              (_this$retryer4 = this.retryer) == null ? void 0 : _this$retryer4.continueRetry();
+              return this.promise;
+            }
+          }
+          if (options) {
+            this.setOptions(options);
+          }
+          if (!this.options.queryFn) {
+            const observer = this.observers.find((x2) => x2.options.queryFn);
+            if (observer) {
+              this.setOptions(observer.options);
+            }
+          }
+          if (!Array.isArray(this.options.queryKey)) {
+            if (true) {
+              this.logger.error("As of v4, queryKey needs to be an Array. If you are using a string like 'repoData', please change it to an Array, e.g. ['repoData']");
+            }
+          }
+          const abortController = getAbortController();
+          const queryFnContext = {
+            queryKey: this.queryKey,
+            pageParam: void 0,
+            meta: this.meta
+          };
+          const addSignalProperty = (object) => {
+            Object.defineProperty(object, "signal", {
+              enumerable: true,
+              get: () => {
+                if (abortController) {
+                  this.abortSignalConsumed = true;
+                  return abortController.signal;
+                }
+                return void 0;
+              }
+            });
+          };
+          addSignalProperty(queryFnContext);
+          const fetchFn = () => {
+            if (!this.options.queryFn) {
+              return Promise.reject("Missing queryFn");
+            }
+            this.abortSignalConsumed = false;
+            return this.options.queryFn(queryFnContext);
+          };
+          const context = {
+            fetchOptions,
+            options: this.options,
+            queryKey: this.queryKey,
+            state: this.state,
+            fetchFn
+          };
+          addSignalProperty(context);
+          (_this$options$behavio = this.options.behavior) == null ? void 0 : _this$options$behavio.onFetch(context);
+          this.revertState = this.state;
+          if (this.state.fetchStatus === "idle" || this.state.fetchMeta !== ((_context$fetchOptions = context.fetchOptions) == null ? void 0 : _context$fetchOptions.meta)) {
+            var _context$fetchOptions2;
+            this.dispatch({
+              type: "fetch",
+              meta: (_context$fetchOptions2 = context.fetchOptions) == null ? void 0 : _context$fetchOptions2.meta
+            });
+          }
+          const onError = (error) => {
+            if (!(isCancelledError(error) && error.silent)) {
+              this.dispatch({
+                type: "error",
+                error
+              });
+            }
+            if (!isCancelledError(error)) {
+              var _this$cache$config$on, _this$cache$config, _this$cache$config$on2, _this$cache$config2;
+              (_this$cache$config$on = (_this$cache$config = this.cache.config).onError) == null ? void 0 : _this$cache$config$on.call(_this$cache$config, error, this);
+              (_this$cache$config$on2 = (_this$cache$config2 = this.cache.config).onSettled) == null ? void 0 : _this$cache$config$on2.call(_this$cache$config2, this.state.data, error, this);
+              if (true) {
+                this.logger.error(error);
+              }
+            }
+            if (!this.isFetchingOptimistic) {
+              this.scheduleGc();
+            }
+            this.isFetchingOptimistic = false;
+          };
+          this.retryer = createRetryer({
+            fn: context.fetchFn,
+            abort: abortController == null ? void 0 : abortController.abort.bind(abortController),
+            onSuccess: (data) => {
+              var _this$cache$config$on3, _this$cache$config3, _this$cache$config$on4, _this$cache$config4;
+              if (typeof data === "undefined") {
+                if (true) {
+                  this.logger.error("Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: " + this.queryHash);
+                }
+                onError(new Error("undefined"));
+                return;
+              }
+              this.setData(data);
+              (_this$cache$config$on3 = (_this$cache$config3 = this.cache.config).onSuccess) == null ? void 0 : _this$cache$config$on3.call(_this$cache$config3, data, this);
+              (_this$cache$config$on4 = (_this$cache$config4 = this.cache.config).onSettled) == null ? void 0 : _this$cache$config$on4.call(_this$cache$config4, data, this.state.error, this);
+              if (!this.isFetchingOptimistic) {
+                this.scheduleGc();
+              }
+              this.isFetchingOptimistic = false;
+            },
+            onError,
+            onFail: (failureCount, error) => {
+              this.dispatch({
+                type: "failed",
+                failureCount,
+                error
+              });
+            },
+            onPause: () => {
+              this.dispatch({
+                type: "pause"
+              });
+            },
+            onContinue: () => {
+              this.dispatch({
+                type: "continue"
+              });
+            },
+            retry: context.options.retry,
+            retryDelay: context.options.retryDelay,
+            networkMode: context.options.networkMode
+          });
+          this.promise = this.retryer.promise;
+          return this.promise;
+        }
+        dispatch(action) {
+          const reducer = (state) => {
+            var _action$meta, _action$dataUpdatedAt;
+            switch (action.type) {
+              case "failed":
+                return {
+                  ...state,
+                  fetchFailureCount: action.failureCount,
+                  fetchFailureReason: action.error
+                };
+              case "pause":
+                return {
+                  ...state,
+                  fetchStatus: "paused"
+                };
+              case "continue":
+                return {
+                  ...state,
+                  fetchStatus: "fetching"
+                };
+              case "fetch":
+                return {
+                  ...state,
+                  fetchFailureCount: 0,
+                  fetchFailureReason: null,
+                  fetchMeta: (_action$meta = action.meta) != null ? _action$meta : null,
+                  fetchStatus: canFetch(this.options.networkMode) ? "fetching" : "paused",
+                  ...!state.dataUpdatedAt && {
+                    error: null,
+                    status: "loading"
+                  }
+                };
+              case "success":
+                return {
+                  ...state,
+                  data: action.data,
+                  dataUpdateCount: state.dataUpdateCount + 1,
+                  dataUpdatedAt: (_action$dataUpdatedAt = action.dataUpdatedAt) != null ? _action$dataUpdatedAt : Date.now(),
+                  error: null,
+                  isInvalidated: false,
+                  status: "success",
+                  ...!action.manual && {
+                    fetchStatus: "idle",
+                    fetchFailureCount: 0,
+                    fetchFailureReason: null
+                  }
+                };
+              case "error":
+                const error = action.error;
+                if (isCancelledError(error) && error.revert && this.revertState) {
+                  return {
+                    ...this.revertState
+                  };
+                }
+                return {
+                  ...state,
+                  error,
+                  errorUpdateCount: state.errorUpdateCount + 1,
+                  errorUpdatedAt: Date.now(),
+                  fetchFailureCount: state.fetchFailureCount + 1,
+                  fetchFailureReason: error,
+                  fetchStatus: "idle",
+                  status: "error"
+                };
+              case "invalidate":
+                return {
+                  ...state,
+                  isInvalidated: true
+                };
+              case "setState":
+                return {
+                  ...state,
+                  ...action.state
+                };
+            }
+          };
+          this.state = reducer(this.state);
+          notifyManager.batch(() => {
+            this.observers.forEach((observer) => {
+              observer.onQueryUpdate(action);
+            });
+            this.cache.notify({
+              query: this,
+              type: "updated",
+              action
+            });
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/queryCache.mjs
+  var QueryCache;
+  var init_queryCache = __esm({
+    "node_modules/@tanstack/query-core/build/lib/queryCache.mjs"() {
+      init_utils();
+      init_query();
+      init_notifyManager();
+      init_subscribable();
+      QueryCache = class extends Subscribable {
+        constructor(config2) {
+          super();
+          this.config = config2 || {};
+          this.queries = [];
+          this.queriesMap = {};
+        }
+        build(client, options, state) {
+          var _options$queryHash;
+          const queryKey = options.queryKey;
+          const queryHash = (_options$queryHash = options.queryHash) != null ? _options$queryHash : hashQueryKeyByOptions(queryKey, options);
+          let query = this.get(queryHash);
+          if (!query) {
+            query = new Query({
+              cache: this,
+              logger: client.getLogger(),
+              queryKey,
+              queryHash,
+              options: client.defaultQueryOptions(options),
+              state,
+              defaultOptions: client.getQueryDefaults(queryKey)
+            });
+            this.add(query);
+          }
+          return query;
+        }
+        add(query) {
+          if (!this.queriesMap[query.queryHash]) {
+            this.queriesMap[query.queryHash] = query;
+            this.queries.push(query);
+            this.notify({
+              type: "added",
+              query
+            });
+          }
+        }
+        remove(query) {
+          const queryInMap = this.queriesMap[query.queryHash];
+          if (queryInMap) {
+            query.destroy();
+            this.queries = this.queries.filter((x2) => x2 !== query);
+            if (queryInMap === query) {
+              delete this.queriesMap[query.queryHash];
+            }
+            this.notify({
+              type: "removed",
+              query
+            });
+          }
+        }
+        clear() {
+          notifyManager.batch(() => {
+            this.queries.forEach((query) => {
+              this.remove(query);
+            });
+          });
+        }
+        get(queryHash) {
+          return this.queriesMap[queryHash];
+        }
+        getAll() {
+          return this.queries;
+        }
+        find(arg1, arg2) {
+          const [filters] = parseFilterArgs(arg1, arg2);
+          if (typeof filters.exact === "undefined") {
+            filters.exact = true;
+          }
+          return this.queries.find((query) => matchQuery(filters, query));
+        }
+        findAll(arg1, arg2) {
+          const [filters] = parseFilterArgs(arg1, arg2);
+          return Object.keys(filters).length > 0 ? this.queries.filter((query) => matchQuery(filters, query)) : this.queries;
+        }
+        notify(event) {
+          notifyManager.batch(() => {
+            this.listeners.forEach((listener3) => {
+              listener3(event);
+            });
+          });
+        }
+        onFocus() {
+          notifyManager.batch(() => {
+            this.queries.forEach((query) => {
+              query.onFocus();
+            });
+          });
+        }
+        onOnline() {
+          notifyManager.batch(() => {
+            this.queries.forEach((query) => {
+              query.onOnline();
+            });
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/mutation.mjs
+  function getDefaultState2() {
+    return {
+      context: void 0,
+      data: void 0,
+      error: null,
+      failureCount: 0,
+      failureReason: null,
+      isPaused: false,
+      status: "idle",
+      variables: void 0
+    };
+  }
+  var Mutation;
+  var init_mutation = __esm({
+    "node_modules/@tanstack/query-core/build/lib/mutation.mjs"() {
+      init_logger();
+      init_notifyManager();
+      init_removable();
+      init_retryer();
+      Mutation = class extends Removable {
+        constructor(config2) {
+          super();
+          this.defaultOptions = config2.defaultOptions;
+          this.mutationId = config2.mutationId;
+          this.mutationCache = config2.mutationCache;
+          this.logger = config2.logger || defaultLogger;
+          this.observers = [];
+          this.state = config2.state || getDefaultState2();
+          this.setOptions(config2.options);
+          this.scheduleGc();
+        }
+        setOptions(options) {
+          this.options = {
+            ...this.defaultOptions,
+            ...options
+          };
+          this.updateCacheTime(this.options.cacheTime);
+        }
+        get meta() {
+          return this.options.meta;
+        }
+        setState(state) {
+          this.dispatch({
+            type: "setState",
+            state
+          });
+        }
+        addObserver(observer) {
+          if (this.observers.indexOf(observer) === -1) {
+            this.observers.push(observer);
+            this.clearGcTimeout();
+            this.mutationCache.notify({
+              type: "observerAdded",
+              mutation: this,
+              observer
+            });
+          }
+        }
+        removeObserver(observer) {
+          this.observers = this.observers.filter((x2) => x2 !== observer);
+          this.scheduleGc();
+          this.mutationCache.notify({
+            type: "observerRemoved",
+            mutation: this,
+            observer
+          });
+        }
+        optionalRemove() {
+          if (!this.observers.length) {
+            if (this.state.status === "loading") {
+              this.scheduleGc();
+            } else {
+              this.mutationCache.remove(this);
+            }
+          }
+        }
+        continue() {
+          var _this$retryer$continu, _this$retryer;
+          return (_this$retryer$continu = (_this$retryer = this.retryer) == null ? void 0 : _this$retryer.continue()) != null ? _this$retryer$continu : this.execute();
+        }
+        async execute() {
+          const executeMutation = () => {
+            var _this$options$retry;
+            this.retryer = createRetryer({
+              fn: () => {
+                if (!this.options.mutationFn) {
+                  return Promise.reject("No mutationFn found");
+                }
+                return this.options.mutationFn(this.state.variables);
+              },
+              onFail: (failureCount, error) => {
+                this.dispatch({
+                  type: "failed",
+                  failureCount,
+                  error
+                });
+              },
+              onPause: () => {
+                this.dispatch({
+                  type: "pause"
+                });
+              },
+              onContinue: () => {
+                this.dispatch({
+                  type: "continue"
+                });
+              },
+              retry: (_this$options$retry = this.options.retry) != null ? _this$options$retry : 0,
+              retryDelay: this.options.retryDelay,
+              networkMode: this.options.networkMode
+            });
+            return this.retryer.promise;
+          };
+          const restored = this.state.status === "loading";
+          try {
+            var _this$mutationCache$c3, _this$mutationCache$c4, _this$options$onSucce, _this$options2, _this$mutationCache$c5, _this$mutationCache$c6, _this$options$onSettl, _this$options3;
+            if (!restored) {
+              var _this$mutationCache$c, _this$mutationCache$c2, _this$options$onMutat, _this$options;
+              this.dispatch({
+                type: "loading",
+                variables: this.options.variables
+              });
+              await ((_this$mutationCache$c = (_this$mutationCache$c2 = this.mutationCache.config).onMutate) == null ? void 0 : _this$mutationCache$c.call(_this$mutationCache$c2, this.state.variables, this));
+              const context = await ((_this$options$onMutat = (_this$options = this.options).onMutate) == null ? void 0 : _this$options$onMutat.call(_this$options, this.state.variables));
+              if (context !== this.state.context) {
+                this.dispatch({
+                  type: "loading",
+                  context,
+                  variables: this.state.variables
+                });
+              }
+            }
+            const data = await executeMutation();
+            await ((_this$mutationCache$c3 = (_this$mutationCache$c4 = this.mutationCache.config).onSuccess) == null ? void 0 : _this$mutationCache$c3.call(_this$mutationCache$c4, data, this.state.variables, this.state.context, this));
+            await ((_this$options$onSucce = (_this$options2 = this.options).onSuccess) == null ? void 0 : _this$options$onSucce.call(_this$options2, data, this.state.variables, this.state.context));
+            await ((_this$mutationCache$c5 = (_this$mutationCache$c6 = this.mutationCache.config).onSettled) == null ? void 0 : _this$mutationCache$c5.call(_this$mutationCache$c6, data, null, this.state.variables, this.state.context, this));
+            await ((_this$options$onSettl = (_this$options3 = this.options).onSettled) == null ? void 0 : _this$options$onSettl.call(_this$options3, data, null, this.state.variables, this.state.context));
+            this.dispatch({
+              type: "success",
+              data
+            });
+            return data;
+          } catch (error) {
+            try {
+              var _this$mutationCache$c7, _this$mutationCache$c8, _this$options$onError, _this$options4, _this$mutationCache$c9, _this$mutationCache$c10, _this$options$onSettl2, _this$options5;
+              await ((_this$mutationCache$c7 = (_this$mutationCache$c8 = this.mutationCache.config).onError) == null ? void 0 : _this$mutationCache$c7.call(_this$mutationCache$c8, error, this.state.variables, this.state.context, this));
+              if (true) {
+                this.logger.error(error);
+              }
+              await ((_this$options$onError = (_this$options4 = this.options).onError) == null ? void 0 : _this$options$onError.call(_this$options4, error, this.state.variables, this.state.context));
+              await ((_this$mutationCache$c9 = (_this$mutationCache$c10 = this.mutationCache.config).onSettled) == null ? void 0 : _this$mutationCache$c9.call(_this$mutationCache$c10, void 0, error, this.state.variables, this.state.context, this));
+              await ((_this$options$onSettl2 = (_this$options5 = this.options).onSettled) == null ? void 0 : _this$options$onSettl2.call(_this$options5, void 0, error, this.state.variables, this.state.context));
+              throw error;
+            } finally {
+              this.dispatch({
+                type: "error",
+                error
+              });
+            }
+          }
+        }
+        dispatch(action) {
+          const reducer = (state) => {
+            switch (action.type) {
+              case "failed":
+                return {
+                  ...state,
+                  failureCount: action.failureCount,
+                  failureReason: action.error
+                };
+              case "pause":
+                return {
+                  ...state,
+                  isPaused: true
+                };
+              case "continue":
+                return {
+                  ...state,
+                  isPaused: false
+                };
+              case "loading":
+                return {
+                  ...state,
+                  context: action.context,
+                  data: void 0,
+                  failureCount: 0,
+                  failureReason: null,
+                  error: null,
+                  isPaused: !canFetch(this.options.networkMode),
+                  status: "loading",
+                  variables: action.variables
+                };
+              case "success":
+                return {
+                  ...state,
+                  data: action.data,
+                  failureCount: 0,
+                  failureReason: null,
+                  error: null,
+                  status: "success",
+                  isPaused: false
+                };
+              case "error":
+                return {
+                  ...state,
+                  data: void 0,
+                  error: action.error,
+                  failureCount: state.failureCount + 1,
+                  failureReason: action.error,
+                  isPaused: false,
+                  status: "error"
+                };
+              case "setState":
+                return {
+                  ...state,
+                  ...action.state
+                };
+            }
+          };
+          this.state = reducer(this.state);
+          notifyManager.batch(() => {
+            this.observers.forEach((observer) => {
+              observer.onMutationUpdate(action);
+            });
+            this.mutationCache.notify({
+              mutation: this,
+              type: "updated",
+              action
+            });
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/mutationCache.mjs
+  var MutationCache;
+  var init_mutationCache = __esm({
+    "node_modules/@tanstack/query-core/build/lib/mutationCache.mjs"() {
+      init_notifyManager();
+      init_mutation();
+      init_utils();
+      init_subscribable();
+      MutationCache = class extends Subscribable {
+        constructor(config2) {
+          super();
+          this.config = config2 || {};
+          this.mutations = [];
+          this.mutationId = 0;
+        }
+        build(client, options, state) {
+          const mutation = new Mutation({
+            mutationCache: this,
+            logger: client.getLogger(),
+            mutationId: ++this.mutationId,
+            options: client.defaultMutationOptions(options),
+            state,
+            defaultOptions: options.mutationKey ? client.getMutationDefaults(options.mutationKey) : void 0
+          });
+          this.add(mutation);
+          return mutation;
+        }
+        add(mutation) {
+          this.mutations.push(mutation);
+          this.notify({
+            type: "added",
+            mutation
+          });
+        }
+        remove(mutation) {
+          this.mutations = this.mutations.filter((x2) => x2 !== mutation);
+          this.notify({
+            type: "removed",
+            mutation
+          });
+        }
+        clear() {
+          notifyManager.batch(() => {
+            this.mutations.forEach((mutation) => {
+              this.remove(mutation);
+            });
+          });
+        }
+        getAll() {
+          return this.mutations;
+        }
+        find(filters) {
+          if (typeof filters.exact === "undefined") {
+            filters.exact = true;
+          }
+          return this.mutations.find((mutation) => matchMutation(filters, mutation));
+        }
+        findAll(filters) {
+          return this.mutations.filter((mutation) => matchMutation(filters, mutation));
+        }
+        notify(event) {
+          notifyManager.batch(() => {
+            this.listeners.forEach((listener3) => {
+              listener3(event);
+            });
+          });
+        }
+        resumePausedMutations() {
+          var _this$resuming;
+          this.resuming = ((_this$resuming = this.resuming) != null ? _this$resuming : Promise.resolve()).then(() => {
+            const pausedMutations = this.mutations.filter((x2) => x2.state.isPaused);
+            return notifyManager.batch(() => pausedMutations.reduce((promise, mutation) => promise.then(() => mutation.continue().catch(noop)), Promise.resolve()));
+          }).then(() => {
+            this.resuming = void 0;
+          });
+          return this.resuming;
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/infiniteQueryBehavior.mjs
+  function infiniteQueryBehavior() {
+    return {
+      onFetch: (context) => {
+        context.fetchFn = () => {
+          var _context$fetchOptions, _context$fetchOptions2, _context$fetchOptions3, _context$fetchOptions4, _context$state$data, _context$state$data2;
+          const refetchPage = (_context$fetchOptions = context.fetchOptions) == null ? void 0 : (_context$fetchOptions2 = _context$fetchOptions.meta) == null ? void 0 : _context$fetchOptions2.refetchPage;
+          const fetchMore = (_context$fetchOptions3 = context.fetchOptions) == null ? void 0 : (_context$fetchOptions4 = _context$fetchOptions3.meta) == null ? void 0 : _context$fetchOptions4.fetchMore;
+          const pageParam = fetchMore == null ? void 0 : fetchMore.pageParam;
+          const isFetchingNextPage = (fetchMore == null ? void 0 : fetchMore.direction) === "forward";
+          const isFetchingPreviousPage = (fetchMore == null ? void 0 : fetchMore.direction) === "backward";
+          const oldPages = ((_context$state$data = context.state.data) == null ? void 0 : _context$state$data.pages) || [];
+          const oldPageParams = ((_context$state$data2 = context.state.data) == null ? void 0 : _context$state$data2.pageParams) || [];
+          let newPageParams = oldPageParams;
+          let cancelled = false;
+          const addSignalProperty = (object) => {
+            Object.defineProperty(object, "signal", {
+              enumerable: true,
+              get: () => {
+                var _context$signal;
+                if ((_context$signal = context.signal) != null && _context$signal.aborted) {
+                  cancelled = true;
+                } else {
+                  var _context$signal2;
+                  (_context$signal2 = context.signal) == null ? void 0 : _context$signal2.addEventListener("abort", () => {
+                    cancelled = true;
+                  });
+                }
+                return context.signal;
+              }
+            });
+          };
+          const queryFn = context.options.queryFn || (() => Promise.reject("Missing queryFn"));
+          const buildNewPages = (pages, param, page, previous) => {
+            newPageParams = previous ? [param, ...newPageParams] : [...newPageParams, param];
+            return previous ? [page, ...pages] : [...pages, page];
+          };
+          const fetchPage = (pages, manual, param, previous) => {
+            if (cancelled) {
+              return Promise.reject("Cancelled");
+            }
+            if (typeof param === "undefined" && !manual && pages.length) {
+              return Promise.resolve(pages);
+            }
+            const queryFnContext = {
+              queryKey: context.queryKey,
+              pageParam: param,
+              meta: context.options.meta
+            };
+            addSignalProperty(queryFnContext);
+            const queryFnResult = queryFn(queryFnContext);
+            const promise2 = Promise.resolve(queryFnResult).then((page) => buildNewPages(pages, param, page, previous));
+            return promise2;
+          };
+          let promise;
+          if (!oldPages.length) {
+            promise = fetchPage([]);
+          } else if (isFetchingNextPage) {
+            const manual = typeof pageParam !== "undefined";
+            const param = manual ? pageParam : getNextPageParam(context.options, oldPages);
+            promise = fetchPage(oldPages, manual, param);
+          } else if (isFetchingPreviousPage) {
+            const manual = typeof pageParam !== "undefined";
+            const param = manual ? pageParam : getPreviousPageParam(context.options, oldPages);
+            promise = fetchPage(oldPages, manual, param, true);
+          } else {
+            newPageParams = [];
+            const manual = typeof context.options.getNextPageParam === "undefined";
+            const shouldFetchFirstPage = refetchPage && oldPages[0] ? refetchPage(oldPages[0], 0, oldPages) : true;
+            promise = shouldFetchFirstPage ? fetchPage([], manual, oldPageParams[0]) : Promise.resolve(buildNewPages([], oldPageParams[0], oldPages[0]));
+            for (let i5 = 1; i5 < oldPages.length; i5++) {
+              promise = promise.then((pages) => {
+                const shouldFetchNextPage = refetchPage && oldPages[i5] ? refetchPage(oldPages[i5], i5, oldPages) : true;
+                if (shouldFetchNextPage) {
+                  const param = manual ? oldPageParams[i5] : getNextPageParam(context.options, pages);
+                  return fetchPage(pages, manual, param);
+                }
+                return Promise.resolve(buildNewPages(pages, oldPageParams[i5], oldPages[i5]));
+              });
+            }
+          }
+          const finalPromise = promise.then((pages) => ({
+            pages,
+            pageParams: newPageParams
+          }));
+          return finalPromise;
+        };
+      }
+    };
+  }
+  function getNextPageParam(options, pages) {
+    return options.getNextPageParam == null ? void 0 : options.getNextPageParam(pages[pages.length - 1], pages);
+  }
+  function getPreviousPageParam(options, pages) {
+    return options.getPreviousPageParam == null ? void 0 : options.getPreviousPageParam(pages[0], pages);
+  }
+  var init_infiniteQueryBehavior = __esm({
+    "node_modules/@tanstack/query-core/build/lib/infiniteQueryBehavior.mjs"() {
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/queryClient.mjs
+  var QueryClient;
+  var init_queryClient = __esm({
+    "node_modules/@tanstack/query-core/build/lib/queryClient.mjs"() {
+      init_utils();
+      init_queryCache();
+      init_mutationCache();
+      init_focusManager();
+      init_onlineManager();
+      init_notifyManager();
+      init_infiniteQueryBehavior();
+      init_logger();
+      QueryClient = class {
+        constructor(config2 = {}) {
+          this.queryCache = config2.queryCache || new QueryCache();
+          this.mutationCache = config2.mutationCache || new MutationCache();
+          this.logger = config2.logger || defaultLogger;
+          this.defaultOptions = config2.defaultOptions || {};
+          this.queryDefaults = [];
+          this.mutationDefaults = [];
+          this.mountCount = 0;
+          if (config2.logger) {
+            this.logger.error("Passing a custom logger has been deprecated and will be removed in the next major version.");
+          }
+        }
+        mount() {
+          this.mountCount++;
+          if (this.mountCount !== 1)
+            return;
+          this.unsubscribeFocus = focusManager.subscribe(() => {
+            if (focusManager.isFocused()) {
+              this.resumePausedMutations();
+              this.queryCache.onFocus();
+            }
+          });
+          this.unsubscribeOnline = onlineManager.subscribe(() => {
+            if (onlineManager.isOnline()) {
+              this.resumePausedMutations();
+              this.queryCache.onOnline();
+            }
+          });
+        }
+        unmount() {
+          var _this$unsubscribeFocu, _this$unsubscribeOnli;
+          this.mountCount--;
+          if (this.mountCount !== 0)
+            return;
+          (_this$unsubscribeFocu = this.unsubscribeFocus) == null ? void 0 : _this$unsubscribeFocu.call(this);
+          this.unsubscribeFocus = void 0;
+          (_this$unsubscribeOnli = this.unsubscribeOnline) == null ? void 0 : _this$unsubscribeOnli.call(this);
+          this.unsubscribeOnline = void 0;
+        }
+        isFetching(arg1, arg2) {
+          const [filters] = parseFilterArgs(arg1, arg2);
+          filters.fetchStatus = "fetching";
+          return this.queryCache.findAll(filters).length;
+        }
+        isMutating(filters) {
+          return this.mutationCache.findAll({
+            ...filters,
+            fetching: true
+          }).length;
+        }
+        getQueryData(queryKey, filters) {
+          var _this$queryCache$find;
+          return (_this$queryCache$find = this.queryCache.find(queryKey, filters)) == null ? void 0 : _this$queryCache$find.state.data;
+        }
+        ensureQueryData(arg1, arg2, arg3) {
+          const parsedOptions = parseQueryArgs(arg1, arg2, arg3);
+          const cachedData = this.getQueryData(parsedOptions.queryKey);
+          return cachedData ? Promise.resolve(cachedData) : this.fetchQuery(parsedOptions);
+        }
+        getQueriesData(queryKeyOrFilters) {
+          return this.getQueryCache().findAll(queryKeyOrFilters).map(({
+            queryKey,
+            state
+          }) => {
+            const data = state.data;
+            return [queryKey, data];
+          });
+        }
+        setQueryData(queryKey, updater, options) {
+          const query = this.queryCache.find(queryKey);
+          const prevData = query == null ? void 0 : query.state.data;
+          const data = functionalUpdate(updater, prevData);
+          if (typeof data === "undefined") {
+            return void 0;
+          }
+          const parsedOptions = parseQueryArgs(queryKey);
+          const defaultedOptions = this.defaultQueryOptions(parsedOptions);
+          return this.queryCache.build(this, defaultedOptions).setData(data, {
+            ...options,
+            manual: true
+          });
+        }
+        setQueriesData(queryKeyOrFilters, updater, options) {
+          return notifyManager.batch(() => this.getQueryCache().findAll(queryKeyOrFilters).map(({
+            queryKey
+          }) => [queryKey, this.setQueryData(queryKey, updater, options)]));
+        }
+        getQueryState(queryKey, filters) {
+          var _this$queryCache$find2;
+          return (_this$queryCache$find2 = this.queryCache.find(queryKey, filters)) == null ? void 0 : _this$queryCache$find2.state;
+        }
+        removeQueries(arg1, arg2) {
+          const [filters] = parseFilterArgs(arg1, arg2);
+          const queryCache = this.queryCache;
+          notifyManager.batch(() => {
+            queryCache.findAll(filters).forEach((query) => {
+              queryCache.remove(query);
+            });
+          });
+        }
+        resetQueries(arg1, arg2, arg3) {
+          const [filters, options] = parseFilterArgs(arg1, arg2, arg3);
+          const queryCache = this.queryCache;
+          const refetchFilters = {
+            type: "active",
+            ...filters
+          };
+          return notifyManager.batch(() => {
+            queryCache.findAll(filters).forEach((query) => {
+              query.reset();
+            });
+            return this.refetchQueries(refetchFilters, options);
+          });
+        }
+        cancelQueries(arg1, arg2, arg3) {
+          const [filters, cancelOptions = {}] = parseFilterArgs(arg1, arg2, arg3);
+          if (typeof cancelOptions.revert === "undefined") {
+            cancelOptions.revert = true;
+          }
+          const promises = notifyManager.batch(() => this.queryCache.findAll(filters).map((query) => query.cancel(cancelOptions)));
+          return Promise.all(promises).then(noop).catch(noop);
+        }
+        invalidateQueries(arg1, arg2, arg3) {
+          const [filters, options] = parseFilterArgs(arg1, arg2, arg3);
+          return notifyManager.batch(() => {
+            var _ref2, _filters$refetchType;
+            this.queryCache.findAll(filters).forEach((query) => {
+              query.invalidate();
+            });
+            if (filters.refetchType === "none") {
+              return Promise.resolve();
+            }
+            const refetchFilters = {
+              ...filters,
+              type: (_ref2 = (_filters$refetchType = filters.refetchType) != null ? _filters$refetchType : filters.type) != null ? _ref2 : "active"
+            };
+            return this.refetchQueries(refetchFilters, options);
+          });
+        }
+        refetchQueries(arg1, arg2, arg3) {
+          const [filters, options] = parseFilterArgs(arg1, arg2, arg3);
+          const promises = notifyManager.batch(() => this.queryCache.findAll(filters).filter((query) => !query.isDisabled()).map((query) => {
+            var _options$cancelRefetc;
+            return query.fetch(void 0, {
+              ...options,
+              cancelRefetch: (_options$cancelRefetc = options == null ? void 0 : options.cancelRefetch) != null ? _options$cancelRefetc : true,
+              meta: {
+                refetchPage: filters.refetchPage
+              }
+            });
+          }));
+          let promise = Promise.all(promises).then(noop);
+          if (!(options != null && options.throwOnError)) {
+            promise = promise.catch(noop);
+          }
+          return promise;
+        }
+        fetchQuery(arg1, arg2, arg3) {
+          const parsedOptions = parseQueryArgs(arg1, arg2, arg3);
+          const defaultedOptions = this.defaultQueryOptions(parsedOptions);
+          if (typeof defaultedOptions.retry === "undefined") {
+            defaultedOptions.retry = false;
+          }
+          const query = this.queryCache.build(this, defaultedOptions);
+          return query.isStaleByTime(defaultedOptions.staleTime) ? query.fetch(defaultedOptions) : Promise.resolve(query.state.data);
+        }
+        prefetchQuery(arg1, arg2, arg3) {
+          return this.fetchQuery(arg1, arg2, arg3).then(noop).catch(noop);
+        }
+        fetchInfiniteQuery(arg1, arg2, arg3) {
+          const parsedOptions = parseQueryArgs(arg1, arg2, arg3);
+          parsedOptions.behavior = infiniteQueryBehavior();
+          return this.fetchQuery(parsedOptions);
+        }
+        prefetchInfiniteQuery(arg1, arg2, arg3) {
+          return this.fetchInfiniteQuery(arg1, arg2, arg3).then(noop).catch(noop);
+        }
+        resumePausedMutations() {
+          return this.mutationCache.resumePausedMutations();
+        }
+        getQueryCache() {
+          return this.queryCache;
+        }
+        getMutationCache() {
+          return this.mutationCache;
+        }
+        getLogger() {
+          return this.logger;
+        }
+        getDefaultOptions() {
+          return this.defaultOptions;
+        }
+        setDefaultOptions(options) {
+          this.defaultOptions = options;
+        }
+        setQueryDefaults(queryKey, options) {
+          const result = this.queryDefaults.find((x2) => hashQueryKey(queryKey) === hashQueryKey(x2.queryKey));
+          if (result) {
+            result.defaultOptions = options;
+          } else {
+            this.queryDefaults.push({
+              queryKey,
+              defaultOptions: options
+            });
+          }
+        }
+        getQueryDefaults(queryKey) {
+          if (!queryKey) {
+            return void 0;
+          }
+          const firstMatchingDefaults = this.queryDefaults.find((x2) => partialMatchKey(queryKey, x2.queryKey));
+          if (true) {
+            const matchingDefaults = this.queryDefaults.filter((x2) => partialMatchKey(queryKey, x2.queryKey));
+            if (matchingDefaults.length > 1) {
+              this.logger.error("[QueryClient] Several query defaults match with key '" + JSON.stringify(queryKey) + "'. The first matching query defaults are used. Please check how query defaults are registered. Order does matter here. cf. https://react-query.tanstack.com/reference/QueryClient#queryclientsetquerydefaults.");
+            }
+          }
+          return firstMatchingDefaults == null ? void 0 : firstMatchingDefaults.defaultOptions;
+        }
+        setMutationDefaults(mutationKey, options) {
+          const result = this.mutationDefaults.find((x2) => hashQueryKey(mutationKey) === hashQueryKey(x2.mutationKey));
+          if (result) {
+            result.defaultOptions = options;
+          } else {
+            this.mutationDefaults.push({
+              mutationKey,
+              defaultOptions: options
+            });
+          }
+        }
+        getMutationDefaults(mutationKey) {
+          if (!mutationKey) {
+            return void 0;
+          }
+          const firstMatchingDefaults = this.mutationDefaults.find((x2) => partialMatchKey(mutationKey, x2.mutationKey));
+          if (true) {
+            const matchingDefaults = this.mutationDefaults.filter((x2) => partialMatchKey(mutationKey, x2.mutationKey));
+            if (matchingDefaults.length > 1) {
+              this.logger.error("[QueryClient] Several mutation defaults match with key '" + JSON.stringify(mutationKey) + "'. The first matching mutation defaults are used. Please check how mutation defaults are registered. Order does matter here. cf. https://react-query.tanstack.com/reference/QueryClient#queryclientsetmutationdefaults.");
+            }
+          }
+          return firstMatchingDefaults == null ? void 0 : firstMatchingDefaults.defaultOptions;
+        }
+        defaultQueryOptions(options) {
+          if (options != null && options._defaulted) {
+            return options;
+          }
+          const defaultedOptions = {
+            ...this.defaultOptions.queries,
+            ...this.getQueryDefaults(options == null ? void 0 : options.queryKey),
+            ...options,
+            _defaulted: true
+          };
+          if (!defaultedOptions.queryHash && defaultedOptions.queryKey) {
+            defaultedOptions.queryHash = hashQueryKeyByOptions(defaultedOptions.queryKey, defaultedOptions);
+          }
+          if (typeof defaultedOptions.refetchOnReconnect === "undefined") {
+            defaultedOptions.refetchOnReconnect = defaultedOptions.networkMode !== "always";
+          }
+          if (typeof defaultedOptions.useErrorBoundary === "undefined") {
+            defaultedOptions.useErrorBoundary = !!defaultedOptions.suspense;
+          }
+          return defaultedOptions;
+        }
+        defaultMutationOptions(options) {
+          if (options != null && options._defaulted) {
+            return options;
+          }
+          return {
+            ...this.defaultOptions.mutations,
+            ...this.getMutationDefaults(options == null ? void 0 : options.mutationKey),
+            ...options,
+            _defaulted: true
+          };
+        }
+        clear() {
+          this.queryCache.clear();
+          this.mutationCache.clear();
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/queryObserver.mjs
+  function shouldLoadOnMount(query, options) {
+    return options.enabled !== false && !query.state.dataUpdatedAt && !(query.state.status === "error" && options.retryOnMount === false);
+  }
+  function shouldFetchOnMount(query, options) {
+    return shouldLoadOnMount(query, options) || query.state.dataUpdatedAt > 0 && shouldFetchOn(query, options, options.refetchOnMount);
+  }
+  function shouldFetchOn(query, options, field) {
+    if (options.enabled !== false) {
+      const value = typeof field === "function" ? field(query) : field;
+      return value === "always" || value !== false && isStale(query, options);
+    }
+    return false;
+  }
+  function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
+    return options.enabled !== false && (query !== prevQuery || prevOptions.enabled === false) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
+  }
+  function isStale(query, options) {
+    return query.isStaleByTime(options.staleTime);
+  }
+  var QueryObserver;
+  var init_queryObserver = __esm({
+    "node_modules/@tanstack/query-core/build/lib/queryObserver.mjs"() {
+      init_utils();
+      init_notifyManager();
+      init_focusManager();
+      init_subscribable();
+      init_retryer();
+      QueryObserver = class extends Subscribable {
+        constructor(client, options) {
+          super();
+          this.client = client;
+          this.options = options;
+          this.trackedProps = /* @__PURE__ */ new Set();
+          this.selectError = null;
+          this.bindMethods();
+          this.setOptions(options);
+        }
+        bindMethods() {
+          this.remove = this.remove.bind(this);
+          this.refetch = this.refetch.bind(this);
+        }
+        onSubscribe() {
+          if (this.listeners.length === 1) {
+            this.currentQuery.addObserver(this);
+            if (shouldFetchOnMount(this.currentQuery, this.options)) {
+              this.executeFetch();
+            }
+            this.updateTimers();
+          }
+        }
+        onUnsubscribe() {
+          if (!this.listeners.length) {
+            this.destroy();
+          }
+        }
+        shouldFetchOnReconnect() {
+          return shouldFetchOn(this.currentQuery, this.options, this.options.refetchOnReconnect);
+        }
+        shouldFetchOnWindowFocus() {
+          return shouldFetchOn(this.currentQuery, this.options, this.options.refetchOnWindowFocus);
+        }
+        destroy() {
+          this.listeners = [];
+          this.clearStaleTimeout();
+          this.clearRefetchInterval();
+          this.currentQuery.removeObserver(this);
+        }
+        setOptions(options, notifyOptions) {
+          const prevOptions = this.options;
+          const prevQuery = this.currentQuery;
+          this.options = this.client.defaultQueryOptions(options);
+          if (typeof (options == null ? void 0 : options.isDataEqual) !== "undefined") {
+            this.client.getLogger().error("The isDataEqual option has been deprecated and will be removed in the next major version. You can achieve the same functionality by passing a function as the structuralSharing option");
+          }
+          if (!shallowEqualObjects(prevOptions, this.options)) {
+            this.client.getQueryCache().notify({
+              type: "observerOptionsUpdated",
+              query: this.currentQuery,
+              observer: this
+            });
+          }
+          if (typeof this.options.enabled !== "undefined" && typeof this.options.enabled !== "boolean") {
+            throw new Error("Expected enabled to be a boolean");
+          }
+          if (!this.options.queryKey) {
+            this.options.queryKey = prevOptions.queryKey;
+          }
+          this.updateQuery();
+          const mounted = this.hasListeners();
+          if (mounted && shouldFetchOptionally(this.currentQuery, prevQuery, this.options, prevOptions)) {
+            this.executeFetch();
+          }
+          this.updateResult(notifyOptions);
+          if (mounted && (this.currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || this.options.staleTime !== prevOptions.staleTime)) {
+            this.updateStaleTimeout();
+          }
+          const nextRefetchInterval = this.computeRefetchInterval();
+          if (mounted && (this.currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || nextRefetchInterval !== this.currentRefetchInterval)) {
+            this.updateRefetchInterval(nextRefetchInterval);
+          }
+        }
+        getOptimisticResult(options) {
+          const query = this.client.getQueryCache().build(this.client, options);
+          return this.createResult(query, options);
+        }
+        getCurrentResult() {
+          return this.currentResult;
+        }
+        trackResult(result) {
+          const trackedResult = {};
+          Object.keys(result).forEach((key) => {
+            Object.defineProperty(trackedResult, key, {
+              configurable: false,
+              enumerable: true,
+              get: () => {
+                this.trackedProps.add(key);
+                return result[key];
+              }
+            });
+          });
+          return trackedResult;
+        }
+        getCurrentQuery() {
+          return this.currentQuery;
+        }
+        remove() {
+          this.client.getQueryCache().remove(this.currentQuery);
+        }
+        refetch({
+          refetchPage,
+          ...options
+        } = {}) {
+          return this.fetch({
+            ...options,
+            meta: {
+              refetchPage
+            }
+          });
+        }
+        fetchOptimistic(options) {
+          const defaultedOptions = this.client.defaultQueryOptions(options);
+          const query = this.client.getQueryCache().build(this.client, defaultedOptions);
+          query.isFetchingOptimistic = true;
+          return query.fetch().then(() => this.createResult(query, defaultedOptions));
+        }
+        fetch(fetchOptions) {
+          var _fetchOptions$cancelR;
+          return this.executeFetch({
+            ...fetchOptions,
+            cancelRefetch: (_fetchOptions$cancelR = fetchOptions.cancelRefetch) != null ? _fetchOptions$cancelR : true
+          }).then(() => {
+            this.updateResult();
+            return this.currentResult;
+          });
+        }
+        executeFetch(fetchOptions) {
+          this.updateQuery();
+          let promise = this.currentQuery.fetch(this.options, fetchOptions);
+          if (!(fetchOptions != null && fetchOptions.throwOnError)) {
+            promise = promise.catch(noop);
+          }
+          return promise;
+        }
+        updateStaleTimeout() {
+          this.clearStaleTimeout();
+          if (isServer || this.currentResult.isStale || !isValidTimeout(this.options.staleTime)) {
+            return;
+          }
+          const time = timeUntilStale(this.currentResult.dataUpdatedAt, this.options.staleTime);
+          const timeout = time + 1;
+          this.staleTimeoutId = setTimeout(() => {
+            if (!this.currentResult.isStale) {
+              this.updateResult();
+            }
+          }, timeout);
+        }
+        computeRefetchInterval() {
+          var _this$options$refetch;
+          return typeof this.options.refetchInterval === "function" ? this.options.refetchInterval(this.currentResult.data, this.currentQuery) : (_this$options$refetch = this.options.refetchInterval) != null ? _this$options$refetch : false;
+        }
+        updateRefetchInterval(nextInterval) {
+          this.clearRefetchInterval();
+          this.currentRefetchInterval = nextInterval;
+          if (isServer || this.options.enabled === false || !isValidTimeout(this.currentRefetchInterval) || this.currentRefetchInterval === 0) {
+            return;
+          }
+          this.refetchIntervalId = setInterval(() => {
+            if (this.options.refetchIntervalInBackground || focusManager.isFocused()) {
+              this.executeFetch();
+            }
+          }, this.currentRefetchInterval);
+        }
+        updateTimers() {
+          this.updateStaleTimeout();
+          this.updateRefetchInterval(this.computeRefetchInterval());
+        }
+        clearStaleTimeout() {
+          if (this.staleTimeoutId) {
+            clearTimeout(this.staleTimeoutId);
+            this.staleTimeoutId = void 0;
+          }
+        }
+        clearRefetchInterval() {
+          if (this.refetchIntervalId) {
+            clearInterval(this.refetchIntervalId);
+            this.refetchIntervalId = void 0;
+          }
+        }
+        createResult(query, options) {
+          const prevQuery = this.currentQuery;
+          const prevOptions = this.options;
+          const prevResult = this.currentResult;
+          const prevResultState = this.currentResultState;
+          const prevResultOptions = this.currentResultOptions;
+          const queryChange = query !== prevQuery;
+          const queryInitialState = queryChange ? query.state : this.currentQueryInitialState;
+          const prevQueryResult = queryChange ? this.currentResult : this.previousQueryResult;
+          const {
+            state
+          } = query;
+          let {
+            dataUpdatedAt,
+            error,
+            errorUpdatedAt,
+            fetchStatus,
+            status
+          } = state;
+          let isPreviousData = false;
+          let isPlaceholderData = false;
+          let data;
+          if (options._optimisticResults) {
+            const mounted = this.hasListeners();
+            const fetchOnMount = !mounted && shouldFetchOnMount(query, options);
+            const fetchOptionally = mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
+            if (fetchOnMount || fetchOptionally) {
+              fetchStatus = canFetch(query.options.networkMode) ? "fetching" : "paused";
+              if (!dataUpdatedAt) {
+                status = "loading";
+              }
+            }
+            if (options._optimisticResults === "isRestoring") {
+              fetchStatus = "idle";
+            }
+          }
+          if (options.keepPreviousData && !state.dataUpdatedAt && prevQueryResult != null && prevQueryResult.isSuccess && status !== "error") {
+            data = prevQueryResult.data;
+            dataUpdatedAt = prevQueryResult.dataUpdatedAt;
+            status = prevQueryResult.status;
+            isPreviousData = true;
+          } else if (options.select && typeof state.data !== "undefined") {
+            if (prevResult && state.data === (prevResultState == null ? void 0 : prevResultState.data) && options.select === this.selectFn) {
+              data = this.selectResult;
+            } else {
+              try {
+                this.selectFn = options.select;
+                data = options.select(state.data);
+                data = replaceData(prevResult == null ? void 0 : prevResult.data, data, options);
+                this.selectResult = data;
+                this.selectError = null;
+              } catch (selectError) {
+                if (true) {
+                  this.client.getLogger().error(selectError);
+                }
+                this.selectError = selectError;
+              }
+            }
+          } else {
+            data = state.data;
+          }
+          if (typeof options.placeholderData !== "undefined" && typeof data === "undefined" && status === "loading") {
+            let placeholderData;
+            if (prevResult != null && prevResult.isPlaceholderData && options.placeholderData === (prevResultOptions == null ? void 0 : prevResultOptions.placeholderData)) {
+              placeholderData = prevResult.data;
+            } else {
+              placeholderData = typeof options.placeholderData === "function" ? options.placeholderData() : options.placeholderData;
+              if (options.select && typeof placeholderData !== "undefined") {
+                try {
+                  placeholderData = options.select(placeholderData);
+                  this.selectError = null;
+                } catch (selectError) {
+                  if (true) {
+                    this.client.getLogger().error(selectError);
+                  }
+                  this.selectError = selectError;
+                }
+              }
+            }
+            if (typeof placeholderData !== "undefined") {
+              status = "success";
+              data = replaceData(prevResult == null ? void 0 : prevResult.data, placeholderData, options);
+              isPlaceholderData = true;
+            }
+          }
+          if (this.selectError) {
+            error = this.selectError;
+            data = this.selectResult;
+            errorUpdatedAt = Date.now();
+            status = "error";
+          }
+          const isFetching = fetchStatus === "fetching";
+          const isLoading = status === "loading";
+          const isError2 = status === "error";
+          const result = {
+            status,
+            fetchStatus,
+            isLoading,
+            isSuccess: status === "success",
+            isError: isError2,
+            isInitialLoading: isLoading && isFetching,
+            data,
+            dataUpdatedAt,
+            error,
+            errorUpdatedAt,
+            failureCount: state.fetchFailureCount,
+            failureReason: state.fetchFailureReason,
+            errorUpdateCount: state.errorUpdateCount,
+            isFetched: state.dataUpdateCount > 0 || state.errorUpdateCount > 0,
+            isFetchedAfterMount: state.dataUpdateCount > queryInitialState.dataUpdateCount || state.errorUpdateCount > queryInitialState.errorUpdateCount,
+            isFetching,
+            isRefetching: isFetching && !isLoading,
+            isLoadingError: isError2 && state.dataUpdatedAt === 0,
+            isPaused: fetchStatus === "paused",
+            isPlaceholderData,
+            isPreviousData,
+            isRefetchError: isError2 && state.dataUpdatedAt !== 0,
+            isStale: isStale(query, options),
+            refetch: this.refetch,
+            remove: this.remove
+          };
+          return result;
+        }
+        updateResult(notifyOptions) {
+          const prevResult = this.currentResult;
+          const nextResult = this.createResult(this.currentQuery, this.options);
+          this.currentResultState = this.currentQuery.state;
+          this.currentResultOptions = this.options;
+          if (shallowEqualObjects(nextResult, prevResult)) {
+            return;
+          }
+          this.currentResult = nextResult;
+          const defaultNotifyOptions = {
+            cache: true
+          };
+          const shouldNotifyListeners = () => {
+            if (!prevResult) {
+              return true;
+            }
+            const {
+              notifyOnChangeProps
+            } = this.options;
+            if (notifyOnChangeProps === "all" || !notifyOnChangeProps && !this.trackedProps.size) {
+              return true;
+            }
+            const includedProps = new Set(notifyOnChangeProps != null ? notifyOnChangeProps : this.trackedProps);
+            if (this.options.useErrorBoundary) {
+              includedProps.add("error");
+            }
+            return Object.keys(this.currentResult).some((key) => {
+              const typedKey = key;
+              const changed = this.currentResult[typedKey] !== prevResult[typedKey];
+              return changed && includedProps.has(typedKey);
+            });
+          };
+          if ((notifyOptions == null ? void 0 : notifyOptions.listeners) !== false && shouldNotifyListeners()) {
+            defaultNotifyOptions.listeners = true;
+          }
+          this.notify({
+            ...defaultNotifyOptions,
+            ...notifyOptions
+          });
+        }
+        updateQuery() {
+          const query = this.client.getQueryCache().build(this.client, this.options);
+          if (query === this.currentQuery) {
+            return;
+          }
+          const prevQuery = this.currentQuery;
+          this.currentQuery = query;
+          this.currentQueryInitialState = query.state;
+          this.previousQueryResult = this.currentResult;
+          if (this.hasListeners()) {
+            prevQuery == null ? void 0 : prevQuery.removeObserver(this);
+            query.addObserver(this);
+          }
+        }
+        onQueryUpdate(action) {
+          const notifyOptions = {};
+          if (action.type === "success") {
+            notifyOptions.onSuccess = !action.manual;
+          } else if (action.type === "error" && !isCancelledError(action.error)) {
+            notifyOptions.onError = true;
+          }
+          this.updateResult(notifyOptions);
+          if (this.hasListeners()) {
+            this.updateTimers();
+          }
+        }
+        notify(notifyOptions) {
+          notifyManager.batch(() => {
+            if (notifyOptions.onSuccess) {
+              var _this$options$onSucce, _this$options, _this$options$onSettl, _this$options2;
+              (_this$options$onSucce = (_this$options = this.options).onSuccess) == null ? void 0 : _this$options$onSucce.call(_this$options, this.currentResult.data);
+              (_this$options$onSettl = (_this$options2 = this.options).onSettled) == null ? void 0 : _this$options$onSettl.call(_this$options2, this.currentResult.data, null);
+            } else if (notifyOptions.onError) {
+              var _this$options$onError, _this$options3, _this$options$onSettl2, _this$options4;
+              (_this$options$onError = (_this$options3 = this.options).onError) == null ? void 0 : _this$options$onError.call(_this$options3, this.currentResult.error);
+              (_this$options$onSettl2 = (_this$options4 = this.options).onSettled) == null ? void 0 : _this$options$onSettl2.call(_this$options4, void 0, this.currentResult.error);
+            }
+            if (notifyOptions.listeners) {
+              this.listeners.forEach((listener3) => {
+                listener3(this.currentResult);
+              });
+            }
+            if (notifyOptions.cache) {
+              this.client.getQueryCache().notify({
+                query: this.currentQuery,
+                type: "observerResultsUpdated"
+              });
+            }
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/@tanstack/query-core/build/lib/index.mjs
+  var init_lib = __esm({
+    "node_modules/@tanstack/query-core/build/lib/index.mjs"() {
+      init_queryClient();
+      init_queryObserver();
+      init_notifyManager();
+      init_utils();
+    }
+  });
 
   // node_modules/react/cjs/react.development.js
   var require_react_development = __commonJS({
@@ -508,7 +2797,7 @@
               }
             }
           }
-          var ReactElement = function(type, key, ref, self, source, owner, props) {
+          var ReactElement = function(type, key, ref, self2, source, owner, props) {
             var element = {
               // This tag allows us to uniquely identify this as a React Element
               $$typeof: REACT_ELEMENT_TYPE,
@@ -532,7 +2821,7 @@
                 configurable: false,
                 enumerable: false,
                 writable: false,
-                value: self
+                value: self2
               });
               Object.defineProperty(element, "_source", {
                 configurable: false,
@@ -547,12 +2836,12 @@
             }
             return element;
           };
-          function createElement4(type, config2, children) {
+          function createElement6(type, config2, children) {
             var propName;
             var props = {};
             var key = null;
             var ref = null;
-            var self = null;
+            var self2 = null;
             var source = null;
             if (config2 != null) {
               if (hasValidRef(config2)) {
@@ -567,7 +2856,7 @@
                 }
                 key = "" + config2.key;
               }
-              self = config2.__self === void 0 ? null : config2.__self;
+              self2 = config2.__self === void 0 ? null : config2.__self;
               source = config2.__source === void 0 ? null : config2.__source;
               for (propName in config2) {
                 if (hasOwnProperty.call(config2, propName) && !RESERVED_PROPS.hasOwnProperty(propName)) {
@@ -609,7 +2898,7 @@
                 }
               }
             }
-            return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);
+            return ReactElement(type, key, ref, self2, source, ReactCurrentOwner.current, props);
           }
           function cloneAndReplaceKey(oldElement, newKey) {
             var newElement = ReactElement(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
@@ -623,7 +2912,7 @@
             var props = assign({}, element.props);
             var key = element.key;
             var ref = element.ref;
-            var self = element._self;
+            var self2 = element._self;
             var source = element._source;
             var owner = element._owner;
             if (config2 != null) {
@@ -661,7 +2950,7 @@
               }
               props.children = childArray;
             }
-            return ReactElement(element.type, key, ref, self, source, owner, props);
+            return ReactElement(element.type, key, ref, self2, source, owner, props);
           }
           function isValidElement2(object) {
             return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -821,7 +3110,7 @@
             }
             return children;
           }
-          function createContext3(defaultValue) {
+          function createContext5(defaultValue) {
             var context = {
               $$typeof: REACT_CONTEXT_TYPE,
               // As a workaround to support multiple concurrent renderers, we categorize
@@ -1107,7 +3396,7 @@
             }
             return dispatcher;
           }
-          function useContext4(Context) {
+          function useContext6(Context) {
             var dispatcher = resolveDispatcher();
             {
               if (Context._context !== void 0) {
@@ -1121,7 +3410,7 @@
             }
             return dispatcher.useContext(Context);
           }
-          function useState4(initialState) {
+          function useState6(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1133,7 +3422,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect4(create, deps) {
+          function useEffect7(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1145,11 +3434,11 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create, deps);
           }
-          function useCallback3(callback, deps) {
+          function useCallback4(callback, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo5(create, deps) {
+          function useMemo4(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1175,7 +3464,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useId();
           }
-          function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
+          function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
           }
@@ -1646,7 +3935,7 @@
                 error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
               }
             }
-            var element = createElement4.apply(this, arguments);
+            var element = createElement6.apply(this, arguments);
             if (element == null) {
               return element;
             }
@@ -1901,7 +4190,7 @@
           exports.Suspense = REACT_SUSPENSE_TYPE;
           exports.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactSharedInternals;
           exports.cloneElement = cloneElement$1;
-          exports.createContext = createContext3;
+          exports.createContext = createContext5;
           exports.createElement = createElement$1;
           exports.createFactory = createFactory;
           exports.createRef = createRef;
@@ -1911,20 +4200,20 @@
           exports.memo = memo;
           exports.startTransition = startTransition;
           exports.unstable_act = act;
-          exports.useCallback = useCallback3;
-          exports.useContext = useContext4;
+          exports.useCallback = useCallback4;
+          exports.useContext = useContext6;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect4;
+          exports.useEffect = useEffect7;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect4;
-          exports.useMemo = useMemo5;
+          exports.useMemo = useMemo4;
           exports.useReducer = useReducer;
           exports.useRef = useRef3;
-          exports.useState = useState4;
-          exports.useSyncExternalStore = useSyncExternalStore2;
+          exports.useState = useState6;
+          exports.useSyncExternalStore = useSyncExternalStore3;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
@@ -2419,9 +4708,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React22 = require_react();
+          var React19 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4026,7 +6315,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React22.Children.forEach(props.children, function(child) {
+                  React19.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -7675,9 +9964,9 @@
                 if (!Interface.hasOwnProperty(_propName)) {
                   continue;
                 }
-                var normalize = Interface[_propName];
-                if (normalize) {
-                  this[_propName] = normalize(nativeEvent);
+                var normalize2 = Interface[_propName];
+                if (normalize2) {
+                  this[_propName] = normalize2(nativeEvent);
                 } else {
                   this[_propName] = nativeEvent[_propName];
                 }
@@ -9360,10 +11649,10 @@
           function getOwnerDocumentFromRootContainer(rootContainerElement) {
             return rootContainerElement.nodeType === DOCUMENT_NODE ? rootContainerElement : rootContainerElement.ownerDocument;
           }
-          function noop5() {
+          function noop6() {
           }
           function trapClickOnNonInteractiveElement(node) {
-            node.onclick = noop5;
+            node.onclick = noop6;
           }
           function setInitialDOMProperties(tag, domElement, rootContainerElement, nextProps, isCustomComponentTag) {
             for (var propKey in nextProps) {
@@ -9425,7 +11714,7 @@
               }
             }
           }
-          function createElement4(type, props, rootContainerElement, parentNamespace) {
+          function createElement6(type, props, rootContainerElement, parentNamespace) {
             var isCustomComponentTag;
             var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
             var domElement;
@@ -10286,7 +12575,7 @@
               }
               parentNamespace = hostContextDev.namespace;
             }
-            var domElement = createElement4(type, props, rootContainerInstance, parentNamespace);
+            var domElement = createElement6(type, props, rootContainerInstance, parentNamespace);
             precacheFiberNode(internalInstanceHandle, domElement);
             updateFiberProps(domElement, props);
             return domElement;
@@ -10342,7 +12631,7 @@
           var cancelTimeout = typeof clearTimeout === "function" ? clearTimeout : void 0;
           var noTimeout = -1;
           var localPromise = typeof Promise === "function" ? Promise : void 0;
-          var scheduleMicrotask = typeof queueMicrotask === "function" ? queueMicrotask : typeof localPromise !== "undefined" ? function(callback) {
+          var scheduleMicrotask2 = typeof queueMicrotask === "function" ? queueMicrotask : typeof localPromise !== "undefined" ? function(callback) {
             return localPromise.resolve(null).then(callback).catch(handleErrorInNextTick);
           } : scheduleTimeout;
           function handleErrorInNextTick(error2) {
@@ -12473,7 +14762,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React22.Component().refs;
+          var emptyRefsObject = new React19.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -17001,7 +19290,7 @@
           function updateSuspenseComponent(current2, workInProgress2, renderLanes2) {
             var nextProps = workInProgress2.pendingProps;
             {
-              if (shouldSuspend(workInProgress2)) {
+              if (shouldSuspend2(workInProgress2)) {
                 workInProgress2.flags |= DidCapture;
               }
             }
@@ -20560,7 +22849,7 @@
                 if (ReactCurrentActQueue$1.current !== null) {
                   ReactCurrentActQueue$1.current.push(flushSyncCallbacks);
                 } else {
-                  scheduleMicrotask(function() {
+                  scheduleMicrotask2(function() {
                     if ((executionContext & (RenderContext | CommitContext)) === NoContext) {
                       flushSyncCallbacks();
                     }
@@ -22806,7 +25095,7 @@
           var shouldSuspendImpl = function(fiber) {
             return false;
           };
-          function shouldSuspend(fiber) {
+          function shouldSuspend2(fiber) {
             return shouldSuspendImpl(fiber);
           }
           var overrideHookState = null;
@@ -23513,6 +25802,388 @@
     }
   });
 
+  // node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js
+  var require_use_sync_external_store_shim_development = __commonJS({
+    "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js"(exports) {
+      "use strict";
+      if (true) {
+        (function() {
+          "use strict";
+          if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
+            __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
+          }
+          var React19 = require_react();
+          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          function error(format) {
+            {
+              {
+                for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                  args[_key2 - 1] = arguments[_key2];
+                }
+                printWarning("error", format, args);
+              }
+            }
+          }
+          function printWarning(level, format, args) {
+            {
+              var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+              var stack = ReactDebugCurrentFrame.getStackAddendum();
+              if (stack !== "") {
+                format += "%s";
+                args = args.concat([stack]);
+              }
+              var argsWithFormat = args.map(function(item) {
+                return String(item);
+              });
+              argsWithFormat.unshift("Warning: " + format);
+              Function.prototype.apply.call(console[level], console, argsWithFormat);
+            }
+          }
+          function is2(x2, y3) {
+            return x2 === y3 && (x2 !== 0 || 1 / x2 === 1 / y3) || x2 !== x2 && y3 !== y3;
+          }
+          var objectIs = typeof Object.is === "function" ? Object.is : is2;
+          var useState6 = React19.useState, useEffect7 = React19.useEffect, useLayoutEffect4 = React19.useLayoutEffect, useDebugValue2 = React19.useDebugValue;
+          var didWarnOld18Alpha2 = false;
+          var didWarnUncachedGetSnapshot2 = false;
+          function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
+            {
+              if (!didWarnOld18Alpha2) {
+                if (React19.startTransition !== void 0) {
+                  didWarnOld18Alpha2 = true;
+                  error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
+                }
+              }
+            }
+            var value = getSnapshot();
+            {
+              if (!didWarnUncachedGetSnapshot2) {
+                var cachedValue = getSnapshot();
+                if (!objectIs(value, cachedValue)) {
+                  error("The result of getSnapshot should be cached to avoid an infinite loop");
+                  didWarnUncachedGetSnapshot2 = true;
+                }
+              }
+            }
+            var _useState = useState6({
+              inst: {
+                value,
+                getSnapshot
+              }
+            }), inst = _useState[0].inst, forceUpdate = _useState[1];
+            useLayoutEffect4(function() {
+              inst.value = value;
+              inst.getSnapshot = getSnapshot;
+              if (checkIfSnapshotChanged2(inst)) {
+                forceUpdate({
+                  inst
+                });
+              }
+            }, [subscribe, value, getSnapshot]);
+            useEffect7(function() {
+              if (checkIfSnapshotChanged2(inst)) {
+                forceUpdate({
+                  inst
+                });
+              }
+              var handleStoreChange = function() {
+                if (checkIfSnapshotChanged2(inst)) {
+                  forceUpdate({
+                    inst
+                  });
+                }
+              };
+              return subscribe(handleStoreChange);
+            }, [subscribe]);
+            useDebugValue2(value);
+            return value;
+          }
+          function checkIfSnapshotChanged2(inst) {
+            var latestGetSnapshot = inst.getSnapshot;
+            var prevValue = inst.value;
+            try {
+              var nextValue = latestGetSnapshot();
+              return !objectIs(prevValue, nextValue);
+            } catch (error2) {
+              return true;
+            }
+          }
+          function useSyncExternalStore$13(subscribe, getSnapshot, getServerSnapshot) {
+            return getSnapshot();
+          }
+          var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
+          var isServerEnvironment2 = !canUseDOM2;
+          var shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3;
+          var useSyncExternalStore$22 = React19.useSyncExternalStore !== void 0 ? React19.useSyncExternalStore : shim2;
+          exports.useSyncExternalStore = useSyncExternalStore$22;
+          if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
+            __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
+          }
+        })();
+      }
+    }
+  });
+
+  // node_modules/use-sync-external-store/shim/index.js
+  var require_shim = __commonJS({
+    "node_modules/use-sync-external-store/shim/index.js"(exports, module) {
+      "use strict";
+      if (false) {
+        module.exports = null;
+      } else {
+        module.exports = require_use_sync_external_store_shim_development();
+      }
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/useSyncExternalStore.mjs
+  var import_shim, useSyncExternalStore;
+  var init_useSyncExternalStore = __esm({
+    "node_modules/@tanstack/react-query/build/lib/useSyncExternalStore.mjs"() {
+      import_shim = __toESM(require_shim(), 1);
+      "use client";
+      useSyncExternalStore = import_shim.useSyncExternalStore;
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs
+  function getQueryClientContext(context, contextSharing) {
+    if (context) {
+      return context;
+    }
+    if (contextSharing && typeof window !== "undefined") {
+      if (!window.ReactQueryClientContext) {
+        window.ReactQueryClientContext = defaultContext;
+      }
+      return window.ReactQueryClientContext;
+    }
+    return defaultContext;
+  }
+  var React, defaultContext, QueryClientSharingContext, useQueryClient, QueryClientProvider;
+  var init_QueryClientProvider = __esm({
+    "node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs"() {
+      React = __toESM(require_react(), 1);
+      "use client";
+      defaultContext = /* @__PURE__ */ React.createContext(void 0);
+      QueryClientSharingContext = /* @__PURE__ */ React.createContext(false);
+      useQueryClient = ({
+        context
+      } = {}) => {
+        const queryClient2 = React.useContext(getQueryClientContext(context, React.useContext(QueryClientSharingContext)));
+        if (!queryClient2) {
+          throw new Error("No QueryClient set, use QueryClientProvider to set one");
+        }
+        return queryClient2;
+      };
+      QueryClientProvider = ({
+        client,
+        children,
+        context,
+        contextSharing = false
+      }) => {
+        React.useEffect(() => {
+          client.mount();
+          return () => {
+            client.unmount();
+          };
+        }, [client]);
+        if (contextSharing) {
+          client.getLogger().error("The contextSharing option has been deprecated and will be removed in the next major version");
+        }
+        const Context = getQueryClientContext(context, contextSharing);
+        return /* @__PURE__ */ React.createElement(QueryClientSharingContext.Provider, {
+          value: !context && contextSharing
+        }, /* @__PURE__ */ React.createElement(Context.Provider, {
+          value: client
+        }, children));
+      };
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/isRestoring.mjs
+  var React2, IsRestoringContext, useIsRestoring, IsRestoringProvider;
+  var init_isRestoring = __esm({
+    "node_modules/@tanstack/react-query/build/lib/isRestoring.mjs"() {
+      React2 = __toESM(require_react(), 1);
+      "use client";
+      IsRestoringContext = /* @__PURE__ */ React2.createContext(false);
+      useIsRestoring = () => React2.useContext(IsRestoringContext);
+      IsRestoringProvider = IsRestoringContext.Provider;
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/QueryErrorResetBoundary.mjs
+  function createValue() {
+    let isReset = false;
+    return {
+      clearReset: () => {
+        isReset = false;
+      },
+      reset: () => {
+        isReset = true;
+      },
+      isReset: () => {
+        return isReset;
+      }
+    };
+  }
+  var React3, QueryErrorResetBoundaryContext, useQueryErrorResetBoundary;
+  var init_QueryErrorResetBoundary = __esm({
+    "node_modules/@tanstack/react-query/build/lib/QueryErrorResetBoundary.mjs"() {
+      React3 = __toESM(require_react(), 1);
+      "use client";
+      QueryErrorResetBoundaryContext = /* @__PURE__ */ React3.createContext(createValue());
+      useQueryErrorResetBoundary = () => React3.useContext(QueryErrorResetBoundaryContext);
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/utils.mjs
+  function shouldThrowError(_useErrorBoundary, params) {
+    if (typeof _useErrorBoundary === "function") {
+      return _useErrorBoundary(...params);
+    }
+    return !!_useErrorBoundary;
+  }
+  var init_utils2 = __esm({
+    "node_modules/@tanstack/react-query/build/lib/utils.mjs"() {
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/errorBoundaryUtils.mjs
+  var React4, ensurePreventErrorBoundaryRetry, useClearResetErrorBoundary, getHasError;
+  var init_errorBoundaryUtils = __esm({
+    "node_modules/@tanstack/react-query/build/lib/errorBoundaryUtils.mjs"() {
+      React4 = __toESM(require_react(), 1);
+      init_utils2();
+      "use client";
+      ensurePreventErrorBoundaryRetry = (options, errorResetBoundary) => {
+        if (options.suspense || options.useErrorBoundary) {
+          if (!errorResetBoundary.isReset()) {
+            options.retryOnMount = false;
+          }
+        }
+      };
+      useClearResetErrorBoundary = (errorResetBoundary) => {
+        React4.useEffect(() => {
+          errorResetBoundary.clearReset();
+        }, [errorResetBoundary]);
+      };
+      getHasError = ({
+        result,
+        errorResetBoundary,
+        useErrorBoundary,
+        query
+      }) => {
+        return result.isError && !errorResetBoundary.isReset() && !result.isFetching && shouldThrowError(useErrorBoundary, [result.error, query]);
+      };
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/suspense.mjs
+  var ensureStaleTime, willFetch, shouldSuspend, fetchOptimistic;
+  var init_suspense = __esm({
+    "node_modules/@tanstack/react-query/build/lib/suspense.mjs"() {
+      ensureStaleTime = (defaultedOptions) => {
+        if (defaultedOptions.suspense) {
+          if (typeof defaultedOptions.staleTime !== "number") {
+            defaultedOptions.staleTime = 1e3;
+          }
+        }
+      };
+      willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring;
+      shouldSuspend = (defaultedOptions, result, isRestoring) => (defaultedOptions == null ? void 0 : defaultedOptions.suspense) && willFetch(result, isRestoring);
+      fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).then(({
+        data
+      }) => {
+        defaultedOptions.onSuccess == null ? void 0 : defaultedOptions.onSuccess(data);
+        defaultedOptions.onSettled == null ? void 0 : defaultedOptions.onSettled(data, null);
+      }).catch((error) => {
+        errorResetBoundary.clearReset();
+        defaultedOptions.onError == null ? void 0 : defaultedOptions.onError(error);
+        defaultedOptions.onSettled == null ? void 0 : defaultedOptions.onSettled(void 0, error);
+      });
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/useBaseQuery.mjs
+  function useBaseQuery(options, Observer) {
+    const queryClient2 = useQueryClient({
+      context: options.context
+    });
+    const isRestoring = useIsRestoring();
+    const errorResetBoundary = useQueryErrorResetBoundary();
+    const defaultedOptions = queryClient2.defaultQueryOptions(options);
+    defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : "optimistic";
+    if (defaultedOptions.onError) {
+      defaultedOptions.onError = notifyManager.batchCalls(defaultedOptions.onError);
+    }
+    if (defaultedOptions.onSuccess) {
+      defaultedOptions.onSuccess = notifyManager.batchCalls(defaultedOptions.onSuccess);
+    }
+    if (defaultedOptions.onSettled) {
+      defaultedOptions.onSettled = notifyManager.batchCalls(defaultedOptions.onSettled);
+    }
+    ensureStaleTime(defaultedOptions);
+    ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary);
+    useClearResetErrorBoundary(errorResetBoundary);
+    const [observer] = React5.useState(() => new Observer(queryClient2, defaultedOptions));
+    const result = observer.getOptimisticResult(defaultedOptions);
+    useSyncExternalStore(React5.useCallback((onStoreChange) => isRestoring ? () => void 0 : observer.subscribe(notifyManager.batchCalls(onStoreChange)), [observer, isRestoring]), () => observer.getCurrentResult(), () => observer.getCurrentResult());
+    React5.useEffect(() => {
+      observer.setOptions(defaultedOptions, {
+        listeners: false
+      });
+    }, [defaultedOptions, observer]);
+    if (shouldSuspend(defaultedOptions, result, isRestoring)) {
+      throw fetchOptimistic(defaultedOptions, observer, errorResetBoundary);
+    }
+    if (getHasError({
+      result,
+      errorResetBoundary,
+      useErrorBoundary: defaultedOptions.useErrorBoundary,
+      query: observer.getCurrentQuery()
+    })) {
+      throw result.error;
+    }
+    return !defaultedOptions.notifyOnChangeProps ? observer.trackResult(result) : result;
+  }
+  var React5;
+  var init_useBaseQuery = __esm({
+    "node_modules/@tanstack/react-query/build/lib/useBaseQuery.mjs"() {
+      React5 = __toESM(require_react(), 1);
+      init_useSyncExternalStore();
+      init_lib();
+      init_QueryErrorResetBoundary();
+      init_QueryClientProvider();
+      init_isRestoring();
+      init_errorBoundaryUtils();
+      init_suspense();
+      "use client";
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/useQuery.mjs
+  function useQuery(arg1, arg2, arg3) {
+    const parsedOptions = parseQueryArgs(arg1, arg2, arg3);
+    return useBaseQuery(parsedOptions, QueryObserver);
+  }
+  var init_useQuery = __esm({
+    "node_modules/@tanstack/react-query/build/lib/useQuery.mjs"() {
+      init_lib();
+      init_useBaseQuery();
+      "use client";
+    }
+  });
+
+  // node_modules/@tanstack/react-query/build/lib/index.mjs
+  var init_lib2 = __esm({
+    "node_modules/@tanstack/react-query/build/lib/index.mjs"() {
+      init_lib();
+      init_useQuery();
+      init_QueryClientProvider();
+    }
+  });
+
   // node_modules/react-dom/client.js
   var require_client = __commonJS({
     "node_modules/react-dom/client.js"(exports) {
@@ -23559,16 +26230,16 @@
     };
     return _extends.apply(this, arguments);
   }
-  function createBrowserHistory(options) {
+  function createHashHistory(options) {
     if (options === void 0) {
       options = {};
     }
-    function createBrowserLocation(window2, globalHistory) {
+    function createHashLocation(window2, globalHistory) {
       let {
-        pathname,
-        search,
-        hash
-      } = window2.location;
+        pathname = "/",
+        search = "",
+        hash = ""
+      } = parsePath(window2.location.hash.substr(1));
       return createLocation(
         "",
         {
@@ -23581,10 +26252,20 @@
         globalHistory.state && globalHistory.state.key || "default"
       );
     }
-    function createBrowserHref(window2, to) {
-      return typeof to === "string" ? to : createPath(to);
+    function createHashHref(window2, to) {
+      let base = window2.document.querySelector("base");
+      let href = "";
+      if (base && base.getAttribute("href")) {
+        let url = window2.location.href;
+        let hashIndex = url.indexOf("#");
+        href = hashIndex === -1 ? url : url.slice(0, hashIndex);
+      }
+      return href + "#" + (typeof to === "string" ? to : createPath(to));
     }
-    return getUrlBasedHistory(createBrowserLocation, createBrowserHref, null, options);
+    function validateHashLocation(location2, to) {
+      warning(location2.pathname.charAt(0) === "/", "relative pathnames are not supported in hash history.push(" + JSON.stringify(to) + ")");
+    }
+    return getUrlBasedHistory(createHashLocation, createHashHref, validateHashLocation, options);
   }
   function invariant(value, message) {
     if (value === false || value === null || typeof value === "undefined") {
@@ -23660,7 +26341,7 @@
     }
     return parsedPath;
   }
-  function getUrlBasedHistory(getLocation, createHref, validateLocation, options) {
+  function getUrlBasedHistory(getLocation2, createHref, validateLocation, options) {
     if (options === void 0) {
       options = {};
     }
@@ -23746,7 +26427,7 @@
         return action;
       },
       get location() {
-        return getLocation(window2, globalHistory);
+        return getLocation2(window2, globalHistory);
       },
       listen(fn) {
         if (listener3) {
@@ -23779,7 +26460,43 @@
     };
     return history;
   }
-  function matchRoutes(routes2, locationArg, basename) {
+  function isIndexRoute(route) {
+    return route.index === true;
+  }
+  function convertRoutesToDataRoutes(routes, detectErrorBoundary2, parentPath, manifest) {
+    if (parentPath === void 0) {
+      parentPath = [];
+    }
+    if (manifest === void 0) {
+      manifest = {};
+    }
+    return routes.map((route, index) => {
+      let treePath = [...parentPath, index];
+      let id = typeof route.id === "string" ? route.id : treePath.join("-");
+      invariant(route.index !== true || !route.children, "Cannot specify children on an index route");
+      invariant(!manifest[id], 'Found a route id collision on id "' + id + `".  Route id's must be globally unique within Data Router usages`);
+      if (isIndexRoute(route)) {
+        let indexRoute = _extends({}, route, {
+          hasErrorBoundary: detectErrorBoundary2(route),
+          id
+        });
+        manifest[id] = indexRoute;
+        return indexRoute;
+      } else {
+        let pathOrLayoutRoute = _extends({}, route, {
+          id,
+          hasErrorBoundary: detectErrorBoundary2(route),
+          children: void 0
+        });
+        manifest[id] = pathOrLayoutRoute;
+        if (route.children) {
+          pathOrLayoutRoute.children = convertRoutesToDataRoutes(route.children, detectErrorBoundary2, treePath, manifest);
+        }
+        return pathOrLayoutRoute;
+      }
+    });
+  }
+  function matchRoutes(routes, locationArg, basename) {
     if (basename === void 0) {
       basename = "/";
     }
@@ -23788,7 +26505,7 @@
     if (pathname == null) {
       return null;
     }
-    let branches = flattenRoutes(routes2);
+    let branches = flattenRoutes(routes);
     rankRouteBranches(branches);
     let matches = null;
     for (let i5 = 0; matches == null && i5 < branches.length; ++i5) {
@@ -23805,7 +26522,7 @@
     }
     return matches;
   }
-  function flattenRoutes(routes2, branches, parentsMeta, parentPath) {
+  function flattenRoutes(routes, branches, parentsMeta, parentPath) {
     if (branches === void 0) {
       branches = [];
     }
@@ -23846,7 +26563,7 @@
         routesMeta
       });
     };
-    routes2.forEach((route, index) => {
+    routes.forEach((route, index) => {
       var _route$path;
       if (route.path === "" || !((_route$path = route.path) != null && _route$path.includes("?"))) {
         flattenRoute(route, index);
@@ -23936,39 +26653,6 @@
       }
     }
     return matches;
-  }
-  function generatePath(originalPath, params) {
-    if (params === void 0) {
-      params = {};
-    }
-    let path = originalPath;
-    if (path.endsWith("*") && path !== "*" && !path.endsWith("/*")) {
-      warning(false, 'Route path "' + path + '" will be treated as if it were ' + ('"' + path.replace(/\*$/, "/*") + '" because the `*` character must ') + "always follow a `/` in the pattern. To get rid of this warning, " + ('please change the route path to "' + path.replace(/\*$/, "/*") + '".'));
-      path = path.replace(/\*$/, "/*");
-    }
-    const prefix = path.startsWith("/") ? "/" : "";
-    const segments = path.split(/\/+/).map((segment, index, array) => {
-      const isLastSegment = index === array.length - 1;
-      if (isLastSegment && segment === "*") {
-        const star = "*";
-        const starParam = params[star];
-        return starParam;
-      }
-      const keyMatch = segment.match(/^:(\w+)(\??)$/);
-      if (keyMatch) {
-        const [, key, optional] = keyMatch;
-        let param = params[key];
-        if (optional === "?") {
-          return param == null ? "" : param;
-        }
-        if (param == null) {
-          invariant(false, 'Missing ":' + key + '" param');
-        }
-        return param;
-      }
-      return segment.replace(/\?$/g, "");
-    }).filter((segment) => !!segment);
-    return prefix + segments.join("/");
   }
   function matchPath(pattern, pathname) {
     if (typeof pattern === "string") {
@@ -24127,10 +26811,1719 @@
     }
     return path;
   }
+  function isTrackedPromise(value) {
+    return value instanceof Promise && value._tracked === true;
+  }
+  function unwrapTrackedPromise(value) {
+    if (!isTrackedPromise(value)) {
+      return value;
+    }
+    if (value._error) {
+      throw value._error;
+    }
+    return value._data;
+  }
   function isRouteErrorResponse(error) {
     return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
   }
-  var Action, PopStateEventType, ResultType, paramRe, dynamicSegmentValue, indexRouteValue, emptySegmentValue, staticSegmentValue, splatPenalty, isSplat, joinPaths, normalizePathname, normalizeSearch, normalizeHash, validMutationMethodsArr, validMutationMethods, validRequestMethodsArr, validRequestMethods, isBrowser, UNSAFE_DEFERRED_SYMBOL;
+  function createRouter(init) {
+    invariant(init.routes.length > 0, "You must provide a non-empty routes array to createRouter");
+    let detectErrorBoundary2 = init.detectErrorBoundary || defaultDetectErrorBoundary;
+    let manifest = {};
+    let dataRoutes = convertRoutesToDataRoutes(init.routes, detectErrorBoundary2, void 0, manifest);
+    let inFlightDataRoutes;
+    let unlistenHistory = null;
+    let subscribers = /* @__PURE__ */ new Set();
+    let savedScrollPositions2 = null;
+    let getScrollRestorationKey = null;
+    let getScrollPosition = null;
+    let initialScrollRestored = init.hydrationData != null;
+    let initialMatches = matchRoutes(dataRoutes, init.history.location, init.basename);
+    let initialErrors = null;
+    if (initialMatches == null) {
+      let error = getInternalRouterError(404, {
+        pathname: init.history.location.pathname
+      });
+      let {
+        matches,
+        route
+      } = getShortCircuitMatches(dataRoutes);
+      initialMatches = matches;
+      initialErrors = {
+        [route.id]: error
+      };
+    }
+    let initialized = (
+      // All initialMatches need to be loaded before we're ready.  If we have lazy
+      // functions around still then we'll need to run them in initialize()
+      !initialMatches.some((m4) => m4.route.lazy) && // And we have to either have no loaders or have been provided hydrationData
+      (!initialMatches.some((m4) => m4.route.loader) || init.hydrationData != null)
+    );
+    let router2;
+    let state = {
+      historyAction: init.history.action,
+      location: init.history.location,
+      matches: initialMatches,
+      initialized,
+      navigation: IDLE_NAVIGATION,
+      // Don't restore on initial updateState() if we were SSR'd
+      restoreScrollPosition: init.hydrationData != null ? false : null,
+      preventScrollReset: false,
+      revalidation: "idle",
+      loaderData: init.hydrationData && init.hydrationData.loaderData || {},
+      actionData: init.hydrationData && init.hydrationData.actionData || null,
+      errors: init.hydrationData && init.hydrationData.errors || initialErrors,
+      fetchers: /* @__PURE__ */ new Map(),
+      blockers: /* @__PURE__ */ new Map()
+    };
+    let pendingAction = Action.Pop;
+    let pendingPreventScrollReset = false;
+    let pendingNavigationController;
+    let isUninterruptedRevalidation = false;
+    let isRevalidationRequired = false;
+    let cancelledDeferredRoutes = [];
+    let cancelledFetcherLoads = [];
+    let fetchControllers = /* @__PURE__ */ new Map();
+    let incrementingLoadId = 0;
+    let pendingNavigationLoadId = -1;
+    let fetchReloadIds = /* @__PURE__ */ new Map();
+    let fetchRedirectIds = /* @__PURE__ */ new Set();
+    let fetchLoadMatches = /* @__PURE__ */ new Map();
+    let activeDeferreds = /* @__PURE__ */ new Map();
+    let blockerFunctions = /* @__PURE__ */ new Map();
+    let ignoreNextHistoryUpdate = false;
+    function initialize() {
+      unlistenHistory = init.history.listen((_ref2) => {
+        let {
+          action: historyAction,
+          location: location2,
+          delta
+        } = _ref2;
+        if (ignoreNextHistoryUpdate) {
+          ignoreNextHistoryUpdate = false;
+          return;
+        }
+        warning(blockerFunctions.size === 0 || delta != null, "You are trying to use a blocker on a POP navigation to a location that was not created by @remix-run/router. This will fail silently in production. This can happen if you are navigating outside the router via `window.history.pushState`/`window.location.hash` instead of using router navigation APIs.  This can also happen if you are using createHashRouter and the user manually changes the URL.");
+        let blockerKey = shouldBlockNavigation({
+          currentLocation: state.location,
+          nextLocation: location2,
+          historyAction
+        });
+        if (blockerKey && delta != null) {
+          ignoreNextHistoryUpdate = true;
+          init.history.go(delta * -1);
+          updateBlocker(blockerKey, {
+            state: "blocked",
+            location: location2,
+            proceed() {
+              updateBlocker(blockerKey, {
+                state: "proceeding",
+                proceed: void 0,
+                reset: void 0,
+                location: location2
+              });
+              init.history.go(delta);
+            },
+            reset() {
+              deleteBlocker(blockerKey);
+              updateState({
+                blockers: new Map(router2.state.blockers)
+              });
+            }
+          });
+          return;
+        }
+        return startNavigation(historyAction, location2);
+      });
+      if (state.initialized) {
+        return router2;
+      }
+      let lazyMatches = state.matches.filter((m4) => m4.route.lazy);
+      if (lazyMatches.length === 0) {
+        startNavigation(Action.Pop, state.location);
+        return router2;
+      }
+      let lazyPromises = lazyMatches.map((m4) => loadLazyRouteModule(m4.route, detectErrorBoundary2, manifest));
+      Promise.all(lazyPromises).then(() => {
+        let initialized2 = !state.matches.some((m4) => m4.route.loader) || init.hydrationData != null;
+        if (initialized2) {
+          updateState({
+            initialized: true
+          });
+        } else {
+          startNavigation(Action.Pop, state.location);
+        }
+      });
+      return router2;
+    }
+    function dispose() {
+      if (unlistenHistory) {
+        unlistenHistory();
+      }
+      subscribers.clear();
+      pendingNavigationController && pendingNavigationController.abort();
+      state.fetchers.forEach((_2, key) => deleteFetcher(key));
+      state.blockers.forEach((_2, key) => deleteBlocker(key));
+    }
+    function subscribe(fn) {
+      subscribers.add(fn);
+      return () => subscribers.delete(fn);
+    }
+    function updateState(newState) {
+      state = _extends({}, state, newState);
+      subscribers.forEach((subscriber) => subscriber(state));
+    }
+    function completeNavigation(location2, newState) {
+      var _location$state, _location$state2;
+      let isActionReload = state.actionData != null && state.navigation.formMethod != null && isMutationMethod(state.navigation.formMethod) && state.navigation.state === "loading" && ((_location$state = location2.state) == null ? void 0 : _location$state._isRedirect) !== true;
+      let actionData;
+      if (newState.actionData) {
+        if (Object.keys(newState.actionData).length > 0) {
+          actionData = newState.actionData;
+        } else {
+          actionData = null;
+        }
+      } else if (isActionReload) {
+        actionData = state.actionData;
+      } else {
+        actionData = null;
+      }
+      let loaderData = newState.loaderData ? mergeLoaderData(state.loaderData, newState.loaderData, newState.matches || [], newState.errors) : state.loaderData;
+      for (let [key] of blockerFunctions) {
+        deleteBlocker(key);
+      }
+      let preventScrollReset = pendingPreventScrollReset === true || state.navigation.formMethod != null && isMutationMethod(state.navigation.formMethod) && ((_location$state2 = location2.state) == null ? void 0 : _location$state2._isRedirect) !== true;
+      if (inFlightDataRoutes) {
+        dataRoutes = inFlightDataRoutes;
+        inFlightDataRoutes = void 0;
+      }
+      updateState(_extends({}, newState, {
+        actionData,
+        loaderData,
+        historyAction: pendingAction,
+        location: location2,
+        initialized: true,
+        navigation: IDLE_NAVIGATION,
+        revalidation: "idle",
+        restoreScrollPosition: getSavedScrollPosition(location2, newState.matches || state.matches),
+        preventScrollReset,
+        blockers: new Map(state.blockers)
+      }));
+      if (isUninterruptedRevalidation)
+        ;
+      else if (pendingAction === Action.Pop)
+        ;
+      else if (pendingAction === Action.Push) {
+        init.history.push(location2, location2.state);
+      } else if (pendingAction === Action.Replace) {
+        init.history.replace(location2, location2.state);
+      }
+      pendingAction = Action.Pop;
+      pendingPreventScrollReset = false;
+      isUninterruptedRevalidation = false;
+      isRevalidationRequired = false;
+      cancelledDeferredRoutes = [];
+      cancelledFetcherLoads = [];
+    }
+    async function navigate(to, opts) {
+      if (typeof to === "number") {
+        init.history.go(to);
+        return;
+      }
+      let {
+        path,
+        submission,
+        error
+      } = normalizeNavigateOptions(to, opts);
+      let currentLocation = state.location;
+      let nextLocation = createLocation(state.location, path, opts && opts.state);
+      nextLocation = _extends({}, nextLocation, init.history.encodeLocation(nextLocation));
+      let userReplace = opts && opts.replace != null ? opts.replace : void 0;
+      let historyAction = Action.Push;
+      if (userReplace === true) {
+        historyAction = Action.Replace;
+      } else if (userReplace === false)
+        ;
+      else if (submission != null && isMutationMethod(submission.formMethod) && submission.formAction === state.location.pathname + state.location.search) {
+        historyAction = Action.Replace;
+      }
+      let preventScrollReset = opts && "preventScrollReset" in opts ? opts.preventScrollReset === true : void 0;
+      let blockerKey = shouldBlockNavigation({
+        currentLocation,
+        nextLocation,
+        historyAction
+      });
+      if (blockerKey) {
+        updateBlocker(blockerKey, {
+          state: "blocked",
+          location: nextLocation,
+          proceed() {
+            updateBlocker(blockerKey, {
+              state: "proceeding",
+              proceed: void 0,
+              reset: void 0,
+              location: nextLocation
+            });
+            navigate(to, opts);
+          },
+          reset() {
+            deleteBlocker(blockerKey);
+            updateState({
+              blockers: new Map(state.blockers)
+            });
+          }
+        });
+        return;
+      }
+      return await startNavigation(historyAction, nextLocation, {
+        submission,
+        // Send through the formData serialization error if we have one so we can
+        // render at the right error boundary after we match routes
+        pendingError: error,
+        preventScrollReset,
+        replace: opts && opts.replace
+      });
+    }
+    function revalidate() {
+      interruptActiveLoads();
+      updateState({
+        revalidation: "loading"
+      });
+      if (state.navigation.state === "submitting") {
+        return;
+      }
+      if (state.navigation.state === "idle") {
+        startNavigation(state.historyAction, state.location, {
+          startUninterruptedRevalidation: true
+        });
+        return;
+      }
+      startNavigation(pendingAction || state.historyAction, state.navigation.location, {
+        overrideNavigation: state.navigation
+      });
+    }
+    async function startNavigation(historyAction, location2, opts) {
+      pendingNavigationController && pendingNavigationController.abort();
+      pendingNavigationController = null;
+      pendingAction = historyAction;
+      isUninterruptedRevalidation = (opts && opts.startUninterruptedRevalidation) === true;
+      saveScrollPosition(state.location, state.matches);
+      pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
+      let routesToUse = inFlightDataRoutes || dataRoutes;
+      let loadingNavigation = opts && opts.overrideNavigation;
+      let matches = matchRoutes(routesToUse, location2, init.basename);
+      if (!matches) {
+        let error = getInternalRouterError(404, {
+          pathname: location2.pathname
+        });
+        let {
+          matches: notFoundMatches,
+          route
+        } = getShortCircuitMatches(routesToUse);
+        cancelActiveDeferreds();
+        completeNavigation(location2, {
+          matches: notFoundMatches,
+          loaderData: {},
+          errors: {
+            [route.id]: error
+          }
+        });
+        return;
+      }
+      if (isHashChangeOnly(state.location, location2) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
+        completeNavigation(location2, {
+          matches
+        });
+        return;
+      }
+      pendingNavigationController = new AbortController();
+      let request2 = createClientSideRequest(init.history, location2, pendingNavigationController.signal, opts && opts.submission);
+      let pendingActionData;
+      let pendingError;
+      if (opts && opts.pendingError) {
+        pendingError = {
+          [findNearestBoundary(matches).route.id]: opts.pendingError
+        };
+      } else if (opts && opts.submission && isMutationMethod(opts.submission.formMethod)) {
+        let actionOutput = await handleAction(request2, location2, opts.submission, matches, {
+          replace: opts.replace
+        });
+        if (actionOutput.shortCircuited) {
+          return;
+        }
+        pendingActionData = actionOutput.pendingActionData;
+        pendingError = actionOutput.pendingActionError;
+        let navigation = _extends({
+          state: "loading",
+          location: location2
+        }, opts.submission);
+        loadingNavigation = navigation;
+        request2 = new Request(request2.url, {
+          signal: request2.signal
+        });
+      }
+      let {
+        shortCircuited,
+        loaderData,
+        errors
+      } = await handleLoaders(request2, location2, matches, loadingNavigation, opts && opts.submission, opts && opts.replace, pendingActionData, pendingError);
+      if (shortCircuited) {
+        return;
+      }
+      pendingNavigationController = null;
+      completeNavigation(location2, _extends({
+        matches
+      }, pendingActionData ? {
+        actionData: pendingActionData
+      } : {}, {
+        loaderData,
+        errors
+      }));
+    }
+    async function handleAction(request2, location2, submission, matches, opts) {
+      interruptActiveLoads();
+      let navigation = _extends({
+        state: "submitting",
+        location: location2
+      }, submission);
+      updateState({
+        navigation
+      });
+      let result;
+      let actionMatch = getTargetMatch(matches, location2);
+      if (!actionMatch.route.action && !actionMatch.route.lazy) {
+        result = {
+          type: ResultType.error,
+          error: getInternalRouterError(405, {
+            method: request2.method,
+            pathname: location2.pathname,
+            routeId: actionMatch.route.id
+          })
+        };
+      } else {
+        result = await callLoaderOrAction("action", request2, actionMatch, matches, manifest, detectErrorBoundary2, router2.basename);
+        if (request2.signal.aborted) {
+          return {
+            shortCircuited: true
+          };
+        }
+      }
+      if (isRedirectResult(result)) {
+        let replace3;
+        if (opts && opts.replace != null) {
+          replace3 = opts.replace;
+        } else {
+          replace3 = result.location === state.location.pathname + state.location.search;
+        }
+        await startRedirectNavigation(state, result, {
+          submission,
+          replace: replace3
+        });
+        return {
+          shortCircuited: true
+        };
+      }
+      if (isErrorResult(result)) {
+        let boundaryMatch = findNearestBoundary(matches, actionMatch.route.id);
+        if ((opts && opts.replace) !== true) {
+          pendingAction = Action.Push;
+        }
+        return {
+          // Send back an empty object we can use to clear out any prior actionData
+          pendingActionData: {},
+          pendingActionError: {
+            [boundaryMatch.route.id]: result.error
+          }
+        };
+      }
+      if (isDeferredResult(result)) {
+        throw getInternalRouterError(400, {
+          type: "defer-action"
+        });
+      }
+      return {
+        pendingActionData: {
+          [actionMatch.route.id]: result.data
+        }
+      };
+    }
+    async function handleLoaders(request2, location2, matches, overrideNavigation, submission, replace3, pendingActionData, pendingError) {
+      let loadingNavigation = overrideNavigation;
+      if (!loadingNavigation) {
+        let navigation = _extends({
+          state: "loading",
+          location: location2,
+          formMethod: void 0,
+          formAction: void 0,
+          formEncType: void 0,
+          formData: void 0
+        }, submission);
+        loadingNavigation = navigation;
+      }
+      let activeSubmission = submission ? submission : loadingNavigation.formMethod && loadingNavigation.formAction && loadingNavigation.formData && loadingNavigation.formEncType ? {
+        formMethod: loadingNavigation.formMethod,
+        formAction: loadingNavigation.formAction,
+        formData: loadingNavigation.formData,
+        formEncType: loadingNavigation.formEncType
+      } : void 0;
+      let routesToUse = inFlightDataRoutes || dataRoutes;
+      let [matchesToLoad, revalidatingFetchers] = getMatchesToLoad(init.history, state, matches, activeSubmission, location2, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, fetchLoadMatches, routesToUse, init.basename, pendingActionData, pendingError);
+      cancelActiveDeferreds((routeId) => !(matches && matches.some((m4) => m4.route.id === routeId)) || matchesToLoad && matchesToLoad.some((m4) => m4.route.id === routeId));
+      if (matchesToLoad.length === 0 && revalidatingFetchers.length === 0) {
+        completeNavigation(location2, _extends({
+          matches,
+          loaderData: {},
+          // Commit pending error if we're short circuiting
+          errors: pendingError || null
+        }, pendingActionData ? {
+          actionData: pendingActionData
+        } : {}));
+        return {
+          shortCircuited: true
+        };
+      }
+      if (!isUninterruptedRevalidation) {
+        revalidatingFetchers.forEach((rf) => {
+          let fetcher = state.fetchers.get(rf.key);
+          let revalidatingFetcher = {
+            state: "loading",
+            data: fetcher && fetcher.data,
+            formMethod: void 0,
+            formAction: void 0,
+            formEncType: void 0,
+            formData: void 0,
+            " _hasFetcherDoneAnything ": true
+          };
+          state.fetchers.set(rf.key, revalidatingFetcher);
+        });
+        let actionData = pendingActionData || state.actionData;
+        updateState(_extends({
+          navigation: loadingNavigation
+        }, actionData ? Object.keys(actionData).length === 0 ? {
+          actionData: null
+        } : {
+          actionData
+        } : {}, revalidatingFetchers.length > 0 ? {
+          fetchers: new Map(state.fetchers)
+        } : {}));
+      }
+      pendingNavigationLoadId = ++incrementingLoadId;
+      revalidatingFetchers.forEach((rf) => fetchControllers.set(rf.key, pendingNavigationController));
+      let {
+        results,
+        loaderResults,
+        fetcherResults
+      } = await callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, request2);
+      if (request2.signal.aborted) {
+        return {
+          shortCircuited: true
+        };
+      }
+      revalidatingFetchers.forEach((rf) => fetchControllers.delete(rf.key));
+      let redirect2 = findRedirect(results);
+      if (redirect2) {
+        await startRedirectNavigation(state, redirect2, {
+          replace: replace3
+        });
+        return {
+          shortCircuited: true
+        };
+      }
+      let {
+        loaderData,
+        errors
+      } = processLoaderData(state, matches, matchesToLoad, loaderResults, pendingError, revalidatingFetchers, fetcherResults, activeDeferreds);
+      activeDeferreds.forEach((deferredData, routeId) => {
+        deferredData.subscribe((aborted) => {
+          if (aborted || deferredData.done) {
+            activeDeferreds.delete(routeId);
+          }
+        });
+      });
+      markFetchRedirectsDone();
+      let didAbortFetchLoads = abortStaleFetchLoads(pendingNavigationLoadId);
+      return _extends({
+        loaderData,
+        errors
+      }, didAbortFetchLoads || revalidatingFetchers.length > 0 ? {
+        fetchers: new Map(state.fetchers)
+      } : {});
+    }
+    function getFetcher(key) {
+      return state.fetchers.get(key) || IDLE_FETCHER;
+    }
+    function fetch(key, routeId, href, opts) {
+      if (isServer2) {
+        throw new Error("router.fetch() was called during the server render, but it shouldn't be. You are likely calling a useFetcher() method in the body of your component. Try moving it to a useEffect or a callback.");
+      }
+      if (fetchControllers.has(key))
+        abortFetcher(key);
+      let routesToUse = inFlightDataRoutes || dataRoutes;
+      let matches = matchRoutes(routesToUse, href, init.basename);
+      if (!matches) {
+        setFetcherError(key, routeId, getInternalRouterError(404, {
+          pathname: href
+        }));
+        return;
+      }
+      let {
+        path,
+        submission
+      } = normalizeNavigateOptions(href, opts, true);
+      let match = getTargetMatch(matches, path);
+      pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
+      if (submission && isMutationMethod(submission.formMethod)) {
+        handleFetcherAction(key, routeId, path, match, matches, submission);
+        return;
+      }
+      fetchLoadMatches.set(key, {
+        routeId,
+        path
+      });
+      handleFetcherLoader(key, routeId, path, match, matches, submission);
+    }
+    async function handleFetcherAction(key, routeId, path, match, requestMatches, submission) {
+      interruptActiveLoads();
+      fetchLoadMatches.delete(key);
+      if (!match.route.action && !match.route.lazy) {
+        let error = getInternalRouterError(405, {
+          method: submission.formMethod,
+          pathname: path,
+          routeId
+        });
+        setFetcherError(key, routeId, error);
+        return;
+      }
+      let existingFetcher = state.fetchers.get(key);
+      let fetcher = _extends({
+        state: "submitting"
+      }, submission, {
+        data: existingFetcher && existingFetcher.data,
+        " _hasFetcherDoneAnything ": true
+      });
+      state.fetchers.set(key, fetcher);
+      updateState({
+        fetchers: new Map(state.fetchers)
+      });
+      let abortController = new AbortController();
+      let fetchRequest = createClientSideRequest(init.history, path, abortController.signal, submission);
+      fetchControllers.set(key, abortController);
+      let actionResult = await callLoaderOrAction("action", fetchRequest, match, requestMatches, manifest, detectErrorBoundary2, router2.basename);
+      if (fetchRequest.signal.aborted) {
+        if (fetchControllers.get(key) === abortController) {
+          fetchControllers.delete(key);
+        }
+        return;
+      }
+      if (isRedirectResult(actionResult)) {
+        fetchControllers.delete(key);
+        fetchRedirectIds.add(key);
+        let loadingFetcher = _extends({
+          state: "loading"
+        }, submission, {
+          data: void 0,
+          " _hasFetcherDoneAnything ": true
+        });
+        state.fetchers.set(key, loadingFetcher);
+        updateState({
+          fetchers: new Map(state.fetchers)
+        });
+        return startRedirectNavigation(state, actionResult, {
+          isFetchActionRedirect: true
+        });
+      }
+      if (isErrorResult(actionResult)) {
+        setFetcherError(key, routeId, actionResult.error);
+        return;
+      }
+      if (isDeferredResult(actionResult)) {
+        throw getInternalRouterError(400, {
+          type: "defer-action"
+        });
+      }
+      let nextLocation = state.navigation.location || state.location;
+      let revalidationRequest = createClientSideRequest(init.history, nextLocation, abortController.signal);
+      let routesToUse = inFlightDataRoutes || dataRoutes;
+      let matches = state.navigation.state !== "idle" ? matchRoutes(routesToUse, state.navigation.location, init.basename) : state.matches;
+      invariant(matches, "Didn't find any matches after fetcher action");
+      let loadId = ++incrementingLoadId;
+      fetchReloadIds.set(key, loadId);
+      let loadFetcher = _extends({
+        state: "loading",
+        data: actionResult.data
+      }, submission, {
+        " _hasFetcherDoneAnything ": true
+      });
+      state.fetchers.set(key, loadFetcher);
+      let [matchesToLoad, revalidatingFetchers] = getMatchesToLoad(
+        init.history,
+        state,
+        matches,
+        submission,
+        nextLocation,
+        isRevalidationRequired,
+        cancelledDeferredRoutes,
+        cancelledFetcherLoads,
+        fetchLoadMatches,
+        routesToUse,
+        init.basename,
+        {
+          [match.route.id]: actionResult.data
+        },
+        void 0
+        // No need to send through errors since we short circuit above
+      );
+      revalidatingFetchers.filter((rf) => rf.key !== key).forEach((rf) => {
+        let staleKey = rf.key;
+        let existingFetcher2 = state.fetchers.get(staleKey);
+        let revalidatingFetcher = {
+          state: "loading",
+          data: existingFetcher2 && existingFetcher2.data,
+          formMethod: void 0,
+          formAction: void 0,
+          formEncType: void 0,
+          formData: void 0,
+          " _hasFetcherDoneAnything ": true
+        };
+        state.fetchers.set(staleKey, revalidatingFetcher);
+        fetchControllers.set(staleKey, abortController);
+      });
+      updateState({
+        fetchers: new Map(state.fetchers)
+      });
+      let {
+        results,
+        loaderResults,
+        fetcherResults
+      } = await callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, revalidationRequest);
+      if (abortController.signal.aborted) {
+        return;
+      }
+      fetchReloadIds.delete(key);
+      fetchControllers.delete(key);
+      revalidatingFetchers.forEach((r6) => fetchControllers.delete(r6.key));
+      let redirect2 = findRedirect(results);
+      if (redirect2) {
+        return startRedirectNavigation(state, redirect2);
+      }
+      let {
+        loaderData,
+        errors
+      } = processLoaderData(state, state.matches, matchesToLoad, loaderResults, void 0, revalidatingFetchers, fetcherResults, activeDeferreds);
+      let doneFetcher = {
+        state: "idle",
+        data: actionResult.data,
+        formMethod: void 0,
+        formAction: void 0,
+        formEncType: void 0,
+        formData: void 0,
+        " _hasFetcherDoneAnything ": true
+      };
+      state.fetchers.set(key, doneFetcher);
+      let didAbortFetchLoads = abortStaleFetchLoads(loadId);
+      if (state.navigation.state === "loading" && loadId > pendingNavigationLoadId) {
+        invariant(pendingAction, "Expected pending action");
+        pendingNavigationController && pendingNavigationController.abort();
+        completeNavigation(state.navigation.location, {
+          matches,
+          loaderData,
+          errors,
+          fetchers: new Map(state.fetchers)
+        });
+      } else {
+        updateState(_extends({
+          errors,
+          loaderData: mergeLoaderData(state.loaderData, loaderData, matches, errors)
+        }, didAbortFetchLoads ? {
+          fetchers: new Map(state.fetchers)
+        } : {}));
+        isRevalidationRequired = false;
+      }
+    }
+    async function handleFetcherLoader(key, routeId, path, match, matches, submission) {
+      let existingFetcher = state.fetchers.get(key);
+      let loadingFetcher = _extends({
+        state: "loading",
+        formMethod: void 0,
+        formAction: void 0,
+        formEncType: void 0,
+        formData: void 0
+      }, submission, {
+        data: existingFetcher && existingFetcher.data,
+        " _hasFetcherDoneAnything ": true
+      });
+      state.fetchers.set(key, loadingFetcher);
+      updateState({
+        fetchers: new Map(state.fetchers)
+      });
+      let abortController = new AbortController();
+      let fetchRequest = createClientSideRequest(init.history, path, abortController.signal);
+      fetchControllers.set(key, abortController);
+      let result = await callLoaderOrAction("loader", fetchRequest, match, matches, manifest, detectErrorBoundary2, router2.basename);
+      if (isDeferredResult(result)) {
+        result = await resolveDeferredData(result, fetchRequest.signal, true) || result;
+      }
+      if (fetchControllers.get(key) === abortController) {
+        fetchControllers.delete(key);
+      }
+      if (fetchRequest.signal.aborted) {
+        return;
+      }
+      if (isRedirectResult(result)) {
+        await startRedirectNavigation(state, result);
+        return;
+      }
+      if (isErrorResult(result)) {
+        let boundaryMatch = findNearestBoundary(state.matches, routeId);
+        state.fetchers.delete(key);
+        updateState({
+          fetchers: new Map(state.fetchers),
+          errors: {
+            [boundaryMatch.route.id]: result.error
+          }
+        });
+        return;
+      }
+      invariant(!isDeferredResult(result), "Unhandled fetcher deferred data");
+      let doneFetcher = {
+        state: "idle",
+        data: result.data,
+        formMethod: void 0,
+        formAction: void 0,
+        formEncType: void 0,
+        formData: void 0,
+        " _hasFetcherDoneAnything ": true
+      };
+      state.fetchers.set(key, doneFetcher);
+      updateState({
+        fetchers: new Map(state.fetchers)
+      });
+    }
+    async function startRedirectNavigation(state2, redirect2, _temp) {
+      var _window;
+      let {
+        submission,
+        replace: replace3,
+        isFetchActionRedirect
+      } = _temp === void 0 ? {} : _temp;
+      if (redirect2.revalidate) {
+        isRevalidationRequired = true;
+      }
+      let redirectLocation = createLocation(
+        state2.location,
+        redirect2.location,
+        // TODO: This can be removed once we get rid of useTransition in Remix v2
+        _extends({
+          _isRedirect: true
+        }, isFetchActionRedirect ? {
+          _isFetchActionRedirect: true
+        } : {})
+      );
+      invariant(redirectLocation, "Expected a location on the redirect navigation");
+      if (ABSOLUTE_URL_REGEX.test(redirect2.location) && isBrowser && typeof ((_window = window) == null ? void 0 : _window.location) !== "undefined") {
+        let url = init.history.createURL(redirect2.location);
+        let isDifferentBasename = stripBasename(url.pathname, init.basename || "/") == null;
+        if (window.location.origin !== url.origin || isDifferentBasename) {
+          if (replace3) {
+            window.location.replace(redirect2.location);
+          } else {
+            window.location.assign(redirect2.location);
+          }
+          return;
+        }
+      }
+      pendingNavigationController = null;
+      let redirectHistoryAction = replace3 === true ? Action.Replace : Action.Push;
+      let {
+        formMethod,
+        formAction,
+        formEncType,
+        formData
+      } = state2.navigation;
+      if (!submission && formMethod && formAction && formData && formEncType) {
+        submission = {
+          formMethod,
+          formAction,
+          formEncType,
+          formData
+        };
+      }
+      if (redirectPreserveMethodStatusCodes.has(redirect2.status) && submission && isMutationMethod(submission.formMethod)) {
+        await startNavigation(redirectHistoryAction, redirectLocation, {
+          submission: _extends({}, submission, {
+            formAction: redirect2.location
+          }),
+          // Preserve this flag across redirects
+          preventScrollReset: pendingPreventScrollReset
+        });
+      } else {
+        await startNavigation(redirectHistoryAction, redirectLocation, {
+          overrideNavigation: {
+            state: "loading",
+            location: redirectLocation,
+            formMethod: submission ? submission.formMethod : void 0,
+            formAction: submission ? submission.formAction : void 0,
+            formEncType: submission ? submission.formEncType : void 0,
+            formData: submission ? submission.formData : void 0
+          },
+          // Preserve this flag across redirects
+          preventScrollReset: pendingPreventScrollReset
+        });
+      }
+    }
+    async function callLoadersAndMaybeResolveData(currentMatches, matches, matchesToLoad, fetchersToLoad, request2) {
+      let results = await Promise.all([...matchesToLoad.map((match) => callLoaderOrAction("loader", request2, match, matches, manifest, detectErrorBoundary2, router2.basename)), ...fetchersToLoad.map((f4) => {
+        if (f4.matches && f4.match) {
+          return callLoaderOrAction("loader", createClientSideRequest(init.history, f4.path, request2.signal), f4.match, f4.matches, manifest, detectErrorBoundary2, router2.basename);
+        } else {
+          let error = {
+            type: ResultType.error,
+            error: getInternalRouterError(404, {
+              pathname: f4.path
+            })
+          };
+          return error;
+        }
+      })]);
+      let loaderResults = results.slice(0, matchesToLoad.length);
+      let fetcherResults = results.slice(matchesToLoad.length);
+      await Promise.all([resolveDeferredResults(currentMatches, matchesToLoad, loaderResults, request2.signal, false, state.loaderData), resolveDeferredResults(currentMatches, fetchersToLoad.map((f4) => f4.match), fetcherResults, request2.signal, true)]);
+      return {
+        results,
+        loaderResults,
+        fetcherResults
+      };
+    }
+    function interruptActiveLoads() {
+      isRevalidationRequired = true;
+      cancelledDeferredRoutes.push(...cancelActiveDeferreds());
+      fetchLoadMatches.forEach((_2, key) => {
+        if (fetchControllers.has(key)) {
+          cancelledFetcherLoads.push(key);
+          abortFetcher(key);
+        }
+      });
+    }
+    function setFetcherError(key, routeId, error) {
+      let boundaryMatch = findNearestBoundary(state.matches, routeId);
+      deleteFetcher(key);
+      updateState({
+        errors: {
+          [boundaryMatch.route.id]: error
+        },
+        fetchers: new Map(state.fetchers)
+      });
+    }
+    function deleteFetcher(key) {
+      if (fetchControllers.has(key))
+        abortFetcher(key);
+      fetchLoadMatches.delete(key);
+      fetchReloadIds.delete(key);
+      fetchRedirectIds.delete(key);
+      state.fetchers.delete(key);
+    }
+    function abortFetcher(key) {
+      let controller = fetchControllers.get(key);
+      invariant(controller, "Expected fetch controller: " + key);
+      controller.abort();
+      fetchControllers.delete(key);
+    }
+    function markFetchersDone(keys) {
+      for (let key of keys) {
+        let fetcher = getFetcher(key);
+        let doneFetcher = {
+          state: "idle",
+          data: fetcher.data,
+          formMethod: void 0,
+          formAction: void 0,
+          formEncType: void 0,
+          formData: void 0,
+          " _hasFetcherDoneAnything ": true
+        };
+        state.fetchers.set(key, doneFetcher);
+      }
+    }
+    function markFetchRedirectsDone() {
+      let doneKeys = [];
+      for (let key of fetchRedirectIds) {
+        let fetcher = state.fetchers.get(key);
+        invariant(fetcher, "Expected fetcher: " + key);
+        if (fetcher.state === "loading") {
+          fetchRedirectIds.delete(key);
+          doneKeys.push(key);
+        }
+      }
+      markFetchersDone(doneKeys);
+    }
+    function abortStaleFetchLoads(landedId) {
+      let yeetedKeys = [];
+      for (let [key, id] of fetchReloadIds) {
+        if (id < landedId) {
+          let fetcher = state.fetchers.get(key);
+          invariant(fetcher, "Expected fetcher: " + key);
+          if (fetcher.state === "loading") {
+            abortFetcher(key);
+            fetchReloadIds.delete(key);
+            yeetedKeys.push(key);
+          }
+        }
+      }
+      markFetchersDone(yeetedKeys);
+      return yeetedKeys.length > 0;
+    }
+    function getBlocker(key, fn) {
+      let blocker = state.blockers.get(key) || IDLE_BLOCKER;
+      if (blockerFunctions.get(key) !== fn) {
+        blockerFunctions.set(key, fn);
+      }
+      return blocker;
+    }
+    function deleteBlocker(key) {
+      state.blockers.delete(key);
+      blockerFunctions.delete(key);
+    }
+    function updateBlocker(key, newBlocker) {
+      let blocker = state.blockers.get(key) || IDLE_BLOCKER;
+      invariant(blocker.state === "unblocked" && newBlocker.state === "blocked" || blocker.state === "blocked" && newBlocker.state === "blocked" || blocker.state === "blocked" && newBlocker.state === "proceeding" || blocker.state === "blocked" && newBlocker.state === "unblocked" || blocker.state === "proceeding" && newBlocker.state === "unblocked", "Invalid blocker state transition: " + blocker.state + " -> " + newBlocker.state);
+      state.blockers.set(key, newBlocker);
+      updateState({
+        blockers: new Map(state.blockers)
+      });
+    }
+    function shouldBlockNavigation(_ref2) {
+      let {
+        currentLocation,
+        nextLocation,
+        historyAction
+      } = _ref2;
+      if (blockerFunctions.size === 0) {
+        return;
+      }
+      if (blockerFunctions.size > 1) {
+        warning(false, "A router only supports one blocker at a time");
+      }
+      let entries = Array.from(blockerFunctions.entries());
+      let [blockerKey, blockerFunction] = entries[entries.length - 1];
+      let blocker = state.blockers.get(blockerKey);
+      if (blocker && blocker.state === "proceeding") {
+        return;
+      }
+      if (blockerFunction({
+        currentLocation,
+        nextLocation,
+        historyAction
+      })) {
+        return blockerKey;
+      }
+    }
+    function cancelActiveDeferreds(predicate) {
+      let cancelledRouteIds = [];
+      activeDeferreds.forEach((dfd, routeId) => {
+        if (!predicate || predicate(routeId)) {
+          dfd.cancel();
+          cancelledRouteIds.push(routeId);
+          activeDeferreds.delete(routeId);
+        }
+      });
+      return cancelledRouteIds;
+    }
+    function enableScrollRestoration(positions, getPosition, getKey) {
+      savedScrollPositions2 = positions;
+      getScrollPosition = getPosition;
+      getScrollRestorationKey = getKey || ((location2) => location2.key);
+      if (!initialScrollRestored && state.navigation === IDLE_NAVIGATION) {
+        initialScrollRestored = true;
+        let y3 = getSavedScrollPosition(state.location, state.matches);
+        if (y3 != null) {
+          updateState({
+            restoreScrollPosition: y3
+          });
+        }
+      }
+      return () => {
+        savedScrollPositions2 = null;
+        getScrollPosition = null;
+        getScrollRestorationKey = null;
+      };
+    }
+    function saveScrollPosition(location2, matches) {
+      if (savedScrollPositions2 && getScrollRestorationKey && getScrollPosition) {
+        let userMatches = matches.map((m4) => createUseMatchesMatch(m4, state.loaderData));
+        let key = getScrollRestorationKey(location2, userMatches) || location2.key;
+        savedScrollPositions2[key] = getScrollPosition();
+      }
+    }
+    function getSavedScrollPosition(location2, matches) {
+      if (savedScrollPositions2 && getScrollRestorationKey && getScrollPosition) {
+        let userMatches = matches.map((m4) => createUseMatchesMatch(m4, state.loaderData));
+        let key = getScrollRestorationKey(location2, userMatches) || location2.key;
+        let y3 = savedScrollPositions2[key];
+        if (typeof y3 === "number") {
+          return y3;
+        }
+      }
+      return null;
+    }
+    function _internalSetRoutes(newRoutes) {
+      inFlightDataRoutes = newRoutes;
+    }
+    router2 = {
+      get basename() {
+        return init.basename;
+      },
+      get state() {
+        return state;
+      },
+      get routes() {
+        return dataRoutes;
+      },
+      initialize,
+      subscribe,
+      enableScrollRestoration,
+      navigate,
+      fetch,
+      revalidate,
+      // Passthrough to history-aware createHref used by useHref so we get proper
+      // hash-aware URLs in DOM paths
+      createHref: (to) => init.history.createHref(to),
+      encodeLocation: (to) => init.history.encodeLocation(to),
+      getFetcher,
+      deleteFetcher,
+      dispose,
+      getBlocker,
+      deleteBlocker,
+      _internalFetchControllers: fetchControllers,
+      _internalActiveDeferreds: activeDeferreds,
+      // TODO: Remove setRoutes, it's temporary to avoid dealing with
+      // updating the tree while validating the update algorithm.
+      _internalSetRoutes
+    };
+    return router2;
+  }
+  function isSubmissionNavigation(opts) {
+    return opts != null && "formData" in opts;
+  }
+  function normalizeNavigateOptions(to, opts, isFetcher) {
+    if (isFetcher === void 0) {
+      isFetcher = false;
+    }
+    let path = typeof to === "string" ? to : createPath(to);
+    if (!opts || !isSubmissionNavigation(opts)) {
+      return {
+        path
+      };
+    }
+    if (opts.formMethod && !isValidMethod(opts.formMethod)) {
+      return {
+        path,
+        error: getInternalRouterError(405, {
+          method: opts.formMethod
+        })
+      };
+    }
+    let submission;
+    if (opts.formData) {
+      submission = {
+        formMethod: opts.formMethod || "get",
+        formAction: stripHashFromPath(path),
+        formEncType: opts && opts.formEncType || "application/x-www-form-urlencoded",
+        formData: opts.formData
+      };
+      if (isMutationMethod(submission.formMethod)) {
+        return {
+          path,
+          submission
+        };
+      }
+    }
+    let parsedPath = parsePath(path);
+    let searchParams = convertFormDataToSearchParams(opts.formData);
+    if (isFetcher && parsedPath.search && hasNakedIndexQuery(parsedPath.search)) {
+      searchParams.append("index", "");
+    }
+    parsedPath.search = "?" + searchParams;
+    return {
+      path: createPath(parsedPath),
+      submission
+    };
+  }
+  function getLoaderMatchesUntilBoundary(matches, boundaryId) {
+    let boundaryMatches = matches;
+    if (boundaryId) {
+      let index = matches.findIndex((m4) => m4.route.id === boundaryId);
+      if (index >= 0) {
+        boundaryMatches = matches.slice(0, index);
+      }
+    }
+    return boundaryMatches;
+  }
+  function getMatchesToLoad(history, state, matches, submission, location2, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, fetchLoadMatches, routesToUse, basename, pendingActionData, pendingError) {
+    let actionResult = pendingError ? Object.values(pendingError)[0] : pendingActionData ? Object.values(pendingActionData)[0] : void 0;
+    let currentUrl = history.createURL(state.location);
+    let nextUrl = history.createURL(location2);
+    let defaultShouldRevalidate = (
+      // Forced revalidation due to submission, useRevalidate, or X-Remix-Revalidate
+      isRevalidationRequired || // Clicked the same link, resubmitted a GET form
+      currentUrl.toString() === nextUrl.toString() || // Search params affect all loaders
+      currentUrl.search !== nextUrl.search
+    );
+    let boundaryId = pendingError ? Object.keys(pendingError)[0] : void 0;
+    let boundaryMatches = getLoaderMatchesUntilBoundary(matches, boundaryId);
+    let navigationMatches = boundaryMatches.filter((match, index) => {
+      if (match.route.lazy) {
+        return true;
+      }
+      if (match.route.loader == null) {
+        return false;
+      }
+      if (isNewLoader(state.loaderData, state.matches[index], match) || cancelledDeferredRoutes.some((id) => id === match.route.id)) {
+        return true;
+      }
+      let currentRouteMatch = state.matches[index];
+      let nextRouteMatch = match;
+      return shouldRevalidateLoader(match, _extends({
+        currentUrl,
+        currentParams: currentRouteMatch.params,
+        nextUrl,
+        nextParams: nextRouteMatch.params
+      }, submission, {
+        actionResult,
+        defaultShouldRevalidate: defaultShouldRevalidate || isNewRouteInstance(currentRouteMatch, nextRouteMatch)
+      }));
+    });
+    let revalidatingFetchers = [];
+    fetchLoadMatches.forEach((f4, key) => {
+      if (!matches.some((m4) => m4.route.id === f4.routeId)) {
+        return;
+      }
+      let fetcherMatches = matchRoutes(routesToUse, f4.path, basename);
+      if (!fetcherMatches) {
+        revalidatingFetchers.push(_extends({
+          key
+        }, f4, {
+          matches: null,
+          match: null
+        }));
+        return;
+      }
+      let fetcherMatch = getTargetMatch(fetcherMatches, f4.path);
+      if (cancelledFetcherLoads.includes(key)) {
+        revalidatingFetchers.push(_extends({
+          key,
+          matches: fetcherMatches,
+          match: fetcherMatch
+        }, f4));
+        return;
+      }
+      let shouldRevalidate = shouldRevalidateLoader(fetcherMatch, _extends({
+        currentUrl,
+        currentParams: state.matches[state.matches.length - 1].params,
+        nextUrl,
+        nextParams: matches[matches.length - 1].params
+      }, submission, {
+        actionResult,
+        defaultShouldRevalidate
+      }));
+      if (shouldRevalidate) {
+        revalidatingFetchers.push(_extends({
+          key,
+          matches: fetcherMatches,
+          match: fetcherMatch
+        }, f4));
+      }
+    });
+    return [navigationMatches, revalidatingFetchers];
+  }
+  function isNewLoader(currentLoaderData, currentMatch, match) {
+    let isNew = (
+      // [a] -> [a, b]
+      !currentMatch || // [a, b] -> [a, c]
+      match.route.id !== currentMatch.route.id
+    );
+    let isMissingData = currentLoaderData[match.route.id] === void 0;
+    return isNew || isMissingData;
+  }
+  function isNewRouteInstance(currentMatch, match) {
+    let currentPath = currentMatch.route.path;
+    return (
+      // param change for this match, /users/123 -> /users/456
+      currentMatch.pathname !== match.pathname || // splat param changed, which is not present in match.path
+      // e.g. /files/images/avatar.jpg -> files/finances.xls
+      currentPath != null && currentPath.endsWith("*") && currentMatch.params["*"] !== match.params["*"]
+    );
+  }
+  function shouldRevalidateLoader(loaderMatch, arg) {
+    if (loaderMatch.route.shouldRevalidate) {
+      let routeChoice = loaderMatch.route.shouldRevalidate(arg);
+      if (typeof routeChoice === "boolean") {
+        return routeChoice;
+      }
+    }
+    return arg.defaultShouldRevalidate;
+  }
+  async function loadLazyRouteModule(route, detectErrorBoundary2, manifest) {
+    if (!route.lazy) {
+      return;
+    }
+    let lazyRoute = await route.lazy();
+    if (!route.lazy) {
+      return;
+    }
+    let routeToUpdate = manifest[route.id];
+    invariant(routeToUpdate, "No route found in manifest");
+    let routeUpdates = {};
+    for (let lazyRouteProperty in lazyRoute) {
+      let staticRouteValue = routeToUpdate[lazyRouteProperty];
+      let isPropertyStaticallyDefined = staticRouteValue !== void 0 && // This property isn't static since it should always be updated based
+      // on the route updates
+      lazyRouteProperty !== "hasErrorBoundary";
+      warning(!isPropertyStaticallyDefined, 'Route "' + routeToUpdate.id + '" has a static property "' + lazyRouteProperty + '" defined but its lazy function is also returning a value for this property. ' + ('The lazy route property "' + lazyRouteProperty + '" will be ignored.'));
+      if (!isPropertyStaticallyDefined && !immutableRouteKeys.has(lazyRouteProperty)) {
+        routeUpdates[lazyRouteProperty] = lazyRoute[lazyRouteProperty];
+      }
+    }
+    Object.assign(routeToUpdate, routeUpdates);
+    Object.assign(routeToUpdate, {
+      // To keep things framework agnostic, we use the provided
+      // `detectErrorBoundary` function to set the `hasErrorBoundary` route
+      // property since the logic will differ between frameworks.
+      hasErrorBoundary: detectErrorBoundary2(_extends({}, routeToUpdate)),
+      lazy: void 0
+    });
+  }
+  async function callLoaderOrAction(type, request2, match, matches, manifest, detectErrorBoundary2, basename, isStaticRequest, isRouteRequest, requestContext) {
+    if (basename === void 0) {
+      basename = "/";
+    }
+    if (isStaticRequest === void 0) {
+      isStaticRequest = false;
+    }
+    if (isRouteRequest === void 0) {
+      isRouteRequest = false;
+    }
+    let resultType;
+    let result;
+    let onReject;
+    let runHandler = (handler) => {
+      let reject;
+      let abortPromise = new Promise((_2, r6) => reject = r6);
+      onReject = () => reject();
+      request2.signal.addEventListener("abort", onReject);
+      return Promise.race([handler({
+        request: request2,
+        params: match.params,
+        context: requestContext
+      }), abortPromise]);
+    };
+    try {
+      let handler = match.route[type];
+      if (match.route.lazy) {
+        if (handler) {
+          let values = await Promise.all([runHandler(handler), loadLazyRouteModule(match.route, detectErrorBoundary2, manifest)]);
+          result = values[0];
+        } else {
+          await loadLazyRouteModule(match.route, detectErrorBoundary2, manifest);
+          handler = match.route[type];
+          if (handler) {
+            result = await runHandler(handler);
+          } else if (type === "action") {
+            throw getInternalRouterError(405, {
+              method: request2.method,
+              pathname: new URL(request2.url).pathname,
+              routeId: match.route.id
+            });
+          } else {
+            return {
+              type: ResultType.data,
+              data: void 0
+            };
+          }
+        }
+      } else {
+        invariant(handler, "Could not find the " + type + ' to run on the "' + match.route.id + '" route');
+        result = await runHandler(handler);
+      }
+      invariant(result !== void 0, "You defined " + (type === "action" ? "an action" : "a loader") + " for route " + ('"' + match.route.id + "\" but didn't return anything from your `" + type + "` ") + "function. Please return a value or `null`.");
+    } catch (e3) {
+      resultType = ResultType.error;
+      result = e3;
+    } finally {
+      if (onReject) {
+        request2.signal.removeEventListener("abort", onReject);
+      }
+    }
+    if (isResponse(result)) {
+      let status = result.status;
+      if (redirectStatusCodes.has(status)) {
+        let location2 = result.headers.get("Location");
+        invariant(location2, "Redirects returned/thrown from loaders/actions must have a Location header");
+        if (!ABSOLUTE_URL_REGEX.test(location2)) {
+          let activeMatches = matches.slice(0, matches.indexOf(match) + 1);
+          let routePathnames = getPathContributingMatches(activeMatches).map((match2) => match2.pathnameBase);
+          let resolvedLocation = resolveTo(location2, routePathnames, new URL(request2.url).pathname);
+          invariant(createPath(resolvedLocation), "Unable to resolve redirect location: " + location2);
+          if (basename) {
+            let path = resolvedLocation.pathname;
+            resolvedLocation.pathname = path === "/" ? basename : joinPaths([basename, path]);
+          }
+          location2 = createPath(resolvedLocation);
+        } else if (!isStaticRequest) {
+          let currentUrl = new URL(request2.url);
+          let url = location2.startsWith("//") ? new URL(currentUrl.protocol + location2) : new URL(location2);
+          let isSameBasename = stripBasename(url.pathname, basename) != null;
+          if (url.origin === currentUrl.origin && isSameBasename) {
+            location2 = url.pathname + url.search + url.hash;
+          }
+        }
+        if (isStaticRequest) {
+          result.headers.set("Location", location2);
+          throw result;
+        }
+        return {
+          type: ResultType.redirect,
+          status,
+          location: location2,
+          revalidate: result.headers.get("X-Remix-Revalidate") !== null
+        };
+      }
+      if (isRouteRequest) {
+        throw {
+          type: resultType || ResultType.data,
+          response: result
+        };
+      }
+      let data;
+      let contentType = result.headers.get("Content-Type");
+      if (contentType && /\bapplication\/json\b/.test(contentType)) {
+        data = await result.json();
+      } else {
+        data = await result.text();
+      }
+      if (resultType === ResultType.error) {
+        return {
+          type: resultType,
+          error: new ErrorResponse(status, result.statusText, data),
+          headers: result.headers
+        };
+      }
+      return {
+        type: ResultType.data,
+        data,
+        statusCode: result.status,
+        headers: result.headers
+      };
+    }
+    if (resultType === ResultType.error) {
+      return {
+        type: resultType,
+        error: result
+      };
+    }
+    if (result instanceof DeferredData) {
+      var _result$init, _result$init2;
+      return {
+        type: ResultType.deferred,
+        deferredData: result,
+        statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status,
+        headers: ((_result$init2 = result.init) == null ? void 0 : _result$init2.headers) && new Headers(result.init.headers)
+      };
+    }
+    return {
+      type: ResultType.data,
+      data: result
+    };
+  }
+  function createClientSideRequest(history, location2, signal, submission) {
+    let url = history.createURL(stripHashFromPath(location2)).toString();
+    let init = {
+      signal
+    };
+    if (submission && isMutationMethod(submission.formMethod)) {
+      let {
+        formMethod,
+        formEncType,
+        formData
+      } = submission;
+      init.method = formMethod.toUpperCase();
+      init.body = formEncType === "application/x-www-form-urlencoded" ? convertFormDataToSearchParams(formData) : formData;
+    }
+    return new Request(url, init);
+  }
+  function convertFormDataToSearchParams(formData) {
+    let searchParams = new URLSearchParams();
+    for (let [key, value] of formData.entries()) {
+      searchParams.append(key, value instanceof File ? value.name : value);
+    }
+    return searchParams;
+  }
+  function processRouteLoaderData(matches, matchesToLoad, results, pendingError, activeDeferreds) {
+    let loaderData = {};
+    let errors = null;
+    let statusCode;
+    let foundError = false;
+    let loaderHeaders = {};
+    results.forEach((result, index) => {
+      let id = matchesToLoad[index].route.id;
+      invariant(!isRedirectResult(result), "Cannot handle redirect results in processLoaderData");
+      if (isErrorResult(result)) {
+        let boundaryMatch = findNearestBoundary(matches, id);
+        let error = result.error;
+        if (pendingError) {
+          error = Object.values(pendingError)[0];
+          pendingError = void 0;
+        }
+        errors = errors || {};
+        if (errors[boundaryMatch.route.id] == null) {
+          errors[boundaryMatch.route.id] = error;
+        }
+        loaderData[id] = void 0;
+        if (!foundError) {
+          foundError = true;
+          statusCode = isRouteErrorResponse(result.error) ? result.error.status : 500;
+        }
+        if (result.headers) {
+          loaderHeaders[id] = result.headers;
+        }
+      } else {
+        if (isDeferredResult(result)) {
+          activeDeferreds.set(id, result.deferredData);
+          loaderData[id] = result.deferredData.data;
+        } else {
+          loaderData[id] = result.data;
+        }
+        if (result.statusCode != null && result.statusCode !== 200 && !foundError) {
+          statusCode = result.statusCode;
+        }
+        if (result.headers) {
+          loaderHeaders[id] = result.headers;
+        }
+      }
+    });
+    if (pendingError) {
+      errors = pendingError;
+      loaderData[Object.keys(pendingError)[0]] = void 0;
+    }
+    return {
+      loaderData,
+      errors,
+      statusCode: statusCode || 200,
+      loaderHeaders
+    };
+  }
+  function processLoaderData(state, matches, matchesToLoad, results, pendingError, revalidatingFetchers, fetcherResults, activeDeferreds) {
+    let {
+      loaderData,
+      errors
+    } = processRouteLoaderData(matches, matchesToLoad, results, pendingError, activeDeferreds);
+    for (let index = 0; index < revalidatingFetchers.length; index++) {
+      let {
+        key,
+        match
+      } = revalidatingFetchers[index];
+      invariant(fetcherResults !== void 0 && fetcherResults[index] !== void 0, "Did not find corresponding fetcher result");
+      let result = fetcherResults[index];
+      if (isErrorResult(result)) {
+        let boundaryMatch = findNearestBoundary(state.matches, match == null ? void 0 : match.route.id);
+        if (!(errors && errors[boundaryMatch.route.id])) {
+          errors = _extends({}, errors, {
+            [boundaryMatch.route.id]: result.error
+          });
+        }
+        state.fetchers.delete(key);
+      } else if (isRedirectResult(result)) {
+        invariant(false, "Unhandled fetcher revalidation redirect");
+      } else if (isDeferredResult(result)) {
+        invariant(false, "Unhandled fetcher deferred data");
+      } else {
+        let doneFetcher = {
+          state: "idle",
+          data: result.data,
+          formMethod: void 0,
+          formAction: void 0,
+          formEncType: void 0,
+          formData: void 0,
+          " _hasFetcherDoneAnything ": true
+        };
+        state.fetchers.set(key, doneFetcher);
+      }
+    }
+    return {
+      loaderData,
+      errors
+    };
+  }
+  function mergeLoaderData(loaderData, newLoaderData, matches, errors) {
+    let mergedLoaderData = _extends({}, newLoaderData);
+    for (let match of matches) {
+      let id = match.route.id;
+      if (newLoaderData.hasOwnProperty(id)) {
+        if (newLoaderData[id] !== void 0) {
+          mergedLoaderData[id] = newLoaderData[id];
+        }
+      } else if (loaderData[id] !== void 0 && match.route.loader) {
+        mergedLoaderData[id] = loaderData[id];
+      }
+      if (errors && errors.hasOwnProperty(id)) {
+        break;
+      }
+    }
+    return mergedLoaderData;
+  }
+  function findNearestBoundary(matches, routeId) {
+    let eligibleMatches = routeId ? matches.slice(0, matches.findIndex((m4) => m4.route.id === routeId) + 1) : [...matches];
+    return eligibleMatches.reverse().find((m4) => m4.route.hasErrorBoundary === true) || matches[0];
+  }
+  function getShortCircuitMatches(routes) {
+    let route = routes.find((r6) => r6.index || !r6.path || r6.path === "/") || {
+      id: "__shim-error-route__"
+    };
+    return {
+      matches: [{
+        params: {},
+        pathname: "",
+        pathnameBase: "",
+        route
+      }],
+      route
+    };
+  }
+  function getInternalRouterError(status, _temp4) {
+    let {
+      pathname,
+      routeId,
+      method,
+      type
+    } = _temp4 === void 0 ? {} : _temp4;
+    let statusText = "Unknown Server Error";
+    let errorMessage = "Unknown @remix-run/router error";
+    if (status === 400) {
+      statusText = "Bad Request";
+      if (method && pathname && routeId) {
+        errorMessage = "You made a " + method + ' request to "' + pathname + '" but ' + ('did not provide a `loader` for route "' + routeId + '", ') + "so there is no way to handle the request.";
+      } else if (type === "defer-action") {
+        errorMessage = "defer() is not supported in actions";
+      }
+    } else if (status === 403) {
+      statusText = "Forbidden";
+      errorMessage = 'Route "' + routeId + '" does not match URL "' + pathname + '"';
+    } else if (status === 404) {
+      statusText = "Not Found";
+      errorMessage = 'No route matches URL "' + pathname + '"';
+    } else if (status === 405) {
+      statusText = "Method Not Allowed";
+      if (method && pathname && routeId) {
+        errorMessage = "You made a " + method.toUpperCase() + ' request to "' + pathname + '" but ' + ('did not provide an `action` for route "' + routeId + '", ') + "so there is no way to handle the request.";
+      } else if (method) {
+        errorMessage = 'Invalid request method "' + method.toUpperCase() + '"';
+      }
+    }
+    return new ErrorResponse(status || 500, statusText, new Error(errorMessage), true);
+  }
+  function findRedirect(results) {
+    for (let i5 = results.length - 1; i5 >= 0; i5--) {
+      let result = results[i5];
+      if (isRedirectResult(result)) {
+        return result;
+      }
+    }
+  }
+  function stripHashFromPath(path) {
+    let parsedPath = typeof path === "string" ? parsePath(path) : path;
+    return createPath(_extends({}, parsedPath, {
+      hash: ""
+    }));
+  }
+  function isHashChangeOnly(a3, b3) {
+    return a3.pathname === b3.pathname && a3.search === b3.search && a3.hash !== b3.hash;
+  }
+  function isDeferredResult(result) {
+    return result.type === ResultType.deferred;
+  }
+  function isErrorResult(result) {
+    return result.type === ResultType.error;
+  }
+  function isRedirectResult(result) {
+    return (result && result.type) === ResultType.redirect;
+  }
+  function isResponse(value) {
+    return value != null && typeof value.status === "number" && typeof value.statusText === "string" && typeof value.headers === "object" && typeof value.body !== "undefined";
+  }
+  function isValidMethod(method) {
+    return validRequestMethods.has(method);
+  }
+  function isMutationMethod(method) {
+    return validMutationMethods.has(method);
+  }
+  async function resolveDeferredResults(currentMatches, matchesToLoad, results, signal, isFetcher, currentLoaderData) {
+    for (let index = 0; index < results.length; index++) {
+      let result = results[index];
+      let match = matchesToLoad[index];
+      if (!match) {
+        continue;
+      }
+      let currentMatch = currentMatches.find((m4) => m4.route.id === match.route.id);
+      let isRevalidatingLoader = currentMatch != null && !isNewRouteInstance(currentMatch, match) && (currentLoaderData && currentLoaderData[match.route.id]) !== void 0;
+      if (isDeferredResult(result) && (isFetcher || isRevalidatingLoader)) {
+        await resolveDeferredData(result, signal, isFetcher).then((result2) => {
+          if (result2) {
+            results[index] = result2 || results[index];
+          }
+        });
+      }
+    }
+  }
+  async function resolveDeferredData(result, signal, unwrap) {
+    if (unwrap === void 0) {
+      unwrap = false;
+    }
+    let aborted = await result.deferredData.resolveData(signal);
+    if (aborted) {
+      return;
+    }
+    if (unwrap) {
+      try {
+        return {
+          type: ResultType.data,
+          data: result.deferredData.unwrappedData
+        };
+      } catch (e3) {
+        return {
+          type: ResultType.error,
+          error: e3
+        };
+      }
+    }
+    return {
+      type: ResultType.data,
+      data: result.deferredData.data
+    };
+  }
+  function hasNakedIndexQuery(search) {
+    return new URLSearchParams(search).getAll("index").some((v2) => v2 === "");
+  }
+  function createUseMatchesMatch(match, loaderData) {
+    let {
+      route,
+      pathname,
+      params
+    } = match;
+    return {
+      id: route.id,
+      pathname,
+      params,
+      data: loaderData[route.id],
+      handle: route.handle
+    };
+  }
+  function getTargetMatch(matches, location2) {
+    let search = typeof location2 === "string" ? parsePath(location2).search : location2.search;
+    if (matches[matches.length - 1].route.index && hasNakedIndexQuery(search || "")) {
+      return matches[matches.length - 1];
+    }
+    let pathMatches = getPathContributingMatches(matches);
+    return pathMatches[pathMatches.length - 1];
+  }
+  var Action, PopStateEventType, ResultType, immutableRouteKeys, paramRe, dynamicSegmentValue, indexRouteValue, emptySegmentValue, staticSegmentValue, splatPenalty, isSplat, joinPaths, normalizePathname, normalizeSearch, normalizeHash, AbortedDeferredError, DeferredData, ErrorResponse, validMutationMethodsArr, validMutationMethods, validRequestMethodsArr, validRequestMethods, redirectStatusCodes, redirectPreserveMethodStatusCodes, IDLE_NAVIGATION, IDLE_FETCHER, IDLE_BLOCKER, ABSOLUTE_URL_REGEX, isBrowser, isServer2, defaultDetectErrorBoundary, UNSAFE_DEFERRED_SYMBOL;
   var init_router = __esm({
     "node_modules/@remix-run/router/dist/router.js"() {
       (function(Action2) {
@@ -24145,6 +28538,7 @@
         ResultType2["redirect"] = "redirect";
         ResultType2["error"] = "error";
       })(ResultType || (ResultType = {}));
+      immutableRouteKeys = /* @__PURE__ */ new Set(["lazy", "caseSensitive", "path", "id", "index", "children"]);
       paramRe = /^:\w+$/;
       dynamicSegmentValue = 3;
       indexRouteValue = 2;
@@ -24156,11 +28550,162 @@
       normalizePathname = (pathname) => pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
       normalizeSearch = (search) => !search || search === "?" ? "" : search.startsWith("?") ? search : "?" + search;
       normalizeHash = (hash) => !hash || hash === "#" ? "" : hash.startsWith("#") ? hash : "#" + hash;
+      AbortedDeferredError = class extends Error {
+      };
+      DeferredData = class {
+        constructor(data, responseInit) {
+          this.pendingKeysSet = /* @__PURE__ */ new Set();
+          this.subscribers = /* @__PURE__ */ new Set();
+          this.deferredKeys = [];
+          invariant(data && typeof data === "object" && !Array.isArray(data), "defer() only accepts plain objects");
+          let reject;
+          this.abortPromise = new Promise((_2, r6) => reject = r6);
+          this.controller = new AbortController();
+          let onAbort = () => reject(new AbortedDeferredError("Deferred data aborted"));
+          this.unlistenAbortSignal = () => this.controller.signal.removeEventListener("abort", onAbort);
+          this.controller.signal.addEventListener("abort", onAbort);
+          this.data = Object.entries(data).reduce((acc, _ref2) => {
+            let [key, value] = _ref2;
+            return Object.assign(acc, {
+              [key]: this.trackPromise(key, value)
+            });
+          }, {});
+          if (this.done) {
+            this.unlistenAbortSignal();
+          }
+          this.init = responseInit;
+        }
+        trackPromise(key, value) {
+          if (!(value instanceof Promise)) {
+            return value;
+          }
+          this.deferredKeys.push(key);
+          this.pendingKeysSet.add(key);
+          let promise = Promise.race([value, this.abortPromise]).then((data) => this.onSettle(promise, key, null, data), (error) => this.onSettle(promise, key, error));
+          promise.catch(() => {
+          });
+          Object.defineProperty(promise, "_tracked", {
+            get: () => true
+          });
+          return promise;
+        }
+        onSettle(promise, key, error, data) {
+          if (this.controller.signal.aborted && error instanceof AbortedDeferredError) {
+            this.unlistenAbortSignal();
+            Object.defineProperty(promise, "_error", {
+              get: () => error
+            });
+            return Promise.reject(error);
+          }
+          this.pendingKeysSet.delete(key);
+          if (this.done) {
+            this.unlistenAbortSignal();
+          }
+          if (error) {
+            Object.defineProperty(promise, "_error", {
+              get: () => error
+            });
+            this.emit(false, key);
+            return Promise.reject(error);
+          }
+          Object.defineProperty(promise, "_data", {
+            get: () => data
+          });
+          this.emit(false, key);
+          return data;
+        }
+        emit(aborted, settledKey) {
+          this.subscribers.forEach((subscriber) => subscriber(aborted, settledKey));
+        }
+        subscribe(fn) {
+          this.subscribers.add(fn);
+          return () => this.subscribers.delete(fn);
+        }
+        cancel() {
+          this.controller.abort();
+          this.pendingKeysSet.forEach((v2, k) => this.pendingKeysSet.delete(k));
+          this.emit(true);
+        }
+        async resolveData(signal) {
+          let aborted = false;
+          if (!this.done) {
+            let onAbort = () => this.cancel();
+            signal.addEventListener("abort", onAbort);
+            aborted = await new Promise((resolve) => {
+              this.subscribe((aborted2) => {
+                signal.removeEventListener("abort", onAbort);
+                if (aborted2 || this.done) {
+                  resolve(aborted2);
+                }
+              });
+            });
+          }
+          return aborted;
+        }
+        get done() {
+          return this.pendingKeysSet.size === 0;
+        }
+        get unwrappedData() {
+          invariant(this.data !== null && this.done, "Can only unwrap data on initialized and settled deferreds");
+          return Object.entries(this.data).reduce((acc, _ref2) => {
+            let [key, value] = _ref2;
+            return Object.assign(acc, {
+              [key]: unwrapTrackedPromise(value)
+            });
+          }, {});
+        }
+        get pendingKeys() {
+          return Array.from(this.pendingKeysSet);
+        }
+      };
+      ErrorResponse = class {
+        constructor(status, statusText, data, internal) {
+          if (internal === void 0) {
+            internal = false;
+          }
+          this.status = status;
+          this.statusText = statusText || "";
+          this.internal = internal;
+          if (data instanceof Error) {
+            this.data = data.toString();
+            this.error = data;
+          } else {
+            this.data = data;
+          }
+        }
+      };
       validMutationMethodsArr = ["post", "put", "patch", "delete"];
       validMutationMethods = new Set(validMutationMethodsArr);
       validRequestMethodsArr = ["get", ...validMutationMethodsArr];
       validRequestMethods = new Set(validRequestMethodsArr);
+      redirectStatusCodes = /* @__PURE__ */ new Set([301, 302, 303, 307, 308]);
+      redirectPreserveMethodStatusCodes = /* @__PURE__ */ new Set([307, 308]);
+      IDLE_NAVIGATION = {
+        state: "idle",
+        location: void 0,
+        formMethod: void 0,
+        formAction: void 0,
+        formEncType: void 0,
+        formData: void 0
+      };
+      IDLE_FETCHER = {
+        state: "idle",
+        data: void 0,
+        formMethod: void 0,
+        formAction: void 0,
+        formEncType: void 0,
+        formData: void 0
+      };
+      IDLE_BLOCKER = {
+        state: "unblocked",
+        proceed: void 0,
+        reset: void 0,
+        location: void 0
+      };
+      ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
       isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
+      isServer2 = !isBrowser;
+      defaultDetectErrorBoundary = (route) => Boolean(route.hasErrorBoundary);
       UNSAFE_DEFERRED_SYMBOL = Symbol("deferred");
     }
   });
@@ -24172,7 +28717,7 @@
   function useSyncExternalStore$2(subscribe, getSnapshot, getServerSnapshot) {
     if (true) {
       if (!didWarnOld18Alpha) {
-        if ("startTransition" in React) {
+        if ("startTransition" in React6) {
           didWarnOld18Alpha = true;
           console.error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
         }
@@ -24190,7 +28735,7 @@
     }
     const [{
       inst
-    }, forceUpdate] = useState2({
+    }, forceUpdate] = useState4({
       inst: {
         value,
         getSnapshot
@@ -24205,7 +28750,7 @@
         });
       }
     }, [subscribe, value, getSnapshot]);
-    useEffect2(() => {
+    useEffect5(() => {
       if (checkIfSnapshotChanged(inst)) {
         forceUpdate({
           inst
@@ -24233,7 +28778,7 @@
       return true;
     }
   }
-  function useSyncExternalStore$1(subscribe, getSnapshot, getServerSnapshot) {
+  function useSyncExternalStore$12(subscribe, getSnapshot, getServerSnapshot) {
     return getSnapshot();
   }
   function _extends2() {
@@ -24263,7 +28808,7 @@
     let {
       basename,
       navigator: navigator2
-    } = React.useContext(NavigationContext);
+    } = React6.useContext(NavigationContext);
     let {
       hash,
       pathname,
@@ -24282,7 +28827,7 @@
     });
   }
   function useInRouterContext() {
-    return React.useContext(LocationContext) != null;
+    return React6.useContext(LocationContext) != null;
   }
   function useLocation() {
     !useInRouterContext() ? true ? invariant(
@@ -24291,7 +28836,7 @@
       // router loaded. We can help them understand how to avoid that.
       "useLocation() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
-    return React.useContext(LocationContext).location;
+    return React6.useContext(LocationContext).location;
   }
   function useNavigate() {
     !useInRouterContext() ? true ? invariant(
@@ -24303,19 +28848,19 @@
     let {
       basename,
       navigator: navigator2
-    } = React.useContext(NavigationContext);
+    } = React6.useContext(NavigationContext);
     let {
       matches
-    } = React.useContext(RouteContext);
+    } = React6.useContext(RouteContext);
     let {
       pathname: locationPathname
     } = useLocation();
     let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match) => match.pathnameBase));
-    let activeRef = React.useRef(false);
-    React.useEffect(() => {
+    let activeRef = React6.useRef(false);
+    React6.useEffect(() => {
       activeRef.current = true;
     });
-    let navigate = React.useCallback(function(to, options) {
+    let navigate = React6.useCallback(function(to, options) {
       if (options === void 0) {
         options = {};
       }
@@ -24335,9 +28880,9 @@
     return navigate;
   }
   function useOutlet(context) {
-    let outlet = React.useContext(RouteContext).outlet;
+    let outlet = React6.useContext(RouteContext).outlet;
     if (outlet) {
-      return /* @__PURE__ */ React.createElement(OutletContext.Provider, {
+      return /* @__PURE__ */ React6.createElement(OutletContext.Provider, {
         value: context
       }, outlet);
     }
@@ -24346,7 +28891,7 @@
   function useParams() {
     let {
       matches
-    } = React.useContext(RouteContext);
+    } = React6.useContext(RouteContext);
     let routeMatch = matches[matches.length - 1];
     return routeMatch ? routeMatch.params : {};
   }
@@ -24356,14 +28901,14 @@
     } = _temp2 === void 0 ? {} : _temp2;
     let {
       matches
-    } = React.useContext(RouteContext);
+    } = React6.useContext(RouteContext);
     let {
       pathname: locationPathname
     } = useLocation();
     let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match) => match.pathnameBase));
-    return React.useMemo(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === "path"), [to, routePathnamesJson, locationPathname, relative]);
+    return React6.useMemo(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === "path"), [to, routePathnamesJson, locationPathname, relative]);
   }
-  function useRoutes(routes2, locationArg) {
+  function useRoutes(routes, locationArg) {
     !useInRouterContext() ? true ? invariant(
       false,
       // TODO: This error is probably because they somehow have 2 versions of the
@@ -24372,11 +28917,11 @@
     ) : invariant(false) : void 0;
     let {
       navigator: navigator2
-    } = React.useContext(NavigationContext);
-    let dataRouterStateContext = React.useContext(DataRouterStateContext);
+    } = React6.useContext(NavigationContext);
+    let dataRouterStateContext = React6.useContext(DataRouterStateContext);
     let {
       matches: parentMatches
-    } = React.useContext(RouteContext);
+    } = React6.useContext(RouteContext);
     let routeMatch = parentMatches[parentMatches.length - 1];
     let parentParams = routeMatch ? routeMatch.params : {};
     let parentPathname = routeMatch ? routeMatch.pathname : "/";
@@ -24400,7 +28945,7 @@
     }
     let pathname = location2.pathname || "/";
     let remainingPathname = parentPathnameBase === "/" ? pathname : pathname.slice(parentPathnameBase.length) || "/";
-    let matches = matchRoutes(routes2, {
+    let matches = matchRoutes(routes, {
       pathname: remainingPathname
     });
     if (true) {
@@ -24421,7 +28966,7 @@
       ])
     })), parentMatches, dataRouterStateContext || void 0);
     if (locationArg && renderedMatches) {
-      return /* @__PURE__ */ React.createElement(LocationContext.Provider, {
+      return /* @__PURE__ */ React6.createElement(LocationContext.Provider, {
         value: {
           location: _extends2({
             pathname: "/",
@@ -24451,17 +28996,17 @@
     };
     let devInfo = null;
     if (true) {
-      devInfo = /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own\xA0", /* @__PURE__ */ React.createElement("code", {
+      devInfo = /* @__PURE__ */ React6.createElement(React6.Fragment, null, /* @__PURE__ */ React6.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React6.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own\xA0", /* @__PURE__ */ React6.createElement("code", {
         style: codeStyles
-      }, "ErrorBoundary"), " prop on\xA0", /* @__PURE__ */ React.createElement("code", {
+      }, "ErrorBoundary"), " prop on\xA0", /* @__PURE__ */ React6.createElement("code", {
         style: codeStyles
       }, "<Route>")));
     }
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ React.createElement("h3", {
+    return /* @__PURE__ */ React6.createElement(React6.Fragment, null, /* @__PURE__ */ React6.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ React6.createElement("h3", {
       style: {
         fontStyle: "italic"
       }
-    }, message), stack ? /* @__PURE__ */ React.createElement("pre", {
+    }, message), stack ? /* @__PURE__ */ React6.createElement("pre", {
       style: preStyles
     }, stack) : null, devInfo);
   }
@@ -24471,11 +29016,11 @@
       match,
       children
     } = _ref2;
-    let dataRouterContext = React.useContext(DataRouterContext);
+    let dataRouterContext = React6.useContext(DataRouterContext);
     if (dataRouterContext && dataRouterContext.static && dataRouterContext.staticContext && (match.route.errorElement || match.route.ErrorBoundary)) {
       dataRouterContext.staticContext._deepestRenderedBoundaryId = match.route.id;
     }
-    return /* @__PURE__ */ React.createElement(RouteContext.Provider, {
+    return /* @__PURE__ */ React6.createElement(RouteContext.Provider, {
       value: routeContext
     }, children);
   }
@@ -24502,11 +29047,11 @@
       let errorElement = null;
       if (dataRouterState) {
         if (match.route.ErrorBoundary) {
-          errorElement = /* @__PURE__ */ React.createElement(match.route.ErrorBoundary, null);
+          errorElement = /* @__PURE__ */ React6.createElement(match.route.ErrorBoundary, null);
         } else if (match.route.errorElement) {
           errorElement = match.route.errorElement;
         } else {
-          errorElement = /* @__PURE__ */ React.createElement(DefaultErrorComponent, null);
+          errorElement = /* @__PURE__ */ React6.createElement(DefaultErrorComponent, null);
         }
       }
       let matches2 = parentMatches.concat(renderedMatches.slice(0, index + 1));
@@ -24515,11 +29060,11 @@
         if (error) {
           children = errorElement;
         } else if (match.route.Component) {
-          children = /* @__PURE__ */ React.createElement(match.route.Component, null);
+          children = /* @__PURE__ */ React6.createElement(match.route.Component, null);
         } else if (match.route.element) {
           children = match.route.element;
         }
-        return /* @__PURE__ */ React.createElement(RenderedRoute, {
+        return /* @__PURE__ */ React6.createElement(RenderedRoute, {
           match,
           routeContext: {
             outlet,
@@ -24528,7 +29073,7 @@
           children
         });
       };
-      return dataRouterState && (match.route.ErrorBoundary || match.route.errorElement || index === 0) ? /* @__PURE__ */ React.createElement(RenderErrorBoundary, {
+      return dataRouterState && (match.route.ErrorBoundary || match.route.errorElement || index === 0) ? /* @__PURE__ */ React6.createElement(RenderErrorBoundary, {
         location: dataRouterState.location,
         component: errorElement,
         error,
@@ -24544,12 +29089,12 @@
     return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
   }
   function useDataRouterState(hookName) {
-    let state = React.useContext(DataRouterStateContext);
+    let state = React6.useContext(DataRouterStateContext);
     !state ? true ? invariant(false, getDataRouterConsoleError(hookName)) : invariant(false) : void 0;
     return state;
   }
   function useRouteContext(hookName) {
-    let route = React.useContext(RouteContext);
+    let route = React6.useContext(RouteContext);
     !route ? true ? invariant(false, getDataRouterConsoleError(hookName)) : invariant(false) : void 0;
     return route;
   }
@@ -24568,7 +29113,7 @@
       matches,
       loaderData
     } = useDataRouterState(DataRouterStateHook.UseMatches);
-    return React.useMemo(() => matches.map((match) => {
+    return React6.useMemo(() => matches.map((match) => {
       let {
         pathname,
         params
@@ -24584,7 +29129,7 @@
   }
   function useRouteError() {
     var _state$errors;
-    let error = React.useContext(RouteErrorContext);
+    let error = React6.useContext(RouteErrorContext);
     let state = useDataRouterState(DataRouterStateHook.UseRouteError);
     let routeId = useCurrentRouteId(DataRouterStateHook.UseRouteError);
     if (error) {
@@ -24598,8 +29143,59 @@
       true ? warning(false, message) : void 0;
     }
   }
+  function RouterProvider(_ref2) {
+    let {
+      fallbackElement,
+      router: router2
+    } = _ref2;
+    let getState = React6.useCallback(() => router2.state, [router2]);
+    let state = useSyncExternalStore2(
+      router2.subscribe,
+      getState,
+      // We have to provide this so React@18 doesn't complain during hydration,
+      // but we pass our serialized hydration data into the router so state here
+      // is already synced with what the server saw
+      getState
+    );
+    let navigator2 = React6.useMemo(() => {
+      return {
+        createHref: router2.createHref,
+        encodeLocation: router2.encodeLocation,
+        go: (n4) => router2.navigate(n4),
+        push: (to, state2, opts) => router2.navigate(to, {
+          state: state2,
+          preventScrollReset: opts == null ? void 0 : opts.preventScrollReset
+        }),
+        replace: (to, state2, opts) => router2.navigate(to, {
+          replace: true,
+          state: state2,
+          preventScrollReset: opts == null ? void 0 : opts.preventScrollReset
+        })
+      };
+    }, [router2]);
+    let basename = router2.basename || "/";
+    let dataRouterContext = React6.useMemo(() => ({
+      router: router2,
+      navigator: navigator2,
+      static: false,
+      basename
+    }), [router2, navigator2, basename]);
+    return /* @__PURE__ */ React6.createElement(React6.Fragment, null, /* @__PURE__ */ React6.createElement(DataRouterContext.Provider, {
+      value: dataRouterContext
+    }, /* @__PURE__ */ React6.createElement(DataRouterStateContext.Provider, {
+      value: state
+    }, /* @__PURE__ */ React6.createElement(Router, {
+      basename: router2.basename,
+      location: router2.state.location,
+      navigationType: router2.state.historyAction,
+      navigator: navigator2
+    }, router2.state.initialized ? /* @__PURE__ */ React6.createElement(Routes, null) : fallbackElement))), null);
+  }
   function Outlet(props) {
     return useOutlet(props.context);
+  }
+  function Route(_props) {
+    true ? invariant(false, "A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.") : invariant(false);
   }
   function Router(_ref4) {
     let {
@@ -24612,7 +29208,7 @@
     } = _ref4;
     !!useInRouterContext() ? true ? invariant(false, "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.") : invariant(false) : void 0;
     let basename = basenameProp.replace(/^\/*/, "/");
-    let navigationContext = React.useMemo(() => ({
+    let navigationContext = React6.useMemo(() => ({
       basename,
       navigator: navigator2,
       static: staticProp
@@ -24627,7 +29223,7 @@
       state = null,
       key = "default"
     } = locationProp;
-    let locationContext = React.useMemo(() => {
+    let locationContext = React6.useMemo(() => {
       let trailingPathname = stripBasename(pathname, basename);
       if (trailingPathname == null) {
         return null;
@@ -24647,65 +29243,124 @@
     if (locationContext == null) {
       return null;
     }
-    return /* @__PURE__ */ React.createElement(NavigationContext.Provider, {
+    return /* @__PURE__ */ React6.createElement(NavigationContext.Provider, {
       value: navigationContext
-    }, /* @__PURE__ */ React.createElement(LocationContext.Provider, {
+    }, /* @__PURE__ */ React6.createElement(LocationContext.Provider, {
       children,
       value: locationContext
     }));
   }
-  var React, is, useState2, useEffect2, useLayoutEffect2, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot, canUseDOM, isServerEnvironment, shim, useSyncExternalStore, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, OutletContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
+  function Routes(_ref5) {
+    let {
+      children,
+      location: location2
+    } = _ref5;
+    let dataRouterContext = React6.useContext(DataRouterContext);
+    let routes = dataRouterContext && !children ? dataRouterContext.router.routes : createRoutesFromChildren(children);
+    return useRoutes(routes, location2);
+  }
+  function createRoutesFromChildren(children, parentPath) {
+    if (parentPath === void 0) {
+      parentPath = [];
+    }
+    let routes = [];
+    React6.Children.forEach(children, (element, index) => {
+      if (!/* @__PURE__ */ React6.isValidElement(element)) {
+        return;
+      }
+      if (element.type === React6.Fragment) {
+        routes.push.apply(routes, createRoutesFromChildren(element.props.children, parentPath));
+        return;
+      }
+      !(element.type === Route) ? true ? invariant(false, "[" + (typeof element.type === "string" ? element.type : element.type.name) + "] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>") : invariant(false) : void 0;
+      !(!element.props.index || !element.props.children) ? true ? invariant(false, "An index route cannot have child routes.") : invariant(false) : void 0;
+      let treePath = [...parentPath, index];
+      let route = {
+        id: element.props.id || treePath.join("-"),
+        caseSensitive: element.props.caseSensitive,
+        element: element.props.element,
+        Component: element.props.Component,
+        index: element.props.index,
+        path: element.props.path,
+        loader: element.props.loader,
+        action: element.props.action,
+        errorElement: element.props.errorElement,
+        ErrorBoundary: element.props.ErrorBoundary,
+        hasErrorBoundary: element.props.ErrorBoundary != null || element.props.errorElement != null,
+        shouldRevalidate: element.props.shouldRevalidate,
+        handle: element.props.handle,
+        lazy: element.props.lazy
+      };
+      if (element.props.children) {
+        route.children = createRoutesFromChildren(element.props.children, treePath);
+      }
+      routes.push(route);
+    });
+    return routes;
+  }
+  function detectErrorBoundary(route) {
+    if (true) {
+      if (route.Component && route.element) {
+        true ? warning(false, "You should not include both `Component` and `element` on your route - `element` will be ignored.") : void 0;
+      }
+      if (route.ErrorBoundary && route.errorElement) {
+        true ? warning(false, "You should not include both `ErrorBoundary` and `errorElement` on your route - `errorElement` will be ignored.") : void 0;
+      }
+    }
+    return Boolean(route.ErrorBoundary) || Boolean(route.errorElement);
+  }
+  var React6, is, useState4, useEffect5, useLayoutEffect2, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot, canUseDOM, isServerEnvironment, shim, useSyncExternalStore2, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, OutletContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
   var init_dist = __esm({
     "node_modules/react-router/dist/index.js"() {
       init_router();
       init_router();
-      React = __toESM(require_react());
+      React6 = __toESM(require_react());
       is = typeof Object.is === "function" ? Object.is : isPolyfill;
       ({
-        useState: useState2,
-        useEffect: useEffect2,
+        useState: useState4,
+        useEffect: useEffect5,
         useLayoutEffect: useLayoutEffect2,
         useDebugValue
-      } = React);
+      } = React6);
       didWarnOld18Alpha = false;
       didWarnUncachedGetSnapshot = false;
       canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
       isServerEnvironment = !canUseDOM;
-      shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore$2;
-      useSyncExternalStore = "useSyncExternalStore" in React ? ((module) => module.useSyncExternalStore)(React) : shim;
-      DataRouterContext = /* @__PURE__ */ React.createContext(null);
+      shim = isServerEnvironment ? useSyncExternalStore$12 : useSyncExternalStore$2;
+      useSyncExternalStore2 = "useSyncExternalStore" in React6 ? ((module) => module.useSyncExternalStore)(React6) : shim;
+      DataRouterContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         DataRouterContext.displayName = "DataRouter";
       }
-      DataRouterStateContext = /* @__PURE__ */ React.createContext(null);
+      DataRouterStateContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         DataRouterStateContext.displayName = "DataRouterState";
       }
-      AwaitContext = /* @__PURE__ */ React.createContext(null);
+      AwaitContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         AwaitContext.displayName = "Await";
       }
-      NavigationContext = /* @__PURE__ */ React.createContext(null);
+      NavigationContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         NavigationContext.displayName = "Navigation";
       }
-      LocationContext = /* @__PURE__ */ React.createContext(null);
+      LocationContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         LocationContext.displayName = "Location";
       }
-      RouteContext = /* @__PURE__ */ React.createContext({
+      RouteContext = /* @__PURE__ */ React6.createContext({
         outlet: null,
         matches: []
       });
       if (true) {
         RouteContext.displayName = "Route";
       }
-      RouteErrorContext = /* @__PURE__ */ React.createContext(null);
+      RouteErrorContext = /* @__PURE__ */ React6.createContext(null);
       if (true) {
         RouteErrorContext.displayName = "RouteError";
       }
-      OutletContext = /* @__PURE__ */ React.createContext(null);
-      RenderErrorBoundary = class extends React.Component {
+      OutletContext = /* @__PURE__ */ React6.createContext(null);
+      RenderErrorBoundary = class extends React6.Component {
         constructor(props) {
           super(props);
           this.state = {
@@ -24734,9 +29389,9 @@
           console.error("React Router caught the following error during render", error, errorInfo);
         }
         render() {
-          return this.state.error ? /* @__PURE__ */ React.createElement(RouteContext.Provider, {
+          return this.state.error ? /* @__PURE__ */ React6.createElement(RouteContext.Provider, {
             value: this.props.routeContext
-          }, /* @__PURE__ */ React.createElement(RouteErrorContext.Provider, {
+          }, /* @__PURE__ */ React6.createElement(RouteErrorContext.Provider, {
             value: this.state.error,
             children: this.props.component
           })) : this.props.children;
@@ -24875,32 +29530,44 @@
       formData
     };
   }
-  function BrowserRouter(_ref2) {
-    let {
-      basename,
-      children,
-      window: window2
-    } = _ref2;
-    let historyRef = React2.useRef();
-    if (historyRef.current == null) {
-      historyRef.current = createBrowserHistory({
-        window: window2,
-        v5Compat: true
+  function createHashRouter(routes, opts) {
+    return createRouter({
+      basename: opts == null ? void 0 : opts.basename,
+      history: createHashHistory({
+        window: opts == null ? void 0 : opts.window
+      }),
+      hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
+      routes,
+      detectErrorBoundary
+    }).initialize();
+  }
+  function parseHydrationData() {
+    var _window;
+    let state = (_window = window) == null ? void 0 : _window.__staticRouterHydrationData;
+    if (state && state.errors) {
+      state = _extends3({}, state, {
+        errors: deserializeErrors(state.errors)
       });
     }
-    let history = historyRef.current;
-    let [state, setState] = React2.useState({
-      action: history.action,
-      location: history.location
-    });
-    React2.useLayoutEffect(() => history.listen(setState), [history]);
-    return /* @__PURE__ */ React2.createElement(Router, {
-      basename,
-      children,
-      location: state.location,
-      navigationType: state.action,
-      navigator: history
-    });
+    return state;
+  }
+  function deserializeErrors(errors) {
+    if (!errors)
+      return null;
+    let entries = Object.entries(errors);
+    let serialized = {};
+    for (let [key, val] of entries) {
+      if (val && val.__type === "RouteErrorResponse") {
+        serialized[key] = new ErrorResponse(val.status, val.statusText, val.data, val.internal === true);
+      } else if (val && val.__type === "Error") {
+        let error = new Error(val.message);
+        error.stack = "";
+        serialized[key] = error;
+      } else {
+        serialized[key] = val;
+      }
+    }
+    return serialized;
   }
   function HistoryRouter(_ref3) {
     let {
@@ -24908,12 +29575,12 @@
       children,
       history
     } = _ref3;
-    const [state, setState] = React2.useState({
+    const [state, setState] = React7.useState({
       action: history.action,
       location: history.location
     });
-    React2.useLayoutEffect(() => history.listen(setState), [history]);
-    return /* @__PURE__ */ React2.createElement(Router, {
+    React7.useLayoutEffect(() => history.listen(setState), [history]);
+    return /* @__PURE__ */ React7.createElement(Router, {
       basename,
       children,
       location: state.location,
@@ -24936,12 +29603,12 @@
     return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
   }
   function useDataRouterContext(hookName) {
-    let ctx = React2.useContext(DataRouterContext);
+    let ctx = React7.useContext(DataRouterContext);
     !ctx ? true ? invariant(false, getDataRouterConsoleError2(hookName)) : invariant(false) : void 0;
     return ctx;
   }
   function useDataRouterState2(hookName) {
-    let state = React2.useContext(DataRouterStateContext);
+    let state = React7.useContext(DataRouterStateContext);
     !state ? true ? invariant(false, getDataRouterConsoleError2(hookName)) : invariant(false) : void 0;
     return state;
   }
@@ -24958,7 +29625,7 @@
     let path = useResolvedPath(to, {
       relative
     });
-    return React2.useCallback((event) => {
+    return React7.useCallback((event) => {
       if (shouldProcessLinkClick(event, target)) {
         event.preventDefault();
         let replace3 = replaceProp !== void 0 ? replaceProp : createPath(location2) === createPath(path);
@@ -24973,10 +29640,10 @@
   }
   function useSubmitImpl(fetcherKey, routeId) {
     let {
-      router
+      router: router2
     } = useDataRouterContext(DataRouterHook2.UseSubmitImpl);
     let defaultAction = useFormAction();
-    return React2.useCallback(function(target, options) {
+    return React7.useCallback(function(target, options) {
       if (options === void 0) {
         options = {};
       }
@@ -24999,11 +29666,11 @@
       };
       if (fetcherKey) {
         !(routeId != null) ? true ? invariant(false, "No routeId available for useFetcher()") : invariant(false) : void 0;
-        router.fetch(fetcherKey, routeId, href, opts);
+        router2.fetch(fetcherKey, routeId, href, opts);
       } else {
-        router.navigate(href, opts);
+        router2.navigate(href, opts);
       }
-    }, [defaultAction, router, fetcherKey, routeId]);
+    }, [defaultAction, router2, fetcherKey, routeId]);
   }
   function useFormAction(action, _temp2) {
     let {
@@ -25011,8 +29678,8 @@
     } = _temp2 === void 0 ? {} : _temp2;
     let {
       basename
-    } = React2.useContext(NavigationContext);
-    let routeContext = React2.useContext(RouteContext);
+    } = React7.useContext(NavigationContext);
+    let routeContext = React7.useContext(RouteContext);
     !routeContext ? true ? invariant(false, "useFormAction must be used inside a RouteContext") : invariant(false) : void 0;
     let [match] = routeContext.matches.slice(-1);
     let path = _extends3({}, useResolvedPath(action ? action : ".", {
@@ -25042,7 +29709,7 @@
       storageKey
     } = _temp3 === void 0 ? {} : _temp3;
     let {
-      router
+      router: router2
     } = useDataRouterContext(DataRouterHook2.UseScrollRestoration);
     let {
       restoreScrollPosition,
@@ -25051,13 +29718,13 @@
     let location2 = useLocation();
     let matches = useMatches();
     let navigation = useNavigation();
-    React2.useEffect(() => {
+    React7.useEffect(() => {
       window.history.scrollRestoration = "manual";
       return () => {
         window.history.scrollRestoration = "auto";
       };
     }, []);
-    usePageHide(React2.useCallback(() => {
+    usePageHide(React7.useCallback(() => {
       if (navigation.state === "idle") {
         let key = (getKey ? getKey(location2, matches) : null) || location2.key;
         savedScrollPositions[key] = window.scrollY;
@@ -25066,7 +29733,7 @@
       window.history.scrollRestoration = "auto";
     }, [storageKey, getKey, navigation.state, location2, matches]));
     if (typeof document !== "undefined") {
-      React2.useLayoutEffect(() => {
+      React7.useLayoutEffect(() => {
         try {
           let sessionPositions = sessionStorage.getItem(storageKey || SCROLL_RESTORATION_STORAGE_KEY);
           if (sessionPositions) {
@@ -25075,11 +29742,11 @@
         } catch (e3) {
         }
       }, [storageKey]);
-      React2.useLayoutEffect(() => {
-        let disableScrollRestoration = router == null ? void 0 : router.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKey);
+      React7.useLayoutEffect(() => {
+        let disableScrollRestoration = router2 == null ? void 0 : router2.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKey);
         return () => disableScrollRestoration && disableScrollRestoration();
-      }, [router, getKey]);
-      React2.useLayoutEffect(() => {
+      }, [router2, getKey]);
+      React7.useLayoutEffect(() => {
         if (restoreScrollPosition === false) {
           return;
         }
@@ -25105,7 +29772,7 @@
     let {
       capture
     } = options || {};
-    React2.useEffect(() => {
+    React7.useEffect(() => {
       let opts = capture != null ? {
         capture
       } : void 0;
@@ -25115,10 +29782,10 @@
       };
     }, [callback, capture]);
   }
-  var React2, defaultMethod, defaultEncType, _excluded, _excluded2, _excluded3, isBrowser2, ABSOLUTE_URL_REGEX, Link, NavLink, Form, FormImpl, DataRouterHook2, DataRouterStateHook2, SCROLL_RESTORATION_STORAGE_KEY, savedScrollPositions;
+  var React7, defaultMethod, defaultEncType, _excluded, _excluded2, _excluded3, isBrowser2, ABSOLUTE_URL_REGEX2, Link, NavLink, Form, FormImpl, DataRouterHook2, DataRouterStateHook2, SCROLL_RESTORATION_STORAGE_KEY, savedScrollPositions;
   var init_dist2 = __esm({
     "node_modules/react-router-dom/dist/index.js"() {
-      React2 = __toESM(require_react());
+      React7 = __toESM(require_react());
       init_dist();
       init_dist();
       init_router();
@@ -25131,8 +29798,8 @@
         HistoryRouter.displayName = "unstable_HistoryRouter";
       }
       isBrowser2 = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
-      ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
-      Link = /* @__PURE__ */ React2.forwardRef(function LinkWithRef(_ref4, ref) {
+      ABSOLUTE_URL_REGEX2 = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+      Link = /* @__PURE__ */ React7.forwardRef(function LinkWithRef(_ref4, ref) {
         let {
           onClick,
           relative,
@@ -25145,10 +29812,10 @@
         } = _ref4, rest = _objectWithoutPropertiesLoose(_ref4, _excluded);
         let {
           basename
-        } = React2.useContext(NavigationContext);
+        } = React7.useContext(NavigationContext);
         let absoluteHref;
         let isExternal = false;
-        if (typeof to === "string" && ABSOLUTE_URL_REGEX.test(to)) {
+        if (typeof to === "string" && ABSOLUTE_URL_REGEX2.test(to)) {
           absoluteHref = to;
           if (isBrowser2) {
             let currentUrl = new URL(window.location.href);
@@ -25180,7 +29847,7 @@
         }
         return (
           // eslint-disable-next-line jsx-a11y/anchor-has-content
-          /* @__PURE__ */ React2.createElement("a", _extends3({}, rest, {
+          /* @__PURE__ */ React7.createElement("a", _extends3({}, rest, {
             href: absoluteHref || href,
             onClick: isExternal || reloadDocument ? onClick : handleClick,
             ref,
@@ -25191,7 +29858,7 @@
       if (true) {
         Link.displayName = "Link";
       }
-      NavLink = /* @__PURE__ */ React2.forwardRef(function NavLinkWithRef(_ref5, ref) {
+      NavLink = /* @__PURE__ */ React7.forwardRef(function NavLinkWithRef(_ref5, ref) {
         let {
           "aria-current": ariaCurrentProp = "page",
           caseSensitive = false,
@@ -25205,10 +29872,10 @@
           relative: rest.relative
         });
         let location2 = useLocation();
-        let routerState = React2.useContext(DataRouterStateContext);
+        let routerState = React7.useContext(DataRouterStateContext);
         let {
           navigator: navigator2
-        } = React2.useContext(NavigationContext);
+        } = React7.useContext(NavigationContext);
         let toPathname = navigator2.encodeLocation ? navigator2.encodeLocation(path).pathname : path.pathname;
         let locationPathname = location2.pathname;
         let nextLocationPathname = routerState && routerState.navigation && routerState.navigation.location ? routerState.navigation.location.pathname : null;
@@ -25233,7 +29900,7 @@
           isActive,
           isPending
         }) : styleProp;
-        return /* @__PURE__ */ React2.createElement(Link, _extends3({}, rest, {
+        return /* @__PURE__ */ React7.createElement(Link, _extends3({}, rest, {
           "aria-current": ariaCurrent,
           className,
           ref,
@@ -25247,15 +29914,15 @@
       if (true) {
         NavLink.displayName = "NavLink";
       }
-      Form = /* @__PURE__ */ React2.forwardRef((props, ref) => {
-        return /* @__PURE__ */ React2.createElement(FormImpl, _extends3({}, props, {
+      Form = /* @__PURE__ */ React7.forwardRef((props, ref) => {
+        return /* @__PURE__ */ React7.createElement(FormImpl, _extends3({}, props, {
           ref
         }));
       });
       if (true) {
         Form.displayName = "Form";
       }
-      FormImpl = /* @__PURE__ */ React2.forwardRef((_ref6, forwardedRef) => {
+      FormImpl = /* @__PURE__ */ React7.forwardRef((_ref6, forwardedRef) => {
         let {
           reloadDocument,
           replace: replace3,
@@ -25286,7 +29953,7 @@
             preventScrollReset
           });
         };
-        return /* @__PURE__ */ React2.createElement("form", _extends3({
+        return /* @__PURE__ */ React7.createElement("form", _extends3({
           ref: forwardedRef,
           method: formMethod,
           action: formAction,
@@ -25902,7 +30569,7 @@
         }
         function createNodeChecker() {
           function validate(props, propName, componentName, location2, propFullName) {
-            if (!isNode(props[propName])) {
+            if (!isNode2(props[propName])) {
               return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
             }
             return null;
@@ -25962,7 +30629,7 @@
           }
           return createChainableTypeChecker(validate);
         }
-        function isNode(propValue) {
+        function isNode2(propValue) {
           switch (typeof propValue) {
             case "number":
             case "string":
@@ -25972,7 +30639,7 @@
               return !propValue;
             case "object":
               if (Array.isArray(propValue)) {
-                return propValue.every(isNode);
+                return propValue.every(isNode2);
               }
               if (propValue === null || isValidElement2(propValue)) {
                 return true;
@@ -25983,7 +30650,7 @@
                 var step;
                 if (iteratorFn !== propValue.entries) {
                   while (!(step = iterator.next()).done) {
-                    if (!isNode(step.value)) {
+                    if (!isNode2(step.value)) {
                       return false;
                     }
                   }
@@ -25991,7 +30658,7 @@
                   while (!(step = iterator.next()).done) {
                     var entry = step.value;
                     if (entry) {
-                      if (!isNode(entry[1])) {
+                      if (!isNode2(entry[1])) {
                         return false;
                       }
                     }
@@ -26141,20 +30808,4541 @@
     }
   });
 
+  // node_modules/graphql-request/build/esm/defaultJsonSerializer.js
+  var defaultJsonSerializer;
+  var init_defaultJsonSerializer = __esm({
+    "node_modules/graphql-request/build/esm/defaultJsonSerializer.js"() {
+      defaultJsonSerializer = {
+        parse: JSON.parse,
+        stringify: JSON.stringify
+      };
+    }
+  });
+
+  // node_modules/extract-files/public/ReactNativeFile.js
+  var require_ReactNativeFile = __commonJS({
+    "node_modules/extract-files/public/ReactNativeFile.js"(exports, module) {
+      "use strict";
+      module.exports = function ReactNativeFile(_ref2) {
+        var uri = _ref2.uri, name = _ref2.name, type = _ref2.type;
+        this.uri = uri;
+        this.name = name;
+        this.type = type;
+      };
+    }
+  });
+
+  // node_modules/extract-files/public/isExtractableFile.js
+  var require_isExtractableFile = __commonJS({
+    "node_modules/extract-files/public/isExtractableFile.js"(exports, module) {
+      "use strict";
+      var ReactNativeFile = require_ReactNativeFile();
+      module.exports = function isExtractableFile(value) {
+        return typeof File !== "undefined" && value instanceof File || typeof Blob !== "undefined" && value instanceof Blob || value instanceof ReactNativeFile;
+      };
+    }
+  });
+
+  // node_modules/extract-files/public/extractFiles.js
+  var require_extractFiles = __commonJS({
+    "node_modules/extract-files/public/extractFiles.js"(exports, module) {
+      "use strict";
+      var defaultIsExtractableFile = require_isExtractableFile();
+      module.exports = function extractFiles(value, path, isExtractableFile) {
+        if (path === void 0) {
+          path = "";
+        }
+        if (isExtractableFile === void 0) {
+          isExtractableFile = defaultIsExtractableFile;
+        }
+        var clone;
+        var files = /* @__PURE__ */ new Map();
+        function addFile(paths, file) {
+          var storedPaths = files.get(file);
+          if (storedPaths)
+            storedPaths.push.apply(storedPaths, paths);
+          else
+            files.set(file, paths);
+        }
+        if (isExtractableFile(value)) {
+          clone = null;
+          addFile([path], value);
+        } else {
+          var prefix = path ? path + "." : "";
+          if (typeof FileList !== "undefined" && value instanceof FileList)
+            clone = Array.prototype.map.call(value, function(file, i6) {
+              addFile(["" + prefix + i6], file);
+              return null;
+            });
+          else if (Array.isArray(value))
+            clone = value.map(function(child, i6) {
+              var result2 = extractFiles(child, "" + prefix + i6, isExtractableFile);
+              result2.files.forEach(addFile);
+              return result2.clone;
+            });
+          else if (value && value.constructor === Object) {
+            clone = {};
+            for (var i5 in value) {
+              var result = extractFiles(value[i5], "" + prefix + i5, isExtractableFile);
+              result.files.forEach(addFile);
+              clone[i5] = result.clone;
+            }
+          } else
+            clone = value;
+        }
+        return {
+          clone,
+          files
+        };
+      };
+    }
+  });
+
+  // node_modules/extract-files/public/index.mjs
+  var import_extractFiles, import_isExtractableFile;
+  var init_public = __esm({
+    "node_modules/extract-files/public/index.mjs"() {
+      import_extractFiles = __toESM(require_extractFiles(), 1);
+      import_isExtractableFile = __toESM(require_isExtractableFile(), 1);
+    }
+  });
+
+  // node_modules/form-data/lib/browser.js
+  var require_browser = __commonJS({
+    "node_modules/form-data/lib/browser.js"(exports, module) {
+      module.exports = typeof self == "object" ? self.FormData : window.FormData;
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/createRequestBody.js
+  var import_form_data, isExtractableFileEnhanced, createRequestBody, createRequestBody_default;
+  var init_createRequestBody = __esm({
+    "node_modules/graphql-request/build/esm/createRequestBody.js"() {
+      init_defaultJsonSerializer();
+      init_public();
+      import_form_data = __toESM(require_browser(), 1);
+      isExtractableFileEnhanced = (value) => (0, import_isExtractableFile.default)(value) || value !== null && typeof value === `object` && typeof value.pipe === `function`;
+      createRequestBody = (query, variables, operationName, jsonSerializer = defaultJsonSerializer) => {
+        const { clone, files } = (0, import_extractFiles.default)({ query, variables, operationName }, ``, isExtractableFileEnhanced);
+        if (files.size === 0) {
+          if (!Array.isArray(query)) {
+            return jsonSerializer.stringify(clone);
+          }
+          if (typeof variables !== `undefined` && !Array.isArray(variables)) {
+            throw new Error(`Cannot create request body with given variable type, array expected`);
+          }
+          const payload = query.reduce((accu, currentQuery, index) => {
+            accu.push({ query: currentQuery, variables: variables ? variables[index] : void 0 });
+            return accu;
+          }, []);
+          return jsonSerializer.stringify(payload);
+        }
+        const Form2 = typeof FormData === `undefined` ? import_form_data.default : FormData;
+        const form = new Form2();
+        form.append(`operations`, jsonSerializer.stringify(clone));
+        const map = {};
+        let i5 = 0;
+        files.forEach((paths) => {
+          map[++i5] = paths;
+        });
+        form.append(`map`, jsonSerializer.stringify(map));
+        i5 = 0;
+        files.forEach((paths, file) => {
+          form.append(`${++i5}`, file);
+        });
+        return form;
+      };
+      createRequestBody_default = createRequestBody;
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/helpers.js
+  var uppercase, HeadersInstanceToPlainObject;
+  var init_helpers = __esm({
+    "node_modules/graphql-request/build/esm/helpers.js"() {
+      uppercase = (str) => str.toUpperCase();
+      HeadersInstanceToPlainObject = (headers) => {
+        const o9 = {};
+        headers.forEach((v2, k) => {
+          o9[k] = v2;
+        });
+        return o9;
+      };
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/parseArgs.js
+  var parseRequestArgs, parseRawRequestArgs, parseBatchRequestArgs, parseRequestExtendedArgs;
+  var init_parseArgs = __esm({
+    "node_modules/graphql-request/build/esm/parseArgs.js"() {
+      parseRequestArgs = (documentOrOptions, variables, requestHeaders) => {
+        return documentOrOptions.document ? documentOrOptions : {
+          document: documentOrOptions,
+          variables,
+          requestHeaders,
+          signal: void 0
+        };
+      };
+      parseRawRequestArgs = (queryOrOptions, variables, requestHeaders) => {
+        return queryOrOptions.query ? queryOrOptions : {
+          query: queryOrOptions,
+          variables,
+          requestHeaders,
+          signal: void 0
+        };
+      };
+      parseBatchRequestArgs = (documentsOrOptions, requestHeaders) => {
+        return documentsOrOptions.documents ? documentsOrOptions : {
+          documents: documentsOrOptions,
+          requestHeaders,
+          signal: void 0
+        };
+      };
+      parseRequestExtendedArgs = (urlOrOptions, document2, ...variablesAndRequestHeaders) => {
+        const [variables, requestHeaders] = variablesAndRequestHeaders;
+        return urlOrOptions.document ? urlOrOptions : {
+          url: urlOrOptions,
+          document: document2,
+          variables,
+          requestHeaders,
+          signal: void 0
+        };
+      };
+    }
+  });
+
+  // node_modules/graphql/jsutils/devAssert.mjs
+  function devAssert(condition, message) {
+    const booleanCondition = Boolean(condition);
+    if (!booleanCondition) {
+      throw new Error(message);
+    }
+  }
+  var init_devAssert = __esm({
+    "node_modules/graphql/jsutils/devAssert.mjs"() {
+    }
+  });
+
+  // node_modules/graphql/jsutils/isObjectLike.mjs
+  function isObjectLike(value) {
+    return typeof value == "object" && value !== null;
+  }
+  var init_isObjectLike = __esm({
+    "node_modules/graphql/jsutils/isObjectLike.mjs"() {
+    }
+  });
+
+  // node_modules/graphql/jsutils/invariant.mjs
+  function invariant2(condition, message) {
+    const booleanCondition = Boolean(condition);
+    if (!booleanCondition) {
+      throw new Error(
+        message != null ? message : "Unexpected invariant triggered."
+      );
+    }
+  }
+  var init_invariant = __esm({
+    "node_modules/graphql/jsutils/invariant.mjs"() {
+    }
+  });
+
+  // node_modules/graphql/language/location.mjs
+  function getLocation(source, position) {
+    let lastLineStart = 0;
+    let line = 1;
+    for (const match of source.body.matchAll(LineRegExp)) {
+      typeof match.index === "number" || invariant2(false);
+      if (match.index >= position) {
+        break;
+      }
+      lastLineStart = match.index + match[0].length;
+      line += 1;
+    }
+    return {
+      line,
+      column: position + 1 - lastLineStart
+    };
+  }
+  var LineRegExp;
+  var init_location = __esm({
+    "node_modules/graphql/language/location.mjs"() {
+      init_invariant();
+      LineRegExp = /\r\n|[\n\r]/g;
+    }
+  });
+
+  // node_modules/graphql/language/printLocation.mjs
+  function printLocation(location2) {
+    return printSourceLocation(
+      location2.source,
+      getLocation(location2.source, location2.start)
+    );
+  }
+  function printSourceLocation(source, sourceLocation) {
+    const firstLineColumnOffset = source.locationOffset.column - 1;
+    const body = "".padStart(firstLineColumnOffset) + source.body;
+    const lineIndex = sourceLocation.line - 1;
+    const lineOffset = source.locationOffset.line - 1;
+    const lineNum = sourceLocation.line + lineOffset;
+    const columnOffset = sourceLocation.line === 1 ? firstLineColumnOffset : 0;
+    const columnNum = sourceLocation.column + columnOffset;
+    const locationStr = `${source.name}:${lineNum}:${columnNum}
+`;
+    const lines = body.split(/\r\n|[\n\r]/g);
+    const locationLine = lines[lineIndex];
+    if (locationLine.length > 120) {
+      const subLineIndex = Math.floor(columnNum / 80);
+      const subLineColumnNum = columnNum % 80;
+      const subLines = [];
+      for (let i5 = 0; i5 < locationLine.length; i5 += 80) {
+        subLines.push(locationLine.slice(i5, i5 + 80));
+      }
+      return locationStr + printPrefixedLines([
+        [`${lineNum} |`, subLines[0]],
+        ...subLines.slice(1, subLineIndex + 1).map((subLine) => ["|", subLine]),
+        ["|", "^".padStart(subLineColumnNum)],
+        ["|", subLines[subLineIndex + 1]]
+      ]);
+    }
+    return locationStr + printPrefixedLines([
+      // Lines specified like this: ["prefix", "string"],
+      [`${lineNum - 1} |`, lines[lineIndex - 1]],
+      [`${lineNum} |`, locationLine],
+      ["|", "^".padStart(columnNum)],
+      [`${lineNum + 1} |`, lines[lineIndex + 1]]
+    ]);
+  }
+  function printPrefixedLines(lines) {
+    const existingLines = lines.filter(([_2, line]) => line !== void 0);
+    const padLen = Math.max(...existingLines.map(([prefix]) => prefix.length));
+    return existingLines.map(([prefix, line]) => prefix.padStart(padLen) + (line ? " " + line : "")).join("\n");
+  }
+  var init_printLocation = __esm({
+    "node_modules/graphql/language/printLocation.mjs"() {
+      init_location();
+    }
+  });
+
+  // node_modules/graphql/error/GraphQLError.mjs
+  function toNormalizedOptions(args) {
+    const firstArg = args[0];
+    if (firstArg == null || "kind" in firstArg || "length" in firstArg) {
+      return {
+        nodes: firstArg,
+        source: args[1],
+        positions: args[2],
+        path: args[3],
+        originalError: args[4],
+        extensions: args[5]
+      };
+    }
+    return firstArg;
+  }
+  function undefinedIfEmpty(array) {
+    return array === void 0 || array.length === 0 ? void 0 : array;
+  }
+  var GraphQLError;
+  var init_GraphQLError = __esm({
+    "node_modules/graphql/error/GraphQLError.mjs"() {
+      init_isObjectLike();
+      init_location();
+      init_printLocation();
+      GraphQLError = class extends Error {
+        /**
+         * An array of `{ line, column }` locations within the source GraphQL document
+         * which correspond to this error.
+         *
+         * Errors during validation often contain multiple locations, for example to
+         * point out two things with the same name. Errors during execution include a
+         * single location, the field which produced the error.
+         *
+         * Enumerable, and appears in the result of JSON.stringify().
+         */
+        /**
+         * An array describing the JSON-path into the execution response which
+         * corresponds to this error. Only included for errors during execution.
+         *
+         * Enumerable, and appears in the result of JSON.stringify().
+         */
+        /**
+         * An array of GraphQL AST Nodes corresponding to this error.
+         */
+        /**
+         * The source GraphQL document for the first location of this error.
+         *
+         * Note that if this Error represents more than one node, the source may not
+         * represent nodes after the first node.
+         */
+        /**
+         * An array of character offsets within the source GraphQL document
+         * which correspond to this error.
+         */
+        /**
+         * The original error thrown from a field resolver during execution.
+         */
+        /**
+         * Extension fields to add to the formatted error.
+         */
+        /**
+         * @deprecated Please use the `GraphQLErrorOptions` constructor overload instead.
+         */
+        constructor(message, ...rawArgs) {
+          var _this$nodes, _nodeLocations$, _ref2;
+          const { nodes, source, positions, path, originalError, extensions } = toNormalizedOptions(rawArgs);
+          super(message);
+          this.name = "GraphQLError";
+          this.path = path !== null && path !== void 0 ? path : void 0;
+          this.originalError = originalError !== null && originalError !== void 0 ? originalError : void 0;
+          this.nodes = undefinedIfEmpty(
+            Array.isArray(nodes) ? nodes : nodes ? [nodes] : void 0
+          );
+          const nodeLocations = undefinedIfEmpty(
+            (_this$nodes = this.nodes) === null || _this$nodes === void 0 ? void 0 : _this$nodes.map((node) => node.loc).filter((loc) => loc != null)
+          );
+          this.source = source !== null && source !== void 0 ? source : nodeLocations === null || nodeLocations === void 0 ? void 0 : (_nodeLocations$ = nodeLocations[0]) === null || _nodeLocations$ === void 0 ? void 0 : _nodeLocations$.source;
+          this.positions = positions !== null && positions !== void 0 ? positions : nodeLocations === null || nodeLocations === void 0 ? void 0 : nodeLocations.map((loc) => loc.start);
+          this.locations = positions && source ? positions.map((pos) => getLocation(source, pos)) : nodeLocations === null || nodeLocations === void 0 ? void 0 : nodeLocations.map((loc) => getLocation(loc.source, loc.start));
+          const originalExtensions = isObjectLike(
+            originalError === null || originalError === void 0 ? void 0 : originalError.extensions
+          ) ? originalError === null || originalError === void 0 ? void 0 : originalError.extensions : void 0;
+          this.extensions = (_ref2 = extensions !== null && extensions !== void 0 ? extensions : originalExtensions) !== null && _ref2 !== void 0 ? _ref2 : /* @__PURE__ */ Object.create(null);
+          Object.defineProperties(this, {
+            message: {
+              writable: true,
+              enumerable: true
+            },
+            name: {
+              enumerable: false
+            },
+            nodes: {
+              enumerable: false
+            },
+            source: {
+              enumerable: false
+            },
+            positions: {
+              enumerable: false
+            },
+            originalError: {
+              enumerable: false
+            }
+          });
+          if (originalError !== null && originalError !== void 0 && originalError.stack) {
+            Object.defineProperty(this, "stack", {
+              value: originalError.stack,
+              writable: true,
+              configurable: true
+            });
+          } else if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, GraphQLError);
+          } else {
+            Object.defineProperty(this, "stack", {
+              value: Error().stack,
+              writable: true,
+              configurable: true
+            });
+          }
+        }
+        get [Symbol.toStringTag]() {
+          return "GraphQLError";
+        }
+        toString() {
+          let output = this.message;
+          if (this.nodes) {
+            for (const node of this.nodes) {
+              if (node.loc) {
+                output += "\n\n" + printLocation(node.loc);
+              }
+            }
+          } else if (this.source && this.locations) {
+            for (const location2 of this.locations) {
+              output += "\n\n" + printSourceLocation(this.source, location2);
+            }
+          }
+          return output;
+        }
+        toJSON() {
+          const formattedError = {
+            message: this.message
+          };
+          if (this.locations != null) {
+            formattedError.locations = this.locations;
+          }
+          if (this.path != null) {
+            formattedError.path = this.path;
+          }
+          if (this.extensions != null && Object.keys(this.extensions).length > 0) {
+            formattedError.extensions = this.extensions;
+          }
+          return formattedError;
+        }
+      };
+    }
+  });
+
+  // node_modules/graphql/error/syntaxError.mjs
+  function syntaxError(source, position, description) {
+    return new GraphQLError(`Syntax Error: ${description}`, {
+      source,
+      positions: [position]
+    });
+  }
+  var init_syntaxError = __esm({
+    "node_modules/graphql/error/syntaxError.mjs"() {
+      init_GraphQLError();
+    }
+  });
+
+  // node_modules/graphql/language/ast.mjs
+  function isNode(maybeNode) {
+    const maybeKind = maybeNode === null || maybeNode === void 0 ? void 0 : maybeNode.kind;
+    return typeof maybeKind === "string" && kindValues.has(maybeKind);
+  }
+  var Location, Token, QueryDocumentKeys, kindValues, OperationTypeNode;
+  var init_ast = __esm({
+    "node_modules/graphql/language/ast.mjs"() {
+      Location = class {
+        /**
+         * The character offset at which this Node begins.
+         */
+        /**
+         * The character offset at which this Node ends.
+         */
+        /**
+         * The Token at which this Node begins.
+         */
+        /**
+         * The Token at which this Node ends.
+         */
+        /**
+         * The Source document the AST represents.
+         */
+        constructor(startToken, endToken, source) {
+          this.start = startToken.start;
+          this.end = endToken.end;
+          this.startToken = startToken;
+          this.endToken = endToken;
+          this.source = source;
+        }
+        get [Symbol.toStringTag]() {
+          return "Location";
+        }
+        toJSON() {
+          return {
+            start: this.start,
+            end: this.end
+          };
+        }
+      };
+      Token = class {
+        /**
+         * The kind of Token.
+         */
+        /**
+         * The character offset at which this Node begins.
+         */
+        /**
+         * The character offset at which this Node ends.
+         */
+        /**
+         * The 1-indexed line number on which this Token appears.
+         */
+        /**
+         * The 1-indexed column number at which this Token begins.
+         */
+        /**
+         * For non-punctuation tokens, represents the interpreted value of the token.
+         *
+         * Note: is undefined for punctuation tokens, but typed as string for
+         * convenience in the parser.
+         */
+        /**
+         * Tokens exist as nodes in a double-linked-list amongst all tokens
+         * including ignored tokens. <SOF> is always the first node and <EOF>
+         * the last.
+         */
+        constructor(kind, start, end3, line, column, value) {
+          this.kind = kind;
+          this.start = start;
+          this.end = end3;
+          this.line = line;
+          this.column = column;
+          this.value = value;
+          this.prev = null;
+          this.next = null;
+        }
+        get [Symbol.toStringTag]() {
+          return "Token";
+        }
+        toJSON() {
+          return {
+            kind: this.kind,
+            value: this.value,
+            line: this.line,
+            column: this.column
+          };
+        }
+      };
+      QueryDocumentKeys = {
+        Name: [],
+        Document: ["definitions"],
+        OperationDefinition: [
+          "name",
+          "variableDefinitions",
+          "directives",
+          "selectionSet"
+        ],
+        VariableDefinition: ["variable", "type", "defaultValue", "directives"],
+        Variable: ["name"],
+        SelectionSet: ["selections"],
+        Field: ["alias", "name", "arguments", "directives", "selectionSet"],
+        Argument: ["name", "value"],
+        FragmentSpread: ["name", "directives"],
+        InlineFragment: ["typeCondition", "directives", "selectionSet"],
+        FragmentDefinition: [
+          "name",
+          // Note: fragment variable definitions are deprecated and will removed in v17.0.0
+          "variableDefinitions",
+          "typeCondition",
+          "directives",
+          "selectionSet"
+        ],
+        IntValue: [],
+        FloatValue: [],
+        StringValue: [],
+        BooleanValue: [],
+        NullValue: [],
+        EnumValue: [],
+        ListValue: ["values"],
+        ObjectValue: ["fields"],
+        ObjectField: ["name", "value"],
+        Directive: ["name", "arguments"],
+        NamedType: ["name"],
+        ListType: ["type"],
+        NonNullType: ["type"],
+        SchemaDefinition: ["description", "directives", "operationTypes"],
+        OperationTypeDefinition: ["type"],
+        ScalarTypeDefinition: ["description", "name", "directives"],
+        ObjectTypeDefinition: [
+          "description",
+          "name",
+          "interfaces",
+          "directives",
+          "fields"
+        ],
+        FieldDefinition: ["description", "name", "arguments", "type", "directives"],
+        InputValueDefinition: [
+          "description",
+          "name",
+          "type",
+          "defaultValue",
+          "directives"
+        ],
+        InterfaceTypeDefinition: [
+          "description",
+          "name",
+          "interfaces",
+          "directives",
+          "fields"
+        ],
+        UnionTypeDefinition: ["description", "name", "directives", "types"],
+        EnumTypeDefinition: ["description", "name", "directives", "values"],
+        EnumValueDefinition: ["description", "name", "directives"],
+        InputObjectTypeDefinition: ["description", "name", "directives", "fields"],
+        DirectiveDefinition: ["description", "name", "arguments", "locations"],
+        SchemaExtension: ["directives", "operationTypes"],
+        ScalarTypeExtension: ["name", "directives"],
+        ObjectTypeExtension: ["name", "interfaces", "directives", "fields"],
+        InterfaceTypeExtension: ["name", "interfaces", "directives", "fields"],
+        UnionTypeExtension: ["name", "directives", "types"],
+        EnumTypeExtension: ["name", "directives", "values"],
+        InputObjectTypeExtension: ["name", "directives", "fields"]
+      };
+      kindValues = new Set(Object.keys(QueryDocumentKeys));
+      (function(OperationTypeNode2) {
+        OperationTypeNode2["QUERY"] = "query";
+        OperationTypeNode2["MUTATION"] = "mutation";
+        OperationTypeNode2["SUBSCRIPTION"] = "subscription";
+      })(OperationTypeNode || (OperationTypeNode = {}));
+    }
+  });
+
+  // node_modules/graphql/language/directiveLocation.mjs
+  var DirectiveLocation;
+  var init_directiveLocation = __esm({
+    "node_modules/graphql/language/directiveLocation.mjs"() {
+      (function(DirectiveLocation2) {
+        DirectiveLocation2["QUERY"] = "QUERY";
+        DirectiveLocation2["MUTATION"] = "MUTATION";
+        DirectiveLocation2["SUBSCRIPTION"] = "SUBSCRIPTION";
+        DirectiveLocation2["FIELD"] = "FIELD";
+        DirectiveLocation2["FRAGMENT_DEFINITION"] = "FRAGMENT_DEFINITION";
+        DirectiveLocation2["FRAGMENT_SPREAD"] = "FRAGMENT_SPREAD";
+        DirectiveLocation2["INLINE_FRAGMENT"] = "INLINE_FRAGMENT";
+        DirectiveLocation2["VARIABLE_DEFINITION"] = "VARIABLE_DEFINITION";
+        DirectiveLocation2["SCHEMA"] = "SCHEMA";
+        DirectiveLocation2["SCALAR"] = "SCALAR";
+        DirectiveLocation2["OBJECT"] = "OBJECT";
+        DirectiveLocation2["FIELD_DEFINITION"] = "FIELD_DEFINITION";
+        DirectiveLocation2["ARGUMENT_DEFINITION"] = "ARGUMENT_DEFINITION";
+        DirectiveLocation2["INTERFACE"] = "INTERFACE";
+        DirectiveLocation2["UNION"] = "UNION";
+        DirectiveLocation2["ENUM"] = "ENUM";
+        DirectiveLocation2["ENUM_VALUE"] = "ENUM_VALUE";
+        DirectiveLocation2["INPUT_OBJECT"] = "INPUT_OBJECT";
+        DirectiveLocation2["INPUT_FIELD_DEFINITION"] = "INPUT_FIELD_DEFINITION";
+      })(DirectiveLocation || (DirectiveLocation = {}));
+    }
+  });
+
+  // node_modules/graphql/language/kinds.mjs
+  var Kind;
+  var init_kinds = __esm({
+    "node_modules/graphql/language/kinds.mjs"() {
+      (function(Kind2) {
+        Kind2["NAME"] = "Name";
+        Kind2["DOCUMENT"] = "Document";
+        Kind2["OPERATION_DEFINITION"] = "OperationDefinition";
+        Kind2["VARIABLE_DEFINITION"] = "VariableDefinition";
+        Kind2["SELECTION_SET"] = "SelectionSet";
+        Kind2["FIELD"] = "Field";
+        Kind2["ARGUMENT"] = "Argument";
+        Kind2["FRAGMENT_SPREAD"] = "FragmentSpread";
+        Kind2["INLINE_FRAGMENT"] = "InlineFragment";
+        Kind2["FRAGMENT_DEFINITION"] = "FragmentDefinition";
+        Kind2["VARIABLE"] = "Variable";
+        Kind2["INT"] = "IntValue";
+        Kind2["FLOAT"] = "FloatValue";
+        Kind2["STRING"] = "StringValue";
+        Kind2["BOOLEAN"] = "BooleanValue";
+        Kind2["NULL"] = "NullValue";
+        Kind2["ENUM"] = "EnumValue";
+        Kind2["LIST"] = "ListValue";
+        Kind2["OBJECT"] = "ObjectValue";
+        Kind2["OBJECT_FIELD"] = "ObjectField";
+        Kind2["DIRECTIVE"] = "Directive";
+        Kind2["NAMED_TYPE"] = "NamedType";
+        Kind2["LIST_TYPE"] = "ListType";
+        Kind2["NON_NULL_TYPE"] = "NonNullType";
+        Kind2["SCHEMA_DEFINITION"] = "SchemaDefinition";
+        Kind2["OPERATION_TYPE_DEFINITION"] = "OperationTypeDefinition";
+        Kind2["SCALAR_TYPE_DEFINITION"] = "ScalarTypeDefinition";
+        Kind2["OBJECT_TYPE_DEFINITION"] = "ObjectTypeDefinition";
+        Kind2["FIELD_DEFINITION"] = "FieldDefinition";
+        Kind2["INPUT_VALUE_DEFINITION"] = "InputValueDefinition";
+        Kind2["INTERFACE_TYPE_DEFINITION"] = "InterfaceTypeDefinition";
+        Kind2["UNION_TYPE_DEFINITION"] = "UnionTypeDefinition";
+        Kind2["ENUM_TYPE_DEFINITION"] = "EnumTypeDefinition";
+        Kind2["ENUM_VALUE_DEFINITION"] = "EnumValueDefinition";
+        Kind2["INPUT_OBJECT_TYPE_DEFINITION"] = "InputObjectTypeDefinition";
+        Kind2["DIRECTIVE_DEFINITION"] = "DirectiveDefinition";
+        Kind2["SCHEMA_EXTENSION"] = "SchemaExtension";
+        Kind2["SCALAR_TYPE_EXTENSION"] = "ScalarTypeExtension";
+        Kind2["OBJECT_TYPE_EXTENSION"] = "ObjectTypeExtension";
+        Kind2["INTERFACE_TYPE_EXTENSION"] = "InterfaceTypeExtension";
+        Kind2["UNION_TYPE_EXTENSION"] = "UnionTypeExtension";
+        Kind2["ENUM_TYPE_EXTENSION"] = "EnumTypeExtension";
+        Kind2["INPUT_OBJECT_TYPE_EXTENSION"] = "InputObjectTypeExtension";
+      })(Kind || (Kind = {}));
+    }
+  });
+
+  // node_modules/graphql/language/characterClasses.mjs
+  function isWhiteSpace(code) {
+    return code === 9 || code === 32;
+  }
+  function isDigit(code) {
+    return code >= 48 && code <= 57;
+  }
+  function isLetter(code) {
+    return code >= 97 && code <= 122 || // A-Z
+    code >= 65 && code <= 90;
+  }
+  function isNameStart(code) {
+    return isLetter(code) || code === 95;
+  }
+  function isNameContinue(code) {
+    return isLetter(code) || isDigit(code) || code === 95;
+  }
+  var init_characterClasses = __esm({
+    "node_modules/graphql/language/characterClasses.mjs"() {
+    }
+  });
+
+  // node_modules/graphql/language/blockString.mjs
+  function dedentBlockStringLines(lines) {
+    var _firstNonEmptyLine2;
+    let commonIndent = Number.MAX_SAFE_INTEGER;
+    let firstNonEmptyLine = null;
+    let lastNonEmptyLine = -1;
+    for (let i5 = 0; i5 < lines.length; ++i5) {
+      var _firstNonEmptyLine;
+      const line = lines[i5];
+      const indent2 = leadingWhitespace(line);
+      if (indent2 === line.length) {
+        continue;
+      }
+      firstNonEmptyLine = (_firstNonEmptyLine = firstNonEmptyLine) !== null && _firstNonEmptyLine !== void 0 ? _firstNonEmptyLine : i5;
+      lastNonEmptyLine = i5;
+      if (i5 !== 0 && indent2 < commonIndent) {
+        commonIndent = indent2;
+      }
+    }
+    return lines.map((line, i5) => i5 === 0 ? line : line.slice(commonIndent)).slice(
+      (_firstNonEmptyLine2 = firstNonEmptyLine) !== null && _firstNonEmptyLine2 !== void 0 ? _firstNonEmptyLine2 : 0,
+      lastNonEmptyLine + 1
+    );
+  }
+  function leadingWhitespace(str) {
+    let i5 = 0;
+    while (i5 < str.length && isWhiteSpace(str.charCodeAt(i5))) {
+      ++i5;
+    }
+    return i5;
+  }
+  function printBlockString(value, options) {
+    const escapedValue = value.replace(/"""/g, '\\"""');
+    const lines = escapedValue.split(/\r\n|[\n\r]/g);
+    const isSingleLine = lines.length === 1;
+    const forceLeadingNewLine = lines.length > 1 && lines.slice(1).every((line) => line.length === 0 || isWhiteSpace(line.charCodeAt(0)));
+    const hasTrailingTripleQuotes = escapedValue.endsWith('\\"""');
+    const hasTrailingQuote = value.endsWith('"') && !hasTrailingTripleQuotes;
+    const hasTrailingSlash = value.endsWith("\\");
+    const forceTrailingNewline = hasTrailingQuote || hasTrailingSlash;
+    const printAsMultipleLines = !(options !== null && options !== void 0 && options.minimize) && // add leading and trailing new lines only if it improves readability
+    (!isSingleLine || value.length > 70 || forceTrailingNewline || forceLeadingNewLine || hasTrailingTripleQuotes);
+    let result = "";
+    const skipLeadingNewLine = isSingleLine && isWhiteSpace(value.charCodeAt(0));
+    if (printAsMultipleLines && !skipLeadingNewLine || forceLeadingNewLine) {
+      result += "\n";
+    }
+    result += escapedValue;
+    if (printAsMultipleLines || forceTrailingNewline) {
+      result += "\n";
+    }
+    return '"""' + result + '"""';
+  }
+  var init_blockString = __esm({
+    "node_modules/graphql/language/blockString.mjs"() {
+      init_characterClasses();
+    }
+  });
+
+  // node_modules/graphql/language/tokenKind.mjs
+  var TokenKind;
+  var init_tokenKind = __esm({
+    "node_modules/graphql/language/tokenKind.mjs"() {
+      (function(TokenKind2) {
+        TokenKind2["SOF"] = "<SOF>";
+        TokenKind2["EOF"] = "<EOF>";
+        TokenKind2["BANG"] = "!";
+        TokenKind2["DOLLAR"] = "$";
+        TokenKind2["AMP"] = "&";
+        TokenKind2["PAREN_L"] = "(";
+        TokenKind2["PAREN_R"] = ")";
+        TokenKind2["SPREAD"] = "...";
+        TokenKind2["COLON"] = ":";
+        TokenKind2["EQUALS"] = "=";
+        TokenKind2["AT"] = "@";
+        TokenKind2["BRACKET_L"] = "[";
+        TokenKind2["BRACKET_R"] = "]";
+        TokenKind2["BRACE_L"] = "{";
+        TokenKind2["PIPE"] = "|";
+        TokenKind2["BRACE_R"] = "}";
+        TokenKind2["NAME"] = "Name";
+        TokenKind2["INT"] = "Int";
+        TokenKind2["FLOAT"] = "Float";
+        TokenKind2["STRING"] = "String";
+        TokenKind2["BLOCK_STRING"] = "BlockString";
+        TokenKind2["COMMENT"] = "Comment";
+      })(TokenKind || (TokenKind = {}));
+    }
+  });
+
+  // node_modules/graphql/language/lexer.mjs
+  function isPunctuatorTokenKind(kind) {
+    return kind === TokenKind.BANG || kind === TokenKind.DOLLAR || kind === TokenKind.AMP || kind === TokenKind.PAREN_L || kind === TokenKind.PAREN_R || kind === TokenKind.SPREAD || kind === TokenKind.COLON || kind === TokenKind.EQUALS || kind === TokenKind.AT || kind === TokenKind.BRACKET_L || kind === TokenKind.BRACKET_R || kind === TokenKind.BRACE_L || kind === TokenKind.PIPE || kind === TokenKind.BRACE_R;
+  }
+  function isUnicodeScalarValue(code) {
+    return code >= 0 && code <= 55295 || code >= 57344 && code <= 1114111;
+  }
+  function isSupplementaryCodePoint(body, location2) {
+    return isLeadingSurrogate(body.charCodeAt(location2)) && isTrailingSurrogate(body.charCodeAt(location2 + 1));
+  }
+  function isLeadingSurrogate(code) {
+    return code >= 55296 && code <= 56319;
+  }
+  function isTrailingSurrogate(code) {
+    return code >= 56320 && code <= 57343;
+  }
+  function printCodePointAt(lexer, location2) {
+    const code = lexer.source.body.codePointAt(location2);
+    if (code === void 0) {
+      return TokenKind.EOF;
+    } else if (code >= 32 && code <= 126) {
+      const char = String.fromCodePoint(code);
+      return char === '"' ? `'"'` : `"${char}"`;
+    }
+    return "U+" + code.toString(16).toUpperCase().padStart(4, "0");
+  }
+  function createToken(lexer, kind, start, end3, value) {
+    const line = lexer.line;
+    const col = 1 + start - lexer.lineStart;
+    return new Token(kind, start, end3, line, col, value);
+  }
+  function readNextToken(lexer, start) {
+    const body = lexer.source.body;
+    const bodyLength = body.length;
+    let position = start;
+    while (position < bodyLength) {
+      const code = body.charCodeAt(position);
+      switch (code) {
+        case 65279:
+        case 9:
+        case 32:
+        case 44:
+          ++position;
+          continue;
+        case 10:
+          ++position;
+          ++lexer.line;
+          lexer.lineStart = position;
+          continue;
+        case 13:
+          if (body.charCodeAt(position + 1) === 10) {
+            position += 2;
+          } else {
+            ++position;
+          }
+          ++lexer.line;
+          lexer.lineStart = position;
+          continue;
+        case 35:
+          return readComment(lexer, position);
+        case 33:
+          return createToken(lexer, TokenKind.BANG, position, position + 1);
+        case 36:
+          return createToken(lexer, TokenKind.DOLLAR, position, position + 1);
+        case 38:
+          return createToken(lexer, TokenKind.AMP, position, position + 1);
+        case 40:
+          return createToken(lexer, TokenKind.PAREN_L, position, position + 1);
+        case 41:
+          return createToken(lexer, TokenKind.PAREN_R, position, position + 1);
+        case 46:
+          if (body.charCodeAt(position + 1) === 46 && body.charCodeAt(position + 2) === 46) {
+            return createToken(lexer, TokenKind.SPREAD, position, position + 3);
+          }
+          break;
+        case 58:
+          return createToken(lexer, TokenKind.COLON, position, position + 1);
+        case 61:
+          return createToken(lexer, TokenKind.EQUALS, position, position + 1);
+        case 64:
+          return createToken(lexer, TokenKind.AT, position, position + 1);
+        case 91:
+          return createToken(lexer, TokenKind.BRACKET_L, position, position + 1);
+        case 93:
+          return createToken(lexer, TokenKind.BRACKET_R, position, position + 1);
+        case 123:
+          return createToken(lexer, TokenKind.BRACE_L, position, position + 1);
+        case 124:
+          return createToken(lexer, TokenKind.PIPE, position, position + 1);
+        case 125:
+          return createToken(lexer, TokenKind.BRACE_R, position, position + 1);
+        case 34:
+          if (body.charCodeAt(position + 1) === 34 && body.charCodeAt(position + 2) === 34) {
+            return readBlockString(lexer, position);
+          }
+          return readString(lexer, position);
+      }
+      if (isDigit(code) || code === 45) {
+        return readNumber(lexer, position, code);
+      }
+      if (isNameStart(code)) {
+        return readName(lexer, position);
+      }
+      throw syntaxError(
+        lexer.source,
+        position,
+        code === 39 ? `Unexpected single quote character ('), did you mean to use a double quote (")?` : isUnicodeScalarValue(code) || isSupplementaryCodePoint(body, position) ? `Unexpected character: ${printCodePointAt(lexer, position)}.` : `Invalid character: ${printCodePointAt(lexer, position)}.`
+      );
+    }
+    return createToken(lexer, TokenKind.EOF, bodyLength, bodyLength);
+  }
+  function readComment(lexer, start) {
+    const body = lexer.source.body;
+    const bodyLength = body.length;
+    let position = start + 1;
+    while (position < bodyLength) {
+      const code = body.charCodeAt(position);
+      if (code === 10 || code === 13) {
+        break;
+      }
+      if (isUnicodeScalarValue(code)) {
+        ++position;
+      } else if (isSupplementaryCodePoint(body, position)) {
+        position += 2;
+      } else {
+        break;
+      }
+    }
+    return createToken(
+      lexer,
+      TokenKind.COMMENT,
+      start,
+      position,
+      body.slice(start + 1, position)
+    );
+  }
+  function readNumber(lexer, start, firstCode) {
+    const body = lexer.source.body;
+    let position = start;
+    let code = firstCode;
+    let isFloat = false;
+    if (code === 45) {
+      code = body.charCodeAt(++position);
+    }
+    if (code === 48) {
+      code = body.charCodeAt(++position);
+      if (isDigit(code)) {
+        throw syntaxError(
+          lexer.source,
+          position,
+          `Invalid number, unexpected digit after 0: ${printCodePointAt(
+            lexer,
+            position
+          )}.`
+        );
+      }
+    } else {
+      position = readDigits(lexer, position, code);
+      code = body.charCodeAt(position);
+    }
+    if (code === 46) {
+      isFloat = true;
+      code = body.charCodeAt(++position);
+      position = readDigits(lexer, position, code);
+      code = body.charCodeAt(position);
+    }
+    if (code === 69 || code === 101) {
+      isFloat = true;
+      code = body.charCodeAt(++position);
+      if (code === 43 || code === 45) {
+        code = body.charCodeAt(++position);
+      }
+      position = readDigits(lexer, position, code);
+      code = body.charCodeAt(position);
+    }
+    if (code === 46 || isNameStart(code)) {
+      throw syntaxError(
+        lexer.source,
+        position,
+        `Invalid number, expected digit but got: ${printCodePointAt(
+          lexer,
+          position
+        )}.`
+      );
+    }
+    return createToken(
+      lexer,
+      isFloat ? TokenKind.FLOAT : TokenKind.INT,
+      start,
+      position,
+      body.slice(start, position)
+    );
+  }
+  function readDigits(lexer, start, firstCode) {
+    if (!isDigit(firstCode)) {
+      throw syntaxError(
+        lexer.source,
+        start,
+        `Invalid number, expected digit but got: ${printCodePointAt(
+          lexer,
+          start
+        )}.`
+      );
+    }
+    const body = lexer.source.body;
+    let position = start + 1;
+    while (isDigit(body.charCodeAt(position))) {
+      ++position;
+    }
+    return position;
+  }
+  function readString(lexer, start) {
+    const body = lexer.source.body;
+    const bodyLength = body.length;
+    let position = start + 1;
+    let chunkStart = position;
+    let value = "";
+    while (position < bodyLength) {
+      const code = body.charCodeAt(position);
+      if (code === 34) {
+        value += body.slice(chunkStart, position);
+        return createToken(lexer, TokenKind.STRING, start, position + 1, value);
+      }
+      if (code === 92) {
+        value += body.slice(chunkStart, position);
+        const escape = body.charCodeAt(position + 1) === 117 ? body.charCodeAt(position + 2) === 123 ? readEscapedUnicodeVariableWidth(lexer, position) : readEscapedUnicodeFixedWidth(lexer, position) : readEscapedCharacter(lexer, position);
+        value += escape.value;
+        position += escape.size;
+        chunkStart = position;
+        continue;
+      }
+      if (code === 10 || code === 13) {
+        break;
+      }
+      if (isUnicodeScalarValue(code)) {
+        ++position;
+      } else if (isSupplementaryCodePoint(body, position)) {
+        position += 2;
+      } else {
+        throw syntaxError(
+          lexer.source,
+          position,
+          `Invalid character within String: ${printCodePointAt(
+            lexer,
+            position
+          )}.`
+        );
+      }
+    }
+    throw syntaxError(lexer.source, position, "Unterminated string.");
+  }
+  function readEscapedUnicodeVariableWidth(lexer, position) {
+    const body = lexer.source.body;
+    let point = 0;
+    let size = 3;
+    while (size < 12) {
+      const code = body.charCodeAt(position + size++);
+      if (code === 125) {
+        if (size < 5 || !isUnicodeScalarValue(point)) {
+          break;
+        }
+        return {
+          value: String.fromCodePoint(point),
+          size
+        };
+      }
+      point = point << 4 | readHexDigit(code);
+      if (point < 0) {
+        break;
+      }
+    }
+    throw syntaxError(
+      lexer.source,
+      position,
+      `Invalid Unicode escape sequence: "${body.slice(
+        position,
+        position + size
+      )}".`
+    );
+  }
+  function readEscapedUnicodeFixedWidth(lexer, position) {
+    const body = lexer.source.body;
+    const code = read16BitHexCode(body, position + 2);
+    if (isUnicodeScalarValue(code)) {
+      return {
+        value: String.fromCodePoint(code),
+        size: 6
+      };
+    }
+    if (isLeadingSurrogate(code)) {
+      if (body.charCodeAt(position + 6) === 92 && body.charCodeAt(position + 7) === 117) {
+        const trailingCode = read16BitHexCode(body, position + 8);
+        if (isTrailingSurrogate(trailingCode)) {
+          return {
+            value: String.fromCodePoint(code, trailingCode),
+            size: 12
+          };
+        }
+      }
+    }
+    throw syntaxError(
+      lexer.source,
+      position,
+      `Invalid Unicode escape sequence: "${body.slice(position, position + 6)}".`
+    );
+  }
+  function read16BitHexCode(body, position) {
+    return readHexDigit(body.charCodeAt(position)) << 12 | readHexDigit(body.charCodeAt(position + 1)) << 8 | readHexDigit(body.charCodeAt(position + 2)) << 4 | readHexDigit(body.charCodeAt(position + 3));
+  }
+  function readHexDigit(code) {
+    return code >= 48 && code <= 57 ? code - 48 : code >= 65 && code <= 70 ? code - 55 : code >= 97 && code <= 102 ? code - 87 : -1;
+  }
+  function readEscapedCharacter(lexer, position) {
+    const body = lexer.source.body;
+    const code = body.charCodeAt(position + 1);
+    switch (code) {
+      case 34:
+        return {
+          value: '"',
+          size: 2
+        };
+      case 92:
+        return {
+          value: "\\",
+          size: 2
+        };
+      case 47:
+        return {
+          value: "/",
+          size: 2
+        };
+      case 98:
+        return {
+          value: "\b",
+          size: 2
+        };
+      case 102:
+        return {
+          value: "\f",
+          size: 2
+        };
+      case 110:
+        return {
+          value: "\n",
+          size: 2
+        };
+      case 114:
+        return {
+          value: "\r",
+          size: 2
+        };
+      case 116:
+        return {
+          value: "	",
+          size: 2
+        };
+    }
+    throw syntaxError(
+      lexer.source,
+      position,
+      `Invalid character escape sequence: "${body.slice(
+        position,
+        position + 2
+      )}".`
+    );
+  }
+  function readBlockString(lexer, start) {
+    const body = lexer.source.body;
+    const bodyLength = body.length;
+    let lineStart = lexer.lineStart;
+    let position = start + 3;
+    let chunkStart = position;
+    let currentLine = "";
+    const blockLines = [];
+    while (position < bodyLength) {
+      const code = body.charCodeAt(position);
+      if (code === 34 && body.charCodeAt(position + 1) === 34 && body.charCodeAt(position + 2) === 34) {
+        currentLine += body.slice(chunkStart, position);
+        blockLines.push(currentLine);
+        const token = createToken(
+          lexer,
+          TokenKind.BLOCK_STRING,
+          start,
+          position + 3,
+          // Return a string of the lines joined with U+000A.
+          dedentBlockStringLines(blockLines).join("\n")
+        );
+        lexer.line += blockLines.length - 1;
+        lexer.lineStart = lineStart;
+        return token;
+      }
+      if (code === 92 && body.charCodeAt(position + 1) === 34 && body.charCodeAt(position + 2) === 34 && body.charCodeAt(position + 3) === 34) {
+        currentLine += body.slice(chunkStart, position);
+        chunkStart = position + 1;
+        position += 4;
+        continue;
+      }
+      if (code === 10 || code === 13) {
+        currentLine += body.slice(chunkStart, position);
+        blockLines.push(currentLine);
+        if (code === 13 && body.charCodeAt(position + 1) === 10) {
+          position += 2;
+        } else {
+          ++position;
+        }
+        currentLine = "";
+        chunkStart = position;
+        lineStart = position;
+        continue;
+      }
+      if (isUnicodeScalarValue(code)) {
+        ++position;
+      } else if (isSupplementaryCodePoint(body, position)) {
+        position += 2;
+      } else {
+        throw syntaxError(
+          lexer.source,
+          position,
+          `Invalid character within String: ${printCodePointAt(
+            lexer,
+            position
+          )}.`
+        );
+      }
+    }
+    throw syntaxError(lexer.source, position, "Unterminated string.");
+  }
+  function readName(lexer, start) {
+    const body = lexer.source.body;
+    const bodyLength = body.length;
+    let position = start + 1;
+    while (position < bodyLength) {
+      const code = body.charCodeAt(position);
+      if (isNameContinue(code)) {
+        ++position;
+      } else {
+        break;
+      }
+    }
+    return createToken(
+      lexer,
+      TokenKind.NAME,
+      start,
+      position,
+      body.slice(start, position)
+    );
+  }
+  var Lexer;
+  var init_lexer = __esm({
+    "node_modules/graphql/language/lexer.mjs"() {
+      init_syntaxError();
+      init_ast();
+      init_blockString();
+      init_characterClasses();
+      init_tokenKind();
+      Lexer = class {
+        /**
+         * The previously focused non-ignored token.
+         */
+        /**
+         * The currently focused non-ignored token.
+         */
+        /**
+         * The (1-indexed) line containing the current token.
+         */
+        /**
+         * The character offset at which the current line begins.
+         */
+        constructor(source) {
+          const startOfFileToken = new Token(TokenKind.SOF, 0, 0, 0, 0);
+          this.source = source;
+          this.lastToken = startOfFileToken;
+          this.token = startOfFileToken;
+          this.line = 1;
+          this.lineStart = 0;
+        }
+        get [Symbol.toStringTag]() {
+          return "Lexer";
+        }
+        /**
+         * Advances the token stream to the next non-ignored token.
+         */
+        advance() {
+          this.lastToken = this.token;
+          const token = this.token = this.lookahead();
+          return token;
+        }
+        /**
+         * Looks ahead and returns the next non-ignored token, but does not change
+         * the state of Lexer.
+         */
+        lookahead() {
+          let token = this.token;
+          if (token.kind !== TokenKind.EOF) {
+            do {
+              if (token.next) {
+                token = token.next;
+              } else {
+                const nextToken = readNextToken(this, token.end);
+                token.next = nextToken;
+                nextToken.prev = token;
+                token = nextToken;
+              }
+            } while (token.kind === TokenKind.COMMENT);
+          }
+          return token;
+        }
+      };
+    }
+  });
+
+  // node_modules/graphql/jsutils/inspect.mjs
+  function inspect(value) {
+    return formatValue(value, []);
+  }
+  function formatValue(value, seenValues) {
+    switch (typeof value) {
+      case "string":
+        return JSON.stringify(value);
+      case "function":
+        return value.name ? `[function ${value.name}]` : "[function]";
+      case "object":
+        return formatObjectValue(value, seenValues);
+      default:
+        return String(value);
+    }
+  }
+  function formatObjectValue(value, previouslySeenValues) {
+    if (value === null) {
+      return "null";
+    }
+    if (previouslySeenValues.includes(value)) {
+      return "[Circular]";
+    }
+    const seenValues = [...previouslySeenValues, value];
+    if (isJSONable(value)) {
+      const jsonValue = value.toJSON();
+      if (jsonValue !== value) {
+        return typeof jsonValue === "string" ? jsonValue : formatValue(jsonValue, seenValues);
+      }
+    } else if (Array.isArray(value)) {
+      return formatArray(value, seenValues);
+    }
+    return formatObject(value, seenValues);
+  }
+  function isJSONable(value) {
+    return typeof value.toJSON === "function";
+  }
+  function formatObject(object, seenValues) {
+    const entries = Object.entries(object);
+    if (entries.length === 0) {
+      return "{}";
+    }
+    if (seenValues.length > MAX_RECURSIVE_DEPTH) {
+      return "[" + getObjectTag(object) + "]";
+    }
+    const properties = entries.map(
+      ([key, value]) => key + ": " + formatValue(value, seenValues)
+    );
+    return "{ " + properties.join(", ") + " }";
+  }
+  function formatArray(array, seenValues) {
+    if (array.length === 0) {
+      return "[]";
+    }
+    if (seenValues.length > MAX_RECURSIVE_DEPTH) {
+      return "[Array]";
+    }
+    const len = Math.min(MAX_ARRAY_LENGTH, array.length);
+    const remaining = array.length - len;
+    const items = [];
+    for (let i5 = 0; i5 < len; ++i5) {
+      items.push(formatValue(array[i5], seenValues));
+    }
+    if (remaining === 1) {
+      items.push("... 1 more item");
+    } else if (remaining > 1) {
+      items.push(`... ${remaining} more items`);
+    }
+    return "[" + items.join(", ") + "]";
+  }
+  function getObjectTag(object) {
+    const tag = Object.prototype.toString.call(object).replace(/^\[object /, "").replace(/]$/, "");
+    if (tag === "Object" && typeof object.constructor === "function") {
+      const name = object.constructor.name;
+      if (typeof name === "string" && name !== "") {
+        return name;
+      }
+    }
+    return tag;
+  }
+  var MAX_ARRAY_LENGTH, MAX_RECURSIVE_DEPTH;
+  var init_inspect = __esm({
+    "node_modules/graphql/jsutils/inspect.mjs"() {
+      MAX_ARRAY_LENGTH = 10;
+      MAX_RECURSIVE_DEPTH = 2;
+    }
+  });
+
+  // node_modules/graphql/jsutils/instanceOf.mjs
+  var instanceOf;
+  var init_instanceOf = __esm({
+    "node_modules/graphql/jsutils/instanceOf.mjs"() {
+      init_inspect();
+      instanceOf = /* c8 ignore next 6 */
+      // FIXME: https://github.com/graphql/graphql-js/issues/2317
+      // eslint-disable-next-line no-undef
+      false ? function instanceOf2(value, constructor) {
+        return value instanceof constructor;
+      } : function instanceOf3(value, constructor) {
+        if (value instanceof constructor) {
+          return true;
+        }
+        if (typeof value === "object" && value !== null) {
+          var _value$constructor;
+          const className = constructor.prototype[Symbol.toStringTag];
+          const valueClassName = (
+            // We still need to support constructor's name to detect conflicts with older versions of this library.
+            Symbol.toStringTag in value ? value[Symbol.toStringTag] : (_value$constructor = value.constructor) === null || _value$constructor === void 0 ? void 0 : _value$constructor.name
+          );
+          if (className === valueClassName) {
+            const stringifiedValue = inspect(value);
+            throw new Error(`Cannot use ${className} "${stringifiedValue}" from another module or realm.
+
+Ensure that there is only one instance of "graphql" in the node_modules
+directory. If different versions of "graphql" are the dependencies of other
+relied on modules, use "resolutions" to ensure only one version is installed.
+
+https://yarnpkg.com/en/docs/selective-version-resolutions
+
+Duplicate "graphql" modules cannot be used at the same time since different
+versions may have different capabilities and behavior. The data from one
+version used in the function from another could produce confusing and
+spurious results.`);
+          }
+        }
+        return false;
+      };
+    }
+  });
+
+  // node_modules/graphql/language/source.mjs
+  function isSource(source) {
+    return instanceOf(source, Source);
+  }
+  var Source;
+  var init_source = __esm({
+    "node_modules/graphql/language/source.mjs"() {
+      init_devAssert();
+      init_inspect();
+      init_instanceOf();
+      Source = class {
+        constructor(body, name = "GraphQL request", locationOffset = {
+          line: 1,
+          column: 1
+        }) {
+          typeof body === "string" || devAssert(false, `Body must be a string. Received: ${inspect(body)}.`);
+          this.body = body;
+          this.name = name;
+          this.locationOffset = locationOffset;
+          this.locationOffset.line > 0 || devAssert(
+            false,
+            "line in locationOffset is 1-indexed and must be positive."
+          );
+          this.locationOffset.column > 0 || devAssert(
+            false,
+            "column in locationOffset is 1-indexed and must be positive."
+          );
+        }
+        get [Symbol.toStringTag]() {
+          return "Source";
+        }
+      };
+    }
+  });
+
+  // node_modules/graphql/language/parser.mjs
+  function parse2(source, options) {
+    const parser = new Parser(source, options);
+    return parser.parseDocument();
+  }
+  function getTokenDesc(token) {
+    const value = token.value;
+    return getTokenKindDesc(token.kind) + (value != null ? ` "${value}"` : "");
+  }
+  function getTokenKindDesc(kind) {
+    return isPunctuatorTokenKind(kind) ? `"${kind}"` : kind;
+  }
+  var Parser;
+  var init_parser = __esm({
+    "node_modules/graphql/language/parser.mjs"() {
+      init_syntaxError();
+      init_ast();
+      init_directiveLocation();
+      init_kinds();
+      init_lexer();
+      init_source();
+      init_tokenKind();
+      Parser = class {
+        constructor(source, options = {}) {
+          const sourceObj = isSource(source) ? source : new Source(source);
+          this._lexer = new Lexer(sourceObj);
+          this._options = options;
+          this._tokenCounter = 0;
+        }
+        /**
+         * Converts a name lex token into a name parse node.
+         */
+        parseName() {
+          const token = this.expectToken(TokenKind.NAME);
+          return this.node(token, {
+            kind: Kind.NAME,
+            value: token.value
+          });
+        }
+        // Implements the parsing rules in the Document section.
+        /**
+         * Document : Definition+
+         */
+        parseDocument() {
+          return this.node(this._lexer.token, {
+            kind: Kind.DOCUMENT,
+            definitions: this.many(
+              TokenKind.SOF,
+              this.parseDefinition,
+              TokenKind.EOF
+            )
+          });
+        }
+        /**
+         * Definition :
+         *   - ExecutableDefinition
+         *   - TypeSystemDefinition
+         *   - TypeSystemExtension
+         *
+         * ExecutableDefinition :
+         *   - OperationDefinition
+         *   - FragmentDefinition
+         *
+         * TypeSystemDefinition :
+         *   - SchemaDefinition
+         *   - TypeDefinition
+         *   - DirectiveDefinition
+         *
+         * TypeDefinition :
+         *   - ScalarTypeDefinition
+         *   - ObjectTypeDefinition
+         *   - InterfaceTypeDefinition
+         *   - UnionTypeDefinition
+         *   - EnumTypeDefinition
+         *   - InputObjectTypeDefinition
+         */
+        parseDefinition() {
+          if (this.peek(TokenKind.BRACE_L)) {
+            return this.parseOperationDefinition();
+          }
+          const hasDescription = this.peekDescription();
+          const keywordToken = hasDescription ? this._lexer.lookahead() : this._lexer.token;
+          if (keywordToken.kind === TokenKind.NAME) {
+            switch (keywordToken.value) {
+              case "schema":
+                return this.parseSchemaDefinition();
+              case "scalar":
+                return this.parseScalarTypeDefinition();
+              case "type":
+                return this.parseObjectTypeDefinition();
+              case "interface":
+                return this.parseInterfaceTypeDefinition();
+              case "union":
+                return this.parseUnionTypeDefinition();
+              case "enum":
+                return this.parseEnumTypeDefinition();
+              case "input":
+                return this.parseInputObjectTypeDefinition();
+              case "directive":
+                return this.parseDirectiveDefinition();
+            }
+            if (hasDescription) {
+              throw syntaxError(
+                this._lexer.source,
+                this._lexer.token.start,
+                "Unexpected description, descriptions are supported only on type definitions."
+              );
+            }
+            switch (keywordToken.value) {
+              case "query":
+              case "mutation":
+              case "subscription":
+                return this.parseOperationDefinition();
+              case "fragment":
+                return this.parseFragmentDefinition();
+              case "extend":
+                return this.parseTypeSystemExtension();
+            }
+          }
+          throw this.unexpected(keywordToken);
+        }
+        // Implements the parsing rules in the Operations section.
+        /**
+         * OperationDefinition :
+         *  - SelectionSet
+         *  - OperationType Name? VariableDefinitions? Directives? SelectionSet
+         */
+        parseOperationDefinition() {
+          const start = this._lexer.token;
+          if (this.peek(TokenKind.BRACE_L)) {
+            return this.node(start, {
+              kind: Kind.OPERATION_DEFINITION,
+              operation: OperationTypeNode.QUERY,
+              name: void 0,
+              variableDefinitions: [],
+              directives: [],
+              selectionSet: this.parseSelectionSet()
+            });
+          }
+          const operation = this.parseOperationType();
+          let name;
+          if (this.peek(TokenKind.NAME)) {
+            name = this.parseName();
+          }
+          return this.node(start, {
+            kind: Kind.OPERATION_DEFINITION,
+            operation,
+            name,
+            variableDefinitions: this.parseVariableDefinitions(),
+            directives: this.parseDirectives(false),
+            selectionSet: this.parseSelectionSet()
+          });
+        }
+        /**
+         * OperationType : one of query mutation subscription
+         */
+        parseOperationType() {
+          const operationToken = this.expectToken(TokenKind.NAME);
+          switch (operationToken.value) {
+            case "query":
+              return OperationTypeNode.QUERY;
+            case "mutation":
+              return OperationTypeNode.MUTATION;
+            case "subscription":
+              return OperationTypeNode.SUBSCRIPTION;
+          }
+          throw this.unexpected(operationToken);
+        }
+        /**
+         * VariableDefinitions : ( VariableDefinition+ )
+         */
+        parseVariableDefinitions() {
+          return this.optionalMany(
+            TokenKind.PAREN_L,
+            this.parseVariableDefinition,
+            TokenKind.PAREN_R
+          );
+        }
+        /**
+         * VariableDefinition : Variable : Type DefaultValue? Directives[Const]?
+         */
+        parseVariableDefinition() {
+          return this.node(this._lexer.token, {
+            kind: Kind.VARIABLE_DEFINITION,
+            variable: this.parseVariable(),
+            type: (this.expectToken(TokenKind.COLON), this.parseTypeReference()),
+            defaultValue: this.expectOptionalToken(TokenKind.EQUALS) ? this.parseConstValueLiteral() : void 0,
+            directives: this.parseConstDirectives()
+          });
+        }
+        /**
+         * Variable : $ Name
+         */
+        parseVariable() {
+          const start = this._lexer.token;
+          this.expectToken(TokenKind.DOLLAR);
+          return this.node(start, {
+            kind: Kind.VARIABLE,
+            name: this.parseName()
+          });
+        }
+        /**
+         * ```
+         * SelectionSet : { Selection+ }
+         * ```
+         */
+        parseSelectionSet() {
+          return this.node(this._lexer.token, {
+            kind: Kind.SELECTION_SET,
+            selections: this.many(
+              TokenKind.BRACE_L,
+              this.parseSelection,
+              TokenKind.BRACE_R
+            )
+          });
+        }
+        /**
+         * Selection :
+         *   - Field
+         *   - FragmentSpread
+         *   - InlineFragment
+         */
+        parseSelection() {
+          return this.peek(TokenKind.SPREAD) ? this.parseFragment() : this.parseField();
+        }
+        /**
+         * Field : Alias? Name Arguments? Directives? SelectionSet?
+         *
+         * Alias : Name :
+         */
+        parseField() {
+          const start = this._lexer.token;
+          const nameOrAlias = this.parseName();
+          let alias;
+          let name;
+          if (this.expectOptionalToken(TokenKind.COLON)) {
+            alias = nameOrAlias;
+            name = this.parseName();
+          } else {
+            name = nameOrAlias;
+          }
+          return this.node(start, {
+            kind: Kind.FIELD,
+            alias,
+            name,
+            arguments: this.parseArguments(false),
+            directives: this.parseDirectives(false),
+            selectionSet: this.peek(TokenKind.BRACE_L) ? this.parseSelectionSet() : void 0
+          });
+        }
+        /**
+         * Arguments[Const] : ( Argument[?Const]+ )
+         */
+        parseArguments(isConst) {
+          const item = isConst ? this.parseConstArgument : this.parseArgument;
+          return this.optionalMany(TokenKind.PAREN_L, item, TokenKind.PAREN_R);
+        }
+        /**
+         * Argument[Const] : Name : Value[?Const]
+         */
+        parseArgument(isConst = false) {
+          const start = this._lexer.token;
+          const name = this.parseName();
+          this.expectToken(TokenKind.COLON);
+          return this.node(start, {
+            kind: Kind.ARGUMENT,
+            name,
+            value: this.parseValueLiteral(isConst)
+          });
+        }
+        parseConstArgument() {
+          return this.parseArgument(true);
+        }
+        // Implements the parsing rules in the Fragments section.
+        /**
+         * Corresponds to both FragmentSpread and InlineFragment in the spec.
+         *
+         * FragmentSpread : ... FragmentName Directives?
+         *
+         * InlineFragment : ... TypeCondition? Directives? SelectionSet
+         */
+        parseFragment() {
+          const start = this._lexer.token;
+          this.expectToken(TokenKind.SPREAD);
+          const hasTypeCondition = this.expectOptionalKeyword("on");
+          if (!hasTypeCondition && this.peek(TokenKind.NAME)) {
+            return this.node(start, {
+              kind: Kind.FRAGMENT_SPREAD,
+              name: this.parseFragmentName(),
+              directives: this.parseDirectives(false)
+            });
+          }
+          return this.node(start, {
+            kind: Kind.INLINE_FRAGMENT,
+            typeCondition: hasTypeCondition ? this.parseNamedType() : void 0,
+            directives: this.parseDirectives(false),
+            selectionSet: this.parseSelectionSet()
+          });
+        }
+        /**
+         * FragmentDefinition :
+         *   - fragment FragmentName on TypeCondition Directives? SelectionSet
+         *
+         * TypeCondition : NamedType
+         */
+        parseFragmentDefinition() {
+          const start = this._lexer.token;
+          this.expectKeyword("fragment");
+          if (this._options.allowLegacyFragmentVariables === true) {
+            return this.node(start, {
+              kind: Kind.FRAGMENT_DEFINITION,
+              name: this.parseFragmentName(),
+              variableDefinitions: this.parseVariableDefinitions(),
+              typeCondition: (this.expectKeyword("on"), this.parseNamedType()),
+              directives: this.parseDirectives(false),
+              selectionSet: this.parseSelectionSet()
+            });
+          }
+          return this.node(start, {
+            kind: Kind.FRAGMENT_DEFINITION,
+            name: this.parseFragmentName(),
+            typeCondition: (this.expectKeyword("on"), this.parseNamedType()),
+            directives: this.parseDirectives(false),
+            selectionSet: this.parseSelectionSet()
+          });
+        }
+        /**
+         * FragmentName : Name but not `on`
+         */
+        parseFragmentName() {
+          if (this._lexer.token.value === "on") {
+            throw this.unexpected();
+          }
+          return this.parseName();
+        }
+        // Implements the parsing rules in the Values section.
+        /**
+         * Value[Const] :
+         *   - [~Const] Variable
+         *   - IntValue
+         *   - FloatValue
+         *   - StringValue
+         *   - BooleanValue
+         *   - NullValue
+         *   - EnumValue
+         *   - ListValue[?Const]
+         *   - ObjectValue[?Const]
+         *
+         * BooleanValue : one of `true` `false`
+         *
+         * NullValue : `null`
+         *
+         * EnumValue : Name but not `true`, `false` or `null`
+         */
+        parseValueLiteral(isConst) {
+          const token = this._lexer.token;
+          switch (token.kind) {
+            case TokenKind.BRACKET_L:
+              return this.parseList(isConst);
+            case TokenKind.BRACE_L:
+              return this.parseObject(isConst);
+            case TokenKind.INT:
+              this.advanceLexer();
+              return this.node(token, {
+                kind: Kind.INT,
+                value: token.value
+              });
+            case TokenKind.FLOAT:
+              this.advanceLexer();
+              return this.node(token, {
+                kind: Kind.FLOAT,
+                value: token.value
+              });
+            case TokenKind.STRING:
+            case TokenKind.BLOCK_STRING:
+              return this.parseStringLiteral();
+            case TokenKind.NAME:
+              this.advanceLexer();
+              switch (token.value) {
+                case "true":
+                  return this.node(token, {
+                    kind: Kind.BOOLEAN,
+                    value: true
+                  });
+                case "false":
+                  return this.node(token, {
+                    kind: Kind.BOOLEAN,
+                    value: false
+                  });
+                case "null":
+                  return this.node(token, {
+                    kind: Kind.NULL
+                  });
+                default:
+                  return this.node(token, {
+                    kind: Kind.ENUM,
+                    value: token.value
+                  });
+              }
+            case TokenKind.DOLLAR:
+              if (isConst) {
+                this.expectToken(TokenKind.DOLLAR);
+                if (this._lexer.token.kind === TokenKind.NAME) {
+                  const varName = this._lexer.token.value;
+                  throw syntaxError(
+                    this._lexer.source,
+                    token.start,
+                    `Unexpected variable "$${varName}" in constant value.`
+                  );
+                } else {
+                  throw this.unexpected(token);
+                }
+              }
+              return this.parseVariable();
+            default:
+              throw this.unexpected();
+          }
+        }
+        parseConstValueLiteral() {
+          return this.parseValueLiteral(true);
+        }
+        parseStringLiteral() {
+          const token = this._lexer.token;
+          this.advanceLexer();
+          return this.node(token, {
+            kind: Kind.STRING,
+            value: token.value,
+            block: token.kind === TokenKind.BLOCK_STRING
+          });
+        }
+        /**
+         * ListValue[Const] :
+         *   - [ ]
+         *   - [ Value[?Const]+ ]
+         */
+        parseList(isConst) {
+          const item = () => this.parseValueLiteral(isConst);
+          return this.node(this._lexer.token, {
+            kind: Kind.LIST,
+            values: this.any(TokenKind.BRACKET_L, item, TokenKind.BRACKET_R)
+          });
+        }
+        /**
+         * ```
+         * ObjectValue[Const] :
+         *   - { }
+         *   - { ObjectField[?Const]+ }
+         * ```
+         */
+        parseObject(isConst) {
+          const item = () => this.parseObjectField(isConst);
+          return this.node(this._lexer.token, {
+            kind: Kind.OBJECT,
+            fields: this.any(TokenKind.BRACE_L, item, TokenKind.BRACE_R)
+          });
+        }
+        /**
+         * ObjectField[Const] : Name : Value[?Const]
+         */
+        parseObjectField(isConst) {
+          const start = this._lexer.token;
+          const name = this.parseName();
+          this.expectToken(TokenKind.COLON);
+          return this.node(start, {
+            kind: Kind.OBJECT_FIELD,
+            name,
+            value: this.parseValueLiteral(isConst)
+          });
+        }
+        // Implements the parsing rules in the Directives section.
+        /**
+         * Directives[Const] : Directive[?Const]+
+         */
+        parseDirectives(isConst) {
+          const directives = [];
+          while (this.peek(TokenKind.AT)) {
+            directives.push(this.parseDirective(isConst));
+          }
+          return directives;
+        }
+        parseConstDirectives() {
+          return this.parseDirectives(true);
+        }
+        /**
+         * ```
+         * Directive[Const] : @ Name Arguments[?Const]?
+         * ```
+         */
+        parseDirective(isConst) {
+          const start = this._lexer.token;
+          this.expectToken(TokenKind.AT);
+          return this.node(start, {
+            kind: Kind.DIRECTIVE,
+            name: this.parseName(),
+            arguments: this.parseArguments(isConst)
+          });
+        }
+        // Implements the parsing rules in the Types section.
+        /**
+         * Type :
+         *   - NamedType
+         *   - ListType
+         *   - NonNullType
+         */
+        parseTypeReference() {
+          const start = this._lexer.token;
+          let type;
+          if (this.expectOptionalToken(TokenKind.BRACKET_L)) {
+            const innerType = this.parseTypeReference();
+            this.expectToken(TokenKind.BRACKET_R);
+            type = this.node(start, {
+              kind: Kind.LIST_TYPE,
+              type: innerType
+            });
+          } else {
+            type = this.parseNamedType();
+          }
+          if (this.expectOptionalToken(TokenKind.BANG)) {
+            return this.node(start, {
+              kind: Kind.NON_NULL_TYPE,
+              type
+            });
+          }
+          return type;
+        }
+        /**
+         * NamedType : Name
+         */
+        parseNamedType() {
+          return this.node(this._lexer.token, {
+            kind: Kind.NAMED_TYPE,
+            name: this.parseName()
+          });
+        }
+        // Implements the parsing rules in the Type Definition section.
+        peekDescription() {
+          return this.peek(TokenKind.STRING) || this.peek(TokenKind.BLOCK_STRING);
+        }
+        /**
+         * Description : StringValue
+         */
+        parseDescription() {
+          if (this.peekDescription()) {
+            return this.parseStringLiteral();
+          }
+        }
+        /**
+         * ```
+         * SchemaDefinition : Description? schema Directives[Const]? { OperationTypeDefinition+ }
+         * ```
+         */
+        parseSchemaDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("schema");
+          const directives = this.parseConstDirectives();
+          const operationTypes = this.many(
+            TokenKind.BRACE_L,
+            this.parseOperationTypeDefinition,
+            TokenKind.BRACE_R
+          );
+          return this.node(start, {
+            kind: Kind.SCHEMA_DEFINITION,
+            description,
+            directives,
+            operationTypes
+          });
+        }
+        /**
+         * OperationTypeDefinition : OperationType : NamedType
+         */
+        parseOperationTypeDefinition() {
+          const start = this._lexer.token;
+          const operation = this.parseOperationType();
+          this.expectToken(TokenKind.COLON);
+          const type = this.parseNamedType();
+          return this.node(start, {
+            kind: Kind.OPERATION_TYPE_DEFINITION,
+            operation,
+            type
+          });
+        }
+        /**
+         * ScalarTypeDefinition : Description? scalar Name Directives[Const]?
+         */
+        parseScalarTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("scalar");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          return this.node(start, {
+            kind: Kind.SCALAR_TYPE_DEFINITION,
+            description,
+            name,
+            directives
+          });
+        }
+        /**
+         * ObjectTypeDefinition :
+         *   Description?
+         *   type Name ImplementsInterfaces? Directives[Const]? FieldsDefinition?
+         */
+        parseObjectTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("type");
+          const name = this.parseName();
+          const interfaces = this.parseImplementsInterfaces();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseFieldsDefinition();
+          return this.node(start, {
+            kind: Kind.OBJECT_TYPE_DEFINITION,
+            description,
+            name,
+            interfaces,
+            directives,
+            fields
+          });
+        }
+        /**
+         * ImplementsInterfaces :
+         *   - implements `&`? NamedType
+         *   - ImplementsInterfaces & NamedType
+         */
+        parseImplementsInterfaces() {
+          return this.expectOptionalKeyword("implements") ? this.delimitedMany(TokenKind.AMP, this.parseNamedType) : [];
+        }
+        /**
+         * ```
+         * FieldsDefinition : { FieldDefinition+ }
+         * ```
+         */
+        parseFieldsDefinition() {
+          return this.optionalMany(
+            TokenKind.BRACE_L,
+            this.parseFieldDefinition,
+            TokenKind.BRACE_R
+          );
+        }
+        /**
+         * FieldDefinition :
+         *   - Description? Name ArgumentsDefinition? : Type Directives[Const]?
+         */
+        parseFieldDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          const name = this.parseName();
+          const args = this.parseArgumentDefs();
+          this.expectToken(TokenKind.COLON);
+          const type = this.parseTypeReference();
+          const directives = this.parseConstDirectives();
+          return this.node(start, {
+            kind: Kind.FIELD_DEFINITION,
+            description,
+            name,
+            arguments: args,
+            type,
+            directives
+          });
+        }
+        /**
+         * ArgumentsDefinition : ( InputValueDefinition+ )
+         */
+        parseArgumentDefs() {
+          return this.optionalMany(
+            TokenKind.PAREN_L,
+            this.parseInputValueDef,
+            TokenKind.PAREN_R
+          );
+        }
+        /**
+         * InputValueDefinition :
+         *   - Description? Name : Type DefaultValue? Directives[Const]?
+         */
+        parseInputValueDef() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          const name = this.parseName();
+          this.expectToken(TokenKind.COLON);
+          const type = this.parseTypeReference();
+          let defaultValue;
+          if (this.expectOptionalToken(TokenKind.EQUALS)) {
+            defaultValue = this.parseConstValueLiteral();
+          }
+          const directives = this.parseConstDirectives();
+          return this.node(start, {
+            kind: Kind.INPUT_VALUE_DEFINITION,
+            description,
+            name,
+            type,
+            defaultValue,
+            directives
+          });
+        }
+        /**
+         * InterfaceTypeDefinition :
+         *   - Description? interface Name Directives[Const]? FieldsDefinition?
+         */
+        parseInterfaceTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("interface");
+          const name = this.parseName();
+          const interfaces = this.parseImplementsInterfaces();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseFieldsDefinition();
+          return this.node(start, {
+            kind: Kind.INTERFACE_TYPE_DEFINITION,
+            description,
+            name,
+            interfaces,
+            directives,
+            fields
+          });
+        }
+        /**
+         * UnionTypeDefinition :
+         *   - Description? union Name Directives[Const]? UnionMemberTypes?
+         */
+        parseUnionTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("union");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const types = this.parseUnionMemberTypes();
+          return this.node(start, {
+            kind: Kind.UNION_TYPE_DEFINITION,
+            description,
+            name,
+            directives,
+            types
+          });
+        }
+        /**
+         * UnionMemberTypes :
+         *   - = `|`? NamedType
+         *   - UnionMemberTypes | NamedType
+         */
+        parseUnionMemberTypes() {
+          return this.expectOptionalToken(TokenKind.EQUALS) ? this.delimitedMany(TokenKind.PIPE, this.parseNamedType) : [];
+        }
+        /**
+         * EnumTypeDefinition :
+         *   - Description? enum Name Directives[Const]? EnumValuesDefinition?
+         */
+        parseEnumTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("enum");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const values = this.parseEnumValuesDefinition();
+          return this.node(start, {
+            kind: Kind.ENUM_TYPE_DEFINITION,
+            description,
+            name,
+            directives,
+            values
+          });
+        }
+        /**
+         * ```
+         * EnumValuesDefinition : { EnumValueDefinition+ }
+         * ```
+         */
+        parseEnumValuesDefinition() {
+          return this.optionalMany(
+            TokenKind.BRACE_L,
+            this.parseEnumValueDefinition,
+            TokenKind.BRACE_R
+          );
+        }
+        /**
+         * EnumValueDefinition : Description? EnumValue Directives[Const]?
+         */
+        parseEnumValueDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          const name = this.parseEnumValueName();
+          const directives = this.parseConstDirectives();
+          return this.node(start, {
+            kind: Kind.ENUM_VALUE_DEFINITION,
+            description,
+            name,
+            directives
+          });
+        }
+        /**
+         * EnumValue : Name but not `true`, `false` or `null`
+         */
+        parseEnumValueName() {
+          if (this._lexer.token.value === "true" || this._lexer.token.value === "false" || this._lexer.token.value === "null") {
+            throw syntaxError(
+              this._lexer.source,
+              this._lexer.token.start,
+              `${getTokenDesc(
+                this._lexer.token
+              )} is reserved and cannot be used for an enum value.`
+            );
+          }
+          return this.parseName();
+        }
+        /**
+         * InputObjectTypeDefinition :
+         *   - Description? input Name Directives[Const]? InputFieldsDefinition?
+         */
+        parseInputObjectTypeDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("input");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseInputFieldsDefinition();
+          return this.node(start, {
+            kind: Kind.INPUT_OBJECT_TYPE_DEFINITION,
+            description,
+            name,
+            directives,
+            fields
+          });
+        }
+        /**
+         * ```
+         * InputFieldsDefinition : { InputValueDefinition+ }
+         * ```
+         */
+        parseInputFieldsDefinition() {
+          return this.optionalMany(
+            TokenKind.BRACE_L,
+            this.parseInputValueDef,
+            TokenKind.BRACE_R
+          );
+        }
+        /**
+         * TypeSystemExtension :
+         *   - SchemaExtension
+         *   - TypeExtension
+         *
+         * TypeExtension :
+         *   - ScalarTypeExtension
+         *   - ObjectTypeExtension
+         *   - InterfaceTypeExtension
+         *   - UnionTypeExtension
+         *   - EnumTypeExtension
+         *   - InputObjectTypeDefinition
+         */
+        parseTypeSystemExtension() {
+          const keywordToken = this._lexer.lookahead();
+          if (keywordToken.kind === TokenKind.NAME) {
+            switch (keywordToken.value) {
+              case "schema":
+                return this.parseSchemaExtension();
+              case "scalar":
+                return this.parseScalarTypeExtension();
+              case "type":
+                return this.parseObjectTypeExtension();
+              case "interface":
+                return this.parseInterfaceTypeExtension();
+              case "union":
+                return this.parseUnionTypeExtension();
+              case "enum":
+                return this.parseEnumTypeExtension();
+              case "input":
+                return this.parseInputObjectTypeExtension();
+            }
+          }
+          throw this.unexpected(keywordToken);
+        }
+        /**
+         * ```
+         * SchemaExtension :
+         *  - extend schema Directives[Const]? { OperationTypeDefinition+ }
+         *  - extend schema Directives[Const]
+         * ```
+         */
+        parseSchemaExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("schema");
+          const directives = this.parseConstDirectives();
+          const operationTypes = this.optionalMany(
+            TokenKind.BRACE_L,
+            this.parseOperationTypeDefinition,
+            TokenKind.BRACE_R
+          );
+          if (directives.length === 0 && operationTypes.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.SCHEMA_EXTENSION,
+            directives,
+            operationTypes
+          });
+        }
+        /**
+         * ScalarTypeExtension :
+         *   - extend scalar Name Directives[Const]
+         */
+        parseScalarTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("scalar");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          if (directives.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.SCALAR_TYPE_EXTENSION,
+            name,
+            directives
+          });
+        }
+        /**
+         * ObjectTypeExtension :
+         *  - extend type Name ImplementsInterfaces? Directives[Const]? FieldsDefinition
+         *  - extend type Name ImplementsInterfaces? Directives[Const]
+         *  - extend type Name ImplementsInterfaces
+         */
+        parseObjectTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("type");
+          const name = this.parseName();
+          const interfaces = this.parseImplementsInterfaces();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseFieldsDefinition();
+          if (interfaces.length === 0 && directives.length === 0 && fields.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.OBJECT_TYPE_EXTENSION,
+            name,
+            interfaces,
+            directives,
+            fields
+          });
+        }
+        /**
+         * InterfaceTypeExtension :
+         *  - extend interface Name ImplementsInterfaces? Directives[Const]? FieldsDefinition
+         *  - extend interface Name ImplementsInterfaces? Directives[Const]
+         *  - extend interface Name ImplementsInterfaces
+         */
+        parseInterfaceTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("interface");
+          const name = this.parseName();
+          const interfaces = this.parseImplementsInterfaces();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseFieldsDefinition();
+          if (interfaces.length === 0 && directives.length === 0 && fields.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.INTERFACE_TYPE_EXTENSION,
+            name,
+            interfaces,
+            directives,
+            fields
+          });
+        }
+        /**
+         * UnionTypeExtension :
+         *   - extend union Name Directives[Const]? UnionMemberTypes
+         *   - extend union Name Directives[Const]
+         */
+        parseUnionTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("union");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const types = this.parseUnionMemberTypes();
+          if (directives.length === 0 && types.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.UNION_TYPE_EXTENSION,
+            name,
+            directives,
+            types
+          });
+        }
+        /**
+         * EnumTypeExtension :
+         *   - extend enum Name Directives[Const]? EnumValuesDefinition
+         *   - extend enum Name Directives[Const]
+         */
+        parseEnumTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("enum");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const values = this.parseEnumValuesDefinition();
+          if (directives.length === 0 && values.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.ENUM_TYPE_EXTENSION,
+            name,
+            directives,
+            values
+          });
+        }
+        /**
+         * InputObjectTypeExtension :
+         *   - extend input Name Directives[Const]? InputFieldsDefinition
+         *   - extend input Name Directives[Const]
+         */
+        parseInputObjectTypeExtension() {
+          const start = this._lexer.token;
+          this.expectKeyword("extend");
+          this.expectKeyword("input");
+          const name = this.parseName();
+          const directives = this.parseConstDirectives();
+          const fields = this.parseInputFieldsDefinition();
+          if (directives.length === 0 && fields.length === 0) {
+            throw this.unexpected();
+          }
+          return this.node(start, {
+            kind: Kind.INPUT_OBJECT_TYPE_EXTENSION,
+            name,
+            directives,
+            fields
+          });
+        }
+        /**
+         * ```
+         * DirectiveDefinition :
+         *   - Description? directive @ Name ArgumentsDefinition? `repeatable`? on DirectiveLocations
+         * ```
+         */
+        parseDirectiveDefinition() {
+          const start = this._lexer.token;
+          const description = this.parseDescription();
+          this.expectKeyword("directive");
+          this.expectToken(TokenKind.AT);
+          const name = this.parseName();
+          const args = this.parseArgumentDefs();
+          const repeatable = this.expectOptionalKeyword("repeatable");
+          this.expectKeyword("on");
+          const locations = this.parseDirectiveLocations();
+          return this.node(start, {
+            kind: Kind.DIRECTIVE_DEFINITION,
+            description,
+            name,
+            arguments: args,
+            repeatable,
+            locations
+          });
+        }
+        /**
+         * DirectiveLocations :
+         *   - `|`? DirectiveLocation
+         *   - DirectiveLocations | DirectiveLocation
+         */
+        parseDirectiveLocations() {
+          return this.delimitedMany(TokenKind.PIPE, this.parseDirectiveLocation);
+        }
+        /*
+         * DirectiveLocation :
+         *   - ExecutableDirectiveLocation
+         *   - TypeSystemDirectiveLocation
+         *
+         * ExecutableDirectiveLocation : one of
+         *   `QUERY`
+         *   `MUTATION`
+         *   `SUBSCRIPTION`
+         *   `FIELD`
+         *   `FRAGMENT_DEFINITION`
+         *   `FRAGMENT_SPREAD`
+         *   `INLINE_FRAGMENT`
+         *
+         * TypeSystemDirectiveLocation : one of
+         *   `SCHEMA`
+         *   `SCALAR`
+         *   `OBJECT`
+         *   `FIELD_DEFINITION`
+         *   `ARGUMENT_DEFINITION`
+         *   `INTERFACE`
+         *   `UNION`
+         *   `ENUM`
+         *   `ENUM_VALUE`
+         *   `INPUT_OBJECT`
+         *   `INPUT_FIELD_DEFINITION`
+         */
+        parseDirectiveLocation() {
+          const start = this._lexer.token;
+          const name = this.parseName();
+          if (Object.prototype.hasOwnProperty.call(DirectiveLocation, name.value)) {
+            return name;
+          }
+          throw this.unexpected(start);
+        }
+        // Core parsing utility functions
+        /**
+         * Returns a node that, if configured to do so, sets a "loc" field as a
+         * location object, used to identify the place in the source that created a
+         * given parsed object.
+         */
+        node(startToken, node) {
+          if (this._options.noLocation !== true) {
+            node.loc = new Location(
+              startToken,
+              this._lexer.lastToken,
+              this._lexer.source
+            );
+          }
+          return node;
+        }
+        /**
+         * Determines if the next token is of a given kind
+         */
+        peek(kind) {
+          return this._lexer.token.kind === kind;
+        }
+        /**
+         * If the next token is of the given kind, return that token after advancing the lexer.
+         * Otherwise, do not change the parser state and throw an error.
+         */
+        expectToken(kind) {
+          const token = this._lexer.token;
+          if (token.kind === kind) {
+            this.advanceLexer();
+            return token;
+          }
+          throw syntaxError(
+            this._lexer.source,
+            token.start,
+            `Expected ${getTokenKindDesc(kind)}, found ${getTokenDesc(token)}.`
+          );
+        }
+        /**
+         * If the next token is of the given kind, return "true" after advancing the lexer.
+         * Otherwise, do not change the parser state and return "false".
+         */
+        expectOptionalToken(kind) {
+          const token = this._lexer.token;
+          if (token.kind === kind) {
+            this.advanceLexer();
+            return true;
+          }
+          return false;
+        }
+        /**
+         * If the next token is a given keyword, advance the lexer.
+         * Otherwise, do not change the parser state and throw an error.
+         */
+        expectKeyword(value) {
+          const token = this._lexer.token;
+          if (token.kind === TokenKind.NAME && token.value === value) {
+            this.advanceLexer();
+          } else {
+            throw syntaxError(
+              this._lexer.source,
+              token.start,
+              `Expected "${value}", found ${getTokenDesc(token)}.`
+            );
+          }
+        }
+        /**
+         * If the next token is a given keyword, return "true" after advancing the lexer.
+         * Otherwise, do not change the parser state and return "false".
+         */
+        expectOptionalKeyword(value) {
+          const token = this._lexer.token;
+          if (token.kind === TokenKind.NAME && token.value === value) {
+            this.advanceLexer();
+            return true;
+          }
+          return false;
+        }
+        /**
+         * Helper function for creating an error when an unexpected lexed token is encountered.
+         */
+        unexpected(atToken) {
+          const token = atToken !== null && atToken !== void 0 ? atToken : this._lexer.token;
+          return syntaxError(
+            this._lexer.source,
+            token.start,
+            `Unexpected ${getTokenDesc(token)}.`
+          );
+        }
+        /**
+         * Returns a possibly empty list of parse nodes, determined by the parseFn.
+         * This list begins with a lex token of openKind and ends with a lex token of closeKind.
+         * Advances the parser to the next lex token after the closing token.
+         */
+        any(openKind, parseFn, closeKind) {
+          this.expectToken(openKind);
+          const nodes = [];
+          while (!this.expectOptionalToken(closeKind)) {
+            nodes.push(parseFn.call(this));
+          }
+          return nodes;
+        }
+        /**
+         * Returns a list of parse nodes, determined by the parseFn.
+         * It can be empty only if open token is missing otherwise it will always return non-empty list
+         * that begins with a lex token of openKind and ends with a lex token of closeKind.
+         * Advances the parser to the next lex token after the closing token.
+         */
+        optionalMany(openKind, parseFn, closeKind) {
+          if (this.expectOptionalToken(openKind)) {
+            const nodes = [];
+            do {
+              nodes.push(parseFn.call(this));
+            } while (!this.expectOptionalToken(closeKind));
+            return nodes;
+          }
+          return [];
+        }
+        /**
+         * Returns a non-empty list of parse nodes, determined by the parseFn.
+         * This list begins with a lex token of openKind and ends with a lex token of closeKind.
+         * Advances the parser to the next lex token after the closing token.
+         */
+        many(openKind, parseFn, closeKind) {
+          this.expectToken(openKind);
+          const nodes = [];
+          do {
+            nodes.push(parseFn.call(this));
+          } while (!this.expectOptionalToken(closeKind));
+          return nodes;
+        }
+        /**
+         * Returns a non-empty list of parse nodes, determined by the parseFn.
+         * This list may begin with a lex token of delimiterKind followed by items separated by lex tokens of tokenKind.
+         * Advances the parser to the next lex token after last item in the list.
+         */
+        delimitedMany(delimiterKind, parseFn) {
+          this.expectOptionalToken(delimiterKind);
+          const nodes = [];
+          do {
+            nodes.push(parseFn.call(this));
+          } while (this.expectOptionalToken(delimiterKind));
+          return nodes;
+        }
+        advanceLexer() {
+          const { maxTokens } = this._options;
+          const token = this._lexer.advance();
+          if (maxTokens !== void 0 && token.kind !== TokenKind.EOF) {
+            ++this._tokenCounter;
+            if (this._tokenCounter > maxTokens) {
+              throw syntaxError(
+                this._lexer.source,
+                token.start,
+                `Document contains more that ${maxTokens} tokens. Parsing aborted.`
+              );
+            }
+          }
+        }
+      };
+    }
+  });
+
+  // node_modules/graphql/language/printString.mjs
+  function printString(str) {
+    return `"${str.replace(escapedRegExp, escapedReplacer)}"`;
+  }
+  function escapedReplacer(str) {
+    return escapeSequences[str.charCodeAt(0)];
+  }
+  var escapedRegExp, escapeSequences;
+  var init_printString = __esm({
+    "node_modules/graphql/language/printString.mjs"() {
+      escapedRegExp = /[\x00-\x1f\x22\x5c\x7f-\x9f]/g;
+      escapeSequences = [
+        "\\u0000",
+        "\\u0001",
+        "\\u0002",
+        "\\u0003",
+        "\\u0004",
+        "\\u0005",
+        "\\u0006",
+        "\\u0007",
+        "\\b",
+        "\\t",
+        "\\n",
+        "\\u000B",
+        "\\f",
+        "\\r",
+        "\\u000E",
+        "\\u000F",
+        "\\u0010",
+        "\\u0011",
+        "\\u0012",
+        "\\u0013",
+        "\\u0014",
+        "\\u0015",
+        "\\u0016",
+        "\\u0017",
+        "\\u0018",
+        "\\u0019",
+        "\\u001A",
+        "\\u001B",
+        "\\u001C",
+        "\\u001D",
+        "\\u001E",
+        "\\u001F",
+        "",
+        "",
+        '\\"',
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        // 2F
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        // 3F
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        // 4F
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "\\\\",
+        "",
+        "",
+        "",
+        // 5F
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        // 6F
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "\\u007F",
+        "\\u0080",
+        "\\u0081",
+        "\\u0082",
+        "\\u0083",
+        "\\u0084",
+        "\\u0085",
+        "\\u0086",
+        "\\u0087",
+        "\\u0088",
+        "\\u0089",
+        "\\u008A",
+        "\\u008B",
+        "\\u008C",
+        "\\u008D",
+        "\\u008E",
+        "\\u008F",
+        "\\u0090",
+        "\\u0091",
+        "\\u0092",
+        "\\u0093",
+        "\\u0094",
+        "\\u0095",
+        "\\u0096",
+        "\\u0097",
+        "\\u0098",
+        "\\u0099",
+        "\\u009A",
+        "\\u009B",
+        "\\u009C",
+        "\\u009D",
+        "\\u009E",
+        "\\u009F"
+      ];
+    }
+  });
+
+  // node_modules/graphql/language/visitor.mjs
+  function visit(root2, visitor, visitorKeys = QueryDocumentKeys) {
+    const enterLeaveMap = /* @__PURE__ */ new Map();
+    for (const kind of Object.values(Kind)) {
+      enterLeaveMap.set(kind, getEnterLeaveForKind(visitor, kind));
+    }
+    let stack = void 0;
+    let inArray = Array.isArray(root2);
+    let keys = [root2];
+    let index = -1;
+    let edits = [];
+    let node = root2;
+    let key = void 0;
+    let parent = void 0;
+    const path = [];
+    const ancestors = [];
+    do {
+      index++;
+      const isLeaving = index === keys.length;
+      const isEdited = isLeaving && edits.length !== 0;
+      if (isLeaving) {
+        key = ancestors.length === 0 ? void 0 : path[path.length - 1];
+        node = parent;
+        parent = ancestors.pop();
+        if (isEdited) {
+          if (inArray) {
+            node = node.slice();
+            let editOffset = 0;
+            for (const [editKey, editValue] of edits) {
+              const arrayKey = editKey - editOffset;
+              if (editValue === null) {
+                node.splice(arrayKey, 1);
+                editOffset++;
+              } else {
+                node[arrayKey] = editValue;
+              }
+            }
+          } else {
+            node = Object.defineProperties(
+              {},
+              Object.getOwnPropertyDescriptors(node)
+            );
+            for (const [editKey, editValue] of edits) {
+              node[editKey] = editValue;
+            }
+          }
+        }
+        index = stack.index;
+        keys = stack.keys;
+        edits = stack.edits;
+        inArray = stack.inArray;
+        stack = stack.prev;
+      } else if (parent) {
+        key = inArray ? index : keys[index];
+        node = parent[key];
+        if (node === null || node === void 0) {
+          continue;
+        }
+        path.push(key);
+      }
+      let result;
+      if (!Array.isArray(node)) {
+        var _enterLeaveMap$get, _enterLeaveMap$get2;
+        isNode(node) || devAssert(false, `Invalid AST Node: ${inspect(node)}.`);
+        const visitFn = isLeaving ? (_enterLeaveMap$get = enterLeaveMap.get(node.kind)) === null || _enterLeaveMap$get === void 0 ? void 0 : _enterLeaveMap$get.leave : (_enterLeaveMap$get2 = enterLeaveMap.get(node.kind)) === null || _enterLeaveMap$get2 === void 0 ? void 0 : _enterLeaveMap$get2.enter;
+        result = visitFn === null || visitFn === void 0 ? void 0 : visitFn.call(visitor, node, key, parent, path, ancestors);
+        if (result === BREAK) {
+          break;
+        }
+        if (result === false) {
+          if (!isLeaving) {
+            path.pop();
+            continue;
+          }
+        } else if (result !== void 0) {
+          edits.push([key, result]);
+          if (!isLeaving) {
+            if (isNode(result)) {
+              node = result;
+            } else {
+              path.pop();
+              continue;
+            }
+          }
+        }
+      }
+      if (result === void 0 && isEdited) {
+        edits.push([key, node]);
+      }
+      if (isLeaving) {
+        path.pop();
+      } else {
+        var _node$kind;
+        stack = {
+          inArray,
+          index,
+          keys,
+          edits,
+          prev: stack
+        };
+        inArray = Array.isArray(node);
+        keys = inArray ? node : (_node$kind = visitorKeys[node.kind]) !== null && _node$kind !== void 0 ? _node$kind : [];
+        index = -1;
+        edits = [];
+        if (parent) {
+          ancestors.push(parent);
+        }
+        parent = node;
+      }
+    } while (stack !== void 0);
+    if (edits.length !== 0) {
+      return edits[edits.length - 1][1];
+    }
+    return root2;
+  }
+  function getEnterLeaveForKind(visitor, kind) {
+    const kindVisitor = visitor[kind];
+    if (typeof kindVisitor === "object") {
+      return kindVisitor;
+    } else if (typeof kindVisitor === "function") {
+      return {
+        enter: kindVisitor,
+        leave: void 0
+      };
+    }
+    return {
+      enter: visitor.enter,
+      leave: visitor.leave
+    };
+  }
+  var BREAK;
+  var init_visitor = __esm({
+    "node_modules/graphql/language/visitor.mjs"() {
+      init_devAssert();
+      init_inspect();
+      init_ast();
+      init_kinds();
+      BREAK = Object.freeze({});
+    }
+  });
+
+  // node_modules/graphql/language/printer.mjs
+  function print(ast) {
+    return visit(ast, printDocASTReducer);
+  }
+  function join(maybeArray, separator = "") {
+    var _maybeArray$filter$jo;
+    return (_maybeArray$filter$jo = maybeArray === null || maybeArray === void 0 ? void 0 : maybeArray.filter((x2) => x2).join(separator)) !== null && _maybeArray$filter$jo !== void 0 ? _maybeArray$filter$jo : "";
+  }
+  function block(array) {
+    return wrap("{\n", indent(join(array, "\n")), "\n}");
+  }
+  function wrap(start, maybeString, end3 = "") {
+    return maybeString != null && maybeString !== "" ? start + maybeString + end3 : "";
+  }
+  function indent(str) {
+    return wrap("  ", str.replace(/\n/g, "\n  "));
+  }
+  function hasMultilineItems(maybeArray) {
+    var _maybeArray$some;
+    return (_maybeArray$some = maybeArray === null || maybeArray === void 0 ? void 0 : maybeArray.some((str) => str.includes("\n"))) !== null && _maybeArray$some !== void 0 ? _maybeArray$some : false;
+  }
+  var MAX_LINE_LENGTH, printDocASTReducer;
+  var init_printer = __esm({
+    "node_modules/graphql/language/printer.mjs"() {
+      init_blockString();
+      init_printString();
+      init_visitor();
+      MAX_LINE_LENGTH = 80;
+      printDocASTReducer = {
+        Name: {
+          leave: (node) => node.value
+        },
+        Variable: {
+          leave: (node) => "$" + node.name
+        },
+        // Document
+        Document: {
+          leave: (node) => join(node.definitions, "\n\n")
+        },
+        OperationDefinition: {
+          leave(node) {
+            const varDefs = wrap("(", join(node.variableDefinitions, ", "), ")");
+            const prefix = join(
+              [
+                node.operation,
+                join([node.name, varDefs]),
+                join(node.directives, " ")
+              ],
+              " "
+            );
+            return (prefix === "query" ? "" : prefix + " ") + node.selectionSet;
+          }
+        },
+        VariableDefinition: {
+          leave: ({ variable, type, defaultValue, directives }) => variable + ": " + type + wrap(" = ", defaultValue) + wrap(" ", join(directives, " "))
+        },
+        SelectionSet: {
+          leave: ({ selections }) => block(selections)
+        },
+        Field: {
+          leave({ alias, name, arguments: args, directives, selectionSet }) {
+            const prefix = wrap("", alias, ": ") + name;
+            let argsLine = prefix + wrap("(", join(args, ", "), ")");
+            if (argsLine.length > MAX_LINE_LENGTH) {
+              argsLine = prefix + wrap("(\n", indent(join(args, "\n")), "\n)");
+            }
+            return join([argsLine, join(directives, " "), selectionSet], " ");
+          }
+        },
+        Argument: {
+          leave: ({ name, value }) => name + ": " + value
+        },
+        // Fragments
+        FragmentSpread: {
+          leave: ({ name, directives }) => "..." + name + wrap(" ", join(directives, " "))
+        },
+        InlineFragment: {
+          leave: ({ typeCondition, directives, selectionSet }) => join(
+            [
+              "...",
+              wrap("on ", typeCondition),
+              join(directives, " "),
+              selectionSet
+            ],
+            " "
+          )
+        },
+        FragmentDefinition: {
+          leave: ({ name, typeCondition, variableDefinitions, directives, selectionSet }) => (
+            // or removed in the future.
+            `fragment ${name}${wrap("(", join(variableDefinitions, ", "), ")")} on ${typeCondition} ${wrap("", join(directives, " "), " ")}` + selectionSet
+          )
+        },
+        // Value
+        IntValue: {
+          leave: ({ value }) => value
+        },
+        FloatValue: {
+          leave: ({ value }) => value
+        },
+        StringValue: {
+          leave: ({ value, block: isBlockString }) => isBlockString ? printBlockString(value) : printString(value)
+        },
+        BooleanValue: {
+          leave: ({ value }) => value ? "true" : "false"
+        },
+        NullValue: {
+          leave: () => "null"
+        },
+        EnumValue: {
+          leave: ({ value }) => value
+        },
+        ListValue: {
+          leave: ({ values }) => "[" + join(values, ", ") + "]"
+        },
+        ObjectValue: {
+          leave: ({ fields }) => "{" + join(fields, ", ") + "}"
+        },
+        ObjectField: {
+          leave: ({ name, value }) => name + ": " + value
+        },
+        // Directive
+        Directive: {
+          leave: ({ name, arguments: args }) => "@" + name + wrap("(", join(args, ", "), ")")
+        },
+        // Type
+        NamedType: {
+          leave: ({ name }) => name
+        },
+        ListType: {
+          leave: ({ type }) => "[" + type + "]"
+        },
+        NonNullType: {
+          leave: ({ type }) => type + "!"
+        },
+        // Type System Definitions
+        SchemaDefinition: {
+          leave: ({ description, directives, operationTypes }) => wrap("", description, "\n") + join(["schema", join(directives, " "), block(operationTypes)], " ")
+        },
+        OperationTypeDefinition: {
+          leave: ({ operation, type }) => operation + ": " + type
+        },
+        ScalarTypeDefinition: {
+          leave: ({ description, name, directives }) => wrap("", description, "\n") + join(["scalar", name, join(directives, " ")], " ")
+        },
+        ObjectTypeDefinition: {
+          leave: ({ description, name, interfaces, directives, fields }) => wrap("", description, "\n") + join(
+            [
+              "type",
+              name,
+              wrap("implements ", join(interfaces, " & ")),
+              join(directives, " "),
+              block(fields)
+            ],
+            " "
+          )
+        },
+        FieldDefinition: {
+          leave: ({ description, name, arguments: args, type, directives }) => wrap("", description, "\n") + name + (hasMultilineItems(args) ? wrap("(\n", indent(join(args, "\n")), "\n)") : wrap("(", join(args, ", "), ")")) + ": " + type + wrap(" ", join(directives, " "))
+        },
+        InputValueDefinition: {
+          leave: ({ description, name, type, defaultValue, directives }) => wrap("", description, "\n") + join(
+            [name + ": " + type, wrap("= ", defaultValue), join(directives, " ")],
+            " "
+          )
+        },
+        InterfaceTypeDefinition: {
+          leave: ({ description, name, interfaces, directives, fields }) => wrap("", description, "\n") + join(
+            [
+              "interface",
+              name,
+              wrap("implements ", join(interfaces, " & ")),
+              join(directives, " "),
+              block(fields)
+            ],
+            " "
+          )
+        },
+        UnionTypeDefinition: {
+          leave: ({ description, name, directives, types }) => wrap("", description, "\n") + join(
+            ["union", name, join(directives, " "), wrap("= ", join(types, " | "))],
+            " "
+          )
+        },
+        EnumTypeDefinition: {
+          leave: ({ description, name, directives, values }) => wrap("", description, "\n") + join(["enum", name, join(directives, " "), block(values)], " ")
+        },
+        EnumValueDefinition: {
+          leave: ({ description, name, directives }) => wrap("", description, "\n") + join([name, join(directives, " ")], " ")
+        },
+        InputObjectTypeDefinition: {
+          leave: ({ description, name, directives, fields }) => wrap("", description, "\n") + join(["input", name, join(directives, " "), block(fields)], " ")
+        },
+        DirectiveDefinition: {
+          leave: ({ description, name, arguments: args, repeatable, locations }) => wrap("", description, "\n") + "directive @" + name + (hasMultilineItems(args) ? wrap("(\n", indent(join(args, "\n")), "\n)") : wrap("(", join(args, ", "), ")")) + (repeatable ? " repeatable" : "") + " on " + join(locations, " | ")
+        },
+        SchemaExtension: {
+          leave: ({ directives, operationTypes }) => join(
+            ["extend schema", join(directives, " "), block(operationTypes)],
+            " "
+          )
+        },
+        ScalarTypeExtension: {
+          leave: ({ name, directives }) => join(["extend scalar", name, join(directives, " ")], " ")
+        },
+        ObjectTypeExtension: {
+          leave: ({ name, interfaces, directives, fields }) => join(
+            [
+              "extend type",
+              name,
+              wrap("implements ", join(interfaces, " & ")),
+              join(directives, " "),
+              block(fields)
+            ],
+            " "
+          )
+        },
+        InterfaceTypeExtension: {
+          leave: ({ name, interfaces, directives, fields }) => join(
+            [
+              "extend interface",
+              name,
+              wrap("implements ", join(interfaces, " & ")),
+              join(directives, " "),
+              block(fields)
+            ],
+            " "
+          )
+        },
+        UnionTypeExtension: {
+          leave: ({ name, directives, types }) => join(
+            [
+              "extend union",
+              name,
+              join(directives, " "),
+              wrap("= ", join(types, " | "))
+            ],
+            " "
+          )
+        },
+        EnumTypeExtension: {
+          leave: ({ name, directives, values }) => join(["extend enum", name, join(directives, " "), block(values)], " ")
+        },
+        InputObjectTypeExtension: {
+          leave: ({ name, directives, fields }) => join(["extend input", name, join(directives, " "), block(fields)], " ")
+        }
+      };
+    }
+  });
+
+  // node_modules/graphql/language/index.mjs
+  var init_language = __esm({
+    "node_modules/graphql/language/index.mjs"() {
+      init_parser();
+      init_printer();
+    }
+  });
+
+  // node_modules/graphql/index.mjs
+  var init_graphql = __esm({
+    "node_modules/graphql/index.mjs"() {
+      init_language();
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/resolveRequestDocument.js
+  var extractOperationName, resolveRequestDocument;
+  var init_resolveRequestDocument = __esm({
+    "node_modules/graphql-request/build/esm/resolveRequestDocument.js"() {
+      init_graphql();
+      extractOperationName = (document2) => {
+        let operationName = void 0;
+        const operationDefinitions = document2.definitions.filter((definition) => definition.kind === `OperationDefinition`);
+        if (operationDefinitions.length === 1) {
+          operationName = operationDefinitions[0]?.name?.value;
+        }
+        return operationName;
+      };
+      resolveRequestDocument = (document2) => {
+        if (typeof document2 === `string`) {
+          let operationName2 = void 0;
+          try {
+            const parsedDocument = parse2(document2);
+            operationName2 = extractOperationName(parsedDocument);
+          } catch (err) {
+          }
+          return { query: document2, operationName: operationName2 };
+        }
+        const operationName = extractOperationName(document2);
+        return { query: print(document2), operationName };
+      };
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/types.js
+  var ClientError;
+  var init_types = __esm({
+    "node_modules/graphql-request/build/esm/types.js"() {
+      ClientError = class extends Error {
+        constructor(response, request2) {
+          const message = `${ClientError.extractMessage(response)}: ${JSON.stringify({
+            response,
+            request: request2
+          })}`;
+          super(message);
+          Object.setPrototypeOf(this, ClientError.prototype);
+          this.response = response;
+          this.request = request2;
+          if (typeof Error.captureStackTrace === `function`) {
+            Error.captureStackTrace(this, ClientError);
+          }
+        }
+        static extractMessage(response) {
+          return response.errors?.[0]?.message ?? `GraphQL Error (Code: ${response.status})`;
+        }
+      };
+    }
+  });
+
+  // node_modules/cross-fetch/dist/browser-ponyfill.js
+  var require_browser_ponyfill = __commonJS({
+    "node_modules/cross-fetch/dist/browser-ponyfill.js"(exports, module) {
+      var global = typeof self !== "undefined" ? self : exports;
+      var __self__ = function() {
+        function F3() {
+          this.fetch = false;
+          this.DOMException = global.DOMException;
+        }
+        F3.prototype = global;
+        return new F3();
+      }();
+      (function(self2) {
+        var irrelevant = function(exports2) {
+          var support = {
+            searchParams: "URLSearchParams" in self2,
+            iterable: "Symbol" in self2 && "iterator" in Symbol,
+            blob: "FileReader" in self2 && "Blob" in self2 && function() {
+              try {
+                new Blob();
+                return true;
+              } catch (e3) {
+                return false;
+              }
+            }(),
+            formData: "FormData" in self2,
+            arrayBuffer: "ArrayBuffer" in self2
+          };
+          function isDataView(obj) {
+            return obj && DataView.prototype.isPrototypeOf(obj);
+          }
+          if (support.arrayBuffer) {
+            var viewClasses = [
+              "[object Int8Array]",
+              "[object Uint8Array]",
+              "[object Uint8ClampedArray]",
+              "[object Int16Array]",
+              "[object Uint16Array]",
+              "[object Int32Array]",
+              "[object Uint32Array]",
+              "[object Float32Array]",
+              "[object Float64Array]"
+            ];
+            var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+              return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1;
+            };
+          }
+          function normalizeName(name) {
+            if (typeof name !== "string") {
+              name = String(name);
+            }
+            if (/[^a-z0-9\-#$%&'*+.^_`|~]/i.test(name)) {
+              throw new TypeError("Invalid character in header field name");
+            }
+            return name.toLowerCase();
+          }
+          function normalizeValue(value) {
+            if (typeof value !== "string") {
+              value = String(value);
+            }
+            return value;
+          }
+          function iteratorFor(items) {
+            var iterator = {
+              next: function() {
+                var value = items.shift();
+                return { done: value === void 0, value };
+              }
+            };
+            if (support.iterable) {
+              iterator[Symbol.iterator] = function() {
+                return iterator;
+              };
+            }
+            return iterator;
+          }
+          function Headers3(headers) {
+            this.map = {};
+            if (headers instanceof Headers3) {
+              headers.forEach(function(value, name) {
+                this.append(name, value);
+              }, this);
+            } else if (Array.isArray(headers)) {
+              headers.forEach(function(header) {
+                this.append(header[0], header[1]);
+              }, this);
+            } else if (headers) {
+              Object.getOwnPropertyNames(headers).forEach(function(name) {
+                this.append(name, headers[name]);
+              }, this);
+            }
+          }
+          Headers3.prototype.append = function(name, value) {
+            name = normalizeName(name);
+            value = normalizeValue(value);
+            var oldValue = this.map[name];
+            this.map[name] = oldValue ? oldValue + ", " + value : value;
+          };
+          Headers3.prototype["delete"] = function(name) {
+            delete this.map[normalizeName(name)];
+          };
+          Headers3.prototype.get = function(name) {
+            name = normalizeName(name);
+            return this.has(name) ? this.map[name] : null;
+          };
+          Headers3.prototype.has = function(name) {
+            return this.map.hasOwnProperty(normalizeName(name));
+          };
+          Headers3.prototype.set = function(name, value) {
+            this.map[normalizeName(name)] = normalizeValue(value);
+          };
+          Headers3.prototype.forEach = function(callback, thisArg) {
+            for (var name in this.map) {
+              if (this.map.hasOwnProperty(name)) {
+                callback.call(thisArg, this.map[name], name, this);
+              }
+            }
+          };
+          Headers3.prototype.keys = function() {
+            var items = [];
+            this.forEach(function(value, name) {
+              items.push(name);
+            });
+            return iteratorFor(items);
+          };
+          Headers3.prototype.values = function() {
+            var items = [];
+            this.forEach(function(value) {
+              items.push(value);
+            });
+            return iteratorFor(items);
+          };
+          Headers3.prototype.entries = function() {
+            var items = [];
+            this.forEach(function(value, name) {
+              items.push([name, value]);
+            });
+            return iteratorFor(items);
+          };
+          if (support.iterable) {
+            Headers3.prototype[Symbol.iterator] = Headers3.prototype.entries;
+          }
+          function consumed(body) {
+            if (body.bodyUsed) {
+              return Promise.reject(new TypeError("Already read"));
+            }
+            body.bodyUsed = true;
+          }
+          function fileReaderReady(reader) {
+            return new Promise(function(resolve, reject) {
+              reader.onload = function() {
+                resolve(reader.result);
+              };
+              reader.onerror = function() {
+                reject(reader.error);
+              };
+            });
+          }
+          function readBlobAsArrayBuffer(blob) {
+            var reader = new FileReader();
+            var promise = fileReaderReady(reader);
+            reader.readAsArrayBuffer(blob);
+            return promise;
+          }
+          function readBlobAsText(blob) {
+            var reader = new FileReader();
+            var promise = fileReaderReady(reader);
+            reader.readAsText(blob);
+            return promise;
+          }
+          function readArrayBufferAsText(buf) {
+            var view = new Uint8Array(buf);
+            var chars = new Array(view.length);
+            for (var i5 = 0; i5 < view.length; i5++) {
+              chars[i5] = String.fromCharCode(view[i5]);
+            }
+            return chars.join("");
+          }
+          function bufferClone(buf) {
+            if (buf.slice) {
+              return buf.slice(0);
+            } else {
+              var view = new Uint8Array(buf.byteLength);
+              view.set(new Uint8Array(buf));
+              return view.buffer;
+            }
+          }
+          function Body() {
+            this.bodyUsed = false;
+            this._initBody = function(body) {
+              this._bodyInit = body;
+              if (!body) {
+                this._bodyText = "";
+              } else if (typeof body === "string") {
+                this._bodyText = body;
+              } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+                this._bodyBlob = body;
+              } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+                this._bodyFormData = body;
+              } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+                this._bodyText = body.toString();
+              } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+                this._bodyArrayBuffer = bufferClone(body.buffer);
+                this._bodyInit = new Blob([this._bodyArrayBuffer]);
+              } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+                this._bodyArrayBuffer = bufferClone(body);
+              } else {
+                this._bodyText = body = Object.prototype.toString.call(body);
+              }
+              if (!this.headers.get("content-type")) {
+                if (typeof body === "string") {
+                  this.headers.set("content-type", "text/plain;charset=UTF-8");
+                } else if (this._bodyBlob && this._bodyBlob.type) {
+                  this.headers.set("content-type", this._bodyBlob.type);
+                } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+                  this.headers.set("content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+                }
+              }
+            };
+            if (support.blob) {
+              this.blob = function() {
+                var rejected = consumed(this);
+                if (rejected) {
+                  return rejected;
+                }
+                if (this._bodyBlob) {
+                  return Promise.resolve(this._bodyBlob);
+                } else if (this._bodyArrayBuffer) {
+                  return Promise.resolve(new Blob([this._bodyArrayBuffer]));
+                } else if (this._bodyFormData) {
+                  throw new Error("could not read FormData body as blob");
+                } else {
+                  return Promise.resolve(new Blob([this._bodyText]));
+                }
+              };
+              this.arrayBuffer = function() {
+                if (this._bodyArrayBuffer) {
+                  return consumed(this) || Promise.resolve(this._bodyArrayBuffer);
+                } else {
+                  return this.blob().then(readBlobAsArrayBuffer);
+                }
+              };
+            }
+            this.text = function() {
+              var rejected = consumed(this);
+              if (rejected) {
+                return rejected;
+              }
+              if (this._bodyBlob) {
+                return readBlobAsText(this._bodyBlob);
+              } else if (this._bodyArrayBuffer) {
+                return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer));
+              } else if (this._bodyFormData) {
+                throw new Error("could not read FormData body as text");
+              } else {
+                return Promise.resolve(this._bodyText);
+              }
+            };
+            if (support.formData) {
+              this.formData = function() {
+                return this.text().then(decode);
+              };
+            }
+            this.json = function() {
+              return this.text().then(JSON.parse);
+            };
+            return this;
+          }
+          var methods = ["DELETE", "GET", "HEAD", "OPTIONS", "POST", "PUT"];
+          function normalizeMethod(method) {
+            var upcased = method.toUpperCase();
+            return methods.indexOf(upcased) > -1 ? upcased : method;
+          }
+          function Request2(input, options) {
+            options = options || {};
+            var body = options.body;
+            if (input instanceof Request2) {
+              if (input.bodyUsed) {
+                throw new TypeError("Already read");
+              }
+              this.url = input.url;
+              this.credentials = input.credentials;
+              if (!options.headers) {
+                this.headers = new Headers3(input.headers);
+              }
+              this.method = input.method;
+              this.mode = input.mode;
+              this.signal = input.signal;
+              if (!body && input._bodyInit != null) {
+                body = input._bodyInit;
+                input.bodyUsed = true;
+              }
+            } else {
+              this.url = String(input);
+            }
+            this.credentials = options.credentials || this.credentials || "same-origin";
+            if (options.headers || !this.headers) {
+              this.headers = new Headers3(options.headers);
+            }
+            this.method = normalizeMethod(options.method || this.method || "GET");
+            this.mode = options.mode || this.mode || null;
+            this.signal = options.signal || this.signal;
+            this.referrer = null;
+            if ((this.method === "GET" || this.method === "HEAD") && body) {
+              throw new TypeError("Body not allowed for GET or HEAD requests");
+            }
+            this._initBody(body);
+          }
+          Request2.prototype.clone = function() {
+            return new Request2(this, { body: this._bodyInit });
+          };
+          function decode(body) {
+            var form = new FormData();
+            body.trim().split("&").forEach(function(bytes) {
+              if (bytes) {
+                var split = bytes.split("=");
+                var name = split.shift().replace(/\+/g, " ");
+                var value = split.join("=").replace(/\+/g, " ");
+                form.append(decodeURIComponent(name), decodeURIComponent(value));
+              }
+            });
+            return form;
+          }
+          function parseHeaders(rawHeaders) {
+            var headers = new Headers3();
+            var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, " ");
+            preProcessedHeaders.split(/\r?\n/).forEach(function(line) {
+              var parts = line.split(":");
+              var key = parts.shift().trim();
+              if (key) {
+                var value = parts.join(":").trim();
+                headers.append(key, value);
+              }
+            });
+            return headers;
+          }
+          Body.call(Request2.prototype);
+          function Response2(bodyInit, options) {
+            if (!options) {
+              options = {};
+            }
+            this.type = "default";
+            this.status = options.status === void 0 ? 200 : options.status;
+            this.ok = this.status >= 200 && this.status < 300;
+            this.statusText = "statusText" in options ? options.statusText : "OK";
+            this.headers = new Headers3(options.headers);
+            this.url = options.url || "";
+            this._initBody(bodyInit);
+          }
+          Body.call(Response2.prototype);
+          Response2.prototype.clone = function() {
+            return new Response2(this._bodyInit, {
+              status: this.status,
+              statusText: this.statusText,
+              headers: new Headers3(this.headers),
+              url: this.url
+            });
+          };
+          Response2.error = function() {
+            var response = new Response2(null, { status: 0, statusText: "" });
+            response.type = "error";
+            return response;
+          };
+          var redirectStatuses = [301, 302, 303, 307, 308];
+          Response2.redirect = function(url, status) {
+            if (redirectStatuses.indexOf(status) === -1) {
+              throw new RangeError("Invalid status code");
+            }
+            return new Response2(null, { status, headers: { location: url } });
+          };
+          exports2.DOMException = self2.DOMException;
+          try {
+            new exports2.DOMException();
+          } catch (err) {
+            exports2.DOMException = function(message, name) {
+              this.message = message;
+              this.name = name;
+              var error = Error(message);
+              this.stack = error.stack;
+            };
+            exports2.DOMException.prototype = Object.create(Error.prototype);
+            exports2.DOMException.prototype.constructor = exports2.DOMException;
+          }
+          function fetch(input, init) {
+            return new Promise(function(resolve, reject) {
+              var request2 = new Request2(input, init);
+              if (request2.signal && request2.signal.aborted) {
+                return reject(new exports2.DOMException("Aborted", "AbortError"));
+              }
+              var xhr = new XMLHttpRequest();
+              function abortXhr() {
+                xhr.abort();
+              }
+              xhr.onload = function() {
+                var options = {
+                  status: xhr.status,
+                  statusText: xhr.statusText,
+                  headers: parseHeaders(xhr.getAllResponseHeaders() || "")
+                };
+                options.url = "responseURL" in xhr ? xhr.responseURL : options.headers.get("X-Request-URL");
+                var body = "response" in xhr ? xhr.response : xhr.responseText;
+                resolve(new Response2(body, options));
+              };
+              xhr.onerror = function() {
+                reject(new TypeError("Network request failed"));
+              };
+              xhr.ontimeout = function() {
+                reject(new TypeError("Network request failed"));
+              };
+              xhr.onabort = function() {
+                reject(new exports2.DOMException("Aborted", "AbortError"));
+              };
+              xhr.open(request2.method, request2.url, true);
+              if (request2.credentials === "include") {
+                xhr.withCredentials = true;
+              } else if (request2.credentials === "omit") {
+                xhr.withCredentials = false;
+              }
+              if ("responseType" in xhr && support.blob) {
+                xhr.responseType = "blob";
+              }
+              request2.headers.forEach(function(value, name) {
+                xhr.setRequestHeader(name, value);
+              });
+              if (request2.signal) {
+                request2.signal.addEventListener("abort", abortXhr);
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState === 4) {
+                    request2.signal.removeEventListener("abort", abortXhr);
+                  }
+                };
+              }
+              xhr.send(typeof request2._bodyInit === "undefined" ? null : request2._bodyInit);
+            });
+          }
+          fetch.polyfill = true;
+          if (!self2.fetch) {
+            self2.fetch = fetch;
+            self2.Headers = Headers3;
+            self2.Request = Request2;
+            self2.Response = Response2;
+          }
+          exports2.Headers = Headers3;
+          exports2.Request = Request2;
+          exports2.Response = Response2;
+          exports2.fetch = fetch;
+          Object.defineProperty(exports2, "__esModule", { value: true });
+          return exports2;
+        }({});
+      })(__self__);
+      __self__.fetch.ponyfill = true;
+      delete __self__.fetch.polyfill;
+      var ctx = __self__;
+      exports = ctx.fetch;
+      exports.default = ctx.fetch;
+      exports.fetch = ctx.fetch;
+      exports.Headers = ctx.Headers;
+      exports.Request = ctx.Request;
+      exports.Response = ctx.Response;
+      module.exports = exports;
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/graphql-ws.js
+  function parseMessage(data, f4 = (a3) => a3) {
+    const m4 = GraphQLWebSocketMessage.parse(data, f4);
+    return m4;
+  }
+  function ConnectionInit(payload) {
+    return new GraphQLWebSocketMessage(CONNECTION_INIT, payload);
+  }
+  function Ping(payload) {
+    return new GraphQLWebSocketMessage(PING, payload, void 0);
+  }
+  function Pong(payload) {
+    return new GraphQLWebSocketMessage(PONG, payload, void 0);
+  }
+  function Subscribe(id, payload) {
+    return new GraphQLWebSocketMessage(SUBSCRIBE, payload, id);
+  }
+  function Complete(id) {
+    return new GraphQLWebSocketMessage(COMPLETE, void 0, id);
+  }
+  var CONNECTION_INIT, CONNECTION_ACK, PING, PONG, SUBSCRIBE, NEXT, ERROR, COMPLETE, GraphQLWebSocketMessage, GraphQLWebSocketClient;
+  var init_graphql_ws = __esm({
+    "node_modules/graphql-request/build/esm/graphql-ws.js"() {
+      init_resolveRequestDocument();
+      init_types();
+      CONNECTION_INIT = `connection_init`;
+      CONNECTION_ACK = `connection_ack`;
+      PING = `ping`;
+      PONG = `pong`;
+      SUBSCRIBE = `subscribe`;
+      NEXT = `next`;
+      ERROR = `error`;
+      COMPLETE = `complete`;
+      GraphQLWebSocketMessage = class {
+        get type() {
+          return this._type;
+        }
+        get id() {
+          return this._id;
+        }
+        get payload() {
+          return this._payload;
+        }
+        constructor(type, payload, id) {
+          this._type = type;
+          this._payload = payload;
+          this._id = id;
+        }
+        get text() {
+          const result = { type: this.type };
+          if (this.id != null && this.id != void 0)
+            result.id = this.id;
+          if (this.payload != null && this.payload != void 0)
+            result.payload = this.payload;
+          return JSON.stringify(result);
+        }
+        static parse(data, f4) {
+          const { type, payload, id } = JSON.parse(data);
+          return new GraphQLWebSocketMessage(type, f4(payload), id);
+        }
+      };
+      GraphQLWebSocketClient = class {
+        constructor(socket, { onInit, onAcknowledged, onPing, onPong }) {
+          this.socketState = { acknowledged: false, lastRequestId: 0, subscriptions: {} };
+          this.socket = socket;
+          socket.onopen = async (e3) => {
+            this.socketState.acknowledged = false;
+            this.socketState.subscriptions = {};
+            socket.send(ConnectionInit(onInit ? await onInit() : null).text);
+          };
+          socket.onclose = (e3) => {
+            this.socketState.acknowledged = false;
+            this.socketState.subscriptions = {};
+          };
+          socket.onerror = (e3) => {
+            console.error(e3);
+          };
+          socket.onmessage = (e3) => {
+            try {
+              const message = parseMessage(e3.data);
+              switch (message.type) {
+                case CONNECTION_ACK: {
+                  if (this.socketState.acknowledged) {
+                    console.warn(`Duplicate CONNECTION_ACK message ignored`);
+                  } else {
+                    this.socketState.acknowledged = true;
+                    if (onAcknowledged)
+                      onAcknowledged(message.payload);
+                  }
+                  return;
+                }
+                case PING: {
+                  if (onPing)
+                    onPing(message.payload).then((r6) => socket.send(Pong(r6).text));
+                  else
+                    socket.send(Pong(null).text);
+                  return;
+                }
+                case PONG: {
+                  if (onPong)
+                    onPong(message.payload);
+                  return;
+                }
+              }
+              if (!this.socketState.acknowledged) {
+                return;
+              }
+              if (message.id === void 0 || message.id === null || !this.socketState.subscriptions[message.id]) {
+                return;
+              }
+              const { query, variables, subscriber } = this.socketState.subscriptions[message.id];
+              switch (message.type) {
+                case NEXT: {
+                  if (!message.payload.errors && message.payload.data) {
+                    subscriber.next && subscriber.next(message.payload.data);
+                  }
+                  if (message.payload.errors) {
+                    subscriber.error && subscriber.error(new ClientError({ ...message.payload, status: 200 }, { query, variables }));
+                  } else {
+                  }
+                  return;
+                }
+                case ERROR: {
+                  subscriber.error && subscriber.error(new ClientError({ errors: message.payload, status: 200 }, { query, variables }));
+                  return;
+                }
+                case COMPLETE: {
+                  subscriber.complete && subscriber.complete();
+                  delete this.socketState.subscriptions[message.id];
+                  return;
+                }
+              }
+            } catch (e4) {
+              console.error(e4);
+              socket.close(1006);
+            }
+            socket.close(4400, `Unknown graphql-ws message.`);
+          };
+        }
+        makeSubscribe(query, operationName, subscriber, variables) {
+          const subscriptionId = (this.socketState.lastRequestId++).toString();
+          this.socketState.subscriptions[subscriptionId] = { query, variables, subscriber };
+          this.socket.send(Subscribe(subscriptionId, { query, operationName, variables }).text);
+          return () => {
+            this.socket.send(Complete(subscriptionId).text);
+            delete this.socketState.subscriptions[subscriptionId];
+          };
+        }
+        rawRequest(query, variables) {
+          return new Promise((resolve, reject) => {
+            let result;
+            this.rawSubscribe(query, {
+              next: (data, extensions) => result = { data, extensions },
+              error: reject,
+              complete: () => resolve(result)
+            }, variables);
+          });
+        }
+        request(document2, variables) {
+          return new Promise((resolve, reject) => {
+            let result;
+            this.subscribe(document2, {
+              next: (data) => result = data,
+              error: reject,
+              complete: () => resolve(result)
+            }, variables);
+          });
+        }
+        subscribe(document2, subscriber, variables) {
+          const { query, operationName } = resolveRequestDocument(document2);
+          return this.makeSubscribe(query, operationName, subscriber, variables);
+        }
+        rawSubscribe(query, subscriber, variables) {
+          return this.makeSubscribe(query, void 0, subscriber, variables);
+        }
+        ping(payload) {
+          this.socket.send(Ping(payload).text);
+        }
+        close() {
+          this.socket.close(1e3);
+        }
+      };
+      GraphQLWebSocketClient.PROTOCOL = `graphql-transport-ws`;
+    }
+  });
+
+  // node_modules/graphql-request/build/esm/index.js
+  async function request(urlOrOptions, document2, ...variablesAndRequestHeaders) {
+    const requestOptions = parseRequestExtendedArgs(urlOrOptions, document2, ...variablesAndRequestHeaders);
+    const client = new GraphQLClient(requestOptions.url);
+    return client.request({
+      ...requestOptions
+    });
+  }
+  var CrossFetch, resolveHeaders, cleanQuery, buildRequestConfig, createHttpMethodFetcher, GraphQLClient, makeRequest, getResult, callOrIdentity;
+  var init_esm = __esm({
+    "node_modules/graphql-request/build/esm/index.js"() {
+      init_createRequestBody();
+      init_defaultJsonSerializer();
+      init_helpers();
+      init_parseArgs();
+      init_resolveRequestDocument();
+      init_types();
+      CrossFetch = __toESM(require_browser_ponyfill(), 1);
+      init_graphql_ws();
+      init_resolveRequestDocument();
+      resolveHeaders = (headers) => {
+        let oHeaders = {};
+        if (headers) {
+          if (typeof Headers !== `undefined` && headers instanceof Headers || CrossFetch && CrossFetch.Headers && headers instanceof CrossFetch.Headers) {
+            oHeaders = HeadersInstanceToPlainObject(headers);
+          } else if (Array.isArray(headers)) {
+            headers.forEach(([name, value]) => {
+              if (name && value !== void 0) {
+                oHeaders[name] = value;
+              }
+            });
+          } else {
+            oHeaders = headers;
+          }
+        }
+        return oHeaders;
+      };
+      cleanQuery = (str) => str.replace(/([\s,]|#[^\n\r]+)+/g, ` `).trim();
+      buildRequestConfig = (params) => {
+        if (!Array.isArray(params.query)) {
+          const params_2 = params;
+          const search = [`query=${encodeURIComponent(cleanQuery(params_2.query))}`];
+          if (params.variables) {
+            search.push(`variables=${encodeURIComponent(params_2.jsonSerializer.stringify(params_2.variables))}`);
+          }
+          if (params_2.operationName) {
+            search.push(`operationName=${encodeURIComponent(params_2.operationName)}`);
+          }
+          return search.join(`&`);
+        }
+        if (typeof params.variables !== `undefined` && !Array.isArray(params.variables)) {
+          throw new Error(`Cannot create query with given variable type, array expected`);
+        }
+        const params_ = params;
+        const payload = params.query.reduce((acc, currentQuery, index) => {
+          acc.push({
+            query: cleanQuery(currentQuery),
+            variables: params_.variables ? params_.jsonSerializer.stringify(params_.variables[index]) : void 0
+          });
+          return acc;
+        }, []);
+        return `query=${encodeURIComponent(params_.jsonSerializer.stringify(payload))}`;
+      };
+      createHttpMethodFetcher = (method) => async (params) => {
+        const { url, query, variables, operationName, fetch, fetchOptions, middleware } = params;
+        const headers = { ...params.headers };
+        let queryParams = ``;
+        let body = void 0;
+        if (method === `POST`) {
+          body = createRequestBody_default(query, variables, operationName, fetchOptions.jsonSerializer);
+          if (typeof body === `string`) {
+            headers[`Content-Type`] = `application/json`;
+          }
+        } else {
+          queryParams = buildRequestConfig({
+            query,
+            variables,
+            operationName,
+            jsonSerializer: fetchOptions.jsonSerializer ?? defaultJsonSerializer
+          });
+        }
+        const init = {
+          method,
+          headers,
+          body,
+          ...fetchOptions
+        };
+        let urlResolved = url;
+        let initResolved = init;
+        if (middleware) {
+          const result = await Promise.resolve(middleware({ ...init, url, operationName, variables }));
+          const { url: urlNew, ...initNew } = result;
+          urlResolved = urlNew;
+          initResolved = initNew;
+        }
+        if (queryParams) {
+          urlResolved = `${urlResolved}?${queryParams}`;
+        }
+        return await fetch(urlResolved, initResolved);
+      };
+      GraphQLClient = class {
+        constructor(url, requestConfig = {}) {
+          this.url = url;
+          this.requestConfig = requestConfig;
+          this.rawRequest = async (...args) => {
+            const [queryOrOptions, variables, requestHeaders] = args;
+            const rawRequestOptions = parseRawRequestArgs(queryOrOptions, variables, requestHeaders);
+            const { headers, fetch = CrossFetch.default, method = `POST`, requestMiddleware, responseMiddleware, ...fetchOptions } = this.requestConfig;
+            const { url: url2 } = this;
+            if (rawRequestOptions.signal !== void 0) {
+              fetchOptions.signal = rawRequestOptions.signal;
+            }
+            const { operationName } = resolveRequestDocument(rawRequestOptions.query);
+            return makeRequest({
+              url: url2,
+              query: rawRequestOptions.query,
+              variables: rawRequestOptions.variables,
+              headers: {
+                ...resolveHeaders(callOrIdentity(headers)),
+                ...resolveHeaders(rawRequestOptions.requestHeaders)
+              },
+              operationName,
+              fetch,
+              method,
+              fetchOptions,
+              middleware: requestMiddleware
+            }).then((response) => {
+              if (responseMiddleware) {
+                responseMiddleware(response);
+              }
+              return response;
+            }).catch((error) => {
+              if (responseMiddleware) {
+                responseMiddleware(error);
+              }
+              throw error;
+            });
+          };
+        }
+        async request(documentOrOptions, ...variablesAndRequestHeaders) {
+          const [variables, requestHeaders] = variablesAndRequestHeaders;
+          const requestOptions = parseRequestArgs(documentOrOptions, variables, requestHeaders);
+          const { headers, fetch = CrossFetch.default, method = `POST`, requestMiddleware, responseMiddleware, ...fetchOptions } = this.requestConfig;
+          const { url } = this;
+          if (requestOptions.signal !== void 0) {
+            fetchOptions.signal = requestOptions.signal;
+          }
+          const { query, operationName } = resolveRequestDocument(requestOptions.document);
+          return makeRequest({
+            url,
+            query,
+            variables: requestOptions.variables,
+            headers: {
+              ...resolveHeaders(callOrIdentity(headers)),
+              ...resolveHeaders(requestOptions.requestHeaders)
+            },
+            operationName,
+            fetch,
+            method,
+            fetchOptions,
+            middleware: requestMiddleware
+          }).then((response) => {
+            if (responseMiddleware) {
+              responseMiddleware(response);
+            }
+            return response.data;
+          }).catch((error) => {
+            if (responseMiddleware) {
+              responseMiddleware(error);
+            }
+            throw error;
+          });
+        }
+        // prettier-ignore
+        batchRequests(documentsOrOptions, requestHeaders) {
+          const batchRequestOptions = parseBatchRequestArgs(documentsOrOptions, requestHeaders);
+          const { headers, ...fetchOptions } = this.requestConfig;
+          if (batchRequestOptions.signal !== void 0) {
+            fetchOptions.signal = batchRequestOptions.signal;
+          }
+          const queries = batchRequestOptions.documents.map(({ document: document2 }) => resolveRequestDocument(document2).query);
+          const variables = batchRequestOptions.documents.map(({ variables: variables2 }) => variables2);
+          return makeRequest({
+            url: this.url,
+            query: queries,
+            // @ts-expect-error TODO reconcile batch variables into system.
+            variables,
+            headers: {
+              ...resolveHeaders(callOrIdentity(headers)),
+              ...resolveHeaders(batchRequestOptions.requestHeaders)
+            },
+            operationName: void 0,
+            fetch: this.requestConfig.fetch ?? CrossFetch.default,
+            method: this.requestConfig.method || `POST`,
+            fetchOptions,
+            middleware: this.requestConfig.requestMiddleware
+          }).then((response) => {
+            if (this.requestConfig.responseMiddleware) {
+              this.requestConfig.responseMiddleware(response);
+            }
+            return response.data;
+          }).catch((error) => {
+            if (this.requestConfig.responseMiddleware) {
+              this.requestConfig.responseMiddleware(error);
+            }
+            throw error;
+          });
+        }
+        setHeaders(headers) {
+          this.requestConfig.headers = headers;
+          return this;
+        }
+        /**
+         * Attach a header to the client. All subsequent requests will have this header.
+         */
+        setHeader(key, value) {
+          const { headers } = this.requestConfig;
+          if (headers) {
+            headers[key] = value;
+          } else {
+            this.requestConfig.headers = { [key]: value };
+          }
+          return this;
+        }
+        /**
+         * Change the client endpoint. All subsequent requests will send to this endpoint.
+         */
+        setEndpoint(value) {
+          this.url = value;
+          return this;
+        }
+      };
+      makeRequest = async (params) => {
+        const { query, variables, fetchOptions } = params;
+        const fetcher = createHttpMethodFetcher(uppercase(params.method ?? `post`));
+        const isBatchingQuery = Array.isArray(params.query);
+        const response = await fetcher(params);
+        const result = await getResult(response, fetchOptions.jsonSerializer ?? defaultJsonSerializer);
+        const successfullyReceivedData = Array.isArray(result) ? !result.some(({ data }) => !data) : Boolean(result.data);
+        const successfullyPassedErrorPolicy = Array.isArray(result) || !result.errors || Array.isArray(result.errors) && !result.errors.length || fetchOptions.errorPolicy === `all` || fetchOptions.errorPolicy === `ignore`;
+        if (response.ok && successfullyPassedErrorPolicy && successfullyReceivedData) {
+          const { errors, ...rest } = Array.isArray(result) ? result : result;
+          const data = fetchOptions.errorPolicy === `ignore` ? rest : result;
+          const dataEnvelope = isBatchingQuery ? { data } : data;
+          return {
+            ...dataEnvelope,
+            headers: response.headers,
+            status: response.status
+          };
+        } else {
+          const errorResult = typeof result === `string` ? {
+            error: result
+          } : result;
+          throw new ClientError(
+            // @ts-expect-error TODO
+            { ...errorResult, status: response.status, headers: response.headers },
+            { query, variables }
+          );
+        }
+      };
+      getResult = async (response, jsonSerializer) => {
+        let contentType;
+        response.headers.forEach((value, key) => {
+          if (key.toLowerCase() === `content-type`) {
+            contentType = value;
+          }
+        });
+        if (contentType && (contentType.toLowerCase().startsWith(`application/json`) || contentType.toLowerCase().startsWith(`application/graphql+json`) || contentType.toLowerCase().startsWith(`application/graphql-response+json`))) {
+          return jsonSerializer.parse(await response.text());
+        } else {
+          return response.text();
+        }
+      };
+      callOrIdentity = (value) => {
+        return typeof value === `function` ? value() : value;
+      };
+    }
+  });
+
+  // node_modules/tslib/tslib.es6.js
+  var __assign;
+  var init_tslib_es6 = __esm({
+    "node_modules/tslib/tslib.es6.js"() {
+      __assign = function() {
+        __assign = Object.assign || function __assign2(t8) {
+          for (var s9, i5 = 1, n4 = arguments.length; i5 < n4; i5++) {
+            s9 = arguments[i5];
+            for (var p5 in s9)
+              if (Object.prototype.hasOwnProperty.call(s9, p5))
+                t8[p5] = s9[p5];
+          }
+          return t8;
+        };
+        return __assign.apply(this, arguments);
+      };
+    }
+  });
+
+  // node_modules/graphql-tag/lib/index.js
+  function normalize(string) {
+    return string.replace(/[\s,]+/g, " ").trim();
+  }
+  function cacheKeyFromLoc(loc) {
+    return normalize(loc.source.body.substring(loc.start, loc.end));
+  }
+  function processFragments(ast) {
+    var seenKeys = /* @__PURE__ */ new Set();
+    var definitions = [];
+    ast.definitions.forEach(function(fragmentDefinition) {
+      if (fragmentDefinition.kind === "FragmentDefinition") {
+        var fragmentName = fragmentDefinition.name.value;
+        var sourceKey = cacheKeyFromLoc(fragmentDefinition.loc);
+        var sourceKeySet = fragmentSourceMap.get(fragmentName);
+        if (sourceKeySet && !sourceKeySet.has(sourceKey)) {
+          if (printFragmentWarnings) {
+            console.warn("Warning: fragment with name " + fragmentName + " already exists.\ngraphql-tag enforces all fragment names across your application to be unique; read more about\nthis in the docs: http://dev.apollodata.com/core/fragments.html#unique-names");
+          }
+        } else if (!sourceKeySet) {
+          fragmentSourceMap.set(fragmentName, sourceKeySet = /* @__PURE__ */ new Set());
+        }
+        sourceKeySet.add(sourceKey);
+        if (!seenKeys.has(sourceKey)) {
+          seenKeys.add(sourceKey);
+          definitions.push(fragmentDefinition);
+        }
+      } else {
+        definitions.push(fragmentDefinition);
+      }
+    });
+    return __assign(__assign({}, ast), { definitions });
+  }
+  function stripLoc(doc) {
+    var workSet = new Set(doc.definitions);
+    workSet.forEach(function(node) {
+      if (node.loc)
+        delete node.loc;
+      Object.keys(node).forEach(function(key) {
+        var value = node[key];
+        if (value && typeof value === "object") {
+          workSet.add(value);
+        }
+      });
+    });
+    var loc = doc.loc;
+    if (loc) {
+      delete loc.startToken;
+      delete loc.endToken;
+    }
+    return doc;
+  }
+  function parseDocument(source) {
+    var cacheKey = normalize(source);
+    if (!docCache.has(cacheKey)) {
+      var parsed = parse2(source, {
+        experimentalFragmentVariables,
+        allowLegacyFragmentVariables: experimentalFragmentVariables
+      });
+      if (!parsed || parsed.kind !== "Document") {
+        throw new Error("Not a valid GraphQL document.");
+      }
+      docCache.set(cacheKey, stripLoc(processFragments(parsed)));
+    }
+    return docCache.get(cacheKey);
+  }
+  function gql(literals) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+      args[_i - 1] = arguments[_i];
+    }
+    if (typeof literals === "string") {
+      literals = [literals];
+    }
+    var result = literals[0];
+    args.forEach(function(arg, i5) {
+      if (arg && arg.kind === "Document") {
+        result += arg.loc.source.body;
+      } else {
+        result += arg;
+      }
+      result += literals[i5 + 1];
+    });
+    return parseDocument(result);
+  }
+  function resetCaches() {
+    docCache.clear();
+    fragmentSourceMap.clear();
+  }
+  function disableFragmentWarnings() {
+    printFragmentWarnings = false;
+  }
+  function enableExperimentalFragmentVariables() {
+    experimentalFragmentVariables = true;
+  }
+  function disableExperimentalFragmentVariables() {
+    experimentalFragmentVariables = false;
+  }
+  var docCache, fragmentSourceMap, printFragmentWarnings, experimentalFragmentVariables, extras, lib_default;
+  var init_lib3 = __esm({
+    "node_modules/graphql-tag/lib/index.js"() {
+      init_tslib_es6();
+      init_graphql();
+      docCache = /* @__PURE__ */ new Map();
+      fragmentSourceMap = /* @__PURE__ */ new Map();
+      printFragmentWarnings = true;
+      experimentalFragmentVariables = false;
+      extras = {
+        gql,
+        resetCaches,
+        disableFragmentWarnings,
+        enableExperimentalFragmentVariables,
+        disableExperimentalFragmentVariables
+      };
+      (function(gql_1) {
+        gql_1.gql = extras.gql, gql_1.resetCaches = extras.resetCaches, gql_1.disableFragmentWarnings = extras.disableFragmentWarnings, gql_1.enableExperimentalFragmentVariables = extras.enableExperimentalFragmentVariables, gql_1.disableExperimentalFragmentVariables = extras.disableExperimentalFragmentVariables;
+      })(gql || (gql = {}));
+      gql["default"] = gql;
+      lib_default = gql;
+    }
+  });
+
   // src/routes/company/companies.tsx
   var companies_exports = {};
   __export(companies_exports, {
     default: () => Companies
   });
   function Companies() {
-    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("p", null, "Companies"), /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Suspense, { fallback: /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react31.default.createElement(Outlet, null)));
+    const { data, isLoading, error } = useGQLQuery(["companies"], GET_COMPANIES);
+    if (!data && isLoading)
+      return /* @__PURE__ */ import_react27.default.createElement("div", null, "Loading...");
+    return /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col" }, data.companies.map((record, idx) => {
+      return /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, { key: idx }, /* @__PURE__ */ import_react27.default.createElement("div", null, record.name), /* @__PURE__ */ import_react27.default.createElement("div", null, record.cvr));
+    })));
   }
-  var import_react31;
+  var import_react27, GET_COMPANIES, useGQLQuery;
   var init_companies = __esm({
     "src/routes/company/companies.tsx"() {
       "use strict";
-      import_react31 = __toESM(require_react(), 1);
-      init_dist2();
+      init_lib2();
+      init_esm();
+      init_lib3();
+      import_react27 = __toESM(require_react(), 1);
+      GET_COMPANIES = lib_default`
+  query {
+    companies {
+      id
+      name
+      cvr
+    }
+  }
+`;
+      useGQLQuery = (key, query, variables, config2 = {}) => {
+        const endpoint = "http://localhost:5000/graphql";
+        const fetchData = () => __async(void 0, null, function* () {
+          return yield request(endpoint, query, variables);
+        });
+        return useQuery(key, fetchData, config2);
+      };
     }
   });
 
@@ -26164,176 +35352,31 @@
     default: () => CompanyOverviewTab
   });
   function CompanyOverviewTab() {
-    return /* @__PURE__ */ import_react32.default.createElement("div", null, "Company overview tab");
+    const { id } = useParams();
+    return /* @__PURE__ */ import_react28.default.createElement("div", null, "Company overview tab: id - ", id);
   }
-  var import_react32;
+  var import_react28;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react32 = __toESM(require_react(), 1);
-    }
-  });
-
-  // src/routes/person/people.tsx
-  var people_exports = {};
-  __export(people_exports, {
-    default: () => Companies3
-  });
-  function Companies3() {
-    return /* @__PURE__ */ import_react36.default.createElement("div", null, /* @__PURE__ */ import_react36.default.createElement("p", null, "People"), /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Suspense, { fallback: /* @__PURE__ */ import_react36.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react36.default.createElement(Outlet, null)));
-  }
-  var import_react36;
-  var init_people = __esm({
-    "src/routes/person/people.tsx"() {
-      "use strict";
-      import_react36 = __toESM(require_react(), 1);
-      init_dist2();
-    }
-  });
-
-  // src/routes/person/tabs/people-overview-tab.tsx
-  var people_overview_tab_exports = {};
-  __export(people_overview_tab_exports, {
-    default: () => PeopleOverviewTab
-  });
-  function PeopleOverviewTab() {
-    return /* @__PURE__ */ import_react37.default.createElement("div", null, "People overview tab");
-  }
-  var import_react37;
-  var init_people_overview_tab = __esm({
-    "src/routes/person/tabs/people-overview-tab.tsx"() {
-      "use strict";
-      import_react37 = __toESM(require_react(), 1);
-    }
-  });
-
-  // src/routes/dashboard.tsx
-  var dashboard_exports = {};
-  __export(dashboard_exports, {
-    default: () => Dashboard
-  });
-  function Dashboard() {
-    return /* @__PURE__ */ import_react40.default.createElement("div", null, /* @__PURE__ */ import_react40.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react40.default.createElement(Link, { to: "/company", className: "underline" }, "Go to companies"));
-  }
-  var import_react40;
-  var init_dashboard = __esm({
-    "src/routes/dashboard.tsx"() {
-      "use strict";
-      import_react40 = __toESM(require_react(), 1);
+      import_react28 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/index.tsx
-  var import_react41 = __toESM(require_react(), 1);
+  init_lib2();
+  var import_react33 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react30 = __toESM(require_react(), 1);
+  var import_react32 = __toESM(require_react(), 1);
+  init_dist2();
 
   // src/components/layout.tsx
-  var import_react28 = __toESM(require_react(), 1);
+  var import_react26 = __toESM(require_react(), 1);
   init_dist2();
-
-  // src/routing/router-context.tsx
-  var import_react = __toESM(require_react(), 1);
-
-  // src/routing/route.model.tsx
-  init_dist2();
-  var AppRoutesModel = class {
-    constructor(options) {
-      Object.assign(this, options);
-    }
-    static fromRouteDefinitions(definitions) {
-      const nodes = definitions.map(
-        (definition) => RouteNode.fromRouteDefinition(definition)
-      );
-      const byName = {};
-      for (const node of nodes) {
-        if (node.name !== null)
-          byName[node.name] = node;
-      }
-      for (const node of nodes) {
-        if (node.definition.parent != null && byName[node.definition.parent])
-          node.parent = byName[node.definition.parent];
-      }
-      for (const node of nodes) {
-        if (node.parent)
-          node.parent.children.push(node);
-      }
-      return new this({ nodes, byName });
-    }
-    toRouteObjects() {
-      return this.nodes.filter((node) => !node.definition.parent).flatMap(toRouteObjects);
-    }
-  };
-  function toRouteObjects(node) {
-    const objects = Object.keys(node.definition.path).map(
-      (language) => ({
-        path: node.definition.path,
-        element: node.definition.element
-      })
-    );
-    if (node.children.length > 0) {
-      const children = node.children.flatMap(toRouteObjects);
-      for (const object of objects)
-        object.children = children;
-    }
-    return objects;
-  }
-  var RouteNode = class {
-    constructor(fields) {
-      Object.assign(this, fields);
-    }
-    static fromRouteDefinition(definition) {
-      return new this({
-        name: definition.name,
-        definition,
-        parent: null,
-        children: []
-      });
-    }
-    get pattern() {
-      const pattern = this.definition.path;
-      if (this.parent)
-        return `${this.parent.pattern}/${pattern}`;
-      return pattern;
-    }
-    getPath({
-      params,
-      search,
-      hash
-    } = {}) {
-      let path = "/";
-      path += generatePath(this.pattern, params);
-      if (search) {
-        const params2 = search instanceof URLSearchParams ? search : new URLSearchParams(search);
-        path += `?${params2}`;
-      }
-      if (hash) {
-        const params2 = hash instanceof URLSearchParams ? hash : new URLSearchParams(hash);
-        path += `#${params2}`;
-      }
-      return path;
-    }
-  };
-
-  // src/routing/router-context.tsx
-  var AppRouterContext = (0, import_react.createContext)(null);
-  function AppRouterProvider({ routes: routes2, children }) {
-    const value = (0, import_react.useMemo)(
-      () => AppRoutesModel.fromRouteDefinitions(routes2),
-      [routes2]
-    );
-    return /* @__PURE__ */ import_react.default.createElement(AppRouterContext.Provider, { value }, children);
-  }
-  function useAppRoutes() {
-    const context = (0, import_react.useContext)(AppRouterContext);
-    if (!context)
-      throw new Error("useAppRoutes must be used within a AppRouterProvider");
-    return context;
-  }
 
   // node_modules/@fortawesome/free-regular-svg-icons/index.mjs
   var faBell = {
@@ -26482,14 +35525,14 @@
   function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  var noop = function noop2() {
+  var noop2 = function noop3() {
   };
   var _WINDOW = {};
   var _DOCUMENT = {};
   var _MUTATION_OBSERVER = null;
   var _PERFORMANCE = {
-    mark: noop,
-    measure: noop
+    mark: noop2,
+    measure: noop2
   };
   try {
     if (typeof window !== "undefined")
@@ -27686,7 +36729,7 @@
       }));
     });
   }
-  var noop$1 = function noop3() {
+  var noop$1 = function noop4() {
   };
   var p = config.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMANCE.measure ? PERFORMANCE : {
     mark: noop$1,
@@ -27707,7 +36750,7 @@
     begin,
     end
   };
-  var noop$2 = function noop4() {
+  var noop$2 = function noop5() {
   };
   function isWatched(node) {
     var i2svg2 = node.getAttribute ? node.getAttribute(DATA_FA_I2SVG) : null;
@@ -27731,12 +36774,12 @@
   function createElementNS(tag) {
     return DOCUMENT.createElementNS("http://www.w3.org/2000/svg", tag);
   }
-  function createElement3(tag) {
+  function createElement5(tag) {
     return DOCUMENT.createElement(tag);
   }
   function convertSVG(abstractObj) {
     var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    var _params$ceFn = params.ceFn, ceFn = _params$ceFn === void 0 ? abstractObj.tag === "svg" ? createElementNS : createElement3 : _params$ceFn;
+    var _params$ceFn = params.ceFn, ceFn = _params$ceFn === void 0 ? abstractObj.tag === "svg" ? createElementNS : createElement5 : _params$ceFn;
     if (typeof abstractObj === "string") {
       return DOCUMENT.createTextNode(abstractObj);
     }
@@ -28815,7 +37858,7 @@
 
   // node_modules/@fortawesome/react-fontawesome/index.es.js
   var import_prop_types = __toESM(require_prop_types());
-  var import_react2 = __toESM(require_react());
+  var import_react = __toESM(require_react());
   function ownKeys2(object, enumerableOnly) {
     var keys = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -28982,13 +38025,13 @@
       return acc;
     }, {});
   }
-  function convert(createElement4, element) {
+  function convert(createElement6, element) {
     var extraProps = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
     if (typeof element === "string") {
       return element;
     }
     var children = (element.children || []).map(function(child) {
-      return convert(createElement4, child);
+      return convert(createElement6, child);
     });
     var mixins = Object.keys(element.attributes || {}).reduce(function(acc, key) {
       var val = element.attributes[key];
@@ -29013,7 +38056,7 @@
     });
     var _extraProps$style = extraProps.style, existingStyle = _extraProps$style === void 0 ? {} : _extraProps$style, remaining = _objectWithoutProperties(extraProps, _excluded4);
     mixins.attrs["style"] = _objectSpread22(_objectSpread22({}, mixins.attrs["style"]), existingStyle);
-    return createElement4.apply(void 0, [element.tag, _objectSpread22(_objectSpread22({}, mixins.attrs), remaining)].concat(_toConsumableArray2(children)));
+    return createElement6.apply(void 0, [element.tag, _objectSpread22(_objectSpread22({}, mixins.attrs), remaining)].concat(_toConsumableArray2(children)));
   }
   var PRODUCTION2 = false;
   try {
@@ -29055,7 +38098,7 @@
   function objectWithKey(key, value) {
     return Array.isArray(value) && value.length > 0 || !Array.isArray(value) && value ? _defineProperty2({}, key, value) : {};
   }
-  var FontAwesomeIcon = /* @__PURE__ */ import_react2.default.forwardRef(function(props, ref) {
+  var FontAwesomeIcon = /* @__PURE__ */ import_react.default.forwardRef(function(props, ref) {
     var iconArgs = props.icon, maskArgs = props.mask, symbol = props.symbol, className = props.className, title = props.title, titleId = props.titleId, maskId = props.maskId;
     var iconLookup = normalizeIconArgs(iconArgs);
     var classes = objectWithKey("classes", [].concat(_toConsumableArray2(classList(props)), _toConsumableArray2(className.split(" "))));
@@ -29140,10 +38183,10 @@
     transform: null,
     swapOpacity: false
   };
-  var convertCurry = convert.bind(null, import_react2.default.createElement);
+  var convertCurry = convert.bind(null, import_react.default.createElement);
 
   // node_modules/@headlessui/react/dist/hooks/use-iso-morphic-effect.js
-  var import_react3 = __toESM(require_react(), 1);
+  var import_react2 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/utils/env.js
   var i = Object.defineProperty;
@@ -29184,20 +38227,20 @@
 
   // node_modules/@headlessui/react/dist/hooks/use-iso-morphic-effect.js
   var l = (e3, f4) => {
-    s.isServer ? (0, import_react3.useEffect)(e3, f4) : (0, import_react3.useLayoutEffect)(e3, f4);
+    s.isServer ? (0, import_react2.useEffect)(e3, f4) : (0, import_react2.useLayoutEffect)(e3, f4);
   };
 
   // node_modules/@headlessui/react/dist/hooks/use-latest-value.js
-  var import_react4 = __toESM(require_react(), 1);
+  var import_react3 = __toESM(require_react(), 1);
   function s2(e3) {
-    let r6 = (0, import_react4.useRef)(e3);
+    let r6 = (0, import_react3.useRef)(e3);
     return l(() => {
       r6.current = e3;
     }, [e3]), r6;
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-disposables.js
-  var import_react5 = __toESM(require_react(), 1);
+  var import_react4 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/utils/micro-task.js
   function t3(e3) {
@@ -29249,40 +38292,40 @@
 
   // node_modules/@headlessui/react/dist/hooks/use-disposables.js
   function p2() {
-    let [e3] = (0, import_react5.useState)(o2);
-    return (0, import_react5.useEffect)(() => () => e3.dispose(), [e3]), e3;
+    let [e3] = (0, import_react4.useState)(o2);
+    return (0, import_react4.useEffect)(() => () => e3.dispose(), [e3]), e3;
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-event.js
-  var import_react6 = __toESM(require_react(), 1);
+  var import_react5 = __toESM(require_react(), 1);
   var o4 = function(t8) {
     let e3 = s2(t8);
-    return import_react6.default.useCallback((...r6) => e3.current(...r6), [e3]);
+    return import_react5.default.useCallback((...r6) => e3.current(...r6), [e3]);
   };
 
   // node_modules/@headlessui/react/dist/hooks/use-id.js
-  var import_react8 = __toESM(require_react(), 1);
+  var import_react7 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/hooks/use-server-handoff-complete.js
-  var import_react7 = __toESM(require_react(), 1);
+  var import_react6 = __toESM(require_react(), 1);
   function l2() {
-    let [e3, f4] = (0, import_react7.useState)(s.isHandoffComplete);
-    return e3 && s.isHandoffComplete === false && f4(false), (0, import_react7.useEffect)(() => {
+    let [e3, f4] = (0, import_react6.useState)(s.isHandoffComplete);
+    return e3 && s.isHandoffComplete === false && f4(false), (0, import_react6.useEffect)(() => {
       e3 !== true && f4(true);
-    }, [e3]), (0, import_react7.useEffect)(() => s.handoff(), []), e3;
+    }, [e3]), (0, import_react6.useEffect)(() => s.handoff(), []), e3;
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-id.js
   var o6;
-  var I = (o6 = import_react8.default.useId) != null ? o6 : function() {
-    let n4 = l2(), [e3, u3] = import_react8.default.useState(n4 ? () => s.nextId() : null);
+  var I = (o6 = import_react7.default.useId) != null ? o6 : function() {
+    let n4 = l2(), [e3, u3] = import_react7.default.useState(n4 ? () => s.nextId() : null);
     return l(() => {
       e3 === null && u3(s.nextId());
     }, [e3]), e3 != null ? "" + e3 : void 0;
   };
 
   // node_modules/@headlessui/react/dist/hooks/use-outside-click.js
-  var import_react10 = __toESM(require_react(), 1);
+  var import_react9 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/utils/match.js
   function u(r6, n4, ...a3) {
@@ -29374,10 +38417,10 @@
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-document-event.js
-  var import_react9 = __toESM(require_react(), 1);
+  var import_react8 = __toESM(require_react(), 1);
   function d3(e3, r6, n4) {
     let o9 = s2(r6);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react8.useEffect)(() => {
       function t8(u3) {
         o9.current(u3);
       }
@@ -29387,8 +38430,8 @@
 
   // node_modules/@headlessui/react/dist/hooks/use-outside-click.js
   function L2(m4, E4, c4 = true) {
-    let i5 = (0, import_react10.useRef)(false);
-    (0, import_react10.useEffect)(() => {
+    let i5 = (0, import_react9.useRef)(false);
+    (0, import_react9.useEffect)(() => {
       requestAnimationFrame(() => {
         i5.current = c4;
       });
@@ -29410,7 +38453,7 @@
         return !h(n4, F.Loose) && n4.tabIndex !== -1 && e3.preventDefault(), E4(e3, n4);
       }
     }
-    let u3 = (0, import_react10.useRef)(null);
+    let u3 = (0, import_react9.useRef)(null);
     d3("mousedown", (e3) => {
       var o9, l6;
       i5.current && (u3.current = ((l6 = (o9 = e3.composedPath) == null ? void 0 : o9.call(e3)) == null ? void 0 : l6[0]) || e3.target);
@@ -29420,7 +38463,7 @@
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-resolve-button-type.js
-  var import_react11 = __toESM(require_react(), 1);
+  var import_react10 = __toESM(require_react(), 1);
   function i2(t8) {
     var n4;
     if (t8.type)
@@ -29430,7 +38473,7 @@
       return "button";
   }
   function s5(t8, e3) {
-    let [n4, u3] = (0, import_react11.useState)(() => i2(t8));
+    let [n4, u3] = (0, import_react10.useState)(() => i2(t8));
     return l(() => {
       u3(i2(t8));
     }, [t8.type, t8.as]), l(() => {
@@ -29439,14 +38482,14 @@
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-sync-refs.js
-  var import_react12 = __toESM(require_react(), 1);
+  var import_react11 = __toESM(require_react(), 1);
   var u2 = Symbol();
   function T2(t8, n4 = true) {
     return Object.assign(t8, { [u2]: n4 });
   }
   function y(...t8) {
-    let n4 = (0, import_react12.useRef)(t8);
-    (0, import_react12.useEffect)(() => {
+    let n4 = (0, import_react11.useRef)(t8);
+    (0, import_react11.useEffect)(() => {
       n4.current = t8;
     }, [t8]);
     let c4 = o4((e3) => {
@@ -29457,7 +38500,7 @@
   }
 
   // node_modules/@headlessui/react/dist/utils/render.js
-  var import_react13 = __toESM(require_react(), 1);
+  var import_react12 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/utils/class-names.js
   function e2(...n4) {
@@ -29498,16 +38541,16 @@
         typeof F3 == "boolean" && (d10 = true), F3 === true && c4.push(p5);
       d10 && (u3["data-headlessui-state"] = c4.join(" "));
     }
-    if (s9 === import_react13.Fragment && Object.keys(P(o9)).length > 0) {
-      if (!(0, import_react13.isValidElement)(i5) || Array.isArray(i5) && i5.length > 1)
+    if (s9 === import_react12.Fragment && Object.keys(P(o9)).length > 0) {
+      if (!(0, import_react12.isValidElement)(i5) || Array.isArray(i5) && i5.length > 1)
         throw new Error(['Passing props on "Fragment"!', "", `The current component <${a3} /> is rendering a "Fragment".`, "However we need to passthrough the following props:", Object.keys(o9).map((p5) => `  - ${p5}`).join(`
 `), "", "You can apply a few solutions:", ['Add an `as="..."` prop, to ensure that we render an actual element instead of a "Fragment".', "Render a single element as the child so that we can forward the props onto that element."].map((p5) => `  - ${p5}`).join(`
 `)].join(`
 `));
       let d10 = e2((y3 = i5.props) == null ? void 0 : y3.className, o9.className), c4 = d10 ? { className: d10 } : {};
-      return (0, import_react13.cloneElement)(i5, Object.assign({}, h2(i5.props, P(g(o9, ["ref"]))), u3, f4, O(i5.ref, f4.ref), c4));
+      return (0, import_react12.cloneElement)(i5, Object.assign({}, h2(i5.props, P(g(o9, ["ref"]))), u3, f4, O(i5.ref, f4.ref), c4));
     }
-    return (0, import_react13.createElement)(s9, Object.assign({}, g(o9, ["ref"]), s9 !== import_react13.Fragment && f4, s9 !== import_react13.Fragment && u3), i5);
+    return (0, import_react12.createElement)(s9, Object.assign({}, g(o9, ["ref"]), s9 !== import_react12.Fragment && f4, s9 !== import_react12.Fragment && u3), i5);
   }
   function O(...r6) {
     return { ref: r6.every((t8) => t8 == null) ? void 0 : (t8) => {
@@ -29540,7 +38583,7 @@
   }
   function L3(r6) {
     var t8;
-    return Object.assign((0, import_react13.forwardRef)(r6), { displayName: (t8 = r6.displayName) != null ? t8 : r6.name });
+    return Object.assign((0, import_react12.forwardRef)(r6), { displayName: (t8 = r6.displayName) != null ? t8 : r6.name });
   }
   function P(r6) {
     let t8 = Object.assign({}, r6);
@@ -29585,28 +38628,28 @@
   var c2 = L3(s6);
 
   // node_modules/@headlessui/react/dist/internal/open-closed.js
-  var import_react14 = __toESM(require_react(), 1);
-  var n = (0, import_react14.createContext)(null);
+  var import_react13 = __toESM(require_react(), 1);
+  var n = (0, import_react13.createContext)(null);
   n.displayName = "OpenClosedContext";
   var d5 = ((e3) => (e3[e3.Open = 1] = "Open", e3[e3.Closed = 2] = "Closed", e3[e3.Closing = 4] = "Closing", e3[e3.Opening = 8] = "Opening", e3))(d5 || {});
   function C() {
-    return (0, import_react14.useContext)(n);
+    return (0, import_react13.useContext)(n);
   }
   function c3({ value: o9, children: r6 }) {
-    return import_react14.default.createElement(n.Provider, { value: o9 }, r6);
+    return import_react13.default.createElement(n.Provider, { value: o9 }, r6);
   }
 
   // node_modules/@headlessui/react/dist/components/keyboard.js
   var o8 = ((r6) => (r6.Space = " ", r6.Enter = "Enter", r6.Escape = "Escape", r6.Backspace = "Backspace", r6.Delete = "Delete", r6.ArrowLeft = "ArrowLeft", r6.ArrowUp = "ArrowUp", r6.ArrowRight = "ArrowRight", r6.ArrowDown = "ArrowDown", r6.Home = "Home", r6.End = "End", r6.PageUp = "PageUp", r6.PageDown = "PageDown", r6.Tab = "Tab", r6))(o8 || {});
 
   // node_modules/@headlessui/react/dist/hooks/use-tab-direction.js
-  var import_react16 = __toESM(require_react(), 1);
+  var import_react15 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/hooks/use-window-event.js
-  var import_react15 = __toESM(require_react(), 1);
+  var import_react14 = __toESM(require_react(), 1);
   function s7(e3, r6, n4) {
     let o9 = s2(r6);
-    (0, import_react15.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       function t8(i5) {
         o9.current(i5);
       }
@@ -29617,32 +38660,32 @@
   // node_modules/@headlessui/react/dist/hooks/use-tab-direction.js
   var s8 = ((r6) => (r6[r6.Forwards = 0] = "Forwards", r6[r6.Backwards = 1] = "Backwards", r6))(s8 || {});
   function n2() {
-    let e3 = (0, import_react16.useRef)(0);
+    let e3 = (0, import_react15.useRef)(0);
     return s7("keydown", (o9) => {
       o9.key === "Tab" && (e3.current = o9.shiftKey ? 1 : 0);
     }, true), e3;
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-is-mounted.js
-  var import_react17 = __toESM(require_react(), 1);
+  var import_react16 = __toESM(require_react(), 1);
   function f2() {
-    let e3 = (0, import_react17.useRef)(false);
+    let e3 = (0, import_react16.useRef)(false);
     return l(() => (e3.current = true, () => {
       e3.current = false;
     }), []), e3;
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-owner.js
-  var import_react18 = __toESM(require_react(), 1);
+  var import_react17 = __toESM(require_react(), 1);
   function n3(...e3) {
-    return (0, import_react18.useMemo)(() => e(...e3), [...e3]);
+    return (0, import_react17.useMemo)(() => e(...e3), [...e3]);
   }
 
   // node_modules/@headlessui/react/dist/hooks/use-event-listener.js
-  var import_react19 = __toESM(require_react(), 1);
+  var import_react18 = __toESM(require_react(), 1);
   function E3(n4, e3, a3, t8) {
     let i5 = s2(a3);
-    (0, import_react19.useEffect)(() => {
+    (0, import_react18.useEffect)(() => {
       n4 = n4 != null ? n4 : window;
       function r6(o9) {
         i5.current(o9);
@@ -29652,7 +38695,7 @@
   }
 
   // node_modules/@headlessui/react/dist/components/popover/popover.js
-  var import_react20 = __toESM(require_react(), 1);
+  var import_react19 = __toESM(require_react(), 1);
   var Fe = ((s9) => (s9[s9.Open = 0] = "Open", s9[s9.Closed = 1] = "Closed", s9))(Fe || {});
   var Ie = ((t8) => (t8[t8.TogglePopover = 0] = "TogglePopover", t8[t8.ClosePopover = 1] = "ClosePopover", t8[t8.SetButton = 2] = "SetButton", t8[t8.SetButtonId = 3] = "SetButtonId", t8[t8.SetPanel = 4] = "SetPanel", t8[t8.SetPanelId = 5] = "SetPanelId", t8))(Ie || {});
   var xe = { [0]: (o9) => ({ ...o9, popoverState: u(o9.popoverState, { [0]: 1, [1]: 0 }) }), [1](o9) {
@@ -29666,35 +38709,35 @@
   }, [5](o9, l6) {
     return o9.panelId === l6.panelId ? o9 : { ...o9, panelId: l6.panelId };
   } };
-  var le = (0, import_react20.createContext)(null);
+  var le = (0, import_react19.createContext)(null);
   le.displayName = "PopoverContext";
   function Q(o9) {
-    let l6 = (0, import_react20.useContext)(le);
+    let l6 = (0, import_react19.useContext)(le);
     if (l6 === null) {
       let s9 = new Error(`<${o9} /> is missing a parent <Popover /> component.`);
       throw Error.captureStackTrace && Error.captureStackTrace(s9, Q), s9;
     }
     return l6;
   }
-  var ae = (0, import_react20.createContext)(null);
+  var ae = (0, import_react19.createContext)(null);
   ae.displayName = "PopoverAPIContext";
   function pe(o9) {
-    let l6 = (0, import_react20.useContext)(ae);
+    let l6 = (0, import_react19.useContext)(ae);
     if (l6 === null) {
       let s9 = new Error(`<${o9} /> is missing a parent <Popover /> component.`);
       throw Error.captureStackTrace && Error.captureStackTrace(s9, pe), s9;
     }
     return l6;
   }
-  var se = (0, import_react20.createContext)(null);
+  var se = (0, import_react19.createContext)(null);
   se.displayName = "PopoverGroupContext";
   function ve() {
-    return (0, import_react20.useContext)(se);
+    return (0, import_react19.useContext)(se);
   }
-  var Z = (0, import_react20.createContext)(null);
+  var Z = (0, import_react19.createContext)(null);
   Z.displayName = "PopoverPanelContext";
   function Le() {
-    return (0, import_react20.useContext)(Z);
+    return (0, import_react19.useContext)(Z);
   }
   function Me(o9, l6) {
     return u(l6.type, xe, o9, l6);
@@ -29702,9 +38745,9 @@
   var Be = "div";
   function De(o9, l6) {
     var B;
-    let s9 = (0, import_react20.useRef)(null), R2 = y(l6, T2((e3) => {
+    let s9 = (0, import_react19.useRef)(null), R2 = y(l6, T2((e3) => {
       s9.current = e3;
-    })), C2 = (0, import_react20.useRef)([]), r6 = (0, import_react20.useReducer)(Me, { popoverState: 1, buttons: C2, button: null, buttonId: null, panel: null, panelId: null, beforePanelSentinel: (0, import_react20.createRef)(), afterPanelSentinel: (0, import_react20.createRef)() }), [{ popoverState: t8, button: a3, buttonId: v2, panel: f4, panelId: F3, beforePanelSentinel: T4, afterPanelSentinel: d10 }, i5] = r6, p5 = n3((B = s9.current) != null ? B : a3), P3 = (0, import_react20.useMemo)(() => {
+    })), C2 = (0, import_react19.useRef)([]), r6 = (0, import_react19.useReducer)(Me, { popoverState: 1, buttons: C2, button: null, buttonId: null, panel: null, panelId: null, beforePanelSentinel: (0, import_react19.createRef)(), afterPanelSentinel: (0, import_react19.createRef)() }), [{ popoverState: t8, button: a3, buttonId: v2, panel: f4, panelId: F3, beforePanelSentinel: T4, afterPanelSentinel: d10 }, i5] = r6, p5 = n3((B = s9.current) != null ? B : a3), P3 = (0, import_react19.useMemo)(() => {
       if (!a3 || !f4)
         return false;
       for (let N2 of document.querySelectorAll("body > *"))
@@ -29712,11 +38755,11 @@
           return true;
       let e3 = E(), n4 = e3.indexOf(a3), A3 = (n4 + e3.length - 1) % e3.length, g2 = (n4 + 1) % e3.length, G = e3[A3], Te = e3[g2];
       return !f4.contains(G) && !f4.contains(Te);
-    }, [a3, f4]), S2 = s2(v2), y3 = s2(F3), x2 = (0, import_react20.useMemo)(() => ({ buttonId: S2, panelId: y3, close: () => i5({ type: 1 }) }), [S2, y3, i5]), O2 = ve(), L4 = O2 == null ? void 0 : O2.registerPopover, j2 = o4(() => {
+    }, [a3, f4]), S2 = s2(v2), y3 = s2(F3), x2 = (0, import_react19.useMemo)(() => ({ buttonId: S2, panelId: y3, close: () => i5({ type: 1 }) }), [S2, y3, i5]), O2 = ve(), L4 = O2 == null ? void 0 : O2.registerPopover, j2 = o4(() => {
       var e3;
       return (e3 = O2 == null ? void 0 : O2.isFocusWithinPopoverGroup()) != null ? e3 : (p5 == null ? void 0 : p5.activeElement) && ((a3 == null ? void 0 : a3.contains(p5.activeElement)) || (f4 == null ? void 0 : f4.contains(p5.activeElement)));
     });
-    (0, import_react20.useEffect)(() => L4 == null ? void 0 : L4(x2), [L4, x2]), E3(p5 == null ? void 0 : p5.defaultView, "focus", (e3) => {
+    (0, import_react19.useEffect)(() => L4 == null ? void 0 : L4(x2), [L4, x2]), E3(p5 == null ? void 0 : p5.defaultView, "focus", (e3) => {
       var n4, A3, g2, G;
       t8 === 0 && (j2() || a3 && f4 && e3.target !== window && ((A3 = (n4 = T4.current) == null ? void 0 : n4.contains) != null && A3.call(n4, e3.target) || (G = (g2 = d10.current) == null ? void 0 : g2.contains) != null && G.call(g2, e3.target) || i5({ type: 1 })));
     }, true), L2([a3, f4], (e3, n4) => {
@@ -29726,19 +38769,19 @@
       i5({ type: 1 });
       let n4 = (() => e3 ? e3 instanceof HTMLElement ? e3 : "current" in e3 && e3.current instanceof HTMLElement ? e3.current : a3 : a3)();
       n4 == null || n4.focus();
-    }), u3 = (0, import_react20.useMemo)(() => ({ close: M, isPortalled: P3 }), [M, P3]), m4 = (0, import_react20.useMemo)(() => ({ open: t8 === 0, close: M }), [t8, M]), E4 = o9, c4 = { ref: R2 };
-    return import_react20.default.createElement(Z.Provider, { value: null }, import_react20.default.createElement(le.Provider, { value: r6 }, import_react20.default.createElement(ae.Provider, { value: u3 }, import_react20.default.createElement(c3, { value: u(t8, { [0]: d5.Open, [1]: d5.Closed }) }, D({ ourProps: c4, theirProps: E4, slot: m4, defaultTag: Be, name: "Popover" })))));
+    }), u3 = (0, import_react19.useMemo)(() => ({ close: M, isPortalled: P3 }), [M, P3]), m4 = (0, import_react19.useMemo)(() => ({ open: t8 === 0, close: M }), [t8, M]), E4 = o9, c4 = { ref: R2 };
+    return import_react19.default.createElement(Z.Provider, { value: null }, import_react19.default.createElement(le.Provider, { value: r6 }, import_react19.default.createElement(ae.Provider, { value: u3 }, import_react19.default.createElement(c3, { value: u(t8, { [0]: d5.Open, [1]: d5.Closed }) }, D({ ourProps: c4, theirProps: E4, slot: m4, defaultTag: Be, name: "Popover" })))));
   }
   var he = "button";
   function He(o9, l6) {
-    let s9 = I(), { id: R2 = `headlessui-popover-button-${s9}`, ...C2 } = o9, [r6, t8] = Q("Popover.Button"), { isPortalled: a3 } = pe("Popover.Button"), v2 = (0, import_react20.useRef)(null), f4 = `headlessui-focus-sentinel-${I()}`, F3 = ve(), T4 = F3 == null ? void 0 : F3.closeOthers, i5 = Le() !== null;
-    (0, import_react20.useEffect)(() => {
+    let s9 = I(), { id: R2 = `headlessui-popover-button-${s9}`, ...C2 } = o9, [r6, t8] = Q("Popover.Button"), { isPortalled: a3 } = pe("Popover.Button"), v2 = (0, import_react19.useRef)(null), f4 = `headlessui-focus-sentinel-${I()}`, F3 = ve(), T4 = F3 == null ? void 0 : F3.closeOthers, i5 = Le() !== null;
+    (0, import_react19.useEffect)(() => {
       if (!i5)
         return t8({ type: 3, buttonId: R2 }), () => {
           t8({ type: 3, buttonId: null });
         };
     }, [i5, R2, t8]);
-    let [p5] = (0, import_react20.useState)(() => Symbol()), P3 = y(v2, l6, i5 ? null : (e3) => {
+    let [p5] = (0, import_react19.useState)(() => Symbol()), P3 = y(v2, l6, i5 ? null : (e3) => {
       if (e3)
         r6.buttons.current.push(p5);
       else {
@@ -29778,7 +38821,7 @@
       r3(e3.currentTarget) || o9.disabled || (i5 ? (t8({ type: 1 }), (n4 = r6.button) == null || n4.focus()) : (e3.preventDefault(), e3.stopPropagation(), r6.popoverState === 1 && (T4 == null || T4(r6.buttonId)), t8({ type: 0 }), (A3 = r6.button) == null || A3.focus()));
     }), j2 = o4((e3) => {
       e3.preventDefault(), e3.stopPropagation();
-    }), M = r6.popoverState === 0, u3 = (0, import_react20.useMemo)(() => ({ open: M }), [M]), m4 = s5(o9, v2), E4 = i5 ? { ref: S2, type: m4, onKeyDown: x2, onClick: L4 } : { ref: P3, id: r6.buttonId, type: m4, "aria-expanded": o9.disabled ? void 0 : r6.popoverState === 0, "aria-controls": r6.panel ? r6.panelId : void 0, onKeyDown: x2, onKeyUp: O2, onClick: L4, onMouseDown: j2 }, c4 = n2(), B = o4(() => {
+    }), M = r6.popoverState === 0, u3 = (0, import_react19.useMemo)(() => ({ open: M }), [M]), m4 = s5(o9, v2), E4 = i5 ? { ref: S2, type: m4, onKeyDown: x2, onClick: L4 } : { ref: P3, id: r6.buttonId, type: m4, "aria-expanded": o9.disabled ? void 0 : r6.popoverState === 0, "aria-controls": r6.panel ? r6.panelId : void 0, onKeyDown: x2, onKeyUp: O2, onClick: L4, onMouseDown: j2 }, c4 = n2(), B = o4(() => {
       let e3 = r6.panel;
       if (!e3)
         return;
@@ -29787,7 +38830,7 @@
       }
       n4();
     });
-    return import_react20.default.createElement(import_react20.default.Fragment, null, D({ ourProps: E4, theirProps: C2, slot: u3, defaultTag: he, name: "Popover.Button" }), M && !i5 && a3 && import_react20.default.createElement(c2, { id: f4, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: B }));
+    return import_react19.default.createElement(import_react19.default.Fragment, null, D({ ourProps: E4, theirProps: C2, slot: u3, defaultTag: he, name: "Popover.Button" }), M && !i5 && a3 && import_react19.default.createElement(c2, { id: f4, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: B }));
   }
   var Ge = "div";
   var _e = j.RenderStrategy | j.Static;
@@ -29796,13 +38839,13 @@
       if (r3(i5.currentTarget))
         return i5.preventDefault();
       t8({ type: 1 });
-    }), T4 = (0, import_react20.useMemo)(() => ({ open: r6 === 0 }), [r6]);
+    }), T4 = (0, import_react19.useMemo)(() => ({ open: r6 === 0 }), [r6]);
     return D({ ourProps: { ref: a3, id: R2, "aria-hidden": true, onClick: F3 }, theirProps: C2, slot: T4, defaultTag: Ge, features: _e, visible: f4, name: "Popover.Overlay" });
   }
   var we = "div";
   var Ne = j.RenderStrategy | j.Static;
   function Ue(o9, l6) {
-    let s9 = I(), { id: R2 = `headlessui-popover-panel-${s9}`, focus: C2 = false, ...r6 } = o9, [t8, a3] = Q("Popover.Panel"), { close: v2, isPortalled: f4 } = pe("Popover.Panel"), F3 = `headlessui-focus-sentinel-before-${I()}`, T4 = `headlessui-focus-sentinel-after-${I()}`, d10 = (0, import_react20.useRef)(null), i5 = y(d10, l6, (u3) => {
+    let s9 = I(), { id: R2 = `headlessui-popover-panel-${s9}`, focus: C2 = false, ...r6 } = o9, [t8, a3] = Q("Popover.Panel"), { close: v2, isPortalled: f4 } = pe("Popover.Panel"), F3 = `headlessui-focus-sentinel-before-${I()}`, T4 = `headlessui-focus-sentinel-after-${I()}`, d10 = (0, import_react19.useRef)(null), i5 = y(d10, l6, (u3) => {
       a3({ type: 4, panel: u3 });
     }), p5 = n3(d10);
     l(() => (a3({ type: 5, panelId: R2 }), () => {
@@ -29818,16 +38861,16 @@
           break;
       }
     });
-    (0, import_react20.useEffect)(() => {
+    (0, import_react19.useEffect)(() => {
       var u3;
       o9.static || t8.popoverState === 1 && ((u3 = o9.unmount) == null || u3) && a3({ type: 4, panel: null });
-    }, [t8.popoverState, o9.unmount, o9.static, a3]), (0, import_react20.useEffect)(() => {
+    }, [t8.popoverState, o9.unmount, o9.static, a3]), (0, import_react19.useEffect)(() => {
       if (!C2 || t8.popoverState !== 0 || !d10.current)
         return;
       let u3 = p5 == null ? void 0 : p5.activeElement;
       d10.current.contains(u3) || I2(d10.current, L.First);
     }, [C2, d10, t8.popoverState]);
-    let x2 = (0, import_react20.useMemo)(() => ({ open: t8.popoverState === 0, close: v2 }), [t8, v2]), O2 = { ref: i5, id: R2, onKeyDown: y3, onBlur: C2 && t8.popoverState === 0 ? (u3) => {
+    let x2 = (0, import_react19.useMemo)(() => ({ open: t8.popoverState === 0, close: v2 }), [t8, v2]), O2 = { ref: i5, id: R2, onKeyDown: y3, onBlur: C2 && t8.popoverState === 0 ? (u3) => {
       var E4, c4, B, e3, n4;
       let m4 = u3.relatedTarget;
       m4 && d10.current && ((E4 = d10.current) != null && E4.contains(m4) || (a3({ type: 1 }), ((B = (c4 = t8.beforePanelSentinel.current) == null ? void 0 : c4.contains) != null && B.call(c4, m4) || (n4 = (e3 = t8.afterPanelSentinel.current) == null ? void 0 : e3.contains) != null && n4.call(e3, m4)) && m4.focus({ preventScroll: true })));
@@ -29868,11 +38911,11 @@
       }
       m4();
     });
-    return import_react20.default.createElement(Z.Provider, { value: R2 }, S2 && f4 && import_react20.default.createElement(c2, { id: F3, ref: t8.beforePanelSentinel, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: j2 }), D({ ourProps: O2, theirProps: r6, slot: x2, defaultTag: we, features: Ne, visible: S2, name: "Popover.Panel" }), S2 && f4 && import_react20.default.createElement(c2, { id: T4, ref: t8.afterPanelSentinel, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: M }));
+    return import_react19.default.createElement(Z.Provider, { value: R2 }, S2 && f4 && import_react19.default.createElement(c2, { id: F3, ref: t8.beforePanelSentinel, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: j2 }), D({ ourProps: O2, theirProps: r6, slot: x2, defaultTag: we, features: Ne, visible: S2, name: "Popover.Panel" }), S2 && f4 && import_react19.default.createElement(c2, { id: T4, ref: t8.afterPanelSentinel, features: p3.Focusable, "data-headlessui-focus-guard": true, as: "button", type: "button", onFocus: M }));
   }
   var Ke = "div";
   function We(o9, l6) {
-    let s9 = (0, import_react20.useRef)(null), R2 = y(s9, l6), [C2, r6] = (0, import_react20.useState)([]), t8 = o4((p5) => {
+    let s9 = (0, import_react19.useRef)(null), R2 = y(s9, l6), [C2, r6] = (0, import_react19.useState)([]), t8 = o4((p5) => {
       r6((P3) => {
         let S2 = P3.indexOf(p5);
         if (S2 !== -1) {
@@ -29894,8 +38937,8 @@
     }), f4 = o4((p5) => {
       for (let P3 of C2)
         P3.buttonId.current !== p5 && P3.close();
-    }), F3 = (0, import_react20.useMemo)(() => ({ registerPopover: a3, unregisterPopover: t8, isFocusWithinPopoverGroup: v2, closeOthers: f4 }), [a3, t8, v2, f4]), T4 = (0, import_react20.useMemo)(() => ({}), []), d10 = o9, i5 = { ref: R2 };
-    return import_react20.default.createElement(se.Provider, { value: F3 }, D({ ourProps: i5, theirProps: d10, slot: T4, defaultTag: Ke, name: "Popover.Group" }));
+    }), F3 = (0, import_react19.useMemo)(() => ({ registerPopover: a3, unregisterPopover: t8, isFocusWithinPopoverGroup: v2, closeOthers: f4 }), [a3, t8, v2, f4]), T4 = (0, import_react19.useMemo)(() => ({}), []), d10 = o9, i5 = { ref: R2 };
+    return import_react19.default.createElement(se.Provider, { value: F3 }, D({ ourProps: i5, theirProps: d10, slot: T4, defaultTag: Ke, name: "Popover.Group" }));
   }
   var je = L3(De);
   var Ve = L3(He);
@@ -29905,14 +38948,14 @@
   var Lt = Object.assign(je, { Button: Ve, Overlay: $e, Panel: Je, Group: Xe });
 
   // node_modules/@headlessui/react/dist/hooks/use-flags.js
-  var import_react21 = __toESM(require_react(), 1);
+  var import_react20 = __toESM(require_react(), 1);
   function b2(g2 = 0) {
-    let [t8, l6] = (0, import_react21.useState)(g2), u3 = (0, import_react21.useCallback)((e3) => l6((a3) => a3 | e3), [t8]), n4 = (0, import_react21.useCallback)((e3) => Boolean(t8 & e3), [t8]), o9 = (0, import_react21.useCallback)((e3) => l6((a3) => a3 & ~e3), [l6]), s9 = (0, import_react21.useCallback)((e3) => l6((a3) => a3 ^ e3), [l6]);
+    let [t8, l6] = (0, import_react20.useState)(g2), u3 = (0, import_react20.useCallback)((e3) => l6((a3) => a3 | e3), [t8]), n4 = (0, import_react20.useCallback)((e3) => Boolean(t8 & e3), [t8]), o9 = (0, import_react20.useCallback)((e3) => l6((a3) => a3 & ~e3), [l6]), s9 = (0, import_react20.useCallback)((e3) => l6((a3) => a3 ^ e3), [l6]);
     return { flags: t8, addFlag: u3, hasFlag: n4, removeFlag: o9, toggleFlag: s9 };
   }
 
   // node_modules/@headlessui/react/dist/components/transitions/transition.js
-  var import_react22 = __toESM(require_react(), 1);
+  var import_react21 = __toESM(require_react(), 1);
 
   // node_modules/@headlessui/react/dist/utils/once.js
   function l5(r6) {
@@ -29981,28 +39024,28 @@
   function S(n4 = "") {
     return n4.split(" ").filter((t8) => t8.trim().length > 1);
   }
-  var A2 = (0, import_react22.createContext)(null);
+  var A2 = (0, import_react21.createContext)(null);
   A2.displayName = "TransitionContext";
   var Ee = ((r6) => (r6.Visible = "visible", r6.Hidden = "hidden", r6))(Ee || {});
   function be() {
-    let n4 = (0, import_react22.useContext)(A2);
+    let n4 = (0, import_react21.useContext)(A2);
     if (n4 === null)
       throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");
     return n4;
   }
   function Se() {
-    let n4 = (0, import_react22.useContext)(I4);
+    let n4 = (0, import_react21.useContext)(I4);
     if (n4 === null)
       throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");
     return n4;
   }
-  var I4 = (0, import_react22.createContext)(null);
+  var I4 = (0, import_react21.createContext)(null);
   I4.displayName = "NestingContext";
   function _(n4) {
     return "children" in n4 ? _(n4.children) : n4.current.filter(({ el: t8 }) => t8.current !== null).filter(({ state: t8 }) => t8 === "visible").length > 0;
   }
   function ne(n4, t8) {
-    let r6 = s2(n4), o9 = (0, import_react22.useRef)([]), y3 = f2(), N2 = p2(), p5 = o4((s9, e3 = w3.Hidden) => {
+    let r6 = s2(n4), o9 = (0, import_react21.useRef)([]), y3 = f2(), N2 = p2(), p5 = o4((s9, e3 = w3.Hidden) => {
       let a3 = o9.current.findIndex(({ el: i5 }) => i5 === s9);
       a3 !== -1 && (u(e3, { [w3.Unmount]() {
         o9.current.splice(a3, 1);
@@ -30015,7 +39058,7 @@
     }), x2 = o4((s9) => {
       let e3 = o9.current.find(({ el: a3 }) => a3 === s9);
       return e3 ? e3.state !== "visible" && (e3.state = "visible") : o9.current.push({ el: s9, state: "visible" }), () => p5(s9, w3.Unmount);
-    }), m4 = (0, import_react22.useRef)([]), c4 = (0, import_react22.useRef)(Promise.resolve()), u3 = (0, import_react22.useRef)({ enter: [], leave: [], idle: [] }), h3 = o4((s9, e3, a3) => {
+    }), m4 = (0, import_react21.useRef)([]), c4 = (0, import_react21.useRef)(Promise.resolve()), u3 = (0, import_react21.useRef)({ enter: [], leave: [], idle: [] }), h3 = o4((s9, e3, a3) => {
       m4.current.splice(0), t8 && (t8.chains.current[e3] = t8.chains.current[e3].filter(([i5]) => i5 !== s9)), t8 == null || t8.chains.current[e3].push([s9, new Promise((i5) => {
         m4.current.push(i5);
       })]), t8 == null || t8.chains.current[e3].push([s9, new Promise((i5) => {
@@ -30027,7 +39070,7 @@
         (i5 = m4.current.shift()) == null || i5();
       }).then(() => a3(e3));
     });
-    return (0, import_react22.useMemo)(() => ({ children: o9, register: x2, unregister: p5, onStart: h3, onStop: v2, wait: c4, chains: u3 }), [x2, p5, o9, h3, v2, u3, c4]);
+    return (0, import_react21.useMemo)(() => ({ children: o9, register: x2, unregister: p5, onStart: h3, onStop: v2, wait: c4, chains: u3 }), [x2, p5, o9, h3, v2, u3, c4]);
   }
   function xe2() {
   }
@@ -30040,16 +39083,16 @@
     return t8;
   }
   function Re(n4) {
-    let t8 = (0, import_react22.useRef)(re(n4));
-    return (0, import_react22.useEffect)(() => {
+    let t8 = (0, import_react21.useRef)(re(n4));
+    return (0, import_react21.useEffect)(() => {
       t8.current = re(n4);
     }, [n4]), t8;
   }
   var ye = "div";
   var ie2 = j.RenderStrategy;
   function Ne2(n4, t8) {
-    let { beforeEnter: r6, afterEnter: o9, beforeLeave: y3, afterLeave: N2, enter: p5, enterFrom: x2, enterTo: m4, entered: c4, leave: u3, leaveFrom: h3, leaveTo: v2, ...s9 } = n4, e3 = (0, import_react22.useRef)(null), a3 = y(e3, t8), i5 = s9.unmount ? w3.Unmount : w3.Hidden, { show: l6, appear: T4, initial: se2 } = be(), [g2, M] = (0, import_react22.useState)(l6 ? "visible" : "hidden"), z = Se(), { register: F3, unregister: L4 } = z, U = (0, import_react22.useRef)(null);
-    (0, import_react22.useEffect)(() => F3(e3), [F3, e3]), (0, import_react22.useEffect)(() => {
+    let { beforeEnter: r6, afterEnter: o9, beforeLeave: y3, afterLeave: N2, enter: p5, enterFrom: x2, enterTo: m4, entered: c4, leave: u3, leaveFrom: h3, leaveTo: v2, ...s9 } = n4, e3 = (0, import_react21.useRef)(null), a3 = y(e3, t8), i5 = s9.unmount ? w3.Unmount : w3.Hidden, { show: l6, appear: T4, initial: se2 } = be(), [g2, M] = (0, import_react21.useState)(l6 ? "visible" : "hidden"), z = Se(), { register: F3, unregister: L4 } = z, U = (0, import_react21.useRef)(null);
+    (0, import_react21.useEffect)(() => F3(e3), [F3, e3]), (0, import_react21.useEffect)(() => {
       if (i5 === w3.Hidden && e3.current) {
         if (l6 && g2 !== "visible") {
           M("visible");
@@ -30059,7 +39102,7 @@
       }
     }, [g2, e3, F3, L4, l6, i5]);
     let j2 = s2({ enter: S(p5), enterFrom: S(x2), enterTo: S(m4), entered: S(c4), leave: S(u3), leaveFrom: S(h3), leaveTo: S(v2) }), w4 = Re({ beforeEnter: r6, afterEnter: o9, beforeLeave: y3, afterLeave: N2 }), k = l2();
-    (0, import_react22.useEffect)(() => {
+    (0, import_react21.useEffect)(() => {
       if (k && g2 === "visible" && e3.current === null)
         throw new Error("Did you forget to passthrough the `ref` to the actual DOM node?");
     }, [e3, g2, k]);
@@ -30080,26 +39123,26 @@
       O2.onStart(e3, C2, le2);
     }), onStop: s2((C2) => {
       O2.onStop(e3, C2, ue2), C2 === "leave" && !_(O2) && (M("hidden"), L4(e3));
-    }) }), (0, import_react22.useEffect)(() => {
+    }) }), (0, import_react21.useEffect)(() => {
       G && (i5 === w3.Hidden ? U.current = null : U.current = l6);
     }, [l6, G, g2]);
     let B = s9, Te = { ref: a3 };
-    return T4 && l6 && s.isServer && (B = { ...B, className: e2(s9.className, ...j2.current.enter, ...j2.current.enterFrom) }), import_react22.default.createElement(I4.Provider, { value: O2 }, import_react22.default.createElement(c3, { value: u(g2, { ["visible"]: d5.Open, ["hidden"]: d5.Closed }) | H2.flags }, D({ ourProps: Te, theirProps: B, defaultTag: ye, features: ie2, visible: g2 === "visible", name: "Transition.Child" })));
+    return T4 && l6 && s.isServer && (B = { ...B, className: e2(s9.className, ...j2.current.enter, ...j2.current.enterFrom) }), import_react21.default.createElement(I4.Provider, { value: O2 }, import_react21.default.createElement(c3, { value: u(g2, { ["visible"]: d5.Open, ["hidden"]: d5.Closed }) | H2.flags }, D({ ourProps: Te, theirProps: B, defaultTag: ye, features: ie2, visible: g2 === "visible", name: "Transition.Child" })));
   }
   function He2(n4, t8) {
-    let { show: r6, appear: o9 = false, unmount: y3, ...N2 } = n4, p5 = (0, import_react22.useRef)(null), x2 = y(p5, t8);
+    let { show: r6, appear: o9 = false, unmount: y3, ...N2 } = n4, p5 = (0, import_react21.useRef)(null), x2 = y(p5, t8);
     l2();
     let m4 = C();
     if (r6 === void 0 && m4 !== null && (r6 = (m4 & d5.Open) === d5.Open), ![true, false].includes(r6))
       throw new Error("A <Transition /> is used but it is missing a `show={true | false}` prop.");
-    let [c4, u3] = (0, import_react22.useState)(r6 ? "visible" : "hidden"), h3 = ne(() => {
+    let [c4, u3] = (0, import_react21.useState)(r6 ? "visible" : "hidden"), h3 = ne(() => {
       u3("hidden");
-    }), [v2, s9] = (0, import_react22.useState)(true), e3 = (0, import_react22.useRef)([r6]);
+    }), [v2, s9] = (0, import_react21.useState)(true), e3 = (0, import_react21.useRef)([r6]);
     l(() => {
       v2 !== false && e3.current[e3.current.length - 1] !== r6 && (e3.current.push(r6), s9(false));
     }, [e3, r6]);
-    let a3 = (0, import_react22.useMemo)(() => ({ show: r6, appear: o9, initial: v2 }), [r6, o9, v2]);
-    (0, import_react22.useEffect)(() => {
+    let a3 = (0, import_react21.useMemo)(() => ({ show: r6, appear: o9, initial: v2 }), [r6, o9, v2]);
+    (0, import_react21.useEffect)(() => {
       if (r6)
         u3("visible");
       else if (!_(h3))
@@ -30113,11 +39156,11 @@
       }
     }, [r6, h3]);
     let i5 = { unmount: y3 };
-    return import_react22.default.createElement(I4.Provider, { value: h3 }, import_react22.default.createElement(A2.Provider, { value: a3 }, D({ ourProps: { ...i5, as: import_react22.Fragment, children: import_react22.default.createElement(oe, { ref: x2, ...i5, ...N2 }) }, theirProps: {}, defaultTag: import_react22.Fragment, features: ie2, visible: c4 === "visible", name: "Transition" })));
+    return import_react21.default.createElement(I4.Provider, { value: h3 }, import_react21.default.createElement(A2.Provider, { value: a3 }, D({ ourProps: { ...i5, as: import_react21.Fragment, children: import_react21.default.createElement(oe, { ref: x2, ...i5, ...N2 }) }, theirProps: {}, defaultTag: import_react21.Fragment, features: ie2, visible: c4 === "visible", name: "Transition" })));
   }
   function De2(n4, t8) {
-    let r6 = (0, import_react22.useContext)(A2) !== null, o9 = C() !== null;
-    return import_react22.default.createElement(import_react22.default.Fragment, null, !r6 && o9 ? import_react22.default.createElement(q2, { ref: t8, ...n4 }) : import_react22.default.createElement(oe, { ref: t8, ...n4 }));
+    let r6 = (0, import_react21.useContext)(A2) !== null, o9 = C() !== null;
+    return import_react21.default.createElement(import_react21.default.Fragment, null, !r6 && o9 ? import_react21.default.createElement(q2, { ref: t8, ...n4 }) : import_react21.default.createElement(oe, { ref: t8, ...n4 }));
   }
   var q2 = L3(He2);
   var oe = L3(Ne2);
@@ -30125,25 +39168,25 @@
   var tt = Object.assign(q2, { Child: Fe2, Root: q2 });
 
   // src/components/header.tsx
-  var import_react24 = __toESM(require_react(), 1);
+  var import_react23 = __toESM(require_react(), 1);
   function Header() {
-    return /* @__PURE__ */ import_react24.default.createElement("div", { className: "bg-white h-16 px-4 flex justify-between items-center" }, /* @__PURE__ */ import_react24.default.createElement("div", { className: "relative" }, /* @__PURE__ */ import_react24.default.createElement(
+    return /* @__PURE__ */ import_react23.default.createElement("div", { className: "bg-white h-16 px-4 flex justify-between items-center" }, /* @__PURE__ */ import_react23.default.createElement("div", { className: "relative" }, /* @__PURE__ */ import_react23.default.createElement(
       "input",
       {
         type: "text",
         placeholder: "Search",
         className: "text-sm focus:outline-none active-none h-10 w-[24rem] border border-grey-300 rounded-sm px-4"
       }
-    )), /* @__PURE__ */ import_react24.default.createElement("div", { className: "flex items-center mr-2" }, /* @__PURE__ */ import_react24.default.createElement(Lt, { className: "relative" }, ({ open }) => /* @__PURE__ */ import_react24.default.createElement(import_react24.default.Fragment, null, /* @__PURE__ */ import_react24.default.createElement(
+    )), /* @__PURE__ */ import_react23.default.createElement("div", { className: "flex items-center mr-2" }, /* @__PURE__ */ import_react23.default.createElement(Lt, { className: "relative" }, ({ open }) => /* @__PURE__ */ import_react23.default.createElement(import_react23.default.Fragment, null, /* @__PURE__ */ import_react23.default.createElement(
       Lt.Button,
       {
         className: "inline-flex items-center text-grey-700 hover:text-opacity-100 focus:outline-none active:bg-grey-100"
       },
-      /* @__PURE__ */ import_react24.default.createElement(FontAwesomeIcon, { icon: faBell })
-    ), /* @__PURE__ */ import_react24.default.createElement(
+      /* @__PURE__ */ import_react23.default.createElement(FontAwesomeIcon, { icon: faBell })
+    ), /* @__PURE__ */ import_react23.default.createElement(
       tt,
       {
-        as: import_react24.Fragment,
+        as: import_react23.Fragment,
         enter: "transition ease-out duration-200",
         enterFrom: "opacity-0 translate-y-1",
         enterTo: "opacity-100 translate-y-0",
@@ -30151,117 +39194,64 @@
         leaveFrom: "opacity-100 translate-y-0",
         leaveTo: "opacity-0 translate-y-1"
       },
-      /* @__PURE__ */ import_react24.default.createElement(Lt.Panel, { className: "absolute right-0 z-10 mt-2.5 w-80" }, /* @__PURE__ */ import_react24.default.createElement("div", { className: "bg-white rounded-sm shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5" }, "Notifications panel"))
+      /* @__PURE__ */ import_react23.default.createElement(Lt.Panel, { className: "absolute right-0 z-10 mt-2.5 w-80" }, /* @__PURE__ */ import_react23.default.createElement("div", { className: "bg-white rounded-sm shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5" }, "Notifications panel"))
     )))));
   }
 
   // src/components/sidebar.tsx
-  var import_react27 = __toESM(require_react(), 1);
-  init_dist2();
   var import_classnames = __toESM(require_classnames(), 1);
+  var import_react25 = __toESM(require_react(), 1);
+  init_dist2();
 
   // src/routing/navigation-items.tsx
-  var import_react25 = __toESM(require_react(), 1);
+  var import_react24 = __toESM(require_react(), 1);
   function NavigationItems() {
     const scope = {};
-    return (0, import_react25.useMemo)(
+    return (0, import_react24.useMemo)(
       () => [
         {
           key: "dashboard",
           type: "route",
           name: "Dashboard",
           icon: void 0,
-          route: "/" /* DASHBOARD */
+          route: "/"
         },
         {
           key: "companies",
           type: "route",
           name: "Companies",
           icon: void 0,
-          route: "COMPANIES" /* COMPANIES */
+          route: "companies"
+        },
+        {
+          key: "company-overview",
+          type: "route",
+          name: "Company overview",
+          icon: void 0,
+          route: "company-overview"
         },
         {
           key: "people",
           type: "route",
           name: "People",
           icon: void 0,
-          route: "PEOPLE" /* PEOPLE */
+          route: "people"
         }
       ],
       [scope]
     );
   }
 
-  // src/routing/use-get-route-path.ts
-  init_dist2();
-
-  // src/routing/router.ts
-  init_dist2();
-  function useRouteQuery() {
-    return new URLSearchParams(useLocation().search);
-  }
-  function useRouteHash() {
-    return new URLSearchParams(useLocation().hash);
-  }
-
-  // src/routing/use-get-route-path.ts
-  function useGetRoutePath() {
-    const appRoutes = useAppRoutes();
-    const currentParams = useParams();
-    const currentSearch = useRouteQuery();
-    const currentHash = useRouteHash();
-    return ({ to, params, search, hash, keep }) => {
-      const route = appRoutes.byName[to];
-      if (!route)
-        return null;
-      const mergedParams = keep ? __spreadValues(__spreadValues({}, currentParams), params) : params;
-      const mergedSearch = keep ? mergeParams(currentSearch, search) : search;
-      const mergedHash = keep ? mergeParams(currentHash, hash) : hash;
-      return route.getPath({
-        params: mergedParams,
-        search: mergedSearch,
-        hash: mergedHash
-      });
-    };
-  }
-  function mergeParams(current, patch) {
-    if (!patch)
-      return current;
-    const uPatch = patch instanceof URLSearchParams ? patch : new URLSearchParams(patch);
-    const merged = new URLSearchParams(current);
-    for (const [key, value] of uPatch.entries())
-      merged.set(key, value);
-    return merged;
-  }
-
-  // src/components/link.tsx
-  var import_react26 = __toESM(require_react(), 1);
-  init_dist2();
-  var Link2 = import_react26.default.forwardRef(function Link3(props, ref) {
-    const _a = props, { to, params, search, hash, keep, children } = _a, rest = __objRest(_a, ["to", "params", "search", "hash", "keep", "children"]);
-    const getRoutePath = useGetRoutePath();
-    const path = getRoutePath({ to, params, search, hash, keep });
-    if (!path)
-      return import_react26.default.createElement("span", __spreadProps(__spreadValues({}, rest), { ref }), children);
-    return import_react26.default.createElement(
-      Link,
-      __spreadProps(__spreadValues({}, rest), { to: path, ref }),
-      children
-    );
-  });
-
   // src/components/sidebar.tsx
   function Sidebar() {
     const items = NavigationItems();
-    return /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, "Capibara"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react27.default.createElement(SidebarLink, { key: link.key, item: link }))), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
+    return /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, /* @__PURE__ */ import_react25.default.createElement(Link, { to: "/" }, "Capibara")), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react25.default.createElement(SidebarLink, { key: link.key, item: link }))), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
   }
   var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
   function SidebarLink({ item }) {
     const { pathname } = useLocation();
-    const getRoutePath = useGetRoutePath();
-    const path = getRoutePath({ to: item.route, params: item.params });
-    return path ? /* @__PURE__ */ import_react27.default.createElement(
-      Link2,
+    return /* @__PURE__ */ import_react25.default.createElement(
+      Link,
       __spreadValues({
         className: (0, import_classnames.default)(
           pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
@@ -30273,107 +39263,68 @@
         onClick: () => {
         }
       }),
-      /* @__PURE__ */ import_react27.default.createElement("div", null, " ", item.name)
-    ) : /* @__PURE__ */ import_react27.default.createElement("span", null, "No link");
+      /* @__PURE__ */ import_react25.default.createElement("div", null, " ", item.name)
+    );
   }
 
   // src/components/layout.tsx
   function Layout() {
-    const routes2 = useAppRoutes();
-    const route = useRoutes(routes2.toRouteObjects());
-    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react28.default.createElement(Sidebar, null), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react28.default.createElement(Header, null), /* @__PURE__ */ import_react28.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Suspense, { fallback: /* @__PURE__ */ import_react28.default.createElement("div", null, "Loding...") }, route))));
-  }
-
-  // src/components/login-form.tsx
-  var import_react29 = __toESM(require_react(), 1);
-  function LoginForm() {
-    return /* @__PURE__ */ import_react29.default.createElement("div", null, "Login form");
+    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react26.default.createElement(Sidebar, null), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react26.default.createElement(Header, null), /* @__PURE__ */ import_react26.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react26.default.createElement(Outlet, null))));
   }
 
   // src/app.tsx
-  function App() {
-    const { status } = { status: "LOGGED_IN" };
-    return /* @__PURE__ */ import_react30.default.createElement(import_react30.default.Fragment, null, status === "LOGGED_IN" && /* @__PURE__ */ import_react30.default.createElement(Layout, null), status === "LOGGED_OUT" && /* @__PURE__ */ import_react30.default.createElement(LoginForm, null));
-  }
-
-  // src/routes/routes.tsx
-  var import_react39 = __toESM(require_react(), 1);
+  init_companies();
 
   // src/routes/company/companies.route.tsx
-  var import_react33 = __toESM(require_react(), 1);
-  var Companies2 = import_react33.default.lazy(() => Promise.resolve().then(() => (init_companies(), companies_exports)));
-  var OverviewTab = import_react33.default.lazy(() => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports)));
-  function Container(props) {
-    const data = [];
-    return /* @__PURE__ */ import_react33.default.createElement(props.component, { data });
-  }
+  var import_react29 = __toESM(require_react(), 1);
+  var CompanyPage = import_react29.default.lazy(() => Promise.resolve().then(() => (init_companies(), companies_exports)));
+  var CompanyOverviewTab2 = import_react29.default.lazy(
+    () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
+  );
   var companiesRoutes = [
     {
-      name: "COMPANIES" /* COMPANIES */,
-      path: "companies",
-      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: Companies2 })
-    },
-    {
-      name: "COMPANY_PAGE_OVERVIEW_TAB" /* COMPANY_PAGE_OVERVIEW_TAB */,
-      parent: "COMPANIES" /* COMPANIES */,
-      path: "companies/:id",
-      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: OverviewTab })
+      path: "company",
+      element: /* @__PURE__ */ import_react29.default.createElement(CompanyPage, null),
+      children: [
+        {
+          path: ":id",
+          element: /* @__PURE__ */ import_react29.default.createElement(CompanyOverviewTab2, null)
+        }
+      ]
     }
   ];
 
-  // src/routes/not-found/not-found.route.tsx
-  var import_react35 = __toESM(require_react(), 1);
+  // src/routes/dashboard.tsx
+  var import_react30 = __toESM(require_react(), 1);
+  init_dist2();
+  function Dashboard() {
+    return /* @__PURE__ */ import_react30.default.createElement("div", null, /* @__PURE__ */ import_react30.default.createElement("p", null, "Dashboard"), /* @__PURE__ */ import_react30.default.createElement(Outlet, null));
+  }
 
   // src/routes/not-found/not-found.tsx
-  var import_react34 = __toESM(require_react(), 1);
+  var import_react31 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react34.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react31.default.createElement("div", null, "Page not found");
   }
 
-  // src/routes/not-found/not-found.route.tsx
-  var notFoundRoute = {
-    name: "NOT_FOUND" /* NOT_FOUND */,
-    path: "*",
-    element: /* @__PURE__ */ import_react35.default.createElement(NotFoundPage, null)
-  };
-
-  // src/routes/person/people.route.tsx
-  var import_react38 = __toESM(require_react(), 1);
-  var People = import_react38.default.lazy(() => Promise.resolve().then(() => (init_people(), people_exports)));
-  var OverviewTab2 = import_react38.default.lazy(() => Promise.resolve().then(() => (init_people_overview_tab(), people_overview_tab_exports)));
-  function Container2(props) {
-    const data = [];
-    return /* @__PURE__ */ import_react38.default.createElement(props.component, { data });
-  }
-  var peopleRoutes = [
+  // src/app.tsx
+  var router = createHashRouter([
     {
-      name: "PEOPLE" /* PEOPLE */,
-      path: "people",
-      element: /* @__PURE__ */ import_react38.default.createElement(Container2, { component: People })
-    },
-    {
-      name: "PERSON_PAGE_OVERVIEW_TAB" /* PERSON_PAGE_OVERVIEW_TAB */,
-      parent: "PEOPLE" /* PEOPLE */,
-      path: "people/:id",
-      element: /* @__PURE__ */ import_react38.default.createElement(Container2, { component: OverviewTab2 })
+      element: /* @__PURE__ */ import_react32.default.createElement(Layout, null),
+      children: [
+        { path: "/", element: /* @__PURE__ */ import_react32.default.createElement(Dashboard, null) },
+        {
+          path: "companies",
+          element: /* @__PURE__ */ import_react32.default.createElement(Companies, null)
+        },
+        ...companiesRoutes,
+        { path: "*", element: /* @__PURE__ */ import_react32.default.createElement(NotFoundPage, null) }
+      ]
     }
-  ];
-
-  // src/routes/routes.tsx
-  function createRoutes(options) {
-    return [
-      {
-        name: "/" /* DASHBOARD */,
-        path: "",
-        element: /* @__PURE__ */ import_react39.default.createElement(options.dashboard, null)
-      },
-      ...companiesRoutes,
-      ...peopleRoutes,
-      notFoundRoute
-    ];
-  }
+  ]);
 
   // src/index.tsx
+  var queryClient = new QueryClient();
   var rootElement = document.getElementById("root");
   if (!rootElement)
     throw new Error("Failed to find the root element");
@@ -30384,10 +39335,8 @@
       () => location.reload()
     );
   }
-  var dashboard = import_react41.default.lazy(() => Promise.resolve().then(() => (init_dashboard(), dashboard_exports)));
-  var routes = [...createRoutes({ dashboard })];
   root.render(
-    /* @__PURE__ */ import_react41.default.createElement(import_react41.default.StrictMode, null, /* @__PURE__ */ import_react41.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react41.default.createElement(AppRouterProvider, { routes }, /* @__PURE__ */ import_react41.default.createElement(App, null))))
+    /* @__PURE__ */ import_react33.default.createElement(import_react33.default.StrictMode, null, /* @__PURE__ */ import_react33.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react33.default.createElement(RouterProvider, { router })))
   );
 })();
 /*! Bundled license information:
@@ -30436,6 +39385,17 @@ react-dom/cjs/react-dom.development.js:
    * @return {boolean} True if the event is supported.
    * @internal
    * @license Modernizr 3.0.0pre (Custom Build) | MIT
+   *)
+
+use-sync-external-store/cjs/use-sync-external-store-shim.development.js:
+  (**
+   * @license React
+   * use-sync-external-store-shim.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
    *)
 
 @remix-run/router/dist/router.js:

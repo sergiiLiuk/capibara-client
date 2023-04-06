@@ -23,11 +23,11 @@ const useGQLQuery = (key, query, variables?, config = {}) => {
 
 export default function Companies() {
   const { data, isLoading, error } = useGQLQuery(["companies"], GET_COMPANIES);
-  if (!data) return;
+  if (!data && isLoading) return <div>Loading...</div>;
 
   return (
     <div>
-      <div>Companies</div>
+      <div>Companies:</div>
       <div className="flex flex-col">
         {data.companies.map((record, idx) => {
           return (

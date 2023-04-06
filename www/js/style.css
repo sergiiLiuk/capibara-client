@@ -1,4 +1,4 @@
-/* temp_stylePlugin:ni:sha-256;2tsnO0z8Wmcb4vkTax-58ESFFHMPVU4EqYswXsuPsaM */
+/* temp_stylePlugin:ni:sha-256;soKFKArUOBylTueVmGcpVOA2Ko_EYw9-VBfMIFnw_l8 */
 *,
 ::before,
 ::after {
@@ -314,9 +314,6 @@ video {
   --tw-backdrop-saturate: ;
   --tw-backdrop-sepia: ;
 }
-.static {
-  position: static;
-}
 .absolute {
   position: absolute;
 }
@@ -412,6 +409,9 @@ video {
 .border {
   border-width: 1px;
 }
+.border-b {
+  border-bottom-width: 1px;
+}
 .border-t {
   border-top-width: 1px;
 }
@@ -487,9 +487,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
-.underline {
-  text-decoration-line: underline;
-}
 .opacity-0 {
   opacity: 0;
 }
@@ -502,9 +499,6 @@ video {
 }
 .ring-opacity-5 {
   --tw-ring-opacity: 0.05;
-}
-.filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .transition {
   transition-property:

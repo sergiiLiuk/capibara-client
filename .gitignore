@@ -3,8 +3,5 @@
 
 # production
 /build
-
-#serve
-www
-
+ 
 .env
