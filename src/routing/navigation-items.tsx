@@ -1,17 +1,6 @@
 import { useMemo } from "react";
-import { RouteName, RouteParams } from "./route.types";
 
-export type SiteNavigationItem = {
-  key: string;
-  type: "route";
-  name: string;
-  icon?: React.ComponentType<React.SVGAttributes<SVGSVGElement>>;
-  disabled?: boolean;
-  route: RouteName;
-  params?: RouteParams;
-};
-
-export function NavigationItems(): SiteNavigationItem[] {
+export function NavigationItems() {
   //   const { scope, solution } = useAuth();
   const scope = {};
 
@@ -22,21 +11,28 @@ export function NavigationItems(): SiteNavigationItem[] {
         type: "route" as const,
         name: "Dashboard",
         icon: undefined,
-        route: RouteName.DASHBOARD,
+        route: "/",
       },
       {
         key: "companies",
         type: "route" as const,
         name: "Companies",
         icon: undefined,
-        route: RouteName.COMPANIES,
+        route: "companies",
+      },
+      {
+        key: "company-overview",
+        type: "route" as const,
+        name: "Company overview",
+        icon: undefined,
+        route: "company-overview",
       },
       {
         key: "people",
         type: "route" as const,
         name: "People",
         icon: undefined,
-        route: RouteName.PEOPLE,
+        route: "people",
       },
     ],
     [scope]

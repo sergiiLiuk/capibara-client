@@ -1,15 +1,15 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
 import classNames from "classnames";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { NavigationItems } from "../routing/navigation-items";
-import { useGetRoutePath } from "../routing/use-get-route-path";
-import { Link } from "./link";
 
 export default function Sidebar() {
   const items = NavigationItems();
   return (
     <div className="flex flex-col w-60 p-3 text-white bg-neutral-900">
-      <div className="flex items-center gap-2 px-1 py-3">Capibara</div>
+      <div className="flex items-center gap-2 px-1 py-3">
+        <Link to="/">Capibara</Link>
+      </div>
       <div className="flex-1 flex flex-col overflow-auto">
         <div className="flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0">
           {items.map((link) => (
@@ -34,10 +34,8 @@ const linkClasses =
 
 function SidebarLink({ item }: any) {
   const { pathname } = useLocation();
-  const getRoutePath = useGetRoutePath();
-  const path = getRoutePath({ to: item.route, params: item.params });
 
-  return path ? (
+  return (
     <Link
       className={classNames(
         pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
@@ -51,7 +49,5 @@ function SidebarLink({ item }: any) {
     >
       <div> {item.name}</div>
     </Link>
-  ) : (
-    <span>No link</span>
   );
 }

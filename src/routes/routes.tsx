@@ -1,22 +1,22 @@
 import React from "react";
+import { useRoutes } from "react-router-dom";
 import { AppRouteDefinition, RouteName } from "../routing/route.types";
 import { companiesRoutes } from "./company/companies.route";
 
 import { notFoundRoute } from "./not-found/not-found.route";
 import { peopleRoutes } from "./person/people.route";
 
-export function createRoutes(options: {
-  dashboard: React.ComponentType;
-}): AppRouteDefinition[] {
+const Dashboard = React.lazy(() => import("./dashboard"));
+
+export function createRoutes(): AppRouteDefinition[] {
   return [
     {
       name: RouteName.DASHBOARD,
       path: "",
-      element: <options.dashboard />,
+      element: <Dashboard />,
     },
     ...companiesRoutes,
     ...peopleRoutes,
-
     notFoundRoute,
   ];
 }

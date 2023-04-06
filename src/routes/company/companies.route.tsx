@@ -1,9 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { AppRouteDefinition, RouteName } from "../../routing/route.types";
-
-const Companies = React.lazy(() => import("./companies"));
-const OverviewTab = React.lazy(() => import("./tabs/company-overview-tab"));
+// import { AppRouteDefinition, RouteName } from "../../routing/route.types";
+const CompanyPage = React.lazy(() => import("./companies"));
+const CompanyOverviewTab = React.lazy(
+  () => import("./tabs/company-overview-tab")
+);
 
 function Container(props: {
   //   component: React.ComponentType<{ data: api.Workflow }>;
@@ -21,16 +22,15 @@ function Container(props: {
   return <props.component data={data} />;
 }
 
-export const companiesRoutes: AppRouteDefinition[] = [
+export const companiesRoutes = [
   {
-    name: RouteName.COMPANIES,
-    path: "companies",
-    element: <Container component={Companies} />,
-  },
-  {
-    name: RouteName.COMPANY_PAGE_OVERVIEW_TAB,
-    parent: RouteName.COMPANIES,
-    path: "companies/:id",
-    element: <Container component={OverviewTab} />,
+    path: "company",
+    element: <CompanyPage />,
+    children: [
+      {
+        path: ":id",
+        element: <CompanyOverviewTab />,
+      },
+    ],
   },
 ];

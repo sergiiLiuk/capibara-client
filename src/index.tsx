@@ -1,11 +1,14 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./app";
-import { createRoutes } from "./routes/routes";
+import Router from "./app";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 
-import { AppRouteDefinition } from "./routing/route.types";
-import { AppRouterProvider } from "./routing/router-context";
+const queryClient = new QueryClient();
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Failed to find the root element");
@@ -17,16 +20,12 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
-const dashboard = React.lazy(() => import("./routes/dashboard"));
-
-const routes: AppRouteDefinition[] = [...createRoutes({ dashboard })];
-
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AppRouterProvider routes={routes}>
-        <App />
-      </AppRouterProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
