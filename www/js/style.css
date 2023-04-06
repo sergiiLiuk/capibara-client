@@ -1,4 +1,4 @@
-/* temp_stylePlugin:ni:sha-256;soKFKArUOBylTueVmGcpVOA2Ko_EYw9-VBfMIFnw_l8 */
+/* temp_stylePlugin:ni:sha-256;1PmmpSnm0PQQoSYZb_BAnx_rQwHk3684w4ehzHl2P5o */
 *,
 ::before,
 ::after {
@@ -409,6 +409,9 @@ video {
 .border {
   border-width: 1px;
 }
+.border-2 {
+  border-width: 2px;
+}
 .border-b {
   border-bottom-width: 1px;
 }
@@ -430,6 +433,9 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.p-2 {
+  padding: 0.5rem;
 }
 .p-3 {
   padding: 0.75rem;

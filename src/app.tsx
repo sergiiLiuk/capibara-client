@@ -25,15 +25,11 @@ export const router = createHashRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Dashboard /> },
-      {
-        path: "companies",
-        element: <Companies />,
-      },
+      ...companiesRoutes,
       {
         path: "projects",
         element: <Projects />,
       },
-      ...companiesRoutes,
       ...projectsRoutes,
       { path: "*", element: <NotFoundPage /> },
     ],

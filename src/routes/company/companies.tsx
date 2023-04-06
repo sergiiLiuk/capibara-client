@@ -1,6 +1,5 @@
-import { graphql } from "graphql";
 import { useQuery } from "@tanstack/react-query";
-import { GraphQLClient, request } from "graphql-request";
+import { request } from "graphql-request";
 import gql from "graphql-tag";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -31,10 +30,15 @@ export default function Companies() {
       <div className="flex flex-col">
         {data.companies.map((record, idx) => {
           return (
-            <React.Fragment key={idx}>
+            <Link
+              to={`${record.id}`}
+              className="flex flex-col border-2  p-2"
+              key={idx}
+            >
+              <div>{record.id}</div>
               <div>{record.name}</div>
               <div>{record.cvr}</div>
-            </React.Fragment>
+            </Link>
           );
         })}
       </div>

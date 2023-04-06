@@ -1,7 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import Companies from "./companies";
 // import { AppRouteDefinition, RouteName } from "../../routing/route.types";
-const CompanyPage = React.lazy(() => import("./companies"));
+const CompanyPage = React.lazy(() => import("./company-page"));
 const CompanyOverviewTab = React.lazy(
   () => import("./tabs/company-overview-tab")
 );
@@ -24,13 +25,17 @@ function Container(props: {
 
 export const companiesRoutes = [
   {
-    path: "company",
+    path: "companies",
+    element: <Companies />,
+  },
+  {
+    path: "companies/:id",
     element: <CompanyPage />,
-    children: [
-      {
-        path: ":id",
-        element: <CompanyOverviewTab />,
-      },
-    ],
+    // children: [
+    //   {
+    //     path: ":id/overview-tab",
+    //     element: <CompanyOverviewTab />,
+    //   },
+    // ],
   },
 ];
