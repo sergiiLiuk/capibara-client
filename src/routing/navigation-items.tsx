@@ -21,18 +21,11 @@ export function NavigationItems() {
         route: "companies",
       },
       {
-        key: "company-overview",
+        key: "projects",
         type: "route" as const,
-        name: "Company overview",
+        name: "Projects",
         icon: undefined,
-        route: "company-overview",
-      },
-      {
-        key: "people",
-        type: "route" as const,
-        name: "People",
-        icon: undefined,
-        route: "people",
+        route: "projects",
       },
     ],
     [scope]

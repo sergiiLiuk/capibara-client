@@ -4708,9 +4708,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React19 = require_react();
+          var React22 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -6315,7 +6315,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React19.Children.forEach(props.children, function(child) {
+                  React22.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -14762,7 +14762,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React19.Component().refs;
+          var emptyRefsObject = new React22.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -25812,8 +25812,8 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React19 = require_react();
-          var ReactSharedInternals = React19.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var React22 = require_react();
+          var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -25843,13 +25843,13 @@
             return x2 === y3 && (x2 !== 0 || 1 / x2 === 1 / y3) || x2 !== x2 && y3 !== y3;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
-          var useState6 = React19.useState, useEffect7 = React19.useEffect, useLayoutEffect4 = React19.useLayoutEffect, useDebugValue2 = React19.useDebugValue;
+          var useState6 = React22.useState, useEffect7 = React22.useEffect, useLayoutEffect4 = React22.useLayoutEffect, useDebugValue2 = React22.useDebugValue;
           var didWarnOld18Alpha2 = false;
           var didWarnUncachedGetSnapshot2 = false;
           function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
             {
               if (!didWarnOld18Alpha2) {
-                if (React19.startTransition !== void 0) {
+                if (React22.startTransition !== void 0) {
                   didWarnOld18Alpha2 = true;
                   error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
                 }
@@ -25914,7 +25914,7 @@
           var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var isServerEnvironment2 = !canUseDOM2;
           var shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3;
-          var useSyncExternalStore$22 = React19.useSyncExternalStore !== void 0 ? React19.useSyncExternalStore : shim2;
+          var useSyncExternalStore$22 = React22.useSyncExternalStore !== void 0 ? React22.useSyncExternalStore : shim2;
           exports.useSyncExternalStore = useSyncExternalStore$22;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
@@ -35364,14 +35364,48 @@ spurious results.`);
     }
   });
 
+  // src/routes/projects/projects.tsx
+  var projects_exports = {};
+  __export(projects_exports, {
+    default: () => Projects
+  });
+  function Projects() {
+    return /* @__PURE__ */ import_react32.default.createElement("div", null, /* @__PURE__ */ import_react32.default.createElement("div", null, "Projects:"));
+  }
+  var import_react32;
+  var init_projects = __esm({
+    "src/routes/projects/projects.tsx"() {
+      "use strict";
+      import_react32 = __toESM(require_react(), 1);
+    }
+  });
+
+  // src/routes/projects/tabs/project-overview-tab.tsx
+  var project_overview_tab_exports = {};
+  __export(project_overview_tab_exports, {
+    default: () => ProjectOverviewTab
+  });
+  function ProjectOverviewTab() {
+    const { id } = useParams();
+    return /* @__PURE__ */ import_react33.default.createElement("div", null, "Project overview tab: id - ", id);
+  }
+  var import_react33;
+  var init_project_overview_tab = __esm({
+    "src/routes/projects/tabs/project-overview-tab.tsx"() {
+      "use strict";
+      import_react33 = __toESM(require_react(), 1);
+      init_dist2();
+    }
+  });
+
   // src/index.tsx
   init_lib2();
-  var import_react33 = __toESM(require_react(), 1);
+  var import_react36 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react32 = __toESM(require_react(), 1);
+  var import_react35 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -39224,18 +39258,11 @@ spurious results.`);
           route: "companies"
         },
         {
-          key: "company-overview",
+          key: "projects",
           type: "route",
-          name: "Company overview",
+          name: "Projects",
           icon: void 0,
-          route: "company-overview"
-        },
-        {
-          key: "people",
-          type: "route",
-          name: "People",
-          icon: void 0,
-          route: "people"
+          route: "projects"
         }
       ],
       [scope]
@@ -39307,18 +39334,43 @@ spurious results.`);
     return /* @__PURE__ */ import_react31.default.createElement("div", null, "Page not found");
   }
 
+  // src/routes/projects/projects.route.tsx
+  var import_react34 = __toESM(require_react(), 1);
+  var ProjectPage = import_react34.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
+  var ProjectOverviewTab2 = import_react34.default.lazy(
+    () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
+  );
+  var projectsRoutes = [
+    {
+      path: "project",
+      element: /* @__PURE__ */ import_react34.default.createElement(ProjectPage, null),
+      children: [
+        {
+          path: ":id",
+          element: /* @__PURE__ */ import_react34.default.createElement(ProjectOverviewTab2, null)
+        }
+      ]
+    }
+  ];
+
   // src/app.tsx
+  init_projects();
   var router = createHashRouter([
     {
-      element: /* @__PURE__ */ import_react32.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react35.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react32.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react35.default.createElement(Dashboard, null) },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react32.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react35.default.createElement(Companies, null)
+        },
+        {
+          path: "projects",
+          element: /* @__PURE__ */ import_react35.default.createElement(Projects, null)
         },
         ...companiesRoutes,
-        { path: "*", element: /* @__PURE__ */ import_react32.default.createElement(NotFoundPage, null) }
+        ...projectsRoutes,
+        { path: "*", element: /* @__PURE__ */ import_react35.default.createElement(NotFoundPage, null) }
       ]
     }
   ]);
@@ -39336,7 +39388,7 @@ spurious results.`);
     );
   }
   root.render(
-    /* @__PURE__ */ import_react33.default.createElement(import_react33.default.StrictMode, null, /* @__PURE__ */ import_react33.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react33.default.createElement(RouterProvider, { router })))
+    /* @__PURE__ */ import_react36.default.createElement(import_react36.default.StrictMode, null, /* @__PURE__ */ import_react36.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react36.default.createElement(RouterProvider, { router })))
   );
 })();
 /*! Bundled license information:

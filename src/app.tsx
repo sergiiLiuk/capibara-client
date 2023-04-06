@@ -6,6 +6,8 @@ import Companies from "./routes/company/companies";
 import { companiesRoutes } from "./routes/company/companies.route";
 import Dashboard from "./routes/dashboard";
 import NotFoundPage from "./routes/not-found/not-found";
+import { projectsRoutes } from "./routes/projects/projects.route";
+import Projects from "./routes/projects/projects";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -27,7 +29,12 @@ export const router = createHashRouter([
         path: "companies",
         element: <Companies />,
       },
+      {
+        path: "projects",
+        element: <Projects />,
+      },
       ...companiesRoutes,
+      ...projectsRoutes,
       { path: "*", element: <NotFoundPage /> },
     ],
   },
