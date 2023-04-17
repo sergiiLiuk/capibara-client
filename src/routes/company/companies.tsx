@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import React from "react";
 import { Link } from "react-router-dom";
 
+//TODO: move query to its file
 const GET_COMPANIES = gql`
   query {
     companies {
@@ -14,6 +15,7 @@ const GET_COMPANIES = gql`
   }
 `;
 
+//TODO: types
 const useGQLQuery = (key, query, variables?, config = {}) => {
   const endpoint = "http://localhost:5000/graphql";
   const fetchData = async () => await request(endpoint, query, variables);

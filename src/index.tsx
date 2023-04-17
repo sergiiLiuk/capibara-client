@@ -1,8 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import { router } from "./app";
+import {
+  BrowserRouter,
+  HashRouter,
+  RouterProvider,
+  useRoutes,
+} from "react-router-dom";
+import App from "./app";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +24,9 @@ if (process.env.NODE_ENV === "development") {
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <HashRouter>
+        <App />
+      </HashRouter>
     </QueryClientProvider>
   </React.StrictMode>
 );

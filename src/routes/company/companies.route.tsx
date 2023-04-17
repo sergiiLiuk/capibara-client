@@ -31,11 +31,15 @@ export const companiesRoutes = [
   {
     path: "companies/:id",
     element: <CompanyPage />,
-    // children: [
-    //   {
-    //     path: ":id/overview-tab",
-    //     element: <CompanyOverviewTab />,
-    //   },
-    // ],
+    children: [
+      {
+        path: "",
+        element: <CompanyOverviewTab />,
+      },
+      {
+        path: "test",
+        element: <div>Test</div>,
+      },
+    ],
   },
 ];

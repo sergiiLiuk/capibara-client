@@ -1154,7 +1154,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo4(create, deps) {
+          function useMemo5(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1925,7 +1925,7 @@
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect4;
-          exports.useMemo = useMemo4;
+          exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
           exports.useRef = useRef3;
           exports.useState = useState6;
@@ -2424,9 +2424,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React23 = require_react();
+          var React25 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React23.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React25.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4031,7 +4031,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React23.Children.forEach(props.children, function(child) {
+                  React25.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12478,7 +12478,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React23.Component().refs;
+          var emptyRefsObject = new React25.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23528,8 +23528,8 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React23 = require_react();
-          var ReactSharedInternals = React23.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var React25 = require_react();
+          var ReactSharedInternals = React25.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -23559,13 +23559,13 @@
             return x2 === y3 && (x2 !== 0 || 1 / x2 === 1 / y3) || x2 !== x2 && y3 !== y3;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
-          var useState6 = React23.useState, useEffect7 = React23.useEffect, useLayoutEffect4 = React23.useLayoutEffect, useDebugValue2 = React23.useDebugValue;
+          var useState6 = React25.useState, useEffect7 = React25.useEffect, useLayoutEffect4 = React25.useLayoutEffect, useDebugValue2 = React25.useDebugValue;
           var didWarnOld18Alpha2 = false;
           var didWarnUncachedGetSnapshot2 = false;
           function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
             {
               if (!didWarnOld18Alpha2) {
-                if (React23.startTransition !== void 0) {
+                if (React25.startTransition !== void 0) {
                   didWarnOld18Alpha2 = true;
                   error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
                 }
@@ -23630,7 +23630,7 @@
           var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var isServerEnvironment2 = !canUseDOM2;
           var shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3;
-          var useSyncExternalStore$22 = React23.useSyncExternalStore !== void 0 ? React23.useSyncExternalStore : shim2;
+          var useSyncExternalStore$22 = React25.useSyncExternalStore !== void 0 ? React25.useSyncExternalStore : shim2;
           exports.useSyncExternalStore = useSyncExternalStore$22;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
@@ -23928,43 +23928,7 @@
     };
     return history;
   }
-  function isIndexRoute(route) {
-    return route.index === true;
-  }
-  function convertRoutesToDataRoutes(routes, detectErrorBoundary2, parentPath, manifest) {
-    if (parentPath === void 0) {
-      parentPath = [];
-    }
-    if (manifest === void 0) {
-      manifest = {};
-    }
-    return routes.map((route, index) => {
-      let treePath = [...parentPath, index];
-      let id = typeof route.id === "string" ? route.id : treePath.join("-");
-      invariant(route.index !== true || !route.children, "Cannot specify children on an index route");
-      invariant(!manifest[id], 'Found a route id collision on id "' + id + `".  Route id's must be globally unique within Data Router usages`);
-      if (isIndexRoute(route)) {
-        let indexRoute = _extends({}, route, {
-          hasErrorBoundary: detectErrorBoundary2(route),
-          id
-        });
-        manifest[id] = indexRoute;
-        return indexRoute;
-      } else {
-        let pathOrLayoutRoute = _extends({}, route, {
-          id,
-          hasErrorBoundary: detectErrorBoundary2(route),
-          children: void 0
-        });
-        manifest[id] = pathOrLayoutRoute;
-        if (route.children) {
-          pathOrLayoutRoute.children = convertRoutesToDataRoutes(route.children, detectErrorBoundary2, treePath, manifest);
-        }
-        return pathOrLayoutRoute;
-      }
-    });
-  }
-  function matchRoutes(routes, locationArg, basename) {
+  function matchRoutes(routes2, locationArg, basename) {
     if (basename === void 0) {
       basename = "/";
     }
@@ -23973,7 +23937,7 @@
     if (pathname == null) {
       return null;
     }
-    let branches = flattenRoutes(routes);
+    let branches = flattenRoutes(routes2);
     rankRouteBranches(branches);
     let matches = null;
     for (let i5 = 0; matches == null && i5 < branches.length; ++i5) {
@@ -23990,7 +23954,7 @@
     }
     return matches;
   }
-  function flattenRoutes(routes, branches, parentsMeta, parentPath) {
+  function flattenRoutes(routes2, branches, parentsMeta, parentPath) {
     if (branches === void 0) {
       branches = [];
     }
@@ -24031,7 +23995,7 @@
         routesMeta
       });
     };
-    routes.forEach((route, index) => {
+    routes2.forEach((route, index) => {
       var _route$path;
       if (route.path === "" || !((_route$path = route.path) != null && _route$path.includes("?"))) {
         flattenRoute(route, index);
@@ -24279,1719 +24243,10 @@
     }
     return path;
   }
-  function isTrackedPromise(value) {
-    return value instanceof Promise && value._tracked === true;
-  }
-  function unwrapTrackedPromise(value) {
-    if (!isTrackedPromise(value)) {
-      return value;
-    }
-    if (value._error) {
-      throw value._error;
-    }
-    return value._data;
-  }
   function isRouteErrorResponse(error) {
     return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
   }
-  function createRouter(init) {
-    invariant(init.routes.length > 0, "You must provide a non-empty routes array to createRouter");
-    let detectErrorBoundary2 = init.detectErrorBoundary || defaultDetectErrorBoundary;
-    let manifest = {};
-    let dataRoutes = convertRoutesToDataRoutes(init.routes, detectErrorBoundary2, void 0, manifest);
-    let inFlightDataRoutes;
-    let unlistenHistory = null;
-    let subscribers = /* @__PURE__ */ new Set();
-    let savedScrollPositions2 = null;
-    let getScrollRestorationKey = null;
-    let getScrollPosition = null;
-    let initialScrollRestored = init.hydrationData != null;
-    let initialMatches = matchRoutes(dataRoutes, init.history.location, init.basename);
-    let initialErrors = null;
-    if (initialMatches == null) {
-      let error = getInternalRouterError(404, {
-        pathname: init.history.location.pathname
-      });
-      let {
-        matches,
-        route
-      } = getShortCircuitMatches(dataRoutes);
-      initialMatches = matches;
-      initialErrors = {
-        [route.id]: error
-      };
-    }
-    let initialized = (
-      // All initialMatches need to be loaded before we're ready.  If we have lazy
-      // functions around still then we'll need to run them in initialize()
-      !initialMatches.some((m4) => m4.route.lazy) && // And we have to either have no loaders or have been provided hydrationData
-      (!initialMatches.some((m4) => m4.route.loader) || init.hydrationData != null)
-    );
-    let router2;
-    let state = {
-      historyAction: init.history.action,
-      location: init.history.location,
-      matches: initialMatches,
-      initialized,
-      navigation: IDLE_NAVIGATION,
-      // Don't restore on initial updateState() if we were SSR'd
-      restoreScrollPosition: init.hydrationData != null ? false : null,
-      preventScrollReset: false,
-      revalidation: "idle",
-      loaderData: init.hydrationData && init.hydrationData.loaderData || {},
-      actionData: init.hydrationData && init.hydrationData.actionData || null,
-      errors: init.hydrationData && init.hydrationData.errors || initialErrors,
-      fetchers: /* @__PURE__ */ new Map(),
-      blockers: /* @__PURE__ */ new Map()
-    };
-    let pendingAction = Action.Pop;
-    let pendingPreventScrollReset = false;
-    let pendingNavigationController;
-    let isUninterruptedRevalidation = false;
-    let isRevalidationRequired = false;
-    let cancelledDeferredRoutes = [];
-    let cancelledFetcherLoads = [];
-    let fetchControllers = /* @__PURE__ */ new Map();
-    let incrementingLoadId = 0;
-    let pendingNavigationLoadId = -1;
-    let fetchReloadIds = /* @__PURE__ */ new Map();
-    let fetchRedirectIds = /* @__PURE__ */ new Set();
-    let fetchLoadMatches = /* @__PURE__ */ new Map();
-    let activeDeferreds = /* @__PURE__ */ new Map();
-    let blockerFunctions = /* @__PURE__ */ new Map();
-    let ignoreNextHistoryUpdate = false;
-    function initialize() {
-      unlistenHistory = init.history.listen((_ref2) => {
-        let {
-          action: historyAction,
-          location: location2,
-          delta
-        } = _ref2;
-        if (ignoreNextHistoryUpdate) {
-          ignoreNextHistoryUpdate = false;
-          return;
-        }
-        warning(blockerFunctions.size === 0 || delta != null, "You are trying to use a blocker on a POP navigation to a location that was not created by @remix-run/router. This will fail silently in production. This can happen if you are navigating outside the router via `window.history.pushState`/`window.location.hash` instead of using router navigation APIs.  This can also happen if you are using createHashRouter and the user manually changes the URL.");
-        let blockerKey = shouldBlockNavigation({
-          currentLocation: state.location,
-          nextLocation: location2,
-          historyAction
-        });
-        if (blockerKey && delta != null) {
-          ignoreNextHistoryUpdate = true;
-          init.history.go(delta * -1);
-          updateBlocker(blockerKey, {
-            state: "blocked",
-            location: location2,
-            proceed() {
-              updateBlocker(blockerKey, {
-                state: "proceeding",
-                proceed: void 0,
-                reset: void 0,
-                location: location2
-              });
-              init.history.go(delta);
-            },
-            reset() {
-              deleteBlocker(blockerKey);
-              updateState({
-                blockers: new Map(router2.state.blockers)
-              });
-            }
-          });
-          return;
-        }
-        return startNavigation(historyAction, location2);
-      });
-      if (state.initialized) {
-        return router2;
-      }
-      let lazyMatches = state.matches.filter((m4) => m4.route.lazy);
-      if (lazyMatches.length === 0) {
-        startNavigation(Action.Pop, state.location);
-        return router2;
-      }
-      let lazyPromises = lazyMatches.map((m4) => loadLazyRouteModule(m4.route, detectErrorBoundary2, manifest));
-      Promise.all(lazyPromises).then(() => {
-        let initialized2 = !state.matches.some((m4) => m4.route.loader) || init.hydrationData != null;
-        if (initialized2) {
-          updateState({
-            initialized: true
-          });
-        } else {
-          startNavigation(Action.Pop, state.location);
-        }
-      });
-      return router2;
-    }
-    function dispose() {
-      if (unlistenHistory) {
-        unlistenHistory();
-      }
-      subscribers.clear();
-      pendingNavigationController && pendingNavigationController.abort();
-      state.fetchers.forEach((_2, key) => deleteFetcher(key));
-      state.blockers.forEach((_2, key) => deleteBlocker(key));
-    }
-    function subscribe(fn) {
-      subscribers.add(fn);
-      return () => subscribers.delete(fn);
-    }
-    function updateState(newState) {
-      state = _extends({}, state, newState);
-      subscribers.forEach((subscriber) => subscriber(state));
-    }
-    function completeNavigation(location2, newState) {
-      var _location$state, _location$state2;
-      let isActionReload = state.actionData != null && state.navigation.formMethod != null && isMutationMethod(state.navigation.formMethod) && state.navigation.state === "loading" && ((_location$state = location2.state) == null ? void 0 : _location$state._isRedirect) !== true;
-      let actionData;
-      if (newState.actionData) {
-        if (Object.keys(newState.actionData).length > 0) {
-          actionData = newState.actionData;
-        } else {
-          actionData = null;
-        }
-      } else if (isActionReload) {
-        actionData = state.actionData;
-      } else {
-        actionData = null;
-      }
-      let loaderData = newState.loaderData ? mergeLoaderData(state.loaderData, newState.loaderData, newState.matches || [], newState.errors) : state.loaderData;
-      for (let [key] of blockerFunctions) {
-        deleteBlocker(key);
-      }
-      let preventScrollReset = pendingPreventScrollReset === true || state.navigation.formMethod != null && isMutationMethod(state.navigation.formMethod) && ((_location$state2 = location2.state) == null ? void 0 : _location$state2._isRedirect) !== true;
-      if (inFlightDataRoutes) {
-        dataRoutes = inFlightDataRoutes;
-        inFlightDataRoutes = void 0;
-      }
-      updateState(_extends({}, newState, {
-        actionData,
-        loaderData,
-        historyAction: pendingAction,
-        location: location2,
-        initialized: true,
-        navigation: IDLE_NAVIGATION,
-        revalidation: "idle",
-        restoreScrollPosition: getSavedScrollPosition(location2, newState.matches || state.matches),
-        preventScrollReset,
-        blockers: new Map(state.blockers)
-      }));
-      if (isUninterruptedRevalidation)
-        ;
-      else if (pendingAction === Action.Pop)
-        ;
-      else if (pendingAction === Action.Push) {
-        init.history.push(location2, location2.state);
-      } else if (pendingAction === Action.Replace) {
-        init.history.replace(location2, location2.state);
-      }
-      pendingAction = Action.Pop;
-      pendingPreventScrollReset = false;
-      isUninterruptedRevalidation = false;
-      isRevalidationRequired = false;
-      cancelledDeferredRoutes = [];
-      cancelledFetcherLoads = [];
-    }
-    async function navigate(to, opts) {
-      if (typeof to === "number") {
-        init.history.go(to);
-        return;
-      }
-      let {
-        path,
-        submission,
-        error
-      } = normalizeNavigateOptions(to, opts);
-      let currentLocation = state.location;
-      let nextLocation = createLocation(state.location, path, opts && opts.state);
-      nextLocation = _extends({}, nextLocation, init.history.encodeLocation(nextLocation));
-      let userReplace = opts && opts.replace != null ? opts.replace : void 0;
-      let historyAction = Action.Push;
-      if (userReplace === true) {
-        historyAction = Action.Replace;
-      } else if (userReplace === false)
-        ;
-      else if (submission != null && isMutationMethod(submission.formMethod) && submission.formAction === state.location.pathname + state.location.search) {
-        historyAction = Action.Replace;
-      }
-      let preventScrollReset = opts && "preventScrollReset" in opts ? opts.preventScrollReset === true : void 0;
-      let blockerKey = shouldBlockNavigation({
-        currentLocation,
-        nextLocation,
-        historyAction
-      });
-      if (blockerKey) {
-        updateBlocker(blockerKey, {
-          state: "blocked",
-          location: nextLocation,
-          proceed() {
-            updateBlocker(blockerKey, {
-              state: "proceeding",
-              proceed: void 0,
-              reset: void 0,
-              location: nextLocation
-            });
-            navigate(to, opts);
-          },
-          reset() {
-            deleteBlocker(blockerKey);
-            updateState({
-              blockers: new Map(state.blockers)
-            });
-          }
-        });
-        return;
-      }
-      return await startNavigation(historyAction, nextLocation, {
-        submission,
-        // Send through the formData serialization error if we have one so we can
-        // render at the right error boundary after we match routes
-        pendingError: error,
-        preventScrollReset,
-        replace: opts && opts.replace
-      });
-    }
-    function revalidate() {
-      interruptActiveLoads();
-      updateState({
-        revalidation: "loading"
-      });
-      if (state.navigation.state === "submitting") {
-        return;
-      }
-      if (state.navigation.state === "idle") {
-        startNavigation(state.historyAction, state.location, {
-          startUninterruptedRevalidation: true
-        });
-        return;
-      }
-      startNavigation(pendingAction || state.historyAction, state.navigation.location, {
-        overrideNavigation: state.navigation
-      });
-    }
-    async function startNavigation(historyAction, location2, opts) {
-      pendingNavigationController && pendingNavigationController.abort();
-      pendingNavigationController = null;
-      pendingAction = historyAction;
-      isUninterruptedRevalidation = (opts && opts.startUninterruptedRevalidation) === true;
-      saveScrollPosition(state.location, state.matches);
-      pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
-      let routesToUse = inFlightDataRoutes || dataRoutes;
-      let loadingNavigation = opts && opts.overrideNavigation;
-      let matches = matchRoutes(routesToUse, location2, init.basename);
-      if (!matches) {
-        let error = getInternalRouterError(404, {
-          pathname: location2.pathname
-        });
-        let {
-          matches: notFoundMatches,
-          route
-        } = getShortCircuitMatches(routesToUse);
-        cancelActiveDeferreds();
-        completeNavigation(location2, {
-          matches: notFoundMatches,
-          loaderData: {},
-          errors: {
-            [route.id]: error
-          }
-        });
-        return;
-      }
-      if (isHashChangeOnly(state.location, location2) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
-        completeNavigation(location2, {
-          matches
-        });
-        return;
-      }
-      pendingNavigationController = new AbortController();
-      let request2 = createClientSideRequest(init.history, location2, pendingNavigationController.signal, opts && opts.submission);
-      let pendingActionData;
-      let pendingError;
-      if (opts && opts.pendingError) {
-        pendingError = {
-          [findNearestBoundary(matches).route.id]: opts.pendingError
-        };
-      } else if (opts && opts.submission && isMutationMethod(opts.submission.formMethod)) {
-        let actionOutput = await handleAction(request2, location2, opts.submission, matches, {
-          replace: opts.replace
-        });
-        if (actionOutput.shortCircuited) {
-          return;
-        }
-        pendingActionData = actionOutput.pendingActionData;
-        pendingError = actionOutput.pendingActionError;
-        let navigation = _extends({
-          state: "loading",
-          location: location2
-        }, opts.submission);
-        loadingNavigation = navigation;
-        request2 = new Request(request2.url, {
-          signal: request2.signal
-        });
-      }
-      let {
-        shortCircuited,
-        loaderData,
-        errors
-      } = await handleLoaders(request2, location2, matches, loadingNavigation, opts && opts.submission, opts && opts.replace, pendingActionData, pendingError);
-      if (shortCircuited) {
-        return;
-      }
-      pendingNavigationController = null;
-      completeNavigation(location2, _extends({
-        matches
-      }, pendingActionData ? {
-        actionData: pendingActionData
-      } : {}, {
-        loaderData,
-        errors
-      }));
-    }
-    async function handleAction(request2, location2, submission, matches, opts) {
-      interruptActiveLoads();
-      let navigation = _extends({
-        state: "submitting",
-        location: location2
-      }, submission);
-      updateState({
-        navigation
-      });
-      let result;
-      let actionMatch = getTargetMatch(matches, location2);
-      if (!actionMatch.route.action && !actionMatch.route.lazy) {
-        result = {
-          type: ResultType.error,
-          error: getInternalRouterError(405, {
-            method: request2.method,
-            pathname: location2.pathname,
-            routeId: actionMatch.route.id
-          })
-        };
-      } else {
-        result = await callLoaderOrAction("action", request2, actionMatch, matches, manifest, detectErrorBoundary2, router2.basename);
-        if (request2.signal.aborted) {
-          return {
-            shortCircuited: true
-          };
-        }
-      }
-      if (isRedirectResult(result)) {
-        let replace3;
-        if (opts && opts.replace != null) {
-          replace3 = opts.replace;
-        } else {
-          replace3 = result.location === state.location.pathname + state.location.search;
-        }
-        await startRedirectNavigation(state, result, {
-          submission,
-          replace: replace3
-        });
-        return {
-          shortCircuited: true
-        };
-      }
-      if (isErrorResult(result)) {
-        let boundaryMatch = findNearestBoundary(matches, actionMatch.route.id);
-        if ((opts && opts.replace) !== true) {
-          pendingAction = Action.Push;
-        }
-        return {
-          // Send back an empty object we can use to clear out any prior actionData
-          pendingActionData: {},
-          pendingActionError: {
-            [boundaryMatch.route.id]: result.error
-          }
-        };
-      }
-      if (isDeferredResult(result)) {
-        throw getInternalRouterError(400, {
-          type: "defer-action"
-        });
-      }
-      return {
-        pendingActionData: {
-          [actionMatch.route.id]: result.data
-        }
-      };
-    }
-    async function handleLoaders(request2, location2, matches, overrideNavigation, submission, replace3, pendingActionData, pendingError) {
-      let loadingNavigation = overrideNavigation;
-      if (!loadingNavigation) {
-        let navigation = _extends({
-          state: "loading",
-          location: location2,
-          formMethod: void 0,
-          formAction: void 0,
-          formEncType: void 0,
-          formData: void 0
-        }, submission);
-        loadingNavigation = navigation;
-      }
-      let activeSubmission = submission ? submission : loadingNavigation.formMethod && loadingNavigation.formAction && loadingNavigation.formData && loadingNavigation.formEncType ? {
-        formMethod: loadingNavigation.formMethod,
-        formAction: loadingNavigation.formAction,
-        formData: loadingNavigation.formData,
-        formEncType: loadingNavigation.formEncType
-      } : void 0;
-      let routesToUse = inFlightDataRoutes || dataRoutes;
-      let [matchesToLoad, revalidatingFetchers] = getMatchesToLoad(init.history, state, matches, activeSubmission, location2, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, fetchLoadMatches, routesToUse, init.basename, pendingActionData, pendingError);
-      cancelActiveDeferreds((routeId) => !(matches && matches.some((m4) => m4.route.id === routeId)) || matchesToLoad && matchesToLoad.some((m4) => m4.route.id === routeId));
-      if (matchesToLoad.length === 0 && revalidatingFetchers.length === 0) {
-        completeNavigation(location2, _extends({
-          matches,
-          loaderData: {},
-          // Commit pending error if we're short circuiting
-          errors: pendingError || null
-        }, pendingActionData ? {
-          actionData: pendingActionData
-        } : {}));
-        return {
-          shortCircuited: true
-        };
-      }
-      if (!isUninterruptedRevalidation) {
-        revalidatingFetchers.forEach((rf) => {
-          let fetcher = state.fetchers.get(rf.key);
-          let revalidatingFetcher = {
-            state: "loading",
-            data: fetcher && fetcher.data,
-            formMethod: void 0,
-            formAction: void 0,
-            formEncType: void 0,
-            formData: void 0,
-            " _hasFetcherDoneAnything ": true
-          };
-          state.fetchers.set(rf.key, revalidatingFetcher);
-        });
-        let actionData = pendingActionData || state.actionData;
-        updateState(_extends({
-          navigation: loadingNavigation
-        }, actionData ? Object.keys(actionData).length === 0 ? {
-          actionData: null
-        } : {
-          actionData
-        } : {}, revalidatingFetchers.length > 0 ? {
-          fetchers: new Map(state.fetchers)
-        } : {}));
-      }
-      pendingNavigationLoadId = ++incrementingLoadId;
-      revalidatingFetchers.forEach((rf) => fetchControllers.set(rf.key, pendingNavigationController));
-      let {
-        results,
-        loaderResults,
-        fetcherResults
-      } = await callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, request2);
-      if (request2.signal.aborted) {
-        return {
-          shortCircuited: true
-        };
-      }
-      revalidatingFetchers.forEach((rf) => fetchControllers.delete(rf.key));
-      let redirect2 = findRedirect(results);
-      if (redirect2) {
-        await startRedirectNavigation(state, redirect2, {
-          replace: replace3
-        });
-        return {
-          shortCircuited: true
-        };
-      }
-      let {
-        loaderData,
-        errors
-      } = processLoaderData(state, matches, matchesToLoad, loaderResults, pendingError, revalidatingFetchers, fetcherResults, activeDeferreds);
-      activeDeferreds.forEach((deferredData, routeId) => {
-        deferredData.subscribe((aborted) => {
-          if (aborted || deferredData.done) {
-            activeDeferreds.delete(routeId);
-          }
-        });
-      });
-      markFetchRedirectsDone();
-      let didAbortFetchLoads = abortStaleFetchLoads(pendingNavigationLoadId);
-      return _extends({
-        loaderData,
-        errors
-      }, didAbortFetchLoads || revalidatingFetchers.length > 0 ? {
-        fetchers: new Map(state.fetchers)
-      } : {});
-    }
-    function getFetcher(key) {
-      return state.fetchers.get(key) || IDLE_FETCHER;
-    }
-    function fetch(key, routeId, href, opts) {
-      if (isServer2) {
-        throw new Error("router.fetch() was called during the server render, but it shouldn't be. You are likely calling a useFetcher() method in the body of your component. Try moving it to a useEffect or a callback.");
-      }
-      if (fetchControllers.has(key))
-        abortFetcher(key);
-      let routesToUse = inFlightDataRoutes || dataRoutes;
-      let matches = matchRoutes(routesToUse, href, init.basename);
-      if (!matches) {
-        setFetcherError(key, routeId, getInternalRouterError(404, {
-          pathname: href
-        }));
-        return;
-      }
-      let {
-        path,
-        submission
-      } = normalizeNavigateOptions(href, opts, true);
-      let match = getTargetMatch(matches, path);
-      pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
-      if (submission && isMutationMethod(submission.formMethod)) {
-        handleFetcherAction(key, routeId, path, match, matches, submission);
-        return;
-      }
-      fetchLoadMatches.set(key, {
-        routeId,
-        path
-      });
-      handleFetcherLoader(key, routeId, path, match, matches, submission);
-    }
-    async function handleFetcherAction(key, routeId, path, match, requestMatches, submission) {
-      interruptActiveLoads();
-      fetchLoadMatches.delete(key);
-      if (!match.route.action && !match.route.lazy) {
-        let error = getInternalRouterError(405, {
-          method: submission.formMethod,
-          pathname: path,
-          routeId
-        });
-        setFetcherError(key, routeId, error);
-        return;
-      }
-      let existingFetcher = state.fetchers.get(key);
-      let fetcher = _extends({
-        state: "submitting"
-      }, submission, {
-        data: existingFetcher && existingFetcher.data,
-        " _hasFetcherDoneAnything ": true
-      });
-      state.fetchers.set(key, fetcher);
-      updateState({
-        fetchers: new Map(state.fetchers)
-      });
-      let abortController = new AbortController();
-      let fetchRequest = createClientSideRequest(init.history, path, abortController.signal, submission);
-      fetchControllers.set(key, abortController);
-      let actionResult = await callLoaderOrAction("action", fetchRequest, match, requestMatches, manifest, detectErrorBoundary2, router2.basename);
-      if (fetchRequest.signal.aborted) {
-        if (fetchControllers.get(key) === abortController) {
-          fetchControllers.delete(key);
-        }
-        return;
-      }
-      if (isRedirectResult(actionResult)) {
-        fetchControllers.delete(key);
-        fetchRedirectIds.add(key);
-        let loadingFetcher = _extends({
-          state: "loading"
-        }, submission, {
-          data: void 0,
-          " _hasFetcherDoneAnything ": true
-        });
-        state.fetchers.set(key, loadingFetcher);
-        updateState({
-          fetchers: new Map(state.fetchers)
-        });
-        return startRedirectNavigation(state, actionResult, {
-          isFetchActionRedirect: true
-        });
-      }
-      if (isErrorResult(actionResult)) {
-        setFetcherError(key, routeId, actionResult.error);
-        return;
-      }
-      if (isDeferredResult(actionResult)) {
-        throw getInternalRouterError(400, {
-          type: "defer-action"
-        });
-      }
-      let nextLocation = state.navigation.location || state.location;
-      let revalidationRequest = createClientSideRequest(init.history, nextLocation, abortController.signal);
-      let routesToUse = inFlightDataRoutes || dataRoutes;
-      let matches = state.navigation.state !== "idle" ? matchRoutes(routesToUse, state.navigation.location, init.basename) : state.matches;
-      invariant(matches, "Didn't find any matches after fetcher action");
-      let loadId = ++incrementingLoadId;
-      fetchReloadIds.set(key, loadId);
-      let loadFetcher = _extends({
-        state: "loading",
-        data: actionResult.data
-      }, submission, {
-        " _hasFetcherDoneAnything ": true
-      });
-      state.fetchers.set(key, loadFetcher);
-      let [matchesToLoad, revalidatingFetchers] = getMatchesToLoad(
-        init.history,
-        state,
-        matches,
-        submission,
-        nextLocation,
-        isRevalidationRequired,
-        cancelledDeferredRoutes,
-        cancelledFetcherLoads,
-        fetchLoadMatches,
-        routesToUse,
-        init.basename,
-        {
-          [match.route.id]: actionResult.data
-        },
-        void 0
-        // No need to send through errors since we short circuit above
-      );
-      revalidatingFetchers.filter((rf) => rf.key !== key).forEach((rf) => {
-        let staleKey = rf.key;
-        let existingFetcher2 = state.fetchers.get(staleKey);
-        let revalidatingFetcher = {
-          state: "loading",
-          data: existingFetcher2 && existingFetcher2.data,
-          formMethod: void 0,
-          formAction: void 0,
-          formEncType: void 0,
-          formData: void 0,
-          " _hasFetcherDoneAnything ": true
-        };
-        state.fetchers.set(staleKey, revalidatingFetcher);
-        fetchControllers.set(staleKey, abortController);
-      });
-      updateState({
-        fetchers: new Map(state.fetchers)
-      });
-      let {
-        results,
-        loaderResults,
-        fetcherResults
-      } = await callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, revalidationRequest);
-      if (abortController.signal.aborted) {
-        return;
-      }
-      fetchReloadIds.delete(key);
-      fetchControllers.delete(key);
-      revalidatingFetchers.forEach((r6) => fetchControllers.delete(r6.key));
-      let redirect2 = findRedirect(results);
-      if (redirect2) {
-        return startRedirectNavigation(state, redirect2);
-      }
-      let {
-        loaderData,
-        errors
-      } = processLoaderData(state, state.matches, matchesToLoad, loaderResults, void 0, revalidatingFetchers, fetcherResults, activeDeferreds);
-      let doneFetcher = {
-        state: "idle",
-        data: actionResult.data,
-        formMethod: void 0,
-        formAction: void 0,
-        formEncType: void 0,
-        formData: void 0,
-        " _hasFetcherDoneAnything ": true
-      };
-      state.fetchers.set(key, doneFetcher);
-      let didAbortFetchLoads = abortStaleFetchLoads(loadId);
-      if (state.navigation.state === "loading" && loadId > pendingNavigationLoadId) {
-        invariant(pendingAction, "Expected pending action");
-        pendingNavigationController && pendingNavigationController.abort();
-        completeNavigation(state.navigation.location, {
-          matches,
-          loaderData,
-          errors,
-          fetchers: new Map(state.fetchers)
-        });
-      } else {
-        updateState(_extends({
-          errors,
-          loaderData: mergeLoaderData(state.loaderData, loaderData, matches, errors)
-        }, didAbortFetchLoads ? {
-          fetchers: new Map(state.fetchers)
-        } : {}));
-        isRevalidationRequired = false;
-      }
-    }
-    async function handleFetcherLoader(key, routeId, path, match, matches, submission) {
-      let existingFetcher = state.fetchers.get(key);
-      let loadingFetcher = _extends({
-        state: "loading",
-        formMethod: void 0,
-        formAction: void 0,
-        formEncType: void 0,
-        formData: void 0
-      }, submission, {
-        data: existingFetcher && existingFetcher.data,
-        " _hasFetcherDoneAnything ": true
-      });
-      state.fetchers.set(key, loadingFetcher);
-      updateState({
-        fetchers: new Map(state.fetchers)
-      });
-      let abortController = new AbortController();
-      let fetchRequest = createClientSideRequest(init.history, path, abortController.signal);
-      fetchControllers.set(key, abortController);
-      let result = await callLoaderOrAction("loader", fetchRequest, match, matches, manifest, detectErrorBoundary2, router2.basename);
-      if (isDeferredResult(result)) {
-        result = await resolveDeferredData(result, fetchRequest.signal, true) || result;
-      }
-      if (fetchControllers.get(key) === abortController) {
-        fetchControllers.delete(key);
-      }
-      if (fetchRequest.signal.aborted) {
-        return;
-      }
-      if (isRedirectResult(result)) {
-        await startRedirectNavigation(state, result);
-        return;
-      }
-      if (isErrorResult(result)) {
-        let boundaryMatch = findNearestBoundary(state.matches, routeId);
-        state.fetchers.delete(key);
-        updateState({
-          fetchers: new Map(state.fetchers),
-          errors: {
-            [boundaryMatch.route.id]: result.error
-          }
-        });
-        return;
-      }
-      invariant(!isDeferredResult(result), "Unhandled fetcher deferred data");
-      let doneFetcher = {
-        state: "idle",
-        data: result.data,
-        formMethod: void 0,
-        formAction: void 0,
-        formEncType: void 0,
-        formData: void 0,
-        " _hasFetcherDoneAnything ": true
-      };
-      state.fetchers.set(key, doneFetcher);
-      updateState({
-        fetchers: new Map(state.fetchers)
-      });
-    }
-    async function startRedirectNavigation(state2, redirect2, _temp) {
-      var _window;
-      let {
-        submission,
-        replace: replace3,
-        isFetchActionRedirect
-      } = _temp === void 0 ? {} : _temp;
-      if (redirect2.revalidate) {
-        isRevalidationRequired = true;
-      }
-      let redirectLocation = createLocation(
-        state2.location,
-        redirect2.location,
-        // TODO: This can be removed once we get rid of useTransition in Remix v2
-        _extends({
-          _isRedirect: true
-        }, isFetchActionRedirect ? {
-          _isFetchActionRedirect: true
-        } : {})
-      );
-      invariant(redirectLocation, "Expected a location on the redirect navigation");
-      if (ABSOLUTE_URL_REGEX.test(redirect2.location) && isBrowser && typeof ((_window = window) == null ? void 0 : _window.location) !== "undefined") {
-        let url = init.history.createURL(redirect2.location);
-        let isDifferentBasename = stripBasename(url.pathname, init.basename || "/") == null;
-        if (window.location.origin !== url.origin || isDifferentBasename) {
-          if (replace3) {
-            window.location.replace(redirect2.location);
-          } else {
-            window.location.assign(redirect2.location);
-          }
-          return;
-        }
-      }
-      pendingNavigationController = null;
-      let redirectHistoryAction = replace3 === true ? Action.Replace : Action.Push;
-      let {
-        formMethod,
-        formAction,
-        formEncType,
-        formData
-      } = state2.navigation;
-      if (!submission && formMethod && formAction && formData && formEncType) {
-        submission = {
-          formMethod,
-          formAction,
-          formEncType,
-          formData
-        };
-      }
-      if (redirectPreserveMethodStatusCodes.has(redirect2.status) && submission && isMutationMethod(submission.formMethod)) {
-        await startNavigation(redirectHistoryAction, redirectLocation, {
-          submission: _extends({}, submission, {
-            formAction: redirect2.location
-          }),
-          // Preserve this flag across redirects
-          preventScrollReset: pendingPreventScrollReset
-        });
-      } else {
-        await startNavigation(redirectHistoryAction, redirectLocation, {
-          overrideNavigation: {
-            state: "loading",
-            location: redirectLocation,
-            formMethod: submission ? submission.formMethod : void 0,
-            formAction: submission ? submission.formAction : void 0,
-            formEncType: submission ? submission.formEncType : void 0,
-            formData: submission ? submission.formData : void 0
-          },
-          // Preserve this flag across redirects
-          preventScrollReset: pendingPreventScrollReset
-        });
-      }
-    }
-    async function callLoadersAndMaybeResolveData(currentMatches, matches, matchesToLoad, fetchersToLoad, request2) {
-      let results = await Promise.all([...matchesToLoad.map((match) => callLoaderOrAction("loader", request2, match, matches, manifest, detectErrorBoundary2, router2.basename)), ...fetchersToLoad.map((f4) => {
-        if (f4.matches && f4.match) {
-          return callLoaderOrAction("loader", createClientSideRequest(init.history, f4.path, request2.signal), f4.match, f4.matches, manifest, detectErrorBoundary2, router2.basename);
-        } else {
-          let error = {
-            type: ResultType.error,
-            error: getInternalRouterError(404, {
-              pathname: f4.path
-            })
-          };
-          return error;
-        }
-      })]);
-      let loaderResults = results.slice(0, matchesToLoad.length);
-      let fetcherResults = results.slice(matchesToLoad.length);
-      await Promise.all([resolveDeferredResults(currentMatches, matchesToLoad, loaderResults, request2.signal, false, state.loaderData), resolveDeferredResults(currentMatches, fetchersToLoad.map((f4) => f4.match), fetcherResults, request2.signal, true)]);
-      return {
-        results,
-        loaderResults,
-        fetcherResults
-      };
-    }
-    function interruptActiveLoads() {
-      isRevalidationRequired = true;
-      cancelledDeferredRoutes.push(...cancelActiveDeferreds());
-      fetchLoadMatches.forEach((_2, key) => {
-        if (fetchControllers.has(key)) {
-          cancelledFetcherLoads.push(key);
-          abortFetcher(key);
-        }
-      });
-    }
-    function setFetcherError(key, routeId, error) {
-      let boundaryMatch = findNearestBoundary(state.matches, routeId);
-      deleteFetcher(key);
-      updateState({
-        errors: {
-          [boundaryMatch.route.id]: error
-        },
-        fetchers: new Map(state.fetchers)
-      });
-    }
-    function deleteFetcher(key) {
-      if (fetchControllers.has(key))
-        abortFetcher(key);
-      fetchLoadMatches.delete(key);
-      fetchReloadIds.delete(key);
-      fetchRedirectIds.delete(key);
-      state.fetchers.delete(key);
-    }
-    function abortFetcher(key) {
-      let controller = fetchControllers.get(key);
-      invariant(controller, "Expected fetch controller: " + key);
-      controller.abort();
-      fetchControllers.delete(key);
-    }
-    function markFetchersDone(keys) {
-      for (let key of keys) {
-        let fetcher = getFetcher(key);
-        let doneFetcher = {
-          state: "idle",
-          data: fetcher.data,
-          formMethod: void 0,
-          formAction: void 0,
-          formEncType: void 0,
-          formData: void 0,
-          " _hasFetcherDoneAnything ": true
-        };
-        state.fetchers.set(key, doneFetcher);
-      }
-    }
-    function markFetchRedirectsDone() {
-      let doneKeys = [];
-      for (let key of fetchRedirectIds) {
-        let fetcher = state.fetchers.get(key);
-        invariant(fetcher, "Expected fetcher: " + key);
-        if (fetcher.state === "loading") {
-          fetchRedirectIds.delete(key);
-          doneKeys.push(key);
-        }
-      }
-      markFetchersDone(doneKeys);
-    }
-    function abortStaleFetchLoads(landedId) {
-      let yeetedKeys = [];
-      for (let [key, id] of fetchReloadIds) {
-        if (id < landedId) {
-          let fetcher = state.fetchers.get(key);
-          invariant(fetcher, "Expected fetcher: " + key);
-          if (fetcher.state === "loading") {
-            abortFetcher(key);
-            fetchReloadIds.delete(key);
-            yeetedKeys.push(key);
-          }
-        }
-      }
-      markFetchersDone(yeetedKeys);
-      return yeetedKeys.length > 0;
-    }
-    function getBlocker(key, fn) {
-      let blocker = state.blockers.get(key) || IDLE_BLOCKER;
-      if (blockerFunctions.get(key) !== fn) {
-        blockerFunctions.set(key, fn);
-      }
-      return blocker;
-    }
-    function deleteBlocker(key) {
-      state.blockers.delete(key);
-      blockerFunctions.delete(key);
-    }
-    function updateBlocker(key, newBlocker) {
-      let blocker = state.blockers.get(key) || IDLE_BLOCKER;
-      invariant(blocker.state === "unblocked" && newBlocker.state === "blocked" || blocker.state === "blocked" && newBlocker.state === "blocked" || blocker.state === "blocked" && newBlocker.state === "proceeding" || blocker.state === "blocked" && newBlocker.state === "unblocked" || blocker.state === "proceeding" && newBlocker.state === "unblocked", "Invalid blocker state transition: " + blocker.state + " -> " + newBlocker.state);
-      state.blockers.set(key, newBlocker);
-      updateState({
-        blockers: new Map(state.blockers)
-      });
-    }
-    function shouldBlockNavigation(_ref2) {
-      let {
-        currentLocation,
-        nextLocation,
-        historyAction
-      } = _ref2;
-      if (blockerFunctions.size === 0) {
-        return;
-      }
-      if (blockerFunctions.size > 1) {
-        warning(false, "A router only supports one blocker at a time");
-      }
-      let entries = Array.from(blockerFunctions.entries());
-      let [blockerKey, blockerFunction] = entries[entries.length - 1];
-      let blocker = state.blockers.get(blockerKey);
-      if (blocker && blocker.state === "proceeding") {
-        return;
-      }
-      if (blockerFunction({
-        currentLocation,
-        nextLocation,
-        historyAction
-      })) {
-        return blockerKey;
-      }
-    }
-    function cancelActiveDeferreds(predicate) {
-      let cancelledRouteIds = [];
-      activeDeferreds.forEach((dfd, routeId) => {
-        if (!predicate || predicate(routeId)) {
-          dfd.cancel();
-          cancelledRouteIds.push(routeId);
-          activeDeferreds.delete(routeId);
-        }
-      });
-      return cancelledRouteIds;
-    }
-    function enableScrollRestoration(positions, getPosition, getKey) {
-      savedScrollPositions2 = positions;
-      getScrollPosition = getPosition;
-      getScrollRestorationKey = getKey || ((location2) => location2.key);
-      if (!initialScrollRestored && state.navigation === IDLE_NAVIGATION) {
-        initialScrollRestored = true;
-        let y3 = getSavedScrollPosition(state.location, state.matches);
-        if (y3 != null) {
-          updateState({
-            restoreScrollPosition: y3
-          });
-        }
-      }
-      return () => {
-        savedScrollPositions2 = null;
-        getScrollPosition = null;
-        getScrollRestorationKey = null;
-      };
-    }
-    function saveScrollPosition(location2, matches) {
-      if (savedScrollPositions2 && getScrollRestorationKey && getScrollPosition) {
-        let userMatches = matches.map((m4) => createUseMatchesMatch(m4, state.loaderData));
-        let key = getScrollRestorationKey(location2, userMatches) || location2.key;
-        savedScrollPositions2[key] = getScrollPosition();
-      }
-    }
-    function getSavedScrollPosition(location2, matches) {
-      if (savedScrollPositions2 && getScrollRestorationKey && getScrollPosition) {
-        let userMatches = matches.map((m4) => createUseMatchesMatch(m4, state.loaderData));
-        let key = getScrollRestorationKey(location2, userMatches) || location2.key;
-        let y3 = savedScrollPositions2[key];
-        if (typeof y3 === "number") {
-          return y3;
-        }
-      }
-      return null;
-    }
-    function _internalSetRoutes(newRoutes) {
-      inFlightDataRoutes = newRoutes;
-    }
-    router2 = {
-      get basename() {
-        return init.basename;
-      },
-      get state() {
-        return state;
-      },
-      get routes() {
-        return dataRoutes;
-      },
-      initialize,
-      subscribe,
-      enableScrollRestoration,
-      navigate,
-      fetch,
-      revalidate,
-      // Passthrough to history-aware createHref used by useHref so we get proper
-      // hash-aware URLs in DOM paths
-      createHref: (to) => init.history.createHref(to),
-      encodeLocation: (to) => init.history.encodeLocation(to),
-      getFetcher,
-      deleteFetcher,
-      dispose,
-      getBlocker,
-      deleteBlocker,
-      _internalFetchControllers: fetchControllers,
-      _internalActiveDeferreds: activeDeferreds,
-      // TODO: Remove setRoutes, it's temporary to avoid dealing with
-      // updating the tree while validating the update algorithm.
-      _internalSetRoutes
-    };
-    return router2;
-  }
-  function isSubmissionNavigation(opts) {
-    return opts != null && "formData" in opts;
-  }
-  function normalizeNavigateOptions(to, opts, isFetcher) {
-    if (isFetcher === void 0) {
-      isFetcher = false;
-    }
-    let path = typeof to === "string" ? to : createPath(to);
-    if (!opts || !isSubmissionNavigation(opts)) {
-      return {
-        path
-      };
-    }
-    if (opts.formMethod && !isValidMethod(opts.formMethod)) {
-      return {
-        path,
-        error: getInternalRouterError(405, {
-          method: opts.formMethod
-        })
-      };
-    }
-    let submission;
-    if (opts.formData) {
-      submission = {
-        formMethod: opts.formMethod || "get",
-        formAction: stripHashFromPath(path),
-        formEncType: opts && opts.formEncType || "application/x-www-form-urlencoded",
-        formData: opts.formData
-      };
-      if (isMutationMethod(submission.formMethod)) {
-        return {
-          path,
-          submission
-        };
-      }
-    }
-    let parsedPath = parsePath(path);
-    let searchParams = convertFormDataToSearchParams(opts.formData);
-    if (isFetcher && parsedPath.search && hasNakedIndexQuery(parsedPath.search)) {
-      searchParams.append("index", "");
-    }
-    parsedPath.search = "?" + searchParams;
-    return {
-      path: createPath(parsedPath),
-      submission
-    };
-  }
-  function getLoaderMatchesUntilBoundary(matches, boundaryId) {
-    let boundaryMatches = matches;
-    if (boundaryId) {
-      let index = matches.findIndex((m4) => m4.route.id === boundaryId);
-      if (index >= 0) {
-        boundaryMatches = matches.slice(0, index);
-      }
-    }
-    return boundaryMatches;
-  }
-  function getMatchesToLoad(history, state, matches, submission, location2, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, fetchLoadMatches, routesToUse, basename, pendingActionData, pendingError) {
-    let actionResult = pendingError ? Object.values(pendingError)[0] : pendingActionData ? Object.values(pendingActionData)[0] : void 0;
-    let currentUrl = history.createURL(state.location);
-    let nextUrl = history.createURL(location2);
-    let defaultShouldRevalidate = (
-      // Forced revalidation due to submission, useRevalidate, or X-Remix-Revalidate
-      isRevalidationRequired || // Clicked the same link, resubmitted a GET form
-      currentUrl.toString() === nextUrl.toString() || // Search params affect all loaders
-      currentUrl.search !== nextUrl.search
-    );
-    let boundaryId = pendingError ? Object.keys(pendingError)[0] : void 0;
-    let boundaryMatches = getLoaderMatchesUntilBoundary(matches, boundaryId);
-    let navigationMatches = boundaryMatches.filter((match, index) => {
-      if (match.route.lazy) {
-        return true;
-      }
-      if (match.route.loader == null) {
-        return false;
-      }
-      if (isNewLoader(state.loaderData, state.matches[index], match) || cancelledDeferredRoutes.some((id) => id === match.route.id)) {
-        return true;
-      }
-      let currentRouteMatch = state.matches[index];
-      let nextRouteMatch = match;
-      return shouldRevalidateLoader(match, _extends({
-        currentUrl,
-        currentParams: currentRouteMatch.params,
-        nextUrl,
-        nextParams: nextRouteMatch.params
-      }, submission, {
-        actionResult,
-        defaultShouldRevalidate: defaultShouldRevalidate || isNewRouteInstance(currentRouteMatch, nextRouteMatch)
-      }));
-    });
-    let revalidatingFetchers = [];
-    fetchLoadMatches.forEach((f4, key) => {
-      if (!matches.some((m4) => m4.route.id === f4.routeId)) {
-        return;
-      }
-      let fetcherMatches = matchRoutes(routesToUse, f4.path, basename);
-      if (!fetcherMatches) {
-        revalidatingFetchers.push(_extends({
-          key
-        }, f4, {
-          matches: null,
-          match: null
-        }));
-        return;
-      }
-      let fetcherMatch = getTargetMatch(fetcherMatches, f4.path);
-      if (cancelledFetcherLoads.includes(key)) {
-        revalidatingFetchers.push(_extends({
-          key,
-          matches: fetcherMatches,
-          match: fetcherMatch
-        }, f4));
-        return;
-      }
-      let shouldRevalidate = shouldRevalidateLoader(fetcherMatch, _extends({
-        currentUrl,
-        currentParams: state.matches[state.matches.length - 1].params,
-        nextUrl,
-        nextParams: matches[matches.length - 1].params
-      }, submission, {
-        actionResult,
-        defaultShouldRevalidate
-      }));
-      if (shouldRevalidate) {
-        revalidatingFetchers.push(_extends({
-          key,
-          matches: fetcherMatches,
-          match: fetcherMatch
-        }, f4));
-      }
-    });
-    return [navigationMatches, revalidatingFetchers];
-  }
-  function isNewLoader(currentLoaderData, currentMatch, match) {
-    let isNew = (
-      // [a] -> [a, b]
-      !currentMatch || // [a, b] -> [a, c]
-      match.route.id !== currentMatch.route.id
-    );
-    let isMissingData = currentLoaderData[match.route.id] === void 0;
-    return isNew || isMissingData;
-  }
-  function isNewRouteInstance(currentMatch, match) {
-    let currentPath = currentMatch.route.path;
-    return (
-      // param change for this match, /users/123 -> /users/456
-      currentMatch.pathname !== match.pathname || // splat param changed, which is not present in match.path
-      // e.g. /files/images/avatar.jpg -> files/finances.xls
-      currentPath != null && currentPath.endsWith("*") && currentMatch.params["*"] !== match.params["*"]
-    );
-  }
-  function shouldRevalidateLoader(loaderMatch, arg) {
-    if (loaderMatch.route.shouldRevalidate) {
-      let routeChoice = loaderMatch.route.shouldRevalidate(arg);
-      if (typeof routeChoice === "boolean") {
-        return routeChoice;
-      }
-    }
-    return arg.defaultShouldRevalidate;
-  }
-  async function loadLazyRouteModule(route, detectErrorBoundary2, manifest) {
-    if (!route.lazy) {
-      return;
-    }
-    let lazyRoute = await route.lazy();
-    if (!route.lazy) {
-      return;
-    }
-    let routeToUpdate = manifest[route.id];
-    invariant(routeToUpdate, "No route found in manifest");
-    let routeUpdates = {};
-    for (let lazyRouteProperty in lazyRoute) {
-      let staticRouteValue = routeToUpdate[lazyRouteProperty];
-      let isPropertyStaticallyDefined = staticRouteValue !== void 0 && // This property isn't static since it should always be updated based
-      // on the route updates
-      lazyRouteProperty !== "hasErrorBoundary";
-      warning(!isPropertyStaticallyDefined, 'Route "' + routeToUpdate.id + '" has a static property "' + lazyRouteProperty + '" defined but its lazy function is also returning a value for this property. ' + ('The lazy route property "' + lazyRouteProperty + '" will be ignored.'));
-      if (!isPropertyStaticallyDefined && !immutableRouteKeys.has(lazyRouteProperty)) {
-        routeUpdates[lazyRouteProperty] = lazyRoute[lazyRouteProperty];
-      }
-    }
-    Object.assign(routeToUpdate, routeUpdates);
-    Object.assign(routeToUpdate, {
-      // To keep things framework agnostic, we use the provided
-      // `detectErrorBoundary` function to set the `hasErrorBoundary` route
-      // property since the logic will differ between frameworks.
-      hasErrorBoundary: detectErrorBoundary2(_extends({}, routeToUpdate)),
-      lazy: void 0
-    });
-  }
-  async function callLoaderOrAction(type, request2, match, matches, manifest, detectErrorBoundary2, basename, isStaticRequest, isRouteRequest, requestContext) {
-    if (basename === void 0) {
-      basename = "/";
-    }
-    if (isStaticRequest === void 0) {
-      isStaticRequest = false;
-    }
-    if (isRouteRequest === void 0) {
-      isRouteRequest = false;
-    }
-    let resultType;
-    let result;
-    let onReject;
-    let runHandler = (handler) => {
-      let reject;
-      let abortPromise = new Promise((_2, r6) => reject = r6);
-      onReject = () => reject();
-      request2.signal.addEventListener("abort", onReject);
-      return Promise.race([handler({
-        request: request2,
-        params: match.params,
-        context: requestContext
-      }), abortPromise]);
-    };
-    try {
-      let handler = match.route[type];
-      if (match.route.lazy) {
-        if (handler) {
-          let values = await Promise.all([runHandler(handler), loadLazyRouteModule(match.route, detectErrorBoundary2, manifest)]);
-          result = values[0];
-        } else {
-          await loadLazyRouteModule(match.route, detectErrorBoundary2, manifest);
-          handler = match.route[type];
-          if (handler) {
-            result = await runHandler(handler);
-          } else if (type === "action") {
-            throw getInternalRouterError(405, {
-              method: request2.method,
-              pathname: new URL(request2.url).pathname,
-              routeId: match.route.id
-            });
-          } else {
-            return {
-              type: ResultType.data,
-              data: void 0
-            };
-          }
-        }
-      } else {
-        invariant(handler, "Could not find the " + type + ' to run on the "' + match.route.id + '" route');
-        result = await runHandler(handler);
-      }
-      invariant(result !== void 0, "You defined " + (type === "action" ? "an action" : "a loader") + " for route " + ('"' + match.route.id + "\" but didn't return anything from your `" + type + "` ") + "function. Please return a value or `null`.");
-    } catch (e3) {
-      resultType = ResultType.error;
-      result = e3;
-    } finally {
-      if (onReject) {
-        request2.signal.removeEventListener("abort", onReject);
-      }
-    }
-    if (isResponse(result)) {
-      let status = result.status;
-      if (redirectStatusCodes.has(status)) {
-        let location2 = result.headers.get("Location");
-        invariant(location2, "Redirects returned/thrown from loaders/actions must have a Location header");
-        if (!ABSOLUTE_URL_REGEX.test(location2)) {
-          let activeMatches = matches.slice(0, matches.indexOf(match) + 1);
-          let routePathnames = getPathContributingMatches(activeMatches).map((match2) => match2.pathnameBase);
-          let resolvedLocation = resolveTo(location2, routePathnames, new URL(request2.url).pathname);
-          invariant(createPath(resolvedLocation), "Unable to resolve redirect location: " + location2);
-          if (basename) {
-            let path = resolvedLocation.pathname;
-            resolvedLocation.pathname = path === "/" ? basename : joinPaths([basename, path]);
-          }
-          location2 = createPath(resolvedLocation);
-        } else if (!isStaticRequest) {
-          let currentUrl = new URL(request2.url);
-          let url = location2.startsWith("//") ? new URL(currentUrl.protocol + location2) : new URL(location2);
-          let isSameBasename = stripBasename(url.pathname, basename) != null;
-          if (url.origin === currentUrl.origin && isSameBasename) {
-            location2 = url.pathname + url.search + url.hash;
-          }
-        }
-        if (isStaticRequest) {
-          result.headers.set("Location", location2);
-          throw result;
-        }
-        return {
-          type: ResultType.redirect,
-          status,
-          location: location2,
-          revalidate: result.headers.get("X-Remix-Revalidate") !== null
-        };
-      }
-      if (isRouteRequest) {
-        throw {
-          type: resultType || ResultType.data,
-          response: result
-        };
-      }
-      let data;
-      let contentType = result.headers.get("Content-Type");
-      if (contentType && /\bapplication\/json\b/.test(contentType)) {
-        data = await result.json();
-      } else {
-        data = await result.text();
-      }
-      if (resultType === ResultType.error) {
-        return {
-          type: resultType,
-          error: new ErrorResponse(status, result.statusText, data),
-          headers: result.headers
-        };
-      }
-      return {
-        type: ResultType.data,
-        data,
-        statusCode: result.status,
-        headers: result.headers
-      };
-    }
-    if (resultType === ResultType.error) {
-      return {
-        type: resultType,
-        error: result
-      };
-    }
-    if (result instanceof DeferredData) {
-      var _result$init, _result$init2;
-      return {
-        type: ResultType.deferred,
-        deferredData: result,
-        statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status,
-        headers: ((_result$init2 = result.init) == null ? void 0 : _result$init2.headers) && new Headers(result.init.headers)
-      };
-    }
-    return {
-      type: ResultType.data,
-      data: result
-    };
-  }
-  function createClientSideRequest(history, location2, signal, submission) {
-    let url = history.createURL(stripHashFromPath(location2)).toString();
-    let init = {
-      signal
-    };
-    if (submission && isMutationMethod(submission.formMethod)) {
-      let {
-        formMethod,
-        formEncType,
-        formData
-      } = submission;
-      init.method = formMethod.toUpperCase();
-      init.body = formEncType === "application/x-www-form-urlencoded" ? convertFormDataToSearchParams(formData) : formData;
-    }
-    return new Request(url, init);
-  }
-  function convertFormDataToSearchParams(formData) {
-    let searchParams = new URLSearchParams();
-    for (let [key, value] of formData.entries()) {
-      searchParams.append(key, value instanceof File ? value.name : value);
-    }
-    return searchParams;
-  }
-  function processRouteLoaderData(matches, matchesToLoad, results, pendingError, activeDeferreds) {
-    let loaderData = {};
-    let errors = null;
-    let statusCode;
-    let foundError = false;
-    let loaderHeaders = {};
-    results.forEach((result, index) => {
-      let id = matchesToLoad[index].route.id;
-      invariant(!isRedirectResult(result), "Cannot handle redirect results in processLoaderData");
-      if (isErrorResult(result)) {
-        let boundaryMatch = findNearestBoundary(matches, id);
-        let error = result.error;
-        if (pendingError) {
-          error = Object.values(pendingError)[0];
-          pendingError = void 0;
-        }
-        errors = errors || {};
-        if (errors[boundaryMatch.route.id] == null) {
-          errors[boundaryMatch.route.id] = error;
-        }
-        loaderData[id] = void 0;
-        if (!foundError) {
-          foundError = true;
-          statusCode = isRouteErrorResponse(result.error) ? result.error.status : 500;
-        }
-        if (result.headers) {
-          loaderHeaders[id] = result.headers;
-        }
-      } else {
-        if (isDeferredResult(result)) {
-          activeDeferreds.set(id, result.deferredData);
-          loaderData[id] = result.deferredData.data;
-        } else {
-          loaderData[id] = result.data;
-        }
-        if (result.statusCode != null && result.statusCode !== 200 && !foundError) {
-          statusCode = result.statusCode;
-        }
-        if (result.headers) {
-          loaderHeaders[id] = result.headers;
-        }
-      }
-    });
-    if (pendingError) {
-      errors = pendingError;
-      loaderData[Object.keys(pendingError)[0]] = void 0;
-    }
-    return {
-      loaderData,
-      errors,
-      statusCode: statusCode || 200,
-      loaderHeaders
-    };
-  }
-  function processLoaderData(state, matches, matchesToLoad, results, pendingError, revalidatingFetchers, fetcherResults, activeDeferreds) {
-    let {
-      loaderData,
-      errors
-    } = processRouteLoaderData(matches, matchesToLoad, results, pendingError, activeDeferreds);
-    for (let index = 0; index < revalidatingFetchers.length; index++) {
-      let {
-        key,
-        match
-      } = revalidatingFetchers[index];
-      invariant(fetcherResults !== void 0 && fetcherResults[index] !== void 0, "Did not find corresponding fetcher result");
-      let result = fetcherResults[index];
-      if (isErrorResult(result)) {
-        let boundaryMatch = findNearestBoundary(state.matches, match == null ? void 0 : match.route.id);
-        if (!(errors && errors[boundaryMatch.route.id])) {
-          errors = _extends({}, errors, {
-            [boundaryMatch.route.id]: result.error
-          });
-        }
-        state.fetchers.delete(key);
-      } else if (isRedirectResult(result)) {
-        invariant(false, "Unhandled fetcher revalidation redirect");
-      } else if (isDeferredResult(result)) {
-        invariant(false, "Unhandled fetcher deferred data");
-      } else {
-        let doneFetcher = {
-          state: "idle",
-          data: result.data,
-          formMethod: void 0,
-          formAction: void 0,
-          formEncType: void 0,
-          formData: void 0,
-          " _hasFetcherDoneAnything ": true
-        };
-        state.fetchers.set(key, doneFetcher);
-      }
-    }
-    return {
-      loaderData,
-      errors
-    };
-  }
-  function mergeLoaderData(loaderData, newLoaderData, matches, errors) {
-    let mergedLoaderData = _extends({}, newLoaderData);
-    for (let match of matches) {
-      let id = match.route.id;
-      if (newLoaderData.hasOwnProperty(id)) {
-        if (newLoaderData[id] !== void 0) {
-          mergedLoaderData[id] = newLoaderData[id];
-        }
-      } else if (loaderData[id] !== void 0 && match.route.loader) {
-        mergedLoaderData[id] = loaderData[id];
-      }
-      if (errors && errors.hasOwnProperty(id)) {
-        break;
-      }
-    }
-    return mergedLoaderData;
-  }
-  function findNearestBoundary(matches, routeId) {
-    let eligibleMatches = routeId ? matches.slice(0, matches.findIndex((m4) => m4.route.id === routeId) + 1) : [...matches];
-    return eligibleMatches.reverse().find((m4) => m4.route.hasErrorBoundary === true) || matches[0];
-  }
-  function getShortCircuitMatches(routes) {
-    let route = routes.find((r6) => r6.index || !r6.path || r6.path === "/") || {
-      id: "__shim-error-route__"
-    };
-    return {
-      matches: [{
-        params: {},
-        pathname: "",
-        pathnameBase: "",
-        route
-      }],
-      route
-    };
-  }
-  function getInternalRouterError(status, _temp4) {
-    let {
-      pathname,
-      routeId,
-      method,
-      type
-    } = _temp4 === void 0 ? {} : _temp4;
-    let statusText = "Unknown Server Error";
-    let errorMessage = "Unknown @remix-run/router error";
-    if (status === 400) {
-      statusText = "Bad Request";
-      if (method && pathname && routeId) {
-        errorMessage = "You made a " + method + ' request to "' + pathname + '" but ' + ('did not provide a `loader` for route "' + routeId + '", ') + "so there is no way to handle the request.";
-      } else if (type === "defer-action") {
-        errorMessage = "defer() is not supported in actions";
-      }
-    } else if (status === 403) {
-      statusText = "Forbidden";
-      errorMessage = 'Route "' + routeId + '" does not match URL "' + pathname + '"';
-    } else if (status === 404) {
-      statusText = "Not Found";
-      errorMessage = 'No route matches URL "' + pathname + '"';
-    } else if (status === 405) {
-      statusText = "Method Not Allowed";
-      if (method && pathname && routeId) {
-        errorMessage = "You made a " + method.toUpperCase() + ' request to "' + pathname + '" but ' + ('did not provide an `action` for route "' + routeId + '", ') + "so there is no way to handle the request.";
-      } else if (method) {
-        errorMessage = 'Invalid request method "' + method.toUpperCase() + '"';
-      }
-    }
-    return new ErrorResponse(status || 500, statusText, new Error(errorMessage), true);
-  }
-  function findRedirect(results) {
-    for (let i5 = results.length - 1; i5 >= 0; i5--) {
-      let result = results[i5];
-      if (isRedirectResult(result)) {
-        return result;
-      }
-    }
-  }
-  function stripHashFromPath(path) {
-    let parsedPath = typeof path === "string" ? parsePath(path) : path;
-    return createPath(_extends({}, parsedPath, {
-      hash: ""
-    }));
-  }
-  function isHashChangeOnly(a3, b3) {
-    return a3.pathname === b3.pathname && a3.search === b3.search && a3.hash !== b3.hash;
-  }
-  function isDeferredResult(result) {
-    return result.type === ResultType.deferred;
-  }
-  function isErrorResult(result) {
-    return result.type === ResultType.error;
-  }
-  function isRedirectResult(result) {
-    return (result && result.type) === ResultType.redirect;
-  }
-  function isResponse(value) {
-    return value != null && typeof value.status === "number" && typeof value.statusText === "string" && typeof value.headers === "object" && typeof value.body !== "undefined";
-  }
-  function isValidMethod(method) {
-    return validRequestMethods.has(method);
-  }
-  function isMutationMethod(method) {
-    return validMutationMethods.has(method);
-  }
-  async function resolveDeferredResults(currentMatches, matchesToLoad, results, signal, isFetcher, currentLoaderData) {
-    for (let index = 0; index < results.length; index++) {
-      let result = results[index];
-      let match = matchesToLoad[index];
-      if (!match) {
-        continue;
-      }
-      let currentMatch = currentMatches.find((m4) => m4.route.id === match.route.id);
-      let isRevalidatingLoader = currentMatch != null && !isNewRouteInstance(currentMatch, match) && (currentLoaderData && currentLoaderData[match.route.id]) !== void 0;
-      if (isDeferredResult(result) && (isFetcher || isRevalidatingLoader)) {
-        await resolveDeferredData(result, signal, isFetcher).then((result2) => {
-          if (result2) {
-            results[index] = result2 || results[index];
-          }
-        });
-      }
-    }
-  }
-  async function resolveDeferredData(result, signal, unwrap) {
-    if (unwrap === void 0) {
-      unwrap = false;
-    }
-    let aborted = await result.deferredData.resolveData(signal);
-    if (aborted) {
-      return;
-    }
-    if (unwrap) {
-      try {
-        return {
-          type: ResultType.data,
-          data: result.deferredData.unwrappedData
-        };
-      } catch (e3) {
-        return {
-          type: ResultType.error,
-          error: e3
-        };
-      }
-    }
-    return {
-      type: ResultType.data,
-      data: result.deferredData.data
-    };
-  }
-  function hasNakedIndexQuery(search) {
-    return new URLSearchParams(search).getAll("index").some((v2) => v2 === "");
-  }
-  function createUseMatchesMatch(match, loaderData) {
-    let {
-      route,
-      pathname,
-      params
-    } = match;
-    return {
-      id: route.id,
-      pathname,
-      params,
-      data: loaderData[route.id],
-      handle: route.handle
-    };
-  }
-  function getTargetMatch(matches, location2) {
-    let search = typeof location2 === "string" ? parsePath(location2).search : location2.search;
-    if (matches[matches.length - 1].route.index && hasNakedIndexQuery(search || "")) {
-      return matches[matches.length - 1];
-    }
-    let pathMatches = getPathContributingMatches(matches);
-    return pathMatches[pathMatches.length - 1];
-  }
-  var Action, PopStateEventType, ResultType, immutableRouteKeys, paramRe, dynamicSegmentValue, indexRouteValue, emptySegmentValue, staticSegmentValue, splatPenalty, isSplat, joinPaths, normalizePathname, normalizeSearch, normalizeHash, AbortedDeferredError, DeferredData, ErrorResponse, validMutationMethodsArr, validMutationMethods, validRequestMethodsArr, validRequestMethods, redirectStatusCodes, redirectPreserveMethodStatusCodes, IDLE_NAVIGATION, IDLE_FETCHER, IDLE_BLOCKER, ABSOLUTE_URL_REGEX, isBrowser, isServer2, defaultDetectErrorBoundary, UNSAFE_DEFERRED_SYMBOL;
+  var Action, PopStateEventType, ResultType, paramRe, dynamicSegmentValue, indexRouteValue, emptySegmentValue, staticSegmentValue, splatPenalty, isSplat, joinPaths, normalizePathname, normalizeSearch, normalizeHash, validMutationMethodsArr, validMutationMethods, validRequestMethodsArr, validRequestMethods, isBrowser, UNSAFE_DEFERRED_SYMBOL;
   var init_router = __esm({
     "node_modules/@remix-run/router/dist/router.js"() {
       (function(Action2) {
@@ -26006,7 +24261,6 @@
         ResultType2["redirect"] = "redirect";
         ResultType2["error"] = "error";
       })(ResultType || (ResultType = {}));
-      immutableRouteKeys = /* @__PURE__ */ new Set(["lazy", "caseSensitive", "path", "id", "index", "children"]);
       paramRe = /^:\w+$/;
       dynamicSegmentValue = 3;
       indexRouteValue = 2;
@@ -26018,162 +24272,11 @@
       normalizePathname = (pathname) => pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
       normalizeSearch = (search) => !search || search === "?" ? "" : search.startsWith("?") ? search : "?" + search;
       normalizeHash = (hash) => !hash || hash === "#" ? "" : hash.startsWith("#") ? hash : "#" + hash;
-      AbortedDeferredError = class extends Error {
-      };
-      DeferredData = class {
-        constructor(data, responseInit) {
-          this.pendingKeysSet = /* @__PURE__ */ new Set();
-          this.subscribers = /* @__PURE__ */ new Set();
-          this.deferredKeys = [];
-          invariant(data && typeof data === "object" && !Array.isArray(data), "defer() only accepts plain objects");
-          let reject;
-          this.abortPromise = new Promise((_2, r6) => reject = r6);
-          this.controller = new AbortController();
-          let onAbort = () => reject(new AbortedDeferredError("Deferred data aborted"));
-          this.unlistenAbortSignal = () => this.controller.signal.removeEventListener("abort", onAbort);
-          this.controller.signal.addEventListener("abort", onAbort);
-          this.data = Object.entries(data).reduce((acc, _ref2) => {
-            let [key, value] = _ref2;
-            return Object.assign(acc, {
-              [key]: this.trackPromise(key, value)
-            });
-          }, {});
-          if (this.done) {
-            this.unlistenAbortSignal();
-          }
-          this.init = responseInit;
-        }
-        trackPromise(key, value) {
-          if (!(value instanceof Promise)) {
-            return value;
-          }
-          this.deferredKeys.push(key);
-          this.pendingKeysSet.add(key);
-          let promise = Promise.race([value, this.abortPromise]).then((data) => this.onSettle(promise, key, null, data), (error) => this.onSettle(promise, key, error));
-          promise.catch(() => {
-          });
-          Object.defineProperty(promise, "_tracked", {
-            get: () => true
-          });
-          return promise;
-        }
-        onSettle(promise, key, error, data) {
-          if (this.controller.signal.aborted && error instanceof AbortedDeferredError) {
-            this.unlistenAbortSignal();
-            Object.defineProperty(promise, "_error", {
-              get: () => error
-            });
-            return Promise.reject(error);
-          }
-          this.pendingKeysSet.delete(key);
-          if (this.done) {
-            this.unlistenAbortSignal();
-          }
-          if (error) {
-            Object.defineProperty(promise, "_error", {
-              get: () => error
-            });
-            this.emit(false, key);
-            return Promise.reject(error);
-          }
-          Object.defineProperty(promise, "_data", {
-            get: () => data
-          });
-          this.emit(false, key);
-          return data;
-        }
-        emit(aborted, settledKey) {
-          this.subscribers.forEach((subscriber) => subscriber(aborted, settledKey));
-        }
-        subscribe(fn) {
-          this.subscribers.add(fn);
-          return () => this.subscribers.delete(fn);
-        }
-        cancel() {
-          this.controller.abort();
-          this.pendingKeysSet.forEach((v2, k) => this.pendingKeysSet.delete(k));
-          this.emit(true);
-        }
-        async resolveData(signal) {
-          let aborted = false;
-          if (!this.done) {
-            let onAbort = () => this.cancel();
-            signal.addEventListener("abort", onAbort);
-            aborted = await new Promise((resolve) => {
-              this.subscribe((aborted2) => {
-                signal.removeEventListener("abort", onAbort);
-                if (aborted2 || this.done) {
-                  resolve(aborted2);
-                }
-              });
-            });
-          }
-          return aborted;
-        }
-        get done() {
-          return this.pendingKeysSet.size === 0;
-        }
-        get unwrappedData() {
-          invariant(this.data !== null && this.done, "Can only unwrap data on initialized and settled deferreds");
-          return Object.entries(this.data).reduce((acc, _ref2) => {
-            let [key, value] = _ref2;
-            return Object.assign(acc, {
-              [key]: unwrapTrackedPromise(value)
-            });
-          }, {});
-        }
-        get pendingKeys() {
-          return Array.from(this.pendingKeysSet);
-        }
-      };
-      ErrorResponse = class {
-        constructor(status, statusText, data, internal) {
-          if (internal === void 0) {
-            internal = false;
-          }
-          this.status = status;
-          this.statusText = statusText || "";
-          this.internal = internal;
-          if (data instanceof Error) {
-            this.data = data.toString();
-            this.error = data;
-          } else {
-            this.data = data;
-          }
-        }
-      };
       validMutationMethodsArr = ["post", "put", "patch", "delete"];
       validMutationMethods = new Set(validMutationMethodsArr);
       validRequestMethodsArr = ["get", ...validMutationMethodsArr];
       validRequestMethods = new Set(validRequestMethodsArr);
-      redirectStatusCodes = /* @__PURE__ */ new Set([301, 302, 303, 307, 308]);
-      redirectPreserveMethodStatusCodes = /* @__PURE__ */ new Set([307, 308]);
-      IDLE_NAVIGATION = {
-        state: "idle",
-        location: void 0,
-        formMethod: void 0,
-        formAction: void 0,
-        formEncType: void 0,
-        formData: void 0
-      };
-      IDLE_FETCHER = {
-        state: "idle",
-        data: void 0,
-        formMethod: void 0,
-        formAction: void 0,
-        formEncType: void 0,
-        formData: void 0
-      };
-      IDLE_BLOCKER = {
-        state: "unblocked",
-        proceed: void 0,
-        reset: void 0,
-        location: void 0
-      };
-      ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
       isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
-      isServer2 = !isBrowser;
-      defaultDetectErrorBoundary = (route) => Boolean(route.hasErrorBoundary);
       UNSAFE_DEFERRED_SYMBOL = Symbol("deferred");
     }
   });
@@ -26376,7 +24479,7 @@
     let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match) => match.pathnameBase));
     return React6.useMemo(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === "path"), [to, routePathnamesJson, locationPathname, relative]);
   }
-  function useRoutes(routes, locationArg) {
+  function useRoutes(routes2, locationArg) {
     !useInRouterContext() ? true ? invariant(
       false,
       // TODO: This error is probably because they somehow have 2 versions of the
@@ -26413,7 +24516,7 @@
     }
     let pathname = location2.pathname || "/";
     let remainingPathname = parentPathnameBase === "/" ? pathname : pathname.slice(parentPathnameBase.length) || "/";
-    let matches = matchRoutes(routes, {
+    let matches = matchRoutes(routes2, {
       pathname: remainingPathname
     });
     if (true) {
@@ -26611,59 +24714,8 @@
       true ? warning(false, message) : void 0;
     }
   }
-  function RouterProvider(_ref2) {
-    let {
-      fallbackElement,
-      router: router2
-    } = _ref2;
-    let getState = React6.useCallback(() => router2.state, [router2]);
-    let state = useSyncExternalStore2(
-      router2.subscribe,
-      getState,
-      // We have to provide this so React@18 doesn't complain during hydration,
-      // but we pass our serialized hydration data into the router so state here
-      // is already synced with what the server saw
-      getState
-    );
-    let navigator2 = React6.useMemo(() => {
-      return {
-        createHref: router2.createHref,
-        encodeLocation: router2.encodeLocation,
-        go: (n4) => router2.navigate(n4),
-        push: (to, state2, opts) => router2.navigate(to, {
-          state: state2,
-          preventScrollReset: opts == null ? void 0 : opts.preventScrollReset
-        }),
-        replace: (to, state2, opts) => router2.navigate(to, {
-          replace: true,
-          state: state2,
-          preventScrollReset: opts == null ? void 0 : opts.preventScrollReset
-        })
-      };
-    }, [router2]);
-    let basename = router2.basename || "/";
-    let dataRouterContext = React6.useMemo(() => ({
-      router: router2,
-      navigator: navigator2,
-      static: false,
-      basename
-    }), [router2, navigator2, basename]);
-    return /* @__PURE__ */ React6.createElement(React6.Fragment, null, /* @__PURE__ */ React6.createElement(DataRouterContext.Provider, {
-      value: dataRouterContext
-    }, /* @__PURE__ */ React6.createElement(DataRouterStateContext.Provider, {
-      value: state
-    }, /* @__PURE__ */ React6.createElement(Router, {
-      basename: router2.basename,
-      location: router2.state.location,
-      navigationType: router2.state.historyAction,
-      navigator: navigator2
-    }, router2.state.initialized ? /* @__PURE__ */ React6.createElement(Routes, null) : fallbackElement))), null);
-  }
   function Outlet(props) {
     return useOutlet(props.context);
-  }
-  function Route(_props) {
-    true ? invariant(false, "A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.") : invariant(false);
   }
   function Router(_ref4) {
     let {
@@ -26717,65 +24769,6 @@
       children,
       value: locationContext
     }));
-  }
-  function Routes(_ref5) {
-    let {
-      children,
-      location: location2
-    } = _ref5;
-    let dataRouterContext = React6.useContext(DataRouterContext);
-    let routes = dataRouterContext && !children ? dataRouterContext.router.routes : createRoutesFromChildren(children);
-    return useRoutes(routes, location2);
-  }
-  function createRoutesFromChildren(children, parentPath) {
-    if (parentPath === void 0) {
-      parentPath = [];
-    }
-    let routes = [];
-    React6.Children.forEach(children, (element, index) => {
-      if (!/* @__PURE__ */ React6.isValidElement(element)) {
-        return;
-      }
-      if (element.type === React6.Fragment) {
-        routes.push.apply(routes, createRoutesFromChildren(element.props.children, parentPath));
-        return;
-      }
-      !(element.type === Route) ? true ? invariant(false, "[" + (typeof element.type === "string" ? element.type : element.type.name) + "] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>") : invariant(false) : void 0;
-      !(!element.props.index || !element.props.children) ? true ? invariant(false, "An index route cannot have child routes.") : invariant(false) : void 0;
-      let treePath = [...parentPath, index];
-      let route = {
-        id: element.props.id || treePath.join("-"),
-        caseSensitive: element.props.caseSensitive,
-        element: element.props.element,
-        Component: element.props.Component,
-        index: element.props.index,
-        path: element.props.path,
-        loader: element.props.loader,
-        action: element.props.action,
-        errorElement: element.props.errorElement,
-        ErrorBoundary: element.props.ErrorBoundary,
-        hasErrorBoundary: element.props.ErrorBoundary != null || element.props.errorElement != null,
-        shouldRevalidate: element.props.shouldRevalidate,
-        handle: element.props.handle,
-        lazy: element.props.lazy
-      };
-      if (element.props.children) {
-        route.children = createRoutesFromChildren(element.props.children, treePath);
-      }
-      routes.push(route);
-    });
-    return routes;
-  }
-  function detectErrorBoundary(route) {
-    if (true) {
-      if (route.Component && route.element) {
-        true ? warning(false, "You should not include both `Component` and `element` on your route - `element` will be ignored.") : void 0;
-      }
-      if (route.ErrorBoundary && route.errorElement) {
-        true ? warning(false, "You should not include both `ErrorBoundary` and `errorElement` on your route - `errorElement` will be ignored.") : void 0;
-      }
-    }
-    return Boolean(route.ErrorBoundary) || Boolean(route.errorElement);
   }
   var React6, is, useState4, useEffect5, useLayoutEffect2, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot, canUseDOM, isServerEnvironment, shim, useSyncExternalStore2, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, OutletContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
   var init_dist = __esm({
@@ -26998,44 +24991,32 @@
       formData
     };
   }
-  function createHashRouter(routes, opts) {
-    return createRouter({
-      basename: opts == null ? void 0 : opts.basename,
-      history: createHashHistory({
-        window: opts == null ? void 0 : opts.window
-      }),
-      hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
-      routes,
-      detectErrorBoundary
-    }).initialize();
-  }
-  function parseHydrationData() {
-    var _window;
-    let state = (_window = window) == null ? void 0 : _window.__staticRouterHydrationData;
-    if (state && state.errors) {
-      state = _extends3({}, state, {
-        errors: deserializeErrors(state.errors)
+  function HashRouter(_ref2) {
+    let {
+      basename,
+      children,
+      window: window2
+    } = _ref2;
+    let historyRef = React7.useRef();
+    if (historyRef.current == null) {
+      historyRef.current = createHashHistory({
+        window: window2,
+        v5Compat: true
       });
     }
-    return state;
-  }
-  function deserializeErrors(errors) {
-    if (!errors)
-      return null;
-    let entries = Object.entries(errors);
-    let serialized = {};
-    for (let [key, val] of entries) {
-      if (val && val.__type === "RouteErrorResponse") {
-        serialized[key] = new ErrorResponse(val.status, val.statusText, val.data, val.internal === true);
-      } else if (val && val.__type === "Error") {
-        let error = new Error(val.message);
-        error.stack = "";
-        serialized[key] = error;
-      } else {
-        serialized[key] = val;
-      }
-    }
-    return serialized;
+    let history = historyRef.current;
+    let [state, setState] = React7.useState({
+      action: history.action,
+      location: history.location
+    });
+    React7.useLayoutEffect(() => history.listen(setState), [history]);
+    return /* @__PURE__ */ React7.createElement(Router, {
+      basename,
+      children,
+      location: state.location,
+      navigationType: state.action,
+      navigator: history
+    });
   }
   function HistoryRouter(_ref3) {
     let {
@@ -27108,7 +25089,7 @@
   }
   function useSubmitImpl(fetcherKey, routeId) {
     let {
-      router: router2
+      router
     } = useDataRouterContext(DataRouterHook2.UseSubmitImpl);
     let defaultAction = useFormAction();
     return React7.useCallback(function(target, options) {
@@ -27134,11 +25115,11 @@
       };
       if (fetcherKey) {
         !(routeId != null) ? true ? invariant(false, "No routeId available for useFetcher()") : invariant(false) : void 0;
-        router2.fetch(fetcherKey, routeId, href, opts);
+        router.fetch(fetcherKey, routeId, href, opts);
       } else {
-        router2.navigate(href, opts);
+        router.navigate(href, opts);
       }
-    }, [defaultAction, router2, fetcherKey, routeId]);
+    }, [defaultAction, router, fetcherKey, routeId]);
   }
   function useFormAction(action, _temp2) {
     let {
@@ -27177,7 +25158,7 @@
       storageKey
     } = _temp3 === void 0 ? {} : _temp3;
     let {
-      router: router2
+      router
     } = useDataRouterContext(DataRouterHook2.UseScrollRestoration);
     let {
       restoreScrollPosition,
@@ -27211,9 +25192,9 @@
         }
       }, [storageKey]);
       React7.useLayoutEffect(() => {
-        let disableScrollRestoration = router2 == null ? void 0 : router2.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKey);
+        let disableScrollRestoration = router == null ? void 0 : router.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKey);
         return () => disableScrollRestoration && disableScrollRestoration();
-      }, [router2, getKey]);
+      }, [router, getKey]);
       React7.useLayoutEffect(() => {
         if (restoreScrollPosition === false) {
           return;
@@ -27250,7 +25231,7 @@
       };
     }, [callback, capture]);
   }
-  var React7, defaultMethod, defaultEncType, _excluded, _excluded2, _excluded3, isBrowser2, ABSOLUTE_URL_REGEX2, Link, NavLink, Form, FormImpl, DataRouterHook2, DataRouterStateHook2, SCROLL_RESTORATION_STORAGE_KEY, savedScrollPositions;
+  var React7, defaultMethod, defaultEncType, _excluded, _excluded2, _excluded3, isBrowser2, ABSOLUTE_URL_REGEX, Link, NavLink, Form, FormImpl, DataRouterHook2, DataRouterStateHook2, SCROLL_RESTORATION_STORAGE_KEY, savedScrollPositions;
   var init_dist2 = __esm({
     "node_modules/react-router-dom/dist/index.js"() {
       React7 = __toESM(require_react());
@@ -27266,7 +25247,7 @@
         HistoryRouter.displayName = "unstable_HistoryRouter";
       }
       isBrowser2 = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
-      ABSOLUTE_URL_REGEX2 = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+      ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
       Link = /* @__PURE__ */ React7.forwardRef(function LinkWithRef(_ref4, ref) {
         let {
           onClick,
@@ -27283,7 +25264,7 @@
         } = React7.useContext(NavigationContext);
         let absoluteHref;
         let isExternal = false;
-        if (typeof to === "string" && ABSOLUTE_URL_REGEX2.test(to)) {
+        if (typeof to === "string" && ABSOLUTE_URL_REGEX.test(to)) {
           absoluteHref = to;
           if (isBrowser2) {
             let currentUrl = new URL(window.location.href);
@@ -27523,7 +25504,7 @@
           var Portal = REACT_PORTAL_TYPE;
           var Profiler = REACT_PROFILER_TYPE;
           var StrictMode = REACT_STRICT_MODE_TYPE;
-          var Suspense = REACT_SUSPENSE_TYPE;
+          var Suspense2 = REACT_SUSPENSE_TYPE;
           var hasWarnedAboutDeprecatedIsAsyncMode = false;
           function isAsyncMode(object) {
             {
@@ -27582,7 +25563,7 @@
           exports.Portal = Portal;
           exports.Profiler = Profiler;
           exports.StrictMode = StrictMode;
-          exports.Suspense = Suspense;
+          exports.Suspense = Suspense2;
           exports.isAsyncMode = isAsyncMode;
           exports.isConcurrentMode = isConcurrentMode;
           exports.isContextConsumer = isContextConsumer;
@@ -28825,21 +26806,62 @@
     }
   });
 
-  // src/routes/company/tabs/company-overview-tab.tsx
-  var company_overview_tab_exports = {};
-  __export(company_overview_tab_exports, {
-    default: () => CompanyOverviewTab
-  });
-  function CompanyOverviewTab() {
-    const { id } = useParams();
-    return /* @__PURE__ */ import_react28.default.createElement("div", null, "Company overview tab: id - ", id);
+  // src/components/navigation-tabs.tsx
+  function NavigationLink({ path, children }) {
+    const location2 = useLocation();
+    const resolvedPath = useResolvedPath(path);
+    let isActive = resolvedPath.pathname === location2.pathname;
+    return /* @__PURE__ */ import_react28.default.createElement(NavLink, { to: path }, /* @__PURE__ */ import_react28.default.createElement(
+      "button",
+      {
+        style: {
+          padding: "5px 10px",
+          background: isActive ? "blue" : void 0,
+          color: isActive ? "white" : void 0
+        }
+      },
+      children
+    ));
+  }
+  function NavigationTabs(props) {
+    var _a;
+    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
+      const { icon: icon3, label, path, disabled: disabled2 } = item;
+      return /* @__PURE__ */ import_react28.default.createElement(NavigationLink, { key: idx, path }, label);
+    }));
   }
   var import_react28;
-  var init_company_overview_tab = __esm({
-    "src/routes/company/tabs/company-overview-tab.tsx"() {
+  var init_navigation_tabs = __esm({
+    "src/components/navigation-tabs.tsx"() {
       "use strict";
       import_react28 = __toESM(require_react(), 1);
       init_dist2();
+    }
+  });
+
+  // src/routes/company/company-navigation-tabs.tsx
+  var import_react29, CompanyNavigationTabs;
+  var init_company_navigation_tabs = __esm({
+    "src/routes/company/company-navigation-tabs.tsx"() {
+      "use strict";
+      import_react29 = __toESM(require_react(), 1);
+      init_navigation_tabs();
+      CompanyNavigationTabs = () => {
+        const items = (0, import_react29.useMemo)(
+          () => [
+            {
+              path: "",
+              label: "Company overview"
+            },
+            {
+              path: "test",
+              label: "Test"
+            }
+          ],
+          []
+        );
+        return /* @__PURE__ */ import_react29.default.createElement(NavigationTabs, { items });
+      };
     }
   });
 
@@ -28849,14 +26871,33 @@
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react29.default.createElement("div", null, /* @__PURE__ */ import_react29.default.createElement("div", { className: "border-b" }, "Company tabs"), /* @__PURE__ */ import_react29.default.createElement(CompanyOverviewTab, null));
+    return /* @__PURE__ */ import_react30.default.createElement("div", null, /* @__PURE__ */ import_react30.default.createElement("div", { className: "border-b" }, /* @__PURE__ */ import_react30.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react30.default.createElement(import_react30.default.Suspense, { fallback: /* @__PURE__ */ import_react30.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react30.default.createElement(Outlet, null)));
   }
-  var import_react29;
+  var import_react30;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react29 = __toESM(require_react(), 1);
-      init_company_overview_tab();
+      import_react30 = __toESM(require_react(), 1);
+      init_dist2();
+      init_company_navigation_tabs();
+    }
+  });
+
+  // src/routes/company/tabs/company-overview-tab.tsx
+  var company_overview_tab_exports = {};
+  __export(company_overview_tab_exports, {
+    default: () => CompanyOverviewTab
+  });
+  function CompanyOverviewTab() {
+    const { id } = useParams();
+    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("div", null, " Company overview tab: id - ", id));
+  }
+  var import_react31;
+  var init_company_overview_tab = __esm({
+    "src/routes/company/tabs/company-overview-tab.tsx"() {
+      "use strict";
+      import_react31 = __toESM(require_react(), 1);
+      init_dist2();
     }
   });
 
@@ -28866,13 +26907,13 @@
     default: () => Projects
   });
   function Projects() {
-    return /* @__PURE__ */ import_react33.default.createElement("div", null, /* @__PURE__ */ import_react33.default.createElement("div", null, "Projects:"));
+    return /* @__PURE__ */ import_react35.default.createElement("div", null, /* @__PURE__ */ import_react35.default.createElement("div", null, "Projects:"));
   }
-  var import_react33;
+  var import_react35;
   var init_projects = __esm({
     "src/routes/projects/projects.tsx"() {
       "use strict";
-      import_react33 = __toESM(require_react(), 1);
+      import_react35 = __toESM(require_react(), 1);
     }
   });
 
@@ -28883,13 +26924,13 @@
   });
   function ProjectOverviewTab() {
     const { id } = useParams();
-    return /* @__PURE__ */ import_react34.default.createElement("div", null, "Project overview tab: id - ", id);
+    return /* @__PURE__ */ import_react36.default.createElement("div", null, "Project overview tab: id - ", id);
   }
-  var import_react34;
+  var import_react36;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react34 = __toESM(require_react(), 1);
+      import_react36 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -31244,12 +29285,12 @@
   }
 
   // src/index.tsx
-  var import_react37 = __toESM(require_react(), 1);
+  var import_react39 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react36 = __toESM(require_react(), 1);
+  var import_react38 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -35140,11 +33181,11 @@
 
   // src/components/layout.tsx
   function Layout() {
-    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react26.default.createElement(Sidebar, null), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react26.default.createElement(Header, null), /* @__PURE__ */ import_react26.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react26.default.createElement(Outlet, null))));
+    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react26.default.createElement(Sidebar, null), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react26.default.createElement(Header, null), /* @__PURE__ */ import_react26.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react26.default.createElement(import_react26.default.Suspense, { fallback: /* @__PURE__ */ import_react26.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react26.default.createElement(Outlet, null)))));
   }
 
   // src/routes/company/companies.route.tsx
-  var import_react30 = __toESM(require_react(), 1);
+  var import_react32 = __toESM(require_react(), 1);
 
   // node_modules/graphql-request/build/esm/defaultJsonSerializer.js
   var defaultJsonSerializer = {
@@ -38929,53 +36970,57 @@ spurious results.`);
   }
 
   // src/routes/company/companies.route.tsx
-  var CompanyPage2 = import_react30.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react30.default.lazy(
+  var CompanyPage2 = import_react32.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react32.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   var companiesRoutes = [
     {
       path: "companies",
-      element: /* @__PURE__ */ import_react30.default.createElement(Companies, null)
+      element: /* @__PURE__ */ import_react32.default.createElement(Companies, null)
     },
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react30.default.createElement(CompanyPage2, null)
-      // children: [
-      //   {
-      //     path: ":id/overview-tab",
-      //     element: <CompanyOverviewTab />,
-      //   },
-      // ],
+      element: /* @__PURE__ */ import_react32.default.createElement(CompanyPage2, null),
+      children: [
+        {
+          path: "",
+          element: /* @__PURE__ */ import_react32.default.createElement(CompanyOverviewTab2, null)
+        },
+        {
+          path: "test",
+          element: /* @__PURE__ */ import_react32.default.createElement("div", null, "Test")
+        }
+      ]
     }
   ];
 
   // src/routes/dashboard.tsx
-  var import_react31 = __toESM(require_react(), 1);
+  var import_react33 = __toESM(require_react(), 1);
   function Dashboard() {
-    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("p", null, "Dashboard"));
+    return /* @__PURE__ */ import_react33.default.createElement("div", null, /* @__PURE__ */ import_react33.default.createElement("p", null, "Dashboard"));
   }
 
   // src/routes/not-found/not-found.tsx
-  var import_react32 = __toESM(require_react(), 1);
+  var import_react34 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react32.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react34.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react35 = __toESM(require_react(), 1);
-  var ProjectPage = import_react35.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
-  var ProjectOverviewTab2 = import_react35.default.lazy(
+  var import_react37 = __toESM(require_react(), 1);
+  var ProjectPage = import_react37.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
+  var ProjectOverviewTab2 = import_react37.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   var projectsRoutes = [
     {
       path: "project",
-      element: /* @__PURE__ */ import_react35.default.createElement(ProjectPage, null),
+      element: /* @__PURE__ */ import_react37.default.createElement(ProjectPage, null),
       children: [
         {
           path: ":id",
-          element: /* @__PURE__ */ import_react35.default.createElement(ProjectOverviewTab2, null)
+          element: /* @__PURE__ */ import_react37.default.createElement(ProjectOverviewTab2, null)
         }
       ]
     }
@@ -38983,21 +37028,25 @@ spurious results.`);
 
   // src/app.tsx
   init_projects();
-  var router = createHashRouter([
+  function App() {
+    const router = useRoutes(routes);
+    return /* @__PURE__ */ import_react38.default.createElement(import_react38.Suspense, { fallback: /* @__PURE__ */ import_react38.default.createElement("div", null, "Loading...") }, router);
+  }
+  var routes = [
     {
-      element: /* @__PURE__ */ import_react36.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react38.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react36.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react38.default.createElement(Dashboard, null) },
         ...companiesRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react36.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react38.default.createElement(Projects, null)
         },
         ...projectsRoutes,
-        { path: "*", element: /* @__PURE__ */ import_react36.default.createElement(NotFoundPage, null) }
+        { path: "*", element: /* @__PURE__ */ import_react38.default.createElement(NotFoundPage, null) }
       ]
     }
-  ]);
+  ];
 
   // src/index.tsx
   var queryClient = new QueryClient();
@@ -39012,7 +37061,7 @@ spurious results.`);
     );
   }
   root.render(
-    /* @__PURE__ */ import_react37.default.createElement(import_react37.default.StrictMode, null, /* @__PURE__ */ import_react37.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react37.default.createElement(RouterProvider, { router })))
+    /* @__PURE__ */ import_react39.default.createElement(import_react39.default.StrictMode, null, /* @__PURE__ */ import_react39.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react39.default.createElement(HashRouter, null, /* @__PURE__ */ import_react39.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:

@@ -1,5 +1,5 @@
-import React from "react";
-import { createHashRouter } from "react-router-dom";
+import React, { Suspense } from "react";
+import { createHashRouter, useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
 
 import Companies from "./routes/company/companies";
@@ -19,8 +19,12 @@ import Projects from "./routes/projects/projects";
 //     </>
 //   );
 // }
+export default function App() {
+  const router = useRoutes(routes);
+  return <Suspense fallback={<div>Loading...</div>}>{router}</Suspense>;
+}
 
-export const router = createHashRouter([
+export const routes = [
   {
     element: <Layout />,
     children: [
@@ -34,4 +38,4 @@ export const router = createHashRouter([
       { path: "*", element: <NotFoundPage /> },
     ],
   },
-]);
+];
