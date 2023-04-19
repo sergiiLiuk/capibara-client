@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink, useLocation, useResolvedPath } from "react-router-dom";
+import { faBuilding } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export type LinkTabPanelItem = {
   label: string;
@@ -16,8 +18,9 @@ type Props<T extends LinkTabPanelItem> = {
 type NavLinkProps = {
   path: string;
   children: React.ReactNode;
+  icon?: React.ComponentType<React.SVGAttributes<SVGSVGElement>>;
 };
-function NavigationLink({ path, children }: NavLinkProps) {
+function NavigationLink({ path, children, icon }: NavLinkProps) {
   const location = useLocation();
   const resolvedPath = useResolvedPath(path);
   let isActive = resolvedPath.pathname === location.pathname;
@@ -43,7 +46,7 @@ export function NavigationTabs<T extends LinkTabPanelItem>(props: Props<T>) {
       {props.items?.map((item, idx) => {
         const { icon, label, path, disabled } = item;
         return (
-          <NavigationLink key={idx} path={path}>
+          <NavigationLink key={idx} path={path} icon={icon}>
             {label}
           </NavigationLink>
         );

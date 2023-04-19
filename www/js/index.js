@@ -2424,9 +2424,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React25 = require_react();
+          var React26 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React25.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React26.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4031,7 +4031,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React25.Children.forEach(props.children, function(child) {
+                  React26.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12478,7 +12478,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React25.Component().refs;
+          var emptyRefsObject = new React26.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23528,8 +23528,8 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React25 = require_react();
-          var ReactSharedInternals = React25.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var React26 = require_react();
+          var ReactSharedInternals = React26.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -23559,13 +23559,13 @@
             return x2 === y3 && (x2 !== 0 || 1 / x2 === 1 / y3) || x2 !== x2 && y3 !== y3;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
-          var useState6 = React25.useState, useEffect7 = React25.useEffect, useLayoutEffect4 = React25.useLayoutEffect, useDebugValue2 = React25.useDebugValue;
+          var useState6 = React26.useState, useEffect7 = React26.useEffect, useLayoutEffect4 = React26.useLayoutEffect, useDebugValue2 = React26.useDebugValue;
           var didWarnOld18Alpha2 = false;
           var didWarnUncachedGetSnapshot2 = false;
           function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
             {
               if (!didWarnOld18Alpha2) {
-                if (React25.startTransition !== void 0) {
+                if (React26.startTransition !== void 0) {
                   didWarnOld18Alpha2 = true;
                   error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
                 }
@@ -23630,7 +23630,7 @@
           var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var isServerEnvironment2 = !canUseDOM2;
           var shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3;
-          var useSyncExternalStore$22 = React25.useSyncExternalStore !== void 0 ? React25.useSyncExternalStore : shim2;
+          var useSyncExternalStore$22 = React26.useSyncExternalStore !== void 0 ? React26.useSyncExternalStore : shim2;
           exports.useSyncExternalStore = useSyncExternalStore$22;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
@@ -26807,11 +26807,11 @@
   });
 
   // src/components/navigation-tabs.tsx
-  function NavigationLink({ path, children }) {
+  function NavigationLink({ path, children, icon: icon3 }) {
     const location2 = useLocation();
     const resolvedPath = useResolvedPath(path);
     let isActive = resolvedPath.pathname === location2.pathname;
-    return /* @__PURE__ */ import_react28.default.createElement(NavLink, { to: path }, /* @__PURE__ */ import_react28.default.createElement(
+    return /* @__PURE__ */ import_react29.default.createElement(NavLink, { to: path }, /* @__PURE__ */ import_react29.default.createElement(
       "button",
       {
         style: {
@@ -26825,29 +26825,29 @@
   }
   function NavigationTabs(props) {
     var _a;
-    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
+    return /* @__PURE__ */ import_react29.default.createElement("div", { className: "flex" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
       const { icon: icon3, label, path, disabled: disabled2 } = item;
-      return /* @__PURE__ */ import_react28.default.createElement(NavigationLink, { key: idx, path }, label);
+      return /* @__PURE__ */ import_react29.default.createElement(NavigationLink, { key: idx, path, icon: icon3 }, label);
     }));
   }
-  var import_react28;
+  var import_react29;
   var init_navigation_tabs = __esm({
     "src/components/navigation-tabs.tsx"() {
       "use strict";
-      import_react28 = __toESM(require_react(), 1);
+      import_react29 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/routes/company/company-navigation-tabs.tsx
-  var import_react29, CompanyNavigationTabs;
+  var import_react30, CompanyNavigationTabs;
   var init_company_navigation_tabs = __esm({
     "src/routes/company/company-navigation-tabs.tsx"() {
       "use strict";
-      import_react29 = __toESM(require_react(), 1);
+      import_react30 = __toESM(require_react(), 1);
       init_navigation_tabs();
       CompanyNavigationTabs = () => {
-        const items = (0, import_react29.useMemo)(
+        const items = (0, import_react30.useMemo)(
           () => [
             {
               path: "",
@@ -26860,7 +26860,7 @@
           ],
           []
         );
-        return /* @__PURE__ */ import_react29.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react30.default.createElement(NavigationTabs, { items });
       };
     }
   });
@@ -26871,13 +26871,13 @@
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react30.default.createElement("div", null, /* @__PURE__ */ import_react30.default.createElement("div", { className: "border-b" }, /* @__PURE__ */ import_react30.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react30.default.createElement(import_react30.default.Suspense, { fallback: /* @__PURE__ */ import_react30.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react30.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("div", { className: "border-b" }, /* @__PURE__ */ import_react31.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Suspense, { fallback: /* @__PURE__ */ import_react31.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react31.default.createElement(Outlet, null)));
   }
-  var import_react30;
+  var import_react31;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react30 = __toESM(require_react(), 1);
+      import_react31 = __toESM(require_react(), 1);
       init_dist2();
       init_company_navigation_tabs();
     }
@@ -26890,13 +26890,13 @@
   });
   function CompanyOverviewTab() {
     const { id } = useParams();
-    return /* @__PURE__ */ import_react31.default.createElement("div", null, /* @__PURE__ */ import_react31.default.createElement("div", null, " Company overview tab: id - ", id));
+    return /* @__PURE__ */ import_react32.default.createElement("div", null, /* @__PURE__ */ import_react32.default.createElement("div", null, " Company overview tab: id - ", id));
   }
-  var import_react31;
+  var import_react32;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react31 = __toESM(require_react(), 1);
+      import_react32 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -26907,13 +26907,13 @@
     default: () => Projects
   });
   function Projects() {
-    return /* @__PURE__ */ import_react35.default.createElement("div", null, /* @__PURE__ */ import_react35.default.createElement("div", null, "Projects:"));
+    return /* @__PURE__ */ import_react36.default.createElement("div", null, /* @__PURE__ */ import_react36.default.createElement("div", null, "Projects:"));
   }
-  var import_react35;
+  var import_react36;
   var init_projects = __esm({
     "src/routes/projects/projects.tsx"() {
       "use strict";
-      import_react35 = __toESM(require_react(), 1);
+      import_react36 = __toESM(require_react(), 1);
     }
   });
 
@@ -26924,13 +26924,13 @@
   });
   function ProjectOverviewTab() {
     const { id } = useParams();
-    return /* @__PURE__ */ import_react36.default.createElement("div", null, "Project overview tab: id - ", id);
+    return /* @__PURE__ */ import_react37.default.createElement("div", null, "Project overview tab: id - ", id);
   }
-  var import_react36;
+  var import_react37;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react36 = __toESM(require_react(), 1);
+      import_react37 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -29285,16 +29285,16 @@
   }
 
   // src/index.tsx
-  var import_react39 = __toESM(require_react(), 1);
+  var import_react40 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react38 = __toESM(require_react(), 1);
+  var import_react39 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
-  var import_react26 = __toESM(require_react(), 1);
+  var import_react27 = __toESM(require_react(), 1);
   init_dist2();
 
   // node_modules/@fortawesome/free-regular-svg-icons/index.mjs
@@ -33119,11 +33119,31 @@
 
   // src/components/sidebar.tsx
   var import_classnames = __toESM(require_classnames(), 1);
-  var import_react25 = __toESM(require_react(), 1);
+  var import_react26 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/routing/navigation-items.tsx
   var import_react24 = __toESM(require_react(), 1);
+  var import_react25 = __toESM(require_react(), 1);
+
+  // node_modules/@fortawesome/free-solid-svg-icons/index.mjs
+  var faHouse = {
+    prefix: "fas",
+    iconName: "house",
+    icon: [576, 512, [127968, 63498, 63500, "home", "home-alt", "home-lg-alt"], "f015", "M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"]
+  };
+  var faDiagramProject = {
+    prefix: "fas",
+    iconName: "diagram-project",
+    icon: [576, 512, ["project-diagram"], "f542", "M0 80C0 53.5 21.5 32 48 32h96c26.5 0 48 21.5 48 48V96H384V80c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H432c-26.5 0-48-21.5-48-48V160H192v16c0 1.7-.1 3.4-.3 5L272 288h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H272c-26.5 0-48-21.5-48-48V336c0-1.7 .1-3.4 .3-5L144 224H48c-26.5 0-48-21.5-48-48V80z"]
+  };
+  var faBuilding = {
+    prefix: "fas",
+    iconName: "building",
+    icon: [384, 512, [127970, 61687], "f1ad", "M48 0C21.5 0 0 21.5 0 48V464c0 26.5 21.5 48 48 48h96V432c0-26.5 21.5-48 48-48s48 21.5 48 48v80h96c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48H48zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V240zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V112zM272 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16z"]
+  };
+
+  // src/routing/navigation-items.tsx
   function NavigationItems() {
     const scope = {};
     return (0, import_react24.useMemo)(
@@ -33132,21 +33152,21 @@
           key: "dashboard",
           type: "route",
           name: "Dashboard",
-          icon: void 0,
+          icon: /* @__PURE__ */ import_react25.default.createElement(FontAwesomeIcon, { icon: faHouse }),
           route: "/"
         },
         {
           key: "companies",
           type: "route",
           name: "Companies",
-          icon: void 0,
+          icon: /* @__PURE__ */ import_react25.default.createElement(FontAwesomeIcon, { icon: faBuilding }),
           route: "companies"
         },
         {
           key: "projects",
           type: "route",
           name: "Projects",
-          icon: void 0,
+          icon: /* @__PURE__ */ import_react25.default.createElement(FontAwesomeIcon, { icon: faDiagramProject }),
           route: "projects"
         }
       ],
@@ -33157,12 +33177,12 @@
   // src/components/sidebar.tsx
   function Sidebar() {
     const items = NavigationItems();
-    return /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, /* @__PURE__ */ import_react25.default.createElement(Link, { to: "/" }, "Capibara")), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react25.default.createElement(SidebarLink, { key: link.key, item: link }))), /* @__PURE__ */ import_react25.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react25.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
+    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-col w-60 p-3 text-white bg-neutral-900" }, /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, /* @__PURE__ */ import_react26.default.createElement(Link, { to: "/" }, "Capibara")), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react26.default.createElement(SidebarLink, { key: link.key, item: link }))), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react26.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, "Logout"))));
   }
   var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
   function SidebarLink({ item }) {
     const { pathname } = useLocation();
-    return /* @__PURE__ */ import_react25.default.createElement(
+    return /* @__PURE__ */ import_react26.default.createElement(
       Link,
       __spreadValues({
         className: (0, import_classnames.default)(
@@ -33175,33 +33195,34 @@
         onClick: () => {
         }
       }),
-      /* @__PURE__ */ import_react25.default.createElement("div", null, " ", item.name)
+      /* @__PURE__ */ import_react26.default.createElement("span", null, item.icon),
+      /* @__PURE__ */ import_react26.default.createElement("div", null, " ", item.name)
     );
   }
 
   // src/components/layout.tsx
   function Layout() {
-    return /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react26.default.createElement(Sidebar, null), /* @__PURE__ */ import_react26.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react26.default.createElement(Header, null), /* @__PURE__ */ import_react26.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react26.default.createElement(import_react26.default.Suspense, { fallback: /* @__PURE__ */ import_react26.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react26.default.createElement(Outlet, null)))));
+    return /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react27.default.createElement(Sidebar, null), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react27.default.createElement(Header, null), /* @__PURE__ */ import_react27.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Suspense, { fallback: /* @__PURE__ */ import_react27.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react27.default.createElement(Outlet, null)))));
   }
 
   // src/routes/company/companies.route.tsx
-  var import_react32 = __toESM(require_react(), 1);
+  var import_react33 = __toESM(require_react(), 1);
 
   // src/routes/company/companies.tsx
-  var import_react27 = __toESM(require_react(), 1);
+  var import_react28 = __toESM(require_react(), 1);
   init_dist2();
   function Companies({ data }) {
-    return /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col" }, data.companies.map((record, idx) => {
-      return /* @__PURE__ */ import_react27.default.createElement(
+    return /* @__PURE__ */ import_react28.default.createElement("div", null, /* @__PURE__ */ import_react28.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex flex-col" }, data.companies.map((record, idx) => {
+      return /* @__PURE__ */ import_react28.default.createElement(
         Link,
         {
           to: `${record.id}`,
           className: "flex flex-col border-2  p-2",
           key: idx
         },
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.name),
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.cvr)
+        /* @__PURE__ */ import_react28.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react28.default.createElement("div", null, record.name),
+        /* @__PURE__ */ import_react28.default.createElement("div", null, record.cvr)
       );
     })));
   }
@@ -36969,8 +36990,8 @@ spurious results.`);
   };
 
   // src/routes/company/companies.route.tsx
-  var CompanyPage2 = import_react32.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react32.default.lazy(
+  var CompanyPage2 = import_react33.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react33.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   function Container(props) {
@@ -36979,56 +37000,56 @@ spurious results.`);
       GET_COMPANIES
     );
     if (!data && isLoading)
-      return /* @__PURE__ */ import_react32.default.createElement("div", null, "Loading...");
-    return /* @__PURE__ */ import_react32.default.createElement(props.component, { data });
+      return /* @__PURE__ */ import_react33.default.createElement("div", null, "Loading...");
+    return /* @__PURE__ */ import_react33.default.createElement(props.component, { data });
   }
   var companiesRoutes = [
     {
       path: "companies",
-      element: /* @__PURE__ */ import_react32.default.createElement(Container, { component: Companies })
+      element: /* @__PURE__ */ import_react33.default.createElement(Container, { component: Companies })
     },
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react32.default.createElement(CompanyPage2, null),
+      element: /* @__PURE__ */ import_react33.default.createElement(CompanyPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react32.default.createElement(CompanyOverviewTab2, null)
+          element: /* @__PURE__ */ import_react33.default.createElement(CompanyOverviewTab2, null)
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react32.default.createElement("div", null, "Test ")
+          element: /* @__PURE__ */ import_react33.default.createElement("div", null, "Test ")
         }
       ]
     }
   ];
 
   // src/routes/dashboard.tsx
-  var import_react33 = __toESM(require_react(), 1);
+  var import_react34 = __toESM(require_react(), 1);
   function Dashboard() {
-    return /* @__PURE__ */ import_react33.default.createElement("div", null, /* @__PURE__ */ import_react33.default.createElement("p", null, "Dashboard"));
+    return /* @__PURE__ */ import_react34.default.createElement("div", null, /* @__PURE__ */ import_react34.default.createElement("p", null, "Dashboard"));
   }
 
   // src/routes/not-found/not-found.tsx
-  var import_react34 = __toESM(require_react(), 1);
+  var import_react35 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react34.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react35.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react37 = __toESM(require_react(), 1);
-  var ProjectPage = import_react37.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
-  var ProjectOverviewTab2 = import_react37.default.lazy(
+  var import_react38 = __toESM(require_react(), 1);
+  var ProjectPage = import_react38.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
+  var ProjectOverviewTab2 = import_react38.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   var projectsRoutes = [
     {
       path: "project",
-      element: /* @__PURE__ */ import_react37.default.createElement(ProjectPage, null),
+      element: /* @__PURE__ */ import_react38.default.createElement(ProjectPage, null),
       children: [
         {
           path: ":id",
-          element: /* @__PURE__ */ import_react37.default.createElement(ProjectOverviewTab2, null)
+          element: /* @__PURE__ */ import_react38.default.createElement(ProjectOverviewTab2, null)
         }
       ]
     }
@@ -37038,20 +37059,20 @@ spurious results.`);
   init_projects();
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react38.default.createElement(import_react38.Suspense, { fallback: /* @__PURE__ */ import_react38.default.createElement("div", null, "Loading...") }, router);
+    return /* @__PURE__ */ import_react39.default.createElement(import_react39.Suspense, { fallback: /* @__PURE__ */ import_react39.default.createElement("div", null, "Loading...") }, router);
   }
   var routes = [
     {
-      element: /* @__PURE__ */ import_react38.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react39.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react38.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react39.default.createElement(Dashboard, null) },
         ...companiesRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react38.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react39.default.createElement(Projects, null)
         },
         ...projectsRoutes,
-        { path: "*", element: /* @__PURE__ */ import_react38.default.createElement(NotFoundPage, null) }
+        { path: "*", element: /* @__PURE__ */ import_react39.default.createElement(NotFoundPage, null) }
       ]
     }
   ];
@@ -37069,7 +37090,7 @@ spurious results.`);
     );
   }
   root.render(
-    /* @__PURE__ */ import_react39.default.createElement(import_react39.default.StrictMode, null, /* @__PURE__ */ import_react39.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react39.default.createElement(HashRouter, null, /* @__PURE__ */ import_react39.default.createElement(App, null))))
+    /* @__PURE__ */ import_react40.default.createElement(import_react40.default.StrictMode, null, /* @__PURE__ */ import_react40.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react40.default.createElement(HashRouter, null, /* @__PURE__ */ import_react40.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:

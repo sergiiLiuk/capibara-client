@@ -47,6 +47,7 @@ function SidebarLink({ item }: any) {
         onClick: () => {},
       }}
     >
+      <span>{item.icon}</span>
       <div> {item.name}</div>
     </Link>
   );
