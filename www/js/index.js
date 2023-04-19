@@ -33187,6 +33187,25 @@
   // src/routes/company/companies.route.tsx
   var import_react32 = __toESM(require_react(), 1);
 
+  // src/routes/company/companies.tsx
+  var import_react27 = __toESM(require_react(), 1);
+  init_dist2();
+  function Companies({ data }) {
+    return /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col" }, data.companies.map((record, idx) => {
+      return /* @__PURE__ */ import_react27.default.createElement(
+        Link,
+        {
+          to: `${record.id}`,
+          className: "flex flex-col border-2  p-2",
+          key: idx
+        },
+        /* @__PURE__ */ import_react27.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react27.default.createElement("div", null, record.name),
+        /* @__PURE__ */ import_react27.default.createElement("div", null, record.cvr)
+      );
+    })));
+  }
+
   // node_modules/graphql-request/build/esm/defaultJsonSerializer.js
   var defaultJsonSerializer = {
     parse: JSON.parse,
@@ -36931,9 +36950,7 @@ spurious results.`);
   gql["default"] = gql;
   var lib_default = gql;
 
-  // src/routes/company/companies.tsx
-  var import_react27 = __toESM(require_react(), 1);
-  init_dist2();
+  // src/routes/company/companies.api.ts
   var GET_COMPANIES = lib_default`
   query {
     companies {
@@ -36950,34 +36967,25 @@ spurious results.`);
     });
     return useQuery(key, fetchData, config2);
   };
-  function Companies() {
-    const { data, isLoading, error } = useGQLQuery(["companies"], GET_COMPANIES);
-    if (!data && isLoading)
-      return /* @__PURE__ */ import_react27.default.createElement("div", null, "Loading...");
-    return /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col" }, data.companies.map((record, idx) => {
-      return /* @__PURE__ */ import_react27.default.createElement(
-        Link,
-        {
-          to: `${record.id}`,
-          className: "flex flex-col border-2  p-2",
-          key: idx
-        },
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.name),
-        /* @__PURE__ */ import_react27.default.createElement("div", null, record.cvr)
-      );
-    })));
-  }
 
   // src/routes/company/companies.route.tsx
   var CompanyPage2 = import_react32.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
   var CompanyOverviewTab2 = import_react32.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
+  function Container(props) {
+    const { data, isLoading, error } = useGQLQuery(
+      ["companies"],
+      GET_COMPANIES
+    );
+    if (!data && isLoading)
+      return /* @__PURE__ */ import_react32.default.createElement("div", null, "Loading...");
+    return /* @__PURE__ */ import_react32.default.createElement(props.component, { data });
+  }
   var companiesRoutes = [
     {
       path: "companies",
-      element: /* @__PURE__ */ import_react32.default.createElement(Companies, null)
+      element: /* @__PURE__ */ import_react32.default.createElement(Container, { component: Companies })
     },
     {
       path: "companies/:id",
@@ -36989,7 +36997,7 @@ spurious results.`);
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react32.default.createElement("div", null, "Test")
+          element: /* @__PURE__ */ import_react32.default.createElement("div", null, "Test ")
         }
       ]
     }

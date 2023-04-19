@@ -1,31 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { request } from "graphql-request";
-import gql from "graphql-tag";
 import React from "react";
 import { Link } from "react-router-dom";
 
-//TODO: move query to its file
-const GET_COMPANIES = gql`
-  query {
-    companies {
-      id
-      name
-      cvr
-    }
-  }
-`;
-
-//TODO: types
-const useGQLQuery = (key, query, variables?, config = {}) => {
-  const endpoint = "http://localhost:5000/graphql";
-  const fetchData = async () => await request(endpoint, query, variables);
-  return useQuery(key, fetchData, config);
+type Props = {
+  data: any;
 };
 
-export default function Companies() {
-  const { data, isLoading, error } = useGQLQuery(["companies"], GET_COMPANIES);
-  if (!data && isLoading) return <div>Loading...</div>;
-
+export default function Companies({ data }: Props) {
   return (
     <div>
       <div>Companies:</div>
@@ -44,8 +24,6 @@ export default function Companies() {
           );
         })}
       </div>
-
-      {/* <Link to={"/company/1"}>Go to company</Link> */}
     </div>
   );
 }
