@@ -3,7 +3,8 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiagramProject } from "@fortawesome/free-solid-svg-icons";
 import { faBuilding } from "@fortawesome/free-solid-svg-icons";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { RiDashboardFill } from "react-icons/ri";
+import { BiTestTube } from "react-icons/bi";
 
 export function NavigationItems() {
   //   const { scope, solution } = useAuth();
@@ -15,7 +16,7 @@ export function NavigationItems() {
         key: "dashboard",
         type: "route" as const,
         name: "Dashboard",
-        icon: <FontAwesomeIcon icon={faHouse} />,
+        icon: <RiDashboardFill />,
         route: "/",
       },
       {
@@ -31,6 +32,20 @@ export function NavigationItems() {
         name: "Projects",
         icon: <FontAwesomeIcon icon={faDiagramProject} />,
         route: "projects",
+      },
+      {
+        key: "test",
+        type: "route" as const,
+        name: "Test",
+        icon: <BiTestTube />,
+        route: "projects",
+        submenu: true,
+        submenuItems: [
+          {
+            key: "submenu-1",
+            name: "Submenu 1",
+          },
+        ],
       },
     ],
     [scope]
