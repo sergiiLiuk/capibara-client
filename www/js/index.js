@@ -33297,7 +33297,7 @@
         BsArrowLeftShort,
         {
           onClick: () => setOpen((prev) => !prev),
-          className: `bg-white text-cyan-800 text-3xl rounded-full absolute top-12 -right-3.5 border border-cyan-800 cursor-pointer ${open && "rotate-180"}`
+          className: `bg-white text-cyan-800 text-3xl rounded-full absolute top-12 -right-3.5 border border-cyan-800 cursor-pointer ${!open && "rotate-180"}`
         }
       ), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react28.default.createElement("div", { key: link.key }, /* @__PURE__ */ import_react28.default.createElement(SidebarLink, { item: link, open }, link.submenu && /* @__PURE__ */ import_react28.default.createElement(
         BsChevronDown,

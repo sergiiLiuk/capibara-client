@@ -22,7 +22,7 @@ export default function Sidebar() {
         <BsArrowLeftShort
           onClick={() => setOpen((prev) => !prev)}
           className={`bg-white text-cyan-800 text-3xl rounded-full absolute top-12 -right-3.5 border border-cyan-800 cursor-pointer ${
-            open && "rotate-180"
+            !open && "rotate-180"
           }`}
         />
         <div className="flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0">
