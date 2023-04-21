@@ -21,7 +21,7 @@ export default function Sidebar() {
       <div className=" flex-1 flex flex-col overflow-auto">
         <BsArrowLeftShort
           onClick={() => setOpen((prev) => !prev)}
-          className={`bg-white text-cyan-800 text-3xl rounded-full absolute top-12 -right-3.5 border border-cyan-800 cursor-pointer ${
+          className={`bg-white text-cyan-800 text-3xl rounded-full absolute top-20 -right-3.5 border border-cyan-800 cursor-pointer ${
             !open && "rotate-180"
           }`}
         />
@@ -82,7 +82,7 @@ function SidebarLink({
         params: item.params,
       }}
     >
-      <span>{item.icon}</span>
+      {item.icon}
       {open && <div> {item.name}</div>}
       {children}
     </Link>

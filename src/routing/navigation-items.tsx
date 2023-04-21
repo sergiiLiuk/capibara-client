@@ -1,9 +1,6 @@
 import { useMemo } from "react";
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiagramProject } from "@fortawesome/free-solid-svg-icons";
-import { faBuilding } from "@fortawesome/free-solid-svg-icons";
-import { RiDashboardFill } from "react-icons/ri";
+import { BsBriefcase, BsBuilding, BsGrid1X2 } from "react-icons/bs";
 import { BiTestTube } from "react-icons/bi";
 
 export function NavigationItems() {
@@ -16,21 +13,21 @@ export function NavigationItems() {
         key: "dashboard",
         type: "route" as const,
         name: "Dashboard",
-        icon: <RiDashboardFill />,
+        icon: <BsGrid1X2 />,
         route: "/",
       },
       {
         key: "companies",
         type: "route" as const,
         name: "Companies",
-        icon: <FontAwesomeIcon icon={faBuilding} />,
+        icon: <BsBuilding />,
         route: "companies",
       },
       {
         key: "projects",
         type: "route" as const,
         name: "Projects",
-        icon: <FontAwesomeIcon icon={faDiagramProject} />,
+        icon: <BsBriefcase />,
         route: "projects",
       },
       {

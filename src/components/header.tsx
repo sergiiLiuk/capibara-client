@@ -1,12 +1,11 @@
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Popover, Transition, Menu } from "@headlessui/react";
-
+import { BsBell } from "react-icons/bs";
 import React, { Fragment } from "react";
 
 export default function Header() {
   return (
-    <div className="bg-white h-16 px-4 flex justify-between items-center">
+    <div className="bg-cyan-800 h-16 pr-4 flex justify-between items-center">
       <div className="relative">
         <input
           type="text"
@@ -23,7 +22,7 @@ export default function Header() {
                   "inline-flex items-center text-grey-700 hover:text-opacity-100 focus:outline-none active:bg-grey-100"
                 }
               >
-                <FontAwesomeIcon icon={faBell} />
+                <BsBell className="text-white" />
               </Popover.Button>
               <Transition
                 as={Fragment}
