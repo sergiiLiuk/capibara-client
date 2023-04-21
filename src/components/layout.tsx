@@ -10,7 +10,7 @@ export default function Layout() {
       <Sidebar />
       <div className="flex-1 h-screen flex flex-col">
         <Header />
-        <main className="p-6 min-h-0 overflow-auto">
+        <main className="min-h-0 overflow-auto">
           <React.Suspense fallback={<div>Loading.. </div>}>
             {<Outlet />}
           </React.Suspense>

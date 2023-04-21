@@ -27,13 +27,7 @@ function NavigationLink({ path, children, icon }: NavLinkProps) {
 
   return (
     <NavLink to={path}>
-      <button
-        style={{
-          padding: "5px 10px",
-          background: isActive ? "blue" : undefined,
-          color: isActive ? "white" : undefined,
-        }}
-      >
+      <button className={`${isActive && "bg-cyan-800 text-white"} py-1 px-4`}>
         {children}
       </button>
     </NavLink>
@@ -42,7 +36,7 @@ function NavigationLink({ path, children, icon }: NavLinkProps) {
 
 export function NavigationTabs<T extends LinkTabPanelItem>(props: Props<T>) {
   return (
-    <div className="flex">
+    <div className="flex px-6">
       {props.items?.map((item, idx) => {
         const { icon, label, path, disabled } = item;
         return (

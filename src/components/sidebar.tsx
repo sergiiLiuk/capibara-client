@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NavigationItems } from "../routing/navigation-items";
 import { BsArrowLeftShort, BsChevronDown } from "react-icons/bs";
+import { BiLogOutCircle } from "react-icons/bi";
+import { Fa500Px } from "react-icons/fa";
 
 export default function Sidebar() {
   const items = NavigationItems();
@@ -13,10 +15,15 @@ export default function Sidebar() {
     <div
       className={`relative flex flex-col ${
         open ? "w-60" : "w-14"
-      }  p-3 text-white bg-cyan-800 `}
+      }  p-3 text-white bg-cyan-800`}
     >
-      <div className="flex items-center gap-2 px-1 py-3">
-        {open && <Link to="/">Capibara</Link>}
+      <div className=" px-1 py-3">
+        <Link to="/">
+          <div className="flex items-center gap-2">
+            <Fa500Px fontSize="25px" />
+            {open && <span> Capibara</span>}
+          </div>
+        </Link>
       </div>
       <div className=" flex-1 flex flex-col overflow-auto">
         <BsArrowLeftShort
@@ -48,7 +55,15 @@ export default function Sidebar() {
           {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((link) => (
             <SidebarLink key={link.key} item={link} />
           ))} */}
-          <div className={classNames("cursor-pointer", linkClasses)}>
+          <div
+            className={classNames(
+              `cursor-pointer ${!open && "justify-center"}`,
+              linkClasses
+            )}
+          >
+            <div>
+              <BiLogOutCircle />
+            </div>
             {open && <span>Logout</span>}
           </div>
         </div>
@@ -75,6 +90,7 @@ function SidebarLink({
     <Link
       className={classNames(
         pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
+        !open && "justify-center",
         linkClasses
       )}
       {...{
@@ -82,9 +98,11 @@ function SidebarLink({
         params: item.params,
       }}
     >
-      {item.icon}
-      {open && <div> {item.name}</div>}
-      {children}
+      <>
+        <div className="h-6 w-9">{item.icon}</div>
+        {open && <div> {item.name}</div>}
+        {children}
+      </>
     </Link>
   );
 }

@@ -2424,9 +2424,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React27 = require_react();
+          var React28 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React27.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React28.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4031,7 +4031,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React27.Children.forEach(props.children, function(child) {
+                  React28.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12478,7 +12478,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React27.Component().refs;
+          var emptyRefsObject = new React28.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23528,8 +23528,8 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React27 = require_react();
-          var ReactSharedInternals = React27.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var React28 = require_react();
+          var ReactSharedInternals = React28.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -23559,13 +23559,13 @@
             return x2 === y3 && (x2 !== 0 || 1 / x2 === 1 / y3) || x2 !== x2 && y3 !== y3;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
-          var useState7 = React27.useState, useEffect7 = React27.useEffect, useLayoutEffect4 = React27.useLayoutEffect, useDebugValue2 = React27.useDebugValue;
+          var useState7 = React28.useState, useEffect7 = React28.useEffect, useLayoutEffect4 = React28.useLayoutEffect, useDebugValue2 = React28.useDebugValue;
           var didWarnOld18Alpha2 = false;
           var didWarnUncachedGetSnapshot2 = false;
           function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
             {
               if (!didWarnOld18Alpha2) {
-                if (React27.startTransition !== void 0) {
+                if (React28.startTransition !== void 0) {
                   didWarnOld18Alpha2 = true;
                   error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
                 }
@@ -23630,7 +23630,7 @@
           var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var isServerEnvironment2 = !canUseDOM2;
           var shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3;
-          var useSyncExternalStore$22 = React27.useSyncExternalStore !== void 0 ? React27.useSyncExternalStore : shim2;
+          var useSyncExternalStore$22 = React28.useSyncExternalStore !== void 0 ? React28.useSyncExternalStore : shim2;
           exports.useSyncExternalStore = useSyncExternalStore$22;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
@@ -26034,21 +26034,11 @@
     const location2 = useLocation();
     const resolvedPath = useResolvedPath(path);
     let isActive = resolvedPath.pathname === location2.pathname;
-    return /* @__PURE__ */ import_react30.default.createElement(NavLink, { to: path }, /* @__PURE__ */ import_react30.default.createElement(
-      "button",
-      {
-        style: {
-          padding: "5px 10px",
-          background: isActive ? "blue" : void 0,
-          color: isActive ? "white" : void 0
-        }
-      },
-      children
-    ));
+    return /* @__PURE__ */ import_react30.default.createElement(NavLink, { to: path }, /* @__PURE__ */ import_react30.default.createElement("button", { className: `${isActive && "bg-cyan-800 text-white"} py-1 px-4` }, children));
   }
   function NavigationTabs(props) {
     var _a;
-    return /* @__PURE__ */ import_react30.default.createElement("div", { className: "flex" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
+    return /* @__PURE__ */ import_react30.default.createElement("div", { className: "flex px-6" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
       const { icon, label, path, disabled } = item;
       return /* @__PURE__ */ import_react30.default.createElement(NavigationLink, { key: idx, path, icon }, label);
     }));
@@ -26088,21 +26078,36 @@
     }
   });
 
+  // src/components/details-header.tsx
+  var import_react32, TabHeader;
+  var init_details_header = __esm({
+    "src/components/details-header.tsx"() {
+      "use strict";
+      import_react32 = __toESM(require_react(), 1);
+      init_dist2();
+      TabHeader = () => {
+        const { id } = useParams();
+        return /* @__PURE__ */ import_react32.default.createElement("div", { className: "bg-slate-200 py-2 px-6" }, "Tab Header");
+      };
+    }
+  });
+
   // src/routes/company/company-page.tsx
   var company_page_exports = {};
   __export(company_page_exports, {
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react32.default.createElement("div", null, /* @__PURE__ */ import_react32.default.createElement("div", { className: "border-b" }, /* @__PURE__ */ import_react32.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react32.default.createElement(import_react32.default.Suspense, { fallback: /* @__PURE__ */ import_react32.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react32.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react33.default.createElement("div", null, /* @__PURE__ */ import_react33.default.createElement(TabHeader, null), /* @__PURE__ */ import_react33.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react33.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react33.default.createElement(import_react33.default.Suspense, { fallback: /* @__PURE__ */ import_react33.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react33.default.createElement(Outlet, null)));
   }
-  var import_react32;
+  var import_react33;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react32 = __toESM(require_react(), 1);
+      import_react33 = __toESM(require_react(), 1);
       init_dist2();
       init_company_navigation_tabs();
+      init_details_header();
     }
   });
 
@@ -26113,13 +26118,13 @@
   });
   function CompanyOverviewTab() {
     const { id } = useParams();
-    return /* @__PURE__ */ import_react33.default.createElement("div", null, /* @__PURE__ */ import_react33.default.createElement("div", null, " Company overview tab: id - ", id));
+    return /* @__PURE__ */ import_react34.default.createElement("div", { className: "" }, /* @__PURE__ */ import_react34.default.createElement("div", null, " Company overview tab: id - ", id));
   }
-  var import_react33;
+  var import_react34;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react33 = __toESM(require_react(), 1);
+      import_react34 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -26130,13 +26135,13 @@
     default: () => Projects
   });
   function Projects() {
-    return /* @__PURE__ */ import_react37.default.createElement("div", null, /* @__PURE__ */ import_react37.default.createElement("div", null, "Projects:"));
+    return /* @__PURE__ */ import_react38.default.createElement("div", null, /* @__PURE__ */ import_react38.default.createElement("div", null, "Projects:"));
   }
-  var import_react37;
+  var import_react38;
   var init_projects = __esm({
     "src/routes/projects/projects.tsx"() {
       "use strict";
-      import_react37 = __toESM(require_react(), 1);
+      import_react38 = __toESM(require_react(), 1);
     }
   });
 
@@ -26147,13 +26152,13 @@
   });
   function ProjectOverviewTab() {
     const { id } = useParams();
-    return /* @__PURE__ */ import_react38.default.createElement("div", null, "Project overview tab: id - ", id);
+    return /* @__PURE__ */ import_react39.default.createElement("div", null, "Project overview tab: id - ", id);
   }
-  var import_react38;
+  var import_react39;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react38 = __toESM(require_react(), 1);
+      import_react39 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
@@ -28508,12 +28513,12 @@
   }
 
   // src/index.tsx
-  var import_react41 = __toESM(require_react(), 1);
+  var import_react42 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react40 = __toESM(require_react(), 1);
+  var import_react41 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -29644,6 +29649,9 @@
   var import_react26 = __toESM(require_react(), 1);
 
   // node_modules/react-icons/bi/index.esm.js
+  function BiLogOutCircle(props) {
+    return GenIcon({ "tag": "svg", "attr": { "viewBox": "0 0 24 24" }, "child": [{ "tag": "path", "attr": { "d": "m2 12 5 4v-3h9v-2H7V8z" } }, { "tag": "path", "attr": { "d": "M13.001 2.999a8.938 8.938 0 0 0-6.364 2.637L8.051 7.05c1.322-1.322 3.08-2.051 4.95-2.051s3.628.729 4.95 2.051 2.051 3.08 2.051 4.95-.729 3.628-2.051 4.95-3.08 2.051-4.95 2.051-3.628-.729-4.95-2.051l-1.414 1.414c1.699 1.7 3.959 2.637 6.364 2.637s4.665-.937 6.364-2.637c1.7-1.699 2.637-3.959 2.637-6.364s-.937-4.665-2.637-6.364a8.938 8.938 0 0 0-6.364-2.637z" } }] })(props);
+  }
   function BiTestTube(props) {
     return GenIcon({ "tag": "svg", "attr": { "viewBox": "0 0 24 24" }, "child": [{ "tag": "path", "attr": { "d": "m13.293 2.707.818.818L3.318 14.318C2.468 15.168 2 16.298 2 17.5s.468 2.332 1.318 3.183C4.169 21.532 5.299 22 6.5 22s2.331-.468 3.182-1.318L20.475 9.889l.818.818 1.414-1.414-8-8-1.414 1.414zm3.182 8.354-2.403-2.404-1.414 1.414 2.403 2.404-1.414 1.415-.99-.99-1.414 1.414.99.99-1.415 1.415-2.403-2.404L7 15.728l2.403 2.404-1.136 1.136c-.945.944-2.59.944-3.535 0C4.26 18.795 4 18.168 4 17.5s.26-1.295.732-1.768L15.525 4.939l3.535 3.535-2.585 2.587z" } }] })(props);
   }
@@ -29693,6 +29701,11 @@
     );
   }
 
+  // node_modules/react-icons/fa/index.esm.js
+  function Fa500Px(props) {
+    return GenIcon({ "tag": "svg", "attr": { "viewBox": "0 0 448 512" }, "child": [{ "tag": "path", "attr": { "d": "M103.3 344.3c-6.5-14.2-6.9-18.3 7.4-23.1 25.6-8 8 9.2 43.2 49.2h.3v-93.9c1.2-50.2 44-92.2 97.7-92.2 53.9 0 97.7 43.5 97.7 96.8 0 63.4-60.8 113.2-128.5 93.3-10.5-4.2-2.1-31.7 8.5-28.6 53 0 89.4-10.1 89.4-64.4 0-61-77.1-89.6-116.9-44.6-23.5 26.4-17.6 42.1-17.6 157.6 50.7 31 118.3 22 160.4-20.1 24.8-24.8 38.5-58 38.5-93 0-35.2-13.8-68.2-38.8-93.3-24.8-24.8-57.8-38.5-93.3-38.5s-68.8 13.8-93.5 38.5c-.3.3-16 16.5-21.2 23.9l-.5.6c-3.3 4.7-6.3 9.1-20.1 6.1-6.9-1.7-14.3-5.8-14.3-11.8V20c0-5 3.9-10.5 10.5-10.5h241.3c8.3 0 8.3 11.6 8.3 15.1 0 3.9 0 15.1-8.3 15.1H130.3v132.9h.3c104.2-109.8 282.8-36 282.8 108.9 0 178.1-244.8 220.3-310.1 62.8zm63.3-260.8c-.5 4.2 4.6 24.5 14.6 20.6C306 56.6 384 144.5 390.6 144.5c4.8 0 22.8-15.3 14.3-22.8-93.2-89-234.5-57-238.3-38.2zM393 414.7C283 524.6 94 475.5 61 310.5c0-12.2-30.4-7.4-28.9 3.3 24 173.4 246 256.9 381.6 121.3 6.9-7.8-12.6-28.4-20.7-20.4zM213.6 306.6c0 4 4.3 7.3 5.5 8.5 3 3 6.1 4.4 8.5 4.4 3.8 0 2.6.2 22.3-19.5 19.6 19.3 19.1 19.5 22.3 19.5 5.4 0 18.5-10.4 10.7-18.2L265.6 284l18.2-18.2c6.3-6.8-10.1-21.8-16.2-15.7L249.7 268c-18.6-18.8-18.4-19.5-21.5-19.5-5 0-18 11.7-12.4 17.3L234 284c-18.1 17.9-20.4 19.2-20.4 22.6z" } }] })(props);
+  }
+
   // src/components/sidebar.tsx
   function Sidebar() {
     const items = NavigationItems();
@@ -29701,9 +29714,9 @@
     return /* @__PURE__ */ import_react27.default.createElement(
       "div",
       {
-        className: `relative flex flex-col ${open ? "w-60" : "w-14"}  p-3 text-white bg-cyan-800 `
+        className: `relative flex flex-col ${open ? "w-60" : "w-14"}  p-3 text-white bg-cyan-800`
       },
-      /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex items-center gap-2 px-1 py-3" }, open && /* @__PURE__ */ import_react27.default.createElement(Link, { to: "/" }, "Capibara")),
+      /* @__PURE__ */ import_react27.default.createElement("div", { className: " px-1 py-3" }, /* @__PURE__ */ import_react27.default.createElement(Link, { to: "/" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex items-center gap-2" }, /* @__PURE__ */ import_react27.default.createElement(Fa500Px, { fontSize: "25px" }), open && /* @__PURE__ */ import_react27.default.createElement("span", null, " Capibara")))),
       /* @__PURE__ */ import_react27.default.createElement("div", { className: " flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react27.default.createElement(
         BsArrowLeftShort,
         {
@@ -29718,7 +29731,17 @@
         }
       )), link.submenu && submenuOpen && link.submenuItems.map((subMenuItem) => {
         return /* @__PURE__ */ import_react27.default.createElement("div", { key: subMenuItem.key }, subMenuItem.name);
-      })))), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react27.default.createElement("div", { className: (0, import_classnames.default)("cursor-pointer", linkClasses) }, open && /* @__PURE__ */ import_react27.default.createElement("span", null, "Logout"))))
+      })))), /* @__PURE__ */ import_react27.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react27.default.createElement(
+        "div",
+        {
+          className: (0, import_classnames.default)(
+            `cursor-pointer ${!open && "justify-center"}`,
+            linkClasses
+          )
+        },
+        /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement(BiLogOutCircle, null)),
+        open && /* @__PURE__ */ import_react27.default.createElement("span", null, "Logout")
+      )))
     );
   }
   var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
@@ -29733,25 +29756,24 @@
       __spreadValues({
         className: (0, import_classnames.default)(
           pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
+          !open && "justify-center",
           linkClasses
         )
       }, {
         to: item.route,
         params: item.params
       }),
-      item.icon,
-      open && /* @__PURE__ */ import_react27.default.createElement("div", null, " ", item.name),
-      children
+      /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, /* @__PURE__ */ import_react27.default.createElement("div", { className: "h-6 w-9" }, item.icon), open && /* @__PURE__ */ import_react27.default.createElement("div", null, " ", item.name), children)
     );
   }
 
   // src/components/layout.tsx
   function Layout() {
-    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react28.default.createElement(Sidebar, null), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react28.default.createElement(Header, null), /* @__PURE__ */ import_react28.default.createElement("main", { className: "p-6 min-h-0 overflow-auto" }, /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Suspense, { fallback: /* @__PURE__ */ import_react28.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react28.default.createElement(Outlet, null)))));
+    return /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react28.default.createElement(Sidebar, null), /* @__PURE__ */ import_react28.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react28.default.createElement(Header, null), /* @__PURE__ */ import_react28.default.createElement("main", { className: "min-h-0 overflow-auto" }, /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Suspense, { fallback: /* @__PURE__ */ import_react28.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react28.default.createElement(Outlet, null)))));
   }
 
   // src/routes/company/companies.route.tsx
-  var import_react34 = __toESM(require_react(), 1);
+  var import_react35 = __toESM(require_react(), 1);
 
   // src/routes/company/companies.tsx
   var import_react29 = __toESM(require_react(), 1);
@@ -33535,8 +33557,8 @@ spurious results.`);
   };
 
   // src/routes/company/companies.route.tsx
-  var CompanyPage2 = import_react34.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react34.default.lazy(
+  var CompanyPage2 = import_react35.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react35.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   function Container(props) {
@@ -33545,56 +33567,56 @@ spurious results.`);
       GET_COMPANIES
     );
     if (!data && isLoading)
-      return /* @__PURE__ */ import_react34.default.createElement("div", null, "Loading...");
-    return /* @__PURE__ */ import_react34.default.createElement(props.component, { data });
+      return /* @__PURE__ */ import_react35.default.createElement("div", null, "Loading...");
+    return /* @__PURE__ */ import_react35.default.createElement(props.component, { data });
   }
   var companiesRoutes = [
     {
       path: "companies",
-      element: /* @__PURE__ */ import_react34.default.createElement(Container, { component: Companies })
+      element: /* @__PURE__ */ import_react35.default.createElement(Container, { component: Companies })
     },
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react34.default.createElement(CompanyPage2, null),
+      element: /* @__PURE__ */ import_react35.default.createElement(CompanyPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react34.default.createElement(CompanyOverviewTab2, null)
+          element: /* @__PURE__ */ import_react35.default.createElement(CompanyOverviewTab2, null)
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react34.default.createElement("div", null, "Test ")
+          element: /* @__PURE__ */ import_react35.default.createElement("div", null, "Test ")
         }
       ]
     }
   ];
 
   // src/routes/dashboard.tsx
-  var import_react35 = __toESM(require_react(), 1);
+  var import_react36 = __toESM(require_react(), 1);
   function Dashboard() {
-    return /* @__PURE__ */ import_react35.default.createElement("div", null, /* @__PURE__ */ import_react35.default.createElement("p", null, "Dashboard"));
+    return /* @__PURE__ */ import_react36.default.createElement("div", null, /* @__PURE__ */ import_react36.default.createElement("p", null, "Dashboard"));
   }
 
   // src/routes/not-found/not-found.tsx
-  var import_react36 = __toESM(require_react(), 1);
+  var import_react37 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react36.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react37.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react39 = __toESM(require_react(), 1);
-  var ProjectPage = import_react39.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
-  var ProjectOverviewTab2 = import_react39.default.lazy(
+  var import_react40 = __toESM(require_react(), 1);
+  var ProjectPage = import_react40.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
+  var ProjectOverviewTab2 = import_react40.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   var projectsRoutes = [
     {
       path: "project",
-      element: /* @__PURE__ */ import_react39.default.createElement(ProjectPage, null),
+      element: /* @__PURE__ */ import_react40.default.createElement(ProjectPage, null),
       children: [
         {
           path: ":id",
-          element: /* @__PURE__ */ import_react39.default.createElement(ProjectOverviewTab2, null)
+          element: /* @__PURE__ */ import_react40.default.createElement(ProjectOverviewTab2, null)
         }
       ]
     }
@@ -33604,20 +33626,20 @@ spurious results.`);
   init_projects();
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react40.default.createElement(import_react40.Suspense, { fallback: /* @__PURE__ */ import_react40.default.createElement("div", null, "Loading...") }, router);
+    return /* @__PURE__ */ import_react41.default.createElement(import_react41.Suspense, { fallback: /* @__PURE__ */ import_react41.default.createElement("div", null, "Loading...") }, router);
   }
   var routes = [
     {
-      element: /* @__PURE__ */ import_react40.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react41.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react40.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react41.default.createElement(Dashboard, null) },
         ...companiesRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react40.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react41.default.createElement(Projects, null)
         },
         ...projectsRoutes,
-        { path: "*", element: /* @__PURE__ */ import_react40.default.createElement(NotFoundPage, null) }
+        { path: "*", element: /* @__PURE__ */ import_react41.default.createElement(NotFoundPage, null) }
       ]
     }
   ];
@@ -33635,7 +33657,7 @@ spurious results.`);
     );
   }
   root.render(
-    /* @__PURE__ */ import_react41.default.createElement(import_react41.default.StrictMode, null, /* @__PURE__ */ import_react41.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react41.default.createElement(HashRouter, null, /* @__PURE__ */ import_react41.default.createElement(App, null))))
+    /* @__PURE__ */ import_react42.default.createElement(import_react42.default.StrictMode, null, /* @__PURE__ */ import_react42.default.createElement(QueryClientProvider, { client: queryClient }, /* @__PURE__ */ import_react42.default.createElement(HashRouter, null, /* @__PURE__ */ import_react42.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:
