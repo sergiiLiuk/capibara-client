@@ -31743,10 +31743,10 @@
   };
 
   // src/components/sidebar/sidebar.tsx
+  var linkClasses2 = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
   function Sidebar() {
     const items = NavigationItems();
     const [open, setOpen] = (0, import_react49.useState)(true);
-    const [submenuOpen, setSubMenuOpen] = (0, import_react49.useState)(false);
     return /* @__PURE__ */ import_react49.default.createElement(
       "div",
       {
@@ -31772,7 +31772,6 @@
       )))
     );
   }
-  var linkClasses2 = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
 
   // src/components/layout.tsx
   function Layout() {
