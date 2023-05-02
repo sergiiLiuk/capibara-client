@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { createHashRouter, useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
 
-import Companies from "./routes/company/companies";
 import { companiesRoutes } from "./routes/company/companies.route";
 import Dashboard from "./routes/dashboard";
 import NotFoundPage from "./routes/not-found/not-found";

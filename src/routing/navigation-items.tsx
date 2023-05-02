@@ -30,20 +30,6 @@ export function NavigationItems() {
         icon: <BsBriefcase />,
         route: "projects",
       },
-      {
-        key: "test",
-        type: "route" as const,
-        name: "Test",
-        icon: <BiTestTube />,
-        route: "projects",
-        submenu: true,
-        submenuItems: [
-          {
-            key: "submenu-1",
-            name: "Submenu 1",
-          },
-        ],
-      },
     ],
     [scope]
   );
