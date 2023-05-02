@@ -13,10 +13,7 @@ function Container(props: {
   component: React.ComponentType<{ data: any }>;
   showError?: boolean;
 }) {
-  const { data, isLoading, error } = api.useGQLQuery(
-    ["companies"],
-    api.GET_COMPANIES
-  );
+  const { data, isLoading, error } = api.useCompaniesData();
   if (!data && isLoading) return <div>Loading...</div>;
   return <props.component data={data} />;
 }

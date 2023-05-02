@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { request } from "graphql-request";
-import gql from "graphql-tag";
+import { Company } from "../../gql/graphql";
+import { apiGQL } from "../../utils/api-gql";
 
-//TODO: move query to its file
-export const GET_COMPANIES = gql`
+export const GET_COMPANIES_QUERY = /* GraphQL */ `
   query {
     companies {
       id
@@ -13,9 +12,7 @@ export const GET_COMPANIES = gql`
   }
 `;
 
-//TODO: types
-export const useGQLQuery = (key, query, variables?, config = {}) => {
-  const endpoint = "http://localhost:5000/graphql";
-  const fetchData = async () => await request(endpoint, query, variables);
-  return useQuery(key, fetchData, config);
+export const useCompaniesData = (variables?: any) => {
+  const fetchData = async () => await apiGQL<Company[]>(GET_COMPANIES_QUERY);
+  return useQuery(["companies"], fetchData);
 };

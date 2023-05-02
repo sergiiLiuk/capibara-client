@@ -1,5 +1,4 @@
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { Popover, Transition, Menu } from "@headlessui/react";
+import { Popover, Transition } from "@headlessui/react";
 import { BsBell } from "react-icons/bs";
 import React, { Fragment } from "react";
 

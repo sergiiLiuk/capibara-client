@@ -34,19 +34,25 @@ export default function Sidebar() {
         />
         <div className="flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0">
           {items.map((link) => (
-            <div key={link.key}>
+            <div className="" key={link.key}>
               <SidebarLink item={link} open={open}>
                 {link.submenu && (
-                  <BsChevronDown
-                    className={`${submenuOpen && "rotate-180"}`}
-                    onClick={() => setSubMenuOpen((prevState) => !prevState)}
-                  />
+                  <div className="flex items-center ml-2">
+                    <BsChevronDown
+                      className={`${submenuOpen && "rotate-180"}`}
+                      onClick={() => setSubMenuOpen((prevState) => !prevState)}
+                    />
+                  </div>
                 )}
               </SidebarLink>
               {link.submenu &&
                 submenuOpen &&
                 link.submenuItems.map((subMenuItem) => {
-                  return <div key={subMenuItem.key}>{subMenuItem.name}</div>;
+                  return (
+                    <div className="pl-4" key={subMenuItem.key}>
+                      {subMenuItem.name}
+                    </div>
+                  );
                 })}
             </div>
           ))}
@@ -98,11 +104,11 @@ function SidebarLink({
         params: item.params,
       }}
     >
-      <>
-        <div className="h-6 w-9">{item.icon}</div>
+      <div className="flex ">
+        <div className="flex items-center h-6 w-9">{item.icon}</div>
         {open && <div> {item.name}</div>}
         {children}
-      </>
+      </div>
     </Link>
   );
 }

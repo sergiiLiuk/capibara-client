@@ -1,16 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Company } from "../../gql/graphql";
 
 type Props = {
   data: any;
 };
 
 export default function Companies({ data }: Props) {
+  const companies: Company[] = data.data.companies ?? [];
+
   return (
     <div>
       <div>Companies:</div>
       <div className="flex flex-col">
-        {data.companies.map((record, idx) => {
+        {companies.map((record, idx) => {
           return (
             <Link
               to={`${record.id}`}
