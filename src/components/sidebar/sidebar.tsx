@@ -22,7 +22,12 @@ export default function Sidebar() {
     >
       <div className=" px-1 py-3">
         <Link to="/">
-          <div className="flex items-center gap-2">
+          <div
+            className={classNames(
+              !open && "justify-center",
+              "flex items-center  gap-2"
+            )}
+          >
             <Fa500Px fontSize="25px" />
             {open && <span> Capibara</span>}
           </div>
@@ -37,7 +42,7 @@ export default function Sidebar() {
         />
         <div className="flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0">
           {items.map((link) => (
-            <SidebarLink item={link} open={open} />
+            <SidebarLink key={link.key} item={link} open={open} />
           ))}
         </div>
         <div className="flex flex-col gap-0.5 pt-2 border-t border-nautral-700">

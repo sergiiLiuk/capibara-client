@@ -39,7 +39,7 @@ function NavigationLink({ path, children, icon }: NavLinkProps) {
 export function NavigationTabs<T extends LinkTabPanelItem>(props: Props<T>) {
   return (
     <Tab.Group>
-      <Tab.List className="flex px-6">
+      <Tab.List className="flex px-6 py-1">
         {props.items?.map((item, idx) => {
           const { icon, label, path, disabled } = item;
           return (

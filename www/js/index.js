@@ -29048,7 +29048,7 @@
   }
   function NavigationTabs(props) {
     var _a;
-    return /* @__PURE__ */ import_react53.default.createElement(rt.Group, null, /* @__PURE__ */ import_react53.default.createElement(rt.List, { className: "flex px-6" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
+    return /* @__PURE__ */ import_react53.default.createElement(rt.Group, null, /* @__PURE__ */ import_react53.default.createElement(rt.List, { className: "flex px-6 py-1" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
       const { icon, label, path, disabled } = item;
       return /* @__PURE__ */ import_react53.default.createElement(NavigationLink, { key: idx, path, icon }, label);
     })));
@@ -31752,14 +31752,24 @@
       {
         className: `relative flex flex-col ${open ? "w-60" : "w-20"}  p-3 text-white bg-cyan-800`
       },
-      /* @__PURE__ */ import_react49.default.createElement("div", { className: " px-1 py-3" }, /* @__PURE__ */ import_react49.default.createElement(Link, { to: "/" }, /* @__PURE__ */ import_react49.default.createElement("div", { className: "flex items-center gap-2" }, /* @__PURE__ */ import_react49.default.createElement(Fa500Px, { fontSize: "25px" }), open && /* @__PURE__ */ import_react49.default.createElement("span", null, " Capibara")))),
+      /* @__PURE__ */ import_react49.default.createElement("div", { className: " px-1 py-3" }, /* @__PURE__ */ import_react49.default.createElement(Link, { to: "/" }, /* @__PURE__ */ import_react49.default.createElement(
+        "div",
+        {
+          className: (0, import_classnames2.default)(
+            !open && "justify-center",
+            "flex items-center  gap-2"
+          )
+        },
+        /* @__PURE__ */ import_react49.default.createElement(Fa500Px, { fontSize: "25px" }),
+        open && /* @__PURE__ */ import_react49.default.createElement("span", null, " Capibara")
+      ))),
       /* @__PURE__ */ import_react49.default.createElement("div", { className: " flex-1 flex flex-col overflow-auto" }, /* @__PURE__ */ import_react49.default.createElement(
         BsArrowLeftShort,
         {
           onClick: () => setOpen((prev) => !prev),
           className: `bg-white text-cyan-800 text-3xl rounded-full absolute top-20 -right-3.5 border border-cyan-800 cursor-pointer ${!open && "rotate-180"}`
         }
-      ), /* @__PURE__ */ import_react49.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react49.default.createElement(SidebarLink, { item: link, open }))), /* @__PURE__ */ import_react49.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react49.default.createElement(
+      ), /* @__PURE__ */ import_react49.default.createElement("div", { className: "flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0" }, items.map((link) => /* @__PURE__ */ import_react49.default.createElement(SidebarLink, { key: link.key, item: link, open }))), /* @__PURE__ */ import_react49.default.createElement("div", { className: "flex flex-col gap-0.5 pt-2 border-t border-nautral-700" }, /* @__PURE__ */ import_react49.default.createElement(
         "div",
         {
           className: (0, import_classnames2.default)(
