@@ -4,9 +4,11 @@ import * as api from "./company.api";
 import { Company } from "../../gql/graphql";
 
 export default function Companies() {
-  const { data, isLoading, error } = api.useCompaniesData();
-  if (!data && isLoading) return <div>Loading...</div>;
-  const companies: Company[] = data.data.companies ?? [];
+  const { loading, error, data } = api.useCompaniesData();
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Somethingwent wrong</div>;
+
+  const { companies }: { companies: Company[] } = data;
 
   return (
     <div>
@@ -16,7 +18,7 @@ export default function Companies() {
           return (
             <Link
               to={`${record.id}`}
-              className="flex flex-col border-2  p-2"
+              className="flex flex-col border-2 p-2"
               key={idx}
             >
               <div>{record.id}</div>

@@ -1,13 +1,12 @@
 import React, { Suspense } from "react";
-import { createHashRouter, useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
-
-import Dashboard from "./routes/dashboard";
-import NotFoundPage from "./routes/not-found/not-found";
-import { projectsRoutes } from "./routes/projects/projects.route";
-import Projects from "./routes/projects/projects";
 import Companies from "./routes/company/companies";
 import { companyRoutes } from "./routes/company/company.route";
+import Dashboard from "./routes/dashboard";
+import { notFoundRoute } from "./routes/not-found/not-found.route";
+import Projects from "./routes/projects/projects";
+import { projectsRoutes } from "./routes/projects/projects.route";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -39,7 +38,7 @@ export const routes = [
         element: <Projects />,
       },
       ...projectsRoutes,
-      { path: "*", element: <NotFoundPage /> },
+      ...notFoundRoute,
     ],
   },
 ];

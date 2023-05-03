@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { Company } from "../../gql/graphql";
-import { apiGQL } from "../../utils/api-gql";
+import { useQuery, gql } from "@apollo/client";
 
-const GET_COMPANIES_QUERY = /* GraphQL */ `
-  query {
+const GET_COMPANIES_QUERY = /* GraphQL */ gql`
+  query getCompanies {
     companies {
       id
       name
@@ -12,15 +10,13 @@ const GET_COMPANIES_QUERY = /* GraphQL */ `
   }
 `;
 
-export const useCompaniesData = (variables?: any) => {
-  const fetchData = async () =>
-    await apiGQL<Company[]>(GET_COMPANIES_QUERY, variables);
-  return useQuery(["companies"], fetchData);
+export const useCompaniesData = () => {
+  return useQuery(GET_COMPANIES_QUERY);
 };
 
-const GET_COMPANY_QUERY = /* GraphQL */ `
-  query {
-    company {
+const GET_COMPANY_QUERY = /* GraphQL */ gql`
+  query ($id: ID!) {
+    company(id: $id) {
       id
       name
       cvr
@@ -29,7 +25,5 @@ const GET_COMPANY_QUERY = /* GraphQL */ `
 `;
 
 export const useCompanyData = (variables: { id: string }) => {
-  const fetchData = async () =>
-    await apiGQL<Company>(GET_COMPANY_QUERY, { args: variables });
-  return useQuery(["company"], fetchData);
+  return useQuery(GET_COMPANY_QUERY, { variables });
 };

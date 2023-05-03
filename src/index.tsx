@@ -1,14 +1,9 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ApolloProvider } from "@apollo/client";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import {
-  BrowserRouter,
-  HashRouter,
-  RouterProvider,
-  useRoutes,
-} from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import App from "./app";
-import { queryClient } from "./utils/react-query-client";
+import client from "./utils/apollo-client";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Failed to find the root element");
@@ -22,10 +17,10 @@ if (process.env.NODE_ENV === "development") {
 
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <ApolloProvider client={client}>
       <HashRouter>
         <App />
       </HashRouter>
-    </QueryClientProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );
