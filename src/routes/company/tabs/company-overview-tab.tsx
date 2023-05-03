@@ -1,11 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Company } from "../../../gql/graphql";
 
-export default function CompanyOverviewTab() {
-  const { id } = useParams();
-  return (
-    <div className="">
-      <div> Company overview tab: id - {id}</div>
-    </div>
-  );
+type Props = {
+  data: any;
+};
+
+export default function CompanyOverviewTab({ data }: Props) {
+  const company: Company = data.data.company;
+  console.log("I: ", company);
+
+  return <div> Company overview tab: name - {company?.name} </div>;
 }

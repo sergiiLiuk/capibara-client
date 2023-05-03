@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import * as api from "./company.api";
 import { Company } from "../../gql/graphql";
 
-type Props = {
-  data: any;
-};
-
-export default function Companies({ data }: Props) {
+export default function Companies() {
+  const { data, isLoading, error } = api.useCompaniesData();
+  if (!data && isLoading) return <div>Loading...</div>;
   const companies: Company[] = data.data.companies ?? [];
 
   return (

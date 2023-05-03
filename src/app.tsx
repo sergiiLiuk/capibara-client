@@ -2,11 +2,12 @@ import React, { Suspense } from "react";
 import { createHashRouter, useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
 
-import { companiesRoutes } from "./routes/company/companies.route";
 import Dashboard from "./routes/dashboard";
 import NotFoundPage from "./routes/not-found/not-found";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import Projects from "./routes/projects/projects";
+import Companies from "./routes/company/companies";
+import { companyRoutes } from "./routes/company/company.route";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -28,7 +29,11 @@ export const routes = [
     element: <Layout />,
     children: [
       { path: "/", element: <Dashboard /> },
-      ...companiesRoutes,
+      {
+        path: "companies",
+        element: <Companies />,
+      },
+      ...companyRoutes,
       {
         path: "projects",
         element: <Projects />,

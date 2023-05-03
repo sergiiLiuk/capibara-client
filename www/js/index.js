@@ -29032,12 +29032,46 @@
     }
   });
 
+  // src/routes/projects/projects.tsx
+  var projects_exports = {};
+  __export(projects_exports, {
+    default: () => Projects
+  });
+  function Projects() {
+    return /* @__PURE__ */ import_react53.default.createElement("div", null, /* @__PURE__ */ import_react53.default.createElement("div", null, "Projects:"));
+  }
+  var import_react53;
+  var init_projects = __esm({
+    "src/routes/projects/projects.tsx"() {
+      "use strict";
+      import_react53 = __toESM(require_react(), 1);
+    }
+  });
+
+  // src/routes/projects/tabs/project-overview-tab.tsx
+  var project_overview_tab_exports = {};
+  __export(project_overview_tab_exports, {
+    default: () => ProjectOverviewTab
+  });
+  function ProjectOverviewTab() {
+    const { id } = useParams();
+    return /* @__PURE__ */ import_react54.default.createElement("div", null, "Project overview tab: id - ", id);
+  }
+  var import_react54;
+  var init_project_overview_tab = __esm({
+    "src/routes/projects/tabs/project-overview-tab.tsx"() {
+      "use strict";
+      import_react54 = __toESM(require_react(), 1);
+      init_dist2();
+    }
+  });
+
   // src/components/navigation-tabs.tsx
   function NavigationLink({ path, children, icon }) {
     const location2 = useLocation();
     const resolvedPath = useResolvedPath(path);
     let isActive = resolvedPath.pathname === location2.pathname;
-    return /* @__PURE__ */ import_react53.default.createElement(rt, { className: "focus:outline-none" }, /* @__PURE__ */ import_react53.default.createElement(
+    return /* @__PURE__ */ import_react58.default.createElement(rt, { className: "focus:outline-none" }, /* @__PURE__ */ import_react58.default.createElement(
       NavLink,
       {
         className: `${isActive && "bg-cyan-800 text-white"} py-1 px-4`,
@@ -29048,30 +29082,30 @@
   }
   function NavigationTabs(props) {
     var _a;
-    return /* @__PURE__ */ import_react53.default.createElement(rt.Group, null, /* @__PURE__ */ import_react53.default.createElement(rt.List, { className: "flex px-6 py-1" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
+    return /* @__PURE__ */ import_react58.default.createElement(rt.Group, null, /* @__PURE__ */ import_react58.default.createElement(rt.List, { className: "flex px-6 py-1" }, (_a = props.items) == null ? void 0 : _a.map((item, idx) => {
       const { icon, label, path, disabled } = item;
-      return /* @__PURE__ */ import_react53.default.createElement(NavigationLink, { key: idx, path, icon }, label);
+      return /* @__PURE__ */ import_react58.default.createElement(NavigationLink, { key: idx, path, icon }, label);
     })));
   }
-  var import_react53;
+  var import_react58;
   var init_navigation_tabs = __esm({
     "src/components/navigation-tabs.tsx"() {
       "use strict";
       init_headlessui_esm();
-      import_react53 = __toESM(require_react(), 1);
+      import_react58 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/routes/company/company-navigation-tabs.tsx
-  var import_react54, CompanyNavigationTabs;
+  var import_react59, CompanyNavigationTabs;
   var init_company_navigation_tabs = __esm({
     "src/routes/company/company-navigation-tabs.tsx"() {
       "use strict";
-      import_react54 = __toESM(require_react(), 1);
+      import_react59 = __toESM(require_react(), 1);
       init_navigation_tabs();
       CompanyNavigationTabs = () => {
-        const items = (0, import_react54.useMemo)(
+        const items = (0, import_react59.useMemo)(
           () => [
             {
               path: "",
@@ -29084,21 +29118,21 @@
           ],
           []
         );
-        return /* @__PURE__ */ import_react54.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react59.default.createElement(NavigationTabs, { items });
       };
     }
   });
 
   // src/components/details-header.tsx
-  var import_react55, TabHeader;
+  var import_react60, TabHeader;
   var init_details_header = __esm({
     "src/components/details-header.tsx"() {
       "use strict";
-      import_react55 = __toESM(require_react(), 1);
+      import_react60 = __toESM(require_react(), 1);
       init_dist2();
       TabHeader = () => {
         const { id } = useParams();
-        return /* @__PURE__ */ import_react55.default.createElement("div", { className: "bg-slate-200 py-2 px-6" }, "Tab Header");
+        return /* @__PURE__ */ import_react60.default.createElement("div", { className: "bg-slate-200 py-2 px-6" }, "Tab Header");
       };
     }
   });
@@ -29109,13 +29143,13 @@
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react56.default.createElement("div", null, /* @__PURE__ */ import_react56.default.createElement(TabHeader, null), /* @__PURE__ */ import_react56.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react56.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react56.default.createElement(import_react56.default.Suspense, { fallback: /* @__PURE__ */ import_react56.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react56.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react61.default.createElement("div", null, /* @__PURE__ */ import_react61.default.createElement(TabHeader, null), /* @__PURE__ */ import_react61.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react61.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react61.default.createElement(import_react61.default.Suspense, { fallback: /* @__PURE__ */ import_react61.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react61.default.createElement(Outlet, null)));
   }
-  var import_react56;
+  var import_react61;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react56 = __toESM(require_react(), 1);
+      import_react61 = __toESM(require_react(), 1);
       init_dist2();
       init_company_navigation_tabs();
       init_details_header();
@@ -29127,50 +29161,16 @@
   __export(company_overview_tab_exports, {
     default: () => CompanyOverviewTab
   });
-  function CompanyOverviewTab() {
-    const { id } = useParams();
-    return /* @__PURE__ */ import_react57.default.createElement("div", { className: "" }, /* @__PURE__ */ import_react57.default.createElement("div", null, " Company overview tab: id - ", id));
+  function CompanyOverviewTab({ data }) {
+    const company = data.data.company;
+    console.log("I: ", company);
+    return /* @__PURE__ */ import_react62.default.createElement("div", null, " Company overview tab: name - ", company == null ? void 0 : company.name, " ");
   }
-  var import_react57;
+  var import_react62;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react57 = __toESM(require_react(), 1);
-      init_dist2();
-    }
-  });
-
-  // src/routes/projects/projects.tsx
-  var projects_exports = {};
-  __export(projects_exports, {
-    default: () => Projects
-  });
-  function Projects() {
-    return /* @__PURE__ */ import_react61.default.createElement("div", null, /* @__PURE__ */ import_react61.default.createElement("div", null, "Projects:"));
-  }
-  var import_react61;
-  var init_projects = __esm({
-    "src/routes/projects/projects.tsx"() {
-      "use strict";
-      import_react61 = __toESM(require_react(), 1);
-    }
-  });
-
-  // src/routes/projects/tabs/project-overview-tab.tsx
-  var project_overview_tab_exports = {};
-  __export(project_overview_tab_exports, {
-    default: () => ProjectOverviewTab
-  });
-  function ProjectOverviewTab() {
-    const { id } = useParams();
-    return /* @__PURE__ */ import_react62.default.createElement("div", null, "Project overview tab: id - ", id);
-  }
-  var import_react62;
-  var init_project_overview_tab = __esm({
-    "src/routes/projects/tabs/project-overview-tab.tsx"() {
-      "use strict";
       import_react62 = __toESM(require_react(), 1);
-      init_dist2();
     }
   });
 
@@ -31788,29 +31788,43 @@
     return /* @__PURE__ */ import_react50.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react50.default.createElement(Sidebar, null), /* @__PURE__ */ import_react50.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react50.default.createElement(Header, null), /* @__PURE__ */ import_react50.default.createElement("main", { className: "min-h-0 overflow-auto" }, /* @__PURE__ */ import_react50.default.createElement(import_react50.default.Suspense, { fallback: /* @__PURE__ */ import_react50.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react50.default.createElement(Outlet, null)))));
   }
 
-  // src/routes/company/companies.route.tsx
-  var import_react58 = __toESM(require_react(), 1);
+  // src/routes/dashboard.tsx
+  var import_react51 = __toESM(require_react(), 1);
+  function Dashboard() {
+    return /* @__PURE__ */ import_react51.default.createElement("div", null, /* @__PURE__ */ import_react51.default.createElement("p", null, "Dashboard"));
+  }
+
+  // src/routes/not-found/not-found.tsx
+  var import_react52 = __toESM(require_react(), 1);
+  function NotFoundPage() {
+    return /* @__PURE__ */ import_react52.default.createElement("div", null, "Page not found");
+  }
+
+  // src/routes/projects/projects.route.tsx
+  var import_react55 = __toESM(require_react(), 1);
+  var ProjectPage = import_react55.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
+  var ProjectOverviewTab2 = import_react55.default.lazy(
+    () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
+  );
+  var projectsRoutes = [
+    {
+      path: "project",
+      element: /* @__PURE__ */ import_react55.default.createElement(ProjectPage, null),
+      children: [
+        {
+          path: ":id",
+          element: /* @__PURE__ */ import_react55.default.createElement(ProjectOverviewTab2, null)
+        }
+      ]
+    }
+  ];
+
+  // src/app.tsx
+  init_projects();
 
   // src/routes/company/companies.tsx
-  var import_react51 = __toESM(require_react(), 1);
+  var import_react56 = __toESM(require_react(), 1);
   init_dist2();
-  function Companies({ data }) {
-    var _a;
-    const companies = (_a = data.data.companies) != null ? _a : [];
-    return /* @__PURE__ */ import_react51.default.createElement("div", null, /* @__PURE__ */ import_react51.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react51.default.createElement("div", { className: "flex flex-col" }, companies.map((record, idx) => {
-      return /* @__PURE__ */ import_react51.default.createElement(
-        Link,
-        {
-          to: `${record.id}`,
-          className: "flex flex-col border-2  p-2",
-          key: idx
-        },
-        /* @__PURE__ */ import_react51.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react51.default.createElement("div", null, record.name),
-        /* @__PURE__ */ import_react51.default.createElement("div", null, record.cvr)
-      );
-    })));
-  }
 
   // src/utils/raw-fetch.ts
   function rawFetch(url, fetchOptions, options) {
@@ -31918,7 +31932,7 @@
   }
   var GQL_META = Symbol();
 
-  // src/routes/company/companies.api.ts
+  // src/routes/company/company.api.ts
   var GET_COMPANIES_QUERY = (
     /* GraphQL */
     `
@@ -31933,76 +31947,85 @@
   );
   var useCompaniesData = (variables) => {
     const fetchData = () => __async(void 0, null, function* () {
-      return yield apiGQL(GET_COMPANIES_QUERY);
+      return yield apiGQL(GET_COMPANIES_QUERY, variables);
     });
     return useQuery(["companies"], fetchData);
   };
+  var GET_COMPANY_QUERY = (
+    /* GraphQL */
+    `
+  query {
+    company {
+      id
+      name
+      cvr
+    }
+  }
+`
+  );
+  var useCompanyData = (variables) => {
+    const fetchData = () => __async(void 0, null, function* () {
+      return yield apiGQL(GET_COMPANY_QUERY, { args: variables });
+    });
+    return useQuery(["company"], fetchData);
+  };
 
-  // src/routes/company/companies.route.tsx
-  var CompanyPage2 = import_react58.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react58.default.lazy(
+  // src/routes/company/companies.tsx
+  function Companies() {
+    var _a;
+    const { data, isLoading, error } = useCompaniesData();
+    if (!data && isLoading)
+      return /* @__PURE__ */ import_react56.default.createElement("div", null, "Loading...");
+    const companies = (_a = data.data.companies) != null ? _a : [];
+    return /* @__PURE__ */ import_react56.default.createElement("div", null, /* @__PURE__ */ import_react56.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react56.default.createElement("div", { className: "flex flex-col" }, companies.map((record, idx) => {
+      return /* @__PURE__ */ import_react56.default.createElement(
+        Link,
+        {
+          to: `${record.id}`,
+          className: "flex flex-col border-2  p-2",
+          key: idx
+        },
+        /* @__PURE__ */ import_react56.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react56.default.createElement("div", null, record.name),
+        /* @__PURE__ */ import_react56.default.createElement("div", null, record.cvr)
+      );
+    })));
+  }
+
+  // src/routes/company/company.route.tsx
+  var import_react63 = __toESM(require_react(), 1);
+  init_dist2();
+  var CompanyPage2 = import_react63.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react63.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   function Container(props) {
-    const { data, isLoading, error } = useCompaniesData();
+    const { id } = useParams();
+    if (!id)
+      return null;
+    const { data, isLoading, error } = useCompanyData({ id });
     if (!data && isLoading)
-      return /* @__PURE__ */ import_react58.default.createElement("div", null, "Loading...");
-    return /* @__PURE__ */ import_react58.default.createElement(props.component, { data });
+      return /* @__PURE__ */ import_react63.default.createElement("div", null, "Loading...");
+    return /* @__PURE__ */ import_react63.default.createElement(props.component, { data });
   }
-  var companiesRoutes = [
-    {
-      path: "companies",
-      element: /* @__PURE__ */ import_react58.default.createElement(Container, { component: Companies })
-    },
+  var companyRoutes = [
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react58.default.createElement(CompanyPage2, null),
+      element: /* @__PURE__ */ import_react63.default.createElement(CompanyPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react58.default.createElement(CompanyOverviewTab2, null)
+          element: /* @__PURE__ */ import_react63.default.createElement(Container, { component: CompanyOverviewTab2 })
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react58.default.createElement("div", null, "Test ")
-        }
-      ]
-    }
-  ];
-
-  // src/routes/dashboard.tsx
-  var import_react59 = __toESM(require_react(), 1);
-  function Dashboard() {
-    return /* @__PURE__ */ import_react59.default.createElement("div", null, /* @__PURE__ */ import_react59.default.createElement("p", null, "Dashboard"));
-  }
-
-  // src/routes/not-found/not-found.tsx
-  var import_react60 = __toESM(require_react(), 1);
-  function NotFoundPage() {
-    return /* @__PURE__ */ import_react60.default.createElement("div", null, "Page not found");
-  }
-
-  // src/routes/projects/projects.route.tsx
-  var import_react63 = __toESM(require_react(), 1);
-  var ProjectPage = import_react63.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
-  var ProjectOverviewTab2 = import_react63.default.lazy(
-    () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
-  );
-  var projectsRoutes = [
-    {
-      path: "project",
-      element: /* @__PURE__ */ import_react63.default.createElement(ProjectPage, null),
-      children: [
-        {
-          path: ":id",
-          element: /* @__PURE__ */ import_react63.default.createElement(ProjectOverviewTab2, null)
+          element: /* @__PURE__ */ import_react63.default.createElement("div", null, "Test ")
         }
       ]
     }
   ];
 
   // src/app.tsx
-  init_projects();
   function App() {
     const router = useRoutes(routes);
     return /* @__PURE__ */ import_react64.default.createElement(import_react64.Suspense, { fallback: /* @__PURE__ */ import_react64.default.createElement("div", null, "Loading...") }, router);
@@ -32012,7 +32035,11 @@
       element: /* @__PURE__ */ import_react64.default.createElement(Layout, null),
       children: [
         { path: "/", element: /* @__PURE__ */ import_react64.default.createElement(Dashboard, null) },
-        ...companiesRoutes,
+        {
+          path: "companies",
+          element: /* @__PURE__ */ import_react64.default.createElement(Companies, null)
+        },
+        ...companyRoutes,
         {
           path: "projects",
           element: /* @__PURE__ */ import_react64.default.createElement(Projects, null)
