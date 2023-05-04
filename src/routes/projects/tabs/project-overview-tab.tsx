@@ -1,7 +1,17 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { Fragment } from "react";
+import { Project } from "../../../gql/graphql";
 
-export default function ProjectOverviewTab() {
-  const { id } = useParams();
-  return <div>Project overview tab: id - {id}</div>;
+type Props = {
+  project: Project;
+};
+
+export default function ProjectOverviewTab({ project }: Props) {
+  return (
+    <div>
+      Project overview tab:
+      <div>Name: {project.name}</div>
+      <div>Description: {project.description}</div>
+      <div>Company: {project.company?.name}</div>
+    </div>
+  );
 }

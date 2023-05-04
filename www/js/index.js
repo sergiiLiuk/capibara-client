@@ -1134,7 +1134,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo6(create, deps) {
+          function useMemo7(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1905,7 +1905,7 @@
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect5;
-          exports.useMemo = useMemo6;
+          exports.useMemo = useMemo7;
           exports.useReducer = useReducer;
           exports.useRef = useRef5;
           exports.useState = useState7;
@@ -2404,9 +2404,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React28 = require_react();
+          var React30 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React28.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React30.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -2455,7 +2455,7 @@
           var HostPortal = 4;
           var HostComponent = 5;
           var HostText = 6;
-          var Fragment3 = 7;
+          var Fragment4 = 7;
           var Mode = 8;
           var ContextConsumer = 9;
           var ContextProvider = 10;
@@ -3611,7 +3611,7 @@
                 return "DehydratedFragment";
               case ForwardRef:
                 return getWrappedName$1(type, type.render, "ForwardRef");
-              case Fragment3:
+              case Fragment4:
                 return "Fragment";
               case HostComponent:
                 return type;
@@ -4011,7 +4011,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React28.Children.forEach(props.children, function(child) {
+                  React30.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12458,7 +12458,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React28.Component().refs;
+          var emptyRefsObject = new React30.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -13282,7 +13282,7 @@
               }
             }
             function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-              if (current2 === null || current2.tag !== Fragment3) {
+              if (current2 === null || current2.tag !== Fragment4) {
                 var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
                 created.return = returnFiber;
                 return created;
@@ -13685,7 +13685,7 @@
                 if (child.key === key) {
                   var elementType = element.type;
                   if (elementType === REACT_FRAGMENT_TYPE) {
-                    if (child.tag === Fragment3) {
+                    if (child.tag === Fragment4) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
                       existing.return = returnFiber;
@@ -17860,7 +17860,7 @@
                 var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
                 return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
               }
-              case Fragment3:
+              case Fragment4:
                 return updateFragment(current2, workInProgress2, renderLanes2);
               case Mode:
                 return updateMode(current2, workInProgress2, renderLanes2);
@@ -18133,7 +18133,7 @@
               case SimpleMemoComponent:
               case FunctionComponent:
               case ForwardRef:
-              case Fragment3:
+              case Fragment4:
               case Mode:
               case Profiler:
               case ContextConsumer:
@@ -22392,7 +22392,7 @@
             return fiber;
           }
           function createFiberFromFragment(elements, mode, lanes, key) {
-            var fiber = createFiber(Fragment3, elements, key, mode);
+            var fiber = createFiber(Fragment4, elements, key, mode);
             fiber.lanes = lanes;
             return fiber;
           }
@@ -28969,19 +28969,44 @@
     }
   });
 
-  // src/routes/projects/projects.tsx
-  var projects_exports = {};
-  __export(projects_exports, {
-    default: () => Projects
-  });
-  function Projects() {
-    return /* @__PURE__ */ import_react64.default.createElement("div", null, /* @__PURE__ */ import_react64.default.createElement("div", null, "Projects:"));
-  }
-  var import_react64;
-  var init_projects = __esm({
-    "src/routes/projects/projects.tsx"() {
+  // src/routes/projects/project-navigation-tabs.tsx
+  var import_react65, ProjectNavigationTabs;
+  var init_project_navigation_tabs = __esm({
+    "src/routes/projects/project-navigation-tabs.tsx"() {
       "use strict";
-      import_react64 = __toESM(require_react(), 1);
+      import_react65 = __toESM(require_react(), 1);
+      init_navigation_tabs();
+      ProjectNavigationTabs = () => {
+        const items = (0, import_react65.useMemo)(
+          () => [
+            {
+              path: "",
+              label: "Project overview"
+            }
+          ],
+          []
+        );
+        return /* @__PURE__ */ import_react65.default.createElement(NavigationTabs, { items });
+      };
+    }
+  });
+
+  // src/routes/projects/project-page.tsx
+  var project_page_exports = {};
+  __export(project_page_exports, {
+    default: () => ProjectPage
+  });
+  function ProjectPage() {
+    return /* @__PURE__ */ import_react66.default.createElement("div", null, /* @__PURE__ */ import_react66.default.createElement(TabHeader, null), /* @__PURE__ */ import_react66.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react66.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react66.default.createElement(import_react66.default.Suspense, { fallback: /* @__PURE__ */ import_react66.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react66.default.createElement(Outlet, null)));
+  }
+  var import_react66;
+  var init_project_page = __esm({
+    "src/routes/projects/project-page.tsx"() {
+      "use strict";
+      import_react66 = __toESM(require_react(), 1);
+      init_dist2();
+      init_details_header();
+      init_project_navigation_tabs();
     }
   });
 
@@ -28990,16 +29015,15 @@
   __export(project_overview_tab_exports, {
     default: () => ProjectOverviewTab
   });
-  function ProjectOverviewTab() {
-    const { id } = useParams();
-    return /* @__PURE__ */ import_react65.default.createElement("div", null, "Project overview tab: id - ", id);
+  function ProjectOverviewTab({ project }) {
+    var _a5;
+    return /* @__PURE__ */ import_react67.default.createElement("div", null, "Project overview tab:", /* @__PURE__ */ import_react67.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react67.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react67.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
   }
-  var import_react65;
+  var import_react67;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react65 = __toESM(require_react(), 1);
-      init_dist2();
+      import_react67 = __toESM(require_react(), 1);
     }
   });
 
@@ -40690,12 +40714,12 @@ const client = new ApolloClient({
   }();
 
   // src/index.tsx
-  var import_react68 = __toESM(require_react(), 1);
-  var import_client4 = __toESM(require_client(), 1);
+  var import_react70 = __toESM(require_react(), 1);
+  var import_client5 = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react67 = __toESM(require_react(), 1);
+  var import_react69 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -41072,23 +41096,99 @@ const client = new ApolloClient({
     }
   ];
 
-  // src/app.tsx
-  init_projects();
+  // src/routes/projects/projects.tsx
+  var import_react64 = __toESM(require_react(), 1);
+  init_dist2();
+
+  // src/routes/projects/project.api.ts
+  var GET_PROJECTS_QUERY = (
+    /* GraphQL */
+    gql`
+  query getProjects {
+    projects {
+      id
+      name
+      description
+      company {
+        id
+        name
+      }
+    }
+  }
+`
+  );
+  var useProjectsData = () => {
+    return useQuery(GET_PROJECTS_QUERY);
+  };
+  var GET_PROJECT_QUERY = (
+    /* GraphQL */
+    gql`
+  query ($id: ID!) {
+    project(id: $id) {
+      id
+      name
+      description
+      company {
+        id
+        name
+      }
+    }
+  }
+`
+  );
+  var useProjectData = (variables) => {
+    return useQuery(GET_PROJECT_QUERY, { variables });
+  };
+
+  // src/routes/projects/projects.tsx
+  function Projects() {
+    const { loading, error, data } = useProjectsData();
+    if (loading)
+      return /* @__PURE__ */ import_react64.default.createElement("div", null, "Loading...");
+    if (error)
+      return /* @__PURE__ */ import_react64.default.createElement("div", null, "Somethingwent wrong");
+    const { projects } = data;
+    return /* @__PURE__ */ import_react64.default.createElement("div", null, /* @__PURE__ */ import_react64.default.createElement("div", null, "Projects:"), /* @__PURE__ */ import_react64.default.createElement("div", { className: "flex flex-col" }, projects.map((record, idx) => {
+      return /* @__PURE__ */ import_react64.default.createElement(
+        Link,
+        {
+          to: `${record.id}`,
+          className: "flex flex-col border-2 p-2",
+          key: idx
+        },
+        /* @__PURE__ */ import_react64.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react64.default.createElement("div", null, record.name)
+      );
+    })));
+  }
 
   // src/routes/projects/projects.route.tsx
-  var import_react66 = __toESM(require_react(), 1);
-  var ProjectPage = import_react66.default.lazy(() => Promise.resolve().then(() => (init_projects(), projects_exports)));
-  var ProjectOverviewTab2 = import_react66.default.lazy(
+  var import_react68 = __toESM(require_react(), 1);
+  init_dist2();
+  var ProjectPage2 = import_react68.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
+  var ProjectOverviewTab2 = import_react68.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
+  function Container2(props) {
+    const { id } = useParams();
+    if (!id)
+      return null;
+    const { loading, error, data } = useProjectData({ id });
+    if (loading)
+      return /* @__PURE__ */ import_react68.default.createElement("div", null, "Loading...");
+    if (error)
+      return /* @__PURE__ */ import_react68.default.createElement("div", null, "Somethingwent wrong");
+    const { project } = data;
+    return /* @__PURE__ */ import_react68.default.createElement(props.component, { project });
+  }
   var projectsRoutes = [
     {
-      path: "project",
-      element: /* @__PURE__ */ import_react66.default.createElement(ProjectPage, null),
+      path: "projects/:id",
+      element: /* @__PURE__ */ import_react68.default.createElement(ProjectPage2, null),
       children: [
         {
-          path: ":id",
-          element: /* @__PURE__ */ import_react66.default.createElement(ProjectOverviewTab2, null)
+          path: "",
+          element: /* @__PURE__ */ import_react68.default.createElement(Container2, { component: ProjectOverviewTab2 })
         }
       ]
     }
@@ -41097,21 +41197,21 @@ const client = new ApolloClient({
   // src/app.tsx
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react67.default.createElement(import_react67.Suspense, { fallback: /* @__PURE__ */ import_react67.default.createElement("div", null, "Loading...") }, router);
+    return /* @__PURE__ */ import_react69.default.createElement(import_react69.Suspense, { fallback: /* @__PURE__ */ import_react69.default.createElement("div", null, "Loading...") }, router);
   }
   var routes = [
     {
-      element: /* @__PURE__ */ import_react67.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react69.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react67.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react69.default.createElement(Dashboard, null) },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react67.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react69.default.createElement(Companies, null)
         },
         ...companyRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react67.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react69.default.createElement(Projects, null)
         },
         ...projectsRoutes,
         ...notFoundRoute
@@ -41130,7 +41230,7 @@ const client = new ApolloClient({
   var rootElement = document.getElementById("root");
   if (!rootElement)
     throw new Error("Failed to find the root element");
-  var root2 = (0, import_client4.createRoot)(rootElement);
+  var root2 = (0, import_client5.createRoot)(rootElement);
   if (true) {
     new EventSource("/esbuild").addEventListener(
       "change",
@@ -41138,7 +41238,7 @@ const client = new ApolloClient({
     );
   }
   root2.render(
-    /* @__PURE__ */ import_react68.default.createElement(import_react68.default.StrictMode, null, /* @__PURE__ */ import_react68.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react68.default.createElement(HashRouter, null, /* @__PURE__ */ import_react68.default.createElement(App, null))))
+    /* @__PURE__ */ import_react70.default.createElement(import_react70.default.StrictMode, null, /* @__PURE__ */ import_react70.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react70.default.createElement(HashRouter, null, /* @__PURE__ */ import_react70.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:

@@ -33,11 +33,13 @@ export const routes = [
         element: <Companies />,
       },
       ...companyRoutes,
+
       {
         path: "projects",
         element: <Projects />,
       },
       ...projectsRoutes,
+
       ...notFoundRoute,
     ],
   },

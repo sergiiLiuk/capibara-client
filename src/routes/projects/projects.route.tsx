@@ -1,33 +1,40 @@
 import React from "react";
-const ProjectPage = React.lazy(() => import("./projects"));
+import { Project } from "../../gql/graphql";
+import { useParams } from "react-router-dom";
+import * as api from "./project.api";
+
+const ProjectPage = React.lazy(() => import("./project-page"));
 const ProjectOverviewTab = React.lazy(
   () => import("./tabs/project-overview-tab")
 );
 
 function Container(props: {
-  //   component: React.ComponentType<{ data: api.Workflow }>;
-  component: React.ComponentType<{ data: any }>;
+  component: React.ComponentType<{ project: Project }>;
   showError?: boolean;
 }) {
-  // const { id } = useParams<"id">();
-  // if (id === undefined) return null;
-  const data: any = [];
-  //   const { data, isLoading } = api.useWorkflowData({ id });
-  // const { data, isLoading } = { data: [], isLoading: false };
-  // if (isLoading) return <div>Loading..</div>;
-  // if (data === undefined) return props.showError ? <div>Error</div> : null;
+  const { id } = useParams();
+  //TODO: implement error message
+  if (!id) return null;
 
-  return <props.component data={data} />;
+  const { loading, error, data } = api.useProjectData({ id });
+
+  //TODO: implement loading spinner
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Somethingwent wrong</div>;
+
+  const { project } = data;
+
+  return <props.component project={project} />;
 }
 
 export const projectsRoutes = [
   {
-    path: "project",
+    path: "projects/:id",
     element: <ProjectPage />,
     children: [
       {
-        path: ":id",
-        element: <ProjectOverviewTab />,
+        path: "",
+        element: <Container component={ProjectOverviewTab} />,
       },
     ],
   },
