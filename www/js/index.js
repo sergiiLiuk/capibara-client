@@ -41166,7 +41166,14 @@ const client = new ApolloClient({
   };
   var CREATE_PROJECT = (
     /* GraphQL */
-    gql``
+    gql`
+  mutation createProject($name: String!, $description: String!) {
+    createProject(name: $name, description: $description) {
+      name
+      description
+    }
+  }
+`
   );
 
   // src/routes/projects/projects.tsx

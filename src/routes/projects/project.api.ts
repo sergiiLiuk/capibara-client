@@ -37,14 +37,21 @@ export const useProjectData = (variables: { id: string }) => {
   return useQuery(GET_PROJECT_QUERY, { variables });
 };
 
-const CREATE_PROJECT = /* GraphQL */ gql``;
+const CREATE_PROJECT = /* GraphQL */ gql`
+  mutation createProject($name: String!, $description: String!) {
+    createProject(name: $name, description: $description) {
+      name
+      description
+    }
+  }
+`;
 
 export const useCreateProject = (variables: Project) => {
   const [createProject] = useMutation(CREATE_PROJECT, {
     variables: variables,
     update(cache, { data: { createProject } }) {
       const { projects } = cache.readQuery({ query: GET_PROJECTS_QUERY });
-      
+
       cache.writeQuery({
         query: GET_PROJECTS_QUERY,
         data: { projects: projects.concat([createProject]) },
