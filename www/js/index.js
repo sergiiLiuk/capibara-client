@@ -41164,6 +41164,10 @@ const client = new ApolloClient({
   var useProjectData = (variables) => {
     return useQuery(GET_PROJECT_QUERY, { variables });
   };
+  var CREATE_PROJECT = (
+    /* GraphQL */
+    gql``
+  );
 
   // src/routes/projects/projects.tsx
   init_details_header();
