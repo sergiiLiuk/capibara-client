@@ -2404,9 +2404,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React30 = require_react();
+          var React32 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React30.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React32.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4011,7 +4011,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React30.Children.forEach(props.children, function(child) {
+                  React32.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12458,7 +12458,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React30.Component().refs;
+          var emptyRefsObject = new React32.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -28863,12 +28863,32 @@
     }
   });
 
+  // src/components/spinner.tsx
+  var import_react52, Spinner;
+  var init_spinner = __esm({
+    "src/components/spinner.tsx"() {
+      "use strict";
+      import_react52 = __toESM(require_react(), 1);
+      Spinner = () => {
+        return /* @__PURE__ */ import_react52.default.createElement(
+          "div",
+          {
+            className: "animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full",
+            role: "status",
+            "aria-label": "loading"
+          },
+          /* @__PURE__ */ import_react52.default.createElement("span", { className: "sr-only" }, "Loading...")
+        );
+      };
+    }
+  });
+
   // src/components/navigation-tabs.tsx
   function NavigationLink({ path, children, icon }) {
     const location2 = useLocation();
     const resolvedPath = useResolvedPath(path);
     let isActive = resolvedPath.pathname === location2.pathname;
-    return /* @__PURE__ */ import_react55.default.createElement(rt, { className: "focus:outline-none" }, /* @__PURE__ */ import_react55.default.createElement(
+    return /* @__PURE__ */ import_react56.default.createElement(rt, { className: "focus:outline-none" }, /* @__PURE__ */ import_react56.default.createElement(
       NavLink,
       {
         className: `${isActive && "bg-cyan-800 text-white"} py-1 px-4`,
@@ -28879,30 +28899,30 @@
   }
   function NavigationTabs(props) {
     var _a5;
-    return /* @__PURE__ */ import_react55.default.createElement(rt.Group, null, /* @__PURE__ */ import_react55.default.createElement(rt.List, { className: "flex px-6 py-1" }, (_a5 = props.items) == null ? void 0 : _a5.map((item, idx) => {
+    return /* @__PURE__ */ import_react56.default.createElement(rt.Group, null, /* @__PURE__ */ import_react56.default.createElement(rt.List, { className: "flex px-6 py-1" }, (_a5 = props.items) == null ? void 0 : _a5.map((item, idx) => {
       const { icon, label, path, disabled } = item;
-      return /* @__PURE__ */ import_react55.default.createElement(NavigationLink, { key: idx, path, icon }, label);
+      return /* @__PURE__ */ import_react56.default.createElement(NavigationLink, { key: idx, path, icon }, label);
     })));
   }
-  var import_react55;
+  var import_react56;
   var init_navigation_tabs = __esm({
     "src/components/navigation-tabs.tsx"() {
       "use strict";
       init_headlessui_esm();
-      import_react55 = __toESM(require_react(), 1);
+      import_react56 = __toESM(require_react(), 1);
       init_dist2();
     }
   });
 
   // src/routes/company/company-navigation-tabs.tsx
-  var import_react56, CompanyNavigationTabs;
+  var import_react57, CompanyNavigationTabs;
   var init_company_navigation_tabs = __esm({
     "src/routes/company/company-navigation-tabs.tsx"() {
       "use strict";
-      import_react56 = __toESM(require_react(), 1);
+      import_react57 = __toESM(require_react(), 1);
       init_navigation_tabs();
       CompanyNavigationTabs = () => {
-        const items = (0, import_react56.useMemo)(
+        const items = (0, import_react57.useMemo)(
           () => [
             {
               path: "",
@@ -28915,21 +28935,21 @@
           ],
           []
         );
-        return /* @__PURE__ */ import_react56.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react57.default.createElement(NavigationTabs, { items });
       };
     }
   });
 
   // src/components/details-header.tsx
-  var import_react57, TabHeader;
+  var import_react58, TabHeader;
   var init_details_header = __esm({
     "src/components/details-header.tsx"() {
       "use strict";
-      import_react57 = __toESM(require_react(), 1);
+      import_react58 = __toESM(require_react(), 1);
       init_dist2();
-      TabHeader = () => {
+      TabHeader = ({ children }) => {
         const { id } = useParams();
-        return /* @__PURE__ */ import_react57.default.createElement("div", { className: "bg-slate-200 py-2 px-6" }, "Tab Header");
+        return /* @__PURE__ */ import_react58.default.createElement("div", { className: "bg-slate-200 py-2 px-6" }, children);
       };
     }
   });
@@ -28940,16 +28960,17 @@
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react58.default.createElement("div", null, /* @__PURE__ */ import_react58.default.createElement(TabHeader, null), /* @__PURE__ */ import_react58.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react58.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react58.default.createElement(import_react58.default.Suspense, { fallback: /* @__PURE__ */ import_react58.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react58.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react59.default.createElement("div", null, /* @__PURE__ */ import_react59.default.createElement(TabHeader, null), /* @__PURE__ */ import_react59.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react59.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react59.default.createElement(import_react59.default.Suspense, { fallback: /* @__PURE__ */ import_react59.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react59.default.createElement(Outlet, null)));
   }
-  var import_react58;
+  var import_react59;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react58 = __toESM(require_react(), 1);
+      import_react59 = __toESM(require_react(), 1);
       init_dist2();
       init_company_navigation_tabs();
       init_details_header();
+      init_spinner();
     }
   });
 
@@ -28959,25 +28980,25 @@
     default: () => CompanyOverviewTab
   });
   function CompanyOverviewTab({ company }) {
-    return /* @__PURE__ */ import_react59.default.createElement("div", null, " Company overview tab: name - ", company == null ? void 0 : company.name, " ");
+    return /* @__PURE__ */ import_react60.default.createElement("div", null, " Company overview tab: name - ", company == null ? void 0 : company.name, " ");
   }
-  var import_react59;
+  var import_react60;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react59 = __toESM(require_react(), 1);
+      import_react60 = __toESM(require_react(), 1);
     }
   });
 
   // src/routes/projects/project-navigation-tabs.tsx
-  var import_react65, ProjectNavigationTabs;
+  var import_react67, ProjectNavigationTabs;
   var init_project_navigation_tabs = __esm({
     "src/routes/projects/project-navigation-tabs.tsx"() {
       "use strict";
-      import_react65 = __toESM(require_react(), 1);
+      import_react67 = __toESM(require_react(), 1);
       init_navigation_tabs();
       ProjectNavigationTabs = () => {
-        const items = (0, import_react65.useMemo)(
+        const items = (0, import_react67.useMemo)(
           () => [
             {
               path: "",
@@ -28986,7 +29007,7 @@
           ],
           []
         );
-        return /* @__PURE__ */ import_react65.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react67.default.createElement(NavigationTabs, { items });
       };
     }
   });
@@ -28997,16 +29018,17 @@
     default: () => ProjectPage
   });
   function ProjectPage() {
-    return /* @__PURE__ */ import_react66.default.createElement("div", null, /* @__PURE__ */ import_react66.default.createElement(TabHeader, null), /* @__PURE__ */ import_react66.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react66.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react66.default.createElement(import_react66.default.Suspense, { fallback: /* @__PURE__ */ import_react66.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react66.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react68.default.createElement("div", null, /* @__PURE__ */ import_react68.default.createElement(TabHeader, null), /* @__PURE__ */ import_react68.default.createElement("div", { className: "border-b border-cyan-800" }, /* @__PURE__ */ import_react68.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react68.default.createElement(import_react68.default.Suspense, { fallback: /* @__PURE__ */ import_react68.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react68.default.createElement(Outlet, null)));
   }
-  var import_react66;
+  var import_react68;
   var init_project_page = __esm({
     "src/routes/projects/project-page.tsx"() {
       "use strict";
-      import_react66 = __toESM(require_react(), 1);
+      import_react68 = __toESM(require_react(), 1);
       init_dist2();
       init_details_header();
       init_project_navigation_tabs();
+      init_spinner();
     }
   });
 
@@ -29017,13 +29039,13 @@
   });
   function ProjectOverviewTab({ project }) {
     var _a5;
-    return /* @__PURE__ */ import_react67.default.createElement("div", null, "Project overview tab:", /* @__PURE__ */ import_react67.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react67.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react67.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
+    return /* @__PURE__ */ import_react69.default.createElement("div", null, "Project overview tab:", /* @__PURE__ */ import_react69.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react69.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react69.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
   }
-  var import_react67;
+  var import_react69;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react67 = __toESM(require_react(), 1);
+      import_react69 = __toESM(require_react(), 1);
     }
   });
 
@@ -40714,16 +40736,16 @@ const client = new ApolloClient({
   }();
 
   // src/index.tsx
-  var import_react70 = __toESM(require_react(), 1);
+  var import_react72 = __toESM(require_react(), 1);
   var import_client5 = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react69 = __toESM(require_react(), 1);
+  var import_react71 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
-  var import_react52 = __toESM(require_react(), 1);
+  var import_react53 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/header.tsx
@@ -40974,12 +40996,13 @@ const client = new ApolloClient({
   }
 
   // src/components/layout.tsx
+  init_spinner();
   function Layout() {
-    return /* @__PURE__ */ import_react52.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react52.default.createElement(Sidebar, null), /* @__PURE__ */ import_react52.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react52.default.createElement(Header, null), /* @__PURE__ */ import_react52.default.createElement("main", { className: "min-h-0 overflow-auto" }, /* @__PURE__ */ import_react52.default.createElement(import_react52.default.Suspense, { fallback: /* @__PURE__ */ import_react52.default.createElement("div", null, "Loading.. ") }, /* @__PURE__ */ import_react52.default.createElement(Outlet, null)))));
+    return /* @__PURE__ */ import_react53.default.createElement("div", { className: "flex flex-row bg-neutral-100 h-screen w-screen" }, /* @__PURE__ */ import_react53.default.createElement(Sidebar, null), /* @__PURE__ */ import_react53.default.createElement("div", { className: "flex-1 h-screen flex flex-col" }, /* @__PURE__ */ import_react53.default.createElement(Header, null), /* @__PURE__ */ import_react53.default.createElement("main", { className: "min-h-0 overflow-auto" }, /* @__PURE__ */ import_react53.default.createElement(import_react53.default.Suspense, { fallback: /* @__PURE__ */ import_react53.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react53.default.createElement(Outlet, null)))));
   }
 
   // src/routes/company/companies.tsx
-  var import_react53 = __toESM(require_react(), 1);
+  var import_react54 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/routes/company/company.api.ts
@@ -41015,33 +41038,35 @@ const client = new ApolloClient({
   };
 
   // src/routes/company/companies.tsx
+  init_spinner();
   function Companies() {
     const { loading, error, data } = useCompaniesData();
     if (loading)
-      return /* @__PURE__ */ import_react53.default.createElement("div", null, "Loading...");
+      return /* @__PURE__ */ import_react54.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react53.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react54.default.createElement("div", null, "Somethingwent wrong");
     const { companies } = data;
-    return /* @__PURE__ */ import_react53.default.createElement("div", null, /* @__PURE__ */ import_react53.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react53.default.createElement("div", { className: "flex flex-col" }, companies.map((record, idx) => {
-      return /* @__PURE__ */ import_react53.default.createElement(
+    return /* @__PURE__ */ import_react54.default.createElement("div", null, /* @__PURE__ */ import_react54.default.createElement("div", null, "Companies:"), /* @__PURE__ */ import_react54.default.createElement("div", { className: "flex flex-col" }, companies.map((record, idx) => {
+      return /* @__PURE__ */ import_react54.default.createElement(
         Link,
         {
           to: `${record.id}`,
           className: "flex flex-col border-2 p-2",
           key: idx
         },
-        /* @__PURE__ */ import_react53.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react53.default.createElement("div", null, record.name),
-        /* @__PURE__ */ import_react53.default.createElement("div", null, record.cvr)
+        /* @__PURE__ */ import_react54.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react54.default.createElement("div", null, record.name),
+        /* @__PURE__ */ import_react54.default.createElement("div", null, record.cvr)
       );
     })));
   }
 
   // src/routes/company/company.route.tsx
-  var import_react60 = __toESM(require_react(), 1);
+  var import_react61 = __toESM(require_react(), 1);
   init_dist2();
-  var CompanyPage2 = import_react60.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react60.default.lazy(
+  init_spinner();
+  var CompanyPage2 = import_react61.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react61.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   function Container(props) {
@@ -41050,54 +41075,54 @@ const client = new ApolloClient({
       return null;
     const { loading, error, data } = useCompanyData({ id });
     if (loading)
-      return /* @__PURE__ */ import_react60.default.createElement("div", null, "Loading...");
+      return /* @__PURE__ */ import_react61.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react60.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react61.default.createElement("div", null, "Somethingwent wrong");
     const { company } = data;
-    return /* @__PURE__ */ import_react60.default.createElement(props.component, { company });
+    return /* @__PURE__ */ import_react61.default.createElement(props.component, { company });
   }
   var companyRoutes = [
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react60.default.createElement(CompanyPage2, null),
+      element: /* @__PURE__ */ import_react61.default.createElement(CompanyPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react60.default.createElement(Container, { component: CompanyOverviewTab2 })
+          element: /* @__PURE__ */ import_react61.default.createElement(Container, { component: CompanyOverviewTab2 })
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react60.default.createElement("div", null, "Test ")
+          element: /* @__PURE__ */ import_react61.default.createElement("div", null, "Test ")
         }
       ]
     }
   ];
 
   // src/routes/dashboard.tsx
-  var import_react61 = __toESM(require_react(), 1);
+  var import_react62 = __toESM(require_react(), 1);
   function Dashboard() {
-    return /* @__PURE__ */ import_react61.default.createElement("div", null, /* @__PURE__ */ import_react61.default.createElement("p", null, "Dashboard"));
+    return /* @__PURE__ */ import_react62.default.createElement("div", null, /* @__PURE__ */ import_react62.default.createElement("p", null, "Dashboard"));
   }
 
   // src/routes/not-found/not-found.route.tsx
-  var import_react63 = __toESM(require_react(), 1);
+  var import_react64 = __toESM(require_react(), 1);
 
   // src/routes/not-found/not-found.tsx
-  var import_react62 = __toESM(require_react(), 1);
+  var import_react63 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react62.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react63.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/not-found/not-found.route.tsx
   var notFoundRoute = [
     {
       path: "*",
-      element: /* @__PURE__ */ import_react63.default.createElement(NotFoundPage, null)
+      element: /* @__PURE__ */ import_react64.default.createElement(NotFoundPage, null)
     }
   ];
 
   // src/routes/projects/projects.tsx
-  var import_react64 = __toESM(require_react(), 1);
+  var import_react66 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/routes/projects/project.api.ts
@@ -41141,32 +41166,51 @@ const client = new ApolloClient({
   };
 
   // src/routes/projects/projects.tsx
+  init_details_header();
+
+  // src/components/button.tsx
+  var import_react65 = __toESM(require_react(), 1);
+  var Button = ({ children, onClick, disabled = false }) => {
+    return /* @__PURE__ */ import_react65.default.createElement(
+      "button",
+      {
+        disabled,
+        className: "bg-sky-700 hover:bg-sky-600 hover:cursor-pointer px-2 py-1 text-white",
+        onClick
+      },
+      children
+    );
+  };
+
+  // src/routes/projects/projects.tsx
+  init_spinner();
   function Projects() {
     const { loading, error, data } = useProjectsData();
     if (loading)
-      return /* @__PURE__ */ import_react64.default.createElement("div", null, "Loading...");
+      return /* @__PURE__ */ import_react66.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react64.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react66.default.createElement("div", null, "Somethingwent wrong");
     const { projects } = data;
-    return /* @__PURE__ */ import_react64.default.createElement("div", null, /* @__PURE__ */ import_react64.default.createElement("div", null, "Projects:"), /* @__PURE__ */ import_react64.default.createElement("div", { className: "flex flex-col" }, projects.map((record, idx) => {
-      return /* @__PURE__ */ import_react64.default.createElement(
+    return /* @__PURE__ */ import_react66.default.createElement("div", null, /* @__PURE__ */ import_react66.default.createElement(TabHeader, null, /* @__PURE__ */ import_react66.default.createElement(Button, { onClick: () => console.log("Create project") }, "Create project")), /* @__PURE__ */ import_react66.default.createElement("div", null, "Projects:"), /* @__PURE__ */ import_react66.default.createElement("div", { className: "flex flex-col" }, projects.map((record, idx) => {
+      return /* @__PURE__ */ import_react66.default.createElement(
         Link,
         {
           to: `${record.id}`,
           className: "flex flex-col border-2 p-2",
           key: idx
         },
-        /* @__PURE__ */ import_react64.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react64.default.createElement("div", null, record.name)
+        /* @__PURE__ */ import_react66.default.createElement("div", null, record.id),
+        /* @__PURE__ */ import_react66.default.createElement("div", null, record.name)
       );
     })));
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react68 = __toESM(require_react(), 1);
+  var import_react70 = __toESM(require_react(), 1);
   init_dist2();
-  var ProjectPage2 = import_react68.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
-  var ProjectOverviewTab2 = import_react68.default.lazy(
+  init_spinner();
+  var ProjectPage2 = import_react70.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
+  var ProjectOverviewTab2 = import_react70.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   function Container2(props) {
@@ -41175,43 +41219,44 @@ const client = new ApolloClient({
       return null;
     const { loading, error, data } = useProjectData({ id });
     if (loading)
-      return /* @__PURE__ */ import_react68.default.createElement("div", null, "Loading...");
+      return /* @__PURE__ */ import_react70.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react68.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react70.default.createElement("div", null, "Somethingwent wrong");
     const { project } = data;
-    return /* @__PURE__ */ import_react68.default.createElement(props.component, { project });
+    return /* @__PURE__ */ import_react70.default.createElement(props.component, { project });
   }
   var projectsRoutes = [
     {
       path: "projects/:id",
-      element: /* @__PURE__ */ import_react68.default.createElement(ProjectPage2, null),
+      element: /* @__PURE__ */ import_react70.default.createElement(ProjectPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react68.default.createElement(Container2, { component: ProjectOverviewTab2 })
+          element: /* @__PURE__ */ import_react70.default.createElement(Container2, { component: ProjectOverviewTab2 })
         }
       ]
     }
   ];
 
   // src/app.tsx
+  init_spinner();
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react69.default.createElement(import_react69.Suspense, { fallback: /* @__PURE__ */ import_react69.default.createElement("div", null, "Loading...") }, router);
+    return /* @__PURE__ */ import_react71.default.createElement(import_react71.Suspense, { fallback: /* @__PURE__ */ import_react71.default.createElement(Spinner, null) }, router);
   }
   var routes = [
     {
-      element: /* @__PURE__ */ import_react69.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react71.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react69.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react71.default.createElement(Dashboard, null) },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react69.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react71.default.createElement(Companies, null)
         },
         ...companyRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react69.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react71.default.createElement(Projects, null)
         },
         ...projectsRoutes,
         ...notFoundRoute
@@ -41238,7 +41283,7 @@ const client = new ApolloClient({
     );
   }
   root2.render(
-    /* @__PURE__ */ import_react70.default.createElement(import_react70.default.StrictMode, null, /* @__PURE__ */ import_react70.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react70.default.createElement(HashRouter, null, /* @__PURE__ */ import_react70.default.createElement(App, null))))
+    /* @__PURE__ */ import_react72.default.createElement(import_react72.default.StrictMode, null, /* @__PURE__ */ import_react72.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react72.default.createElement(HashRouter, null, /* @__PURE__ */ import_react72.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:

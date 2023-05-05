@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { CompanyNavigationTabs } from "./company-navigation-tabs";
 import { TabHeader } from "../../components/details-header";
+import { Spinner } from "../../components/spinner";
 
 export default function CompanyPage() {
   return (
@@ -10,9 +11,7 @@ export default function CompanyPage() {
       <div className="border-b border-cyan-800">
         {<CompanyNavigationTabs />}
       </div>
-      <React.Suspense fallback={<div>Loading.. </div>}>
-        {<Outlet />}
-      </React.Suspense>
+      <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
     </div>
   );
 }

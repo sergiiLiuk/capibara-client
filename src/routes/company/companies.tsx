@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import * as api from "./company.api";
 import { Company } from "../../gql/graphql";
+import { Spinner } from "../../components/spinner";
 
 export default function Companies() {
   const { loading, error, data } = api.useCompaniesData();
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner />;
   if (error) return <div>Somethingwent wrong</div>;
 
   const { companies }: { companies: Company[] } = data;

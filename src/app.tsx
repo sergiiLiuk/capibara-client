@@ -7,6 +7,7 @@ import Dashboard from "./routes/dashboard";
 import { notFoundRoute } from "./routes/not-found/not-found.route";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
+import { Spinner } from "./components/spinner";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -20,7 +21,7 @@ import { projectsRoutes } from "./routes/projects/projects.route";
 // }
 export default function App() {
   const router = useRoutes(routes);
-  return <Suspense fallback={<div>Loading...</div>}>{router}</Suspense>;
+  return <Suspense fallback={<Spinner />}>{router}</Suspense>;
 }
 
 export const routes = [
