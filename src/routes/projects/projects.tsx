@@ -5,6 +5,7 @@ import * as api from "./project.api";
 import { TabHeader } from "../../components/details-header";
 import { Button } from "../../components/button";
 import { Spinner } from "../../components/spinner";
+import { Modal } from "../../components/dialog";
 
 export default function Projects() {
   const { loading, error, data } = api.useProjectsData();
@@ -16,6 +17,7 @@ export default function Projects() {
   return (
     <div>
       <TabHeader>
+        <Modal title="Create project" />
         <Button onClick={() => console.log("Create project")}>
           Create project
         </Button>
