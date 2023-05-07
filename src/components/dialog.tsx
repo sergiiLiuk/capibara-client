@@ -1,27 +1,60 @@
-import React from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useState } from "react";
-import { Dialog } from "@headlessui/react";
+import ReactDOM from "react-dom";
+// import { Dialog, Transition } from '@headlessui/react';
 
 type Props = {
-  title: string;
+  title?: React.ReactNode;
+  onClose?: () => void;
+  children?: React.ReactNode;
+  autoFocus?: boolean;
+  closeOnEsc?: boolean;
+  closeOnClickOutside?: boolean;
 };
 
-export const Modal = ({ title }: Props) => {
-  let [isOpen, setIsOpen] = useState(false);
+export const Dialog = ({
+  title,
+  onClose,
+  children,
+  autoFocus,
+  closeOnEsc,
+  closeOnClickOutside,
+}: Props) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!dialogRef.current) return;
+    if (autoFocus) dialogRef.current.focus();
+  }, []);
 
-  return (
-    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-      <Dialog.Panel>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>
-          This will permanently deactivate your account
-        </Dialog.Description>
-
-        <p>
-          Are you sure you want to deactivate your account? All of your data
-          will be permanently removed. This action cannot be undone.
-        </p>
-      </Dialog.Panel>
-    </Dialog>
+  return ReactDOM.createPortal(
+    <div
+      className="fixed inset-0 flex flex-col justify-center items-center bg-gray-800 opacity-80 "
+      onClick={
+        closeOnClickOutside && onClose
+          ? (e) => {
+              if (e.target === e.currentTarget) onClose();
+            }
+          : undefined
+      }
+    >
+      <div
+        className="w-96 bg-white shadow-md flex flex-col overflow-hidden"
+        ref={dialogRef}
+        tabIndex={-1}
+        onKeyDown={
+          !(onClose && closeOnEsc)
+            ? undefined
+            : (e) => {
+                if (e.key === "Escape") onClose();
+              }
+        }
+      >
+        <div className="flex items-center px-5 py-2.5 border-b-2 border-grey-300">
+          {title}
+        </div>
+        {children}
+      </div>
+    </div>,
+    document.body
   );
 };

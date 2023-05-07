@@ -1,10 +1,10 @@
 import React from "react";
 
 type Props = {
-  handleSubmit: () => void;
+  onSubmit: () => void;
   children: React.ReactNode;
 };
 
-export const Form = ({ handleSubmit, children }: Props) => {
-  return <form onSubmit={handleSubmit}>{children} </form>;
+export const Form = ({ onSubmit, children }: Props) => {
+  return <form onSubmit={onSubmit}>{children} </form>;
 };
