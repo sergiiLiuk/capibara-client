@@ -73,5 +73,5 @@ export function useCreateProject() {
       },
     }
   );
-  return createProject;
+  return { createProject };
 }

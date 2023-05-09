@@ -42706,13 +42706,13 @@ const client = new ApolloClient({
         }
       }
     );
-    return createProject;
+    return { createProject };
   }
 
   // src/routes/projects/create-project.tsx
   var CreateProject = () => {
     const [dialog, setDialog] = (0, import_react70.useState)(false);
-    const createProject = useCreateProject();
+    const { createProject } = useCreateProject();
     const {
       handleSubmit,
       register,
@@ -42725,6 +42725,7 @@ const client = new ApolloClient({
           description
         }
       });
+      setDialog(false);
     };
     return /* @__PURE__ */ import_react70.default.createElement(import_react70.default.Fragment, null, /* @__PURE__ */ import_react70.default.createElement(Button, { onClick: () => setDialog(true) }, "Create project"), dialog && /* @__PURE__ */ import_react70.default.createElement(
       Dialog,

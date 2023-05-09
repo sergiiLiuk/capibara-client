@@ -12,7 +12,7 @@ type FormValues = {
 
 export const CreateProject = () => {
   const [dialog, setDialog] = useState<boolean>(false);
-  const createProject = useCreateProject();
+  const { createProject } = useCreateProject();
   const {
     handleSubmit,
     register,
@@ -26,6 +26,8 @@ export const CreateProject = () => {
         description: description,
       },
     });
+
+    setDialog(false);
   };
   //TODO: create input & label components
   return (
