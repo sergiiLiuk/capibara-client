@@ -3,25 +3,29 @@ import { Dialog } from "../../components/dialog";
 import { Button } from "../../components/button";
 import { Form } from "../../components/form";
 import { useForm } from "react-hook-form";
+import { useCreateProject } from "./project.api";
 
 type FormValues = {
   name: string;
-  description: string;
+  description?: string;
 };
 
 export const CreateProject = () => {
   const [dialog, setDialog] = useState<boolean>(false);
-
+  const createProject = useCreateProject();
   const {
     handleSubmit,
     register,
-
     formState: { isSubmitting, errors },
   } = useForm<FormValues>();
 
-  const onSubmit = () => {
-    console.log("submit");
-    return null;
+  const onSubmit = ({ name, description }: FormValues) => {
+    createProject({
+      variables: {
+        name: name,
+        description: description,
+      },
+    });
   };
   //TODO: create input & label components
   return (
@@ -54,7 +58,7 @@ export const CreateProject = () => {
                     Project description
                   </label>
                   <input
-                    {...register("name")}
+                    {...register("description")}
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Project description"

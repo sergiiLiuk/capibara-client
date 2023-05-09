@@ -1,4 +1,4 @@
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, gql, useMutation, QueryResult } from "@apollo/client";
 import { Project } from "../../gql/graphql";
 
 const GET_PROJECTS_QUERY = /* GraphQL */ gql`
@@ -40,22 +40,38 @@ export const useProjectData = (variables: { id: string }) => {
 const CREATE_PROJECT = /* GraphQL */ gql`
   mutation createProject($name: String!, $description: String!) {
     createProject(name: $name, description: $description) {
+      id
       name
       description
+      company {
+        id
+      }
     }
   }
 `;
 
-export const useCreateProject = (variables: Project) => {
-  const [createProject] = useMutation(CREATE_PROJECT, {
-    variables: variables,
-    update(cache, { data: { createProject } }) {
-      const { projects } = cache.readQuery({ query: GET_PROJECTS_QUERY });
+interface CreateProjectVariables {
+  name: string;
+  description?: string;
+  companyId?: string;
+}
 
-      cache.writeQuery({
-        query: GET_PROJECTS_QUERY,
-        data: { projects: projects.concat([createProject]) },
-      });
-    },
-  });
-};
+export function useCreateProject() {
+  const [createProject] = useMutation<Project, CreateProjectVariables>(
+    CREATE_PROJECT,
+    {
+      update: (cache, { data: { createProject } }) => {
+        const { projects } = cache.readQuery<Project[]>({
+          query: GET_PROJECTS_QUERY,
+        });
+        cache.writeQuery({
+          query: GET_PROJECTS_QUERY,
+          data: {
+            projects: [...projects, { ...createProject }],
+          },
+        });
+      },
+    }
+  );
+  return createProject;
+}

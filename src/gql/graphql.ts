@@ -22,14 +22,14 @@ export type Company = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addProject?: Maybe<Project>;
+  createProject?: Maybe<Project>;
   deleteProject?: Maybe<Project>;
   updateProject?: Maybe<Project>;
 };
 
 
-export type MutationAddProjectArgs = {
-  companyId: Scalars['ID'];
+export type MutationCreateProjectArgs = {
+  companyId?: InputMaybe<Scalars['ID']>;
   description: Scalars['String'];
   name: Scalars['String'];
 };
