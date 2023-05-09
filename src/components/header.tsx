@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 
 export default function Header() {
   return (
-    <div className="bg-cyan-800 h-16 pr-4 flex justify-between items-center">
+    <div className="bg-cyan-800 py-4 pr-4 flex justify-between items-center">
       <div className="relative">
         <input
           type="text"

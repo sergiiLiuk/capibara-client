@@ -19,7 +19,7 @@ export const Button = ({
     <button
       type={type}
       disabled={disabled}
-      className="bg-sky-700 hover:bg-sky-600 hover:cursor-pointer px-2 py-1 text-white"
+      className="bg-primary hover:bg-primary/80 hover:cursor-pointer px-2 py-1 text-white"
       onClick={onClick}
     >
       {children}

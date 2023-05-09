@@ -40949,7 +40949,7 @@ const client = new ApolloClient({
   // src/components/header.tsx
   var import_react48 = __toESM(require_react(), 1);
   function Header() {
-    return /* @__PURE__ */ import_react48.default.createElement("div", { className: "bg-cyan-800 h-16 pr-4 flex justify-between items-center" }, /* @__PURE__ */ import_react48.default.createElement("div", { className: "relative" }, /* @__PURE__ */ import_react48.default.createElement(
+    return /* @__PURE__ */ import_react48.default.createElement("div", { className: "bg-cyan-800 py-4 pr-4 flex justify-between items-center" }, /* @__PURE__ */ import_react48.default.createElement("div", { className: "relative" }, /* @__PURE__ */ import_react48.default.createElement(
       "input",
       {
         type: "text",
@@ -41287,7 +41287,7 @@ const client = new ApolloClient({
       {
         type,
         disabled,
-        className: "bg-sky-700 hover:bg-sky-600 hover:cursor-pointer px-2 py-1 text-white",
+        className: "bg-primary hover:bg-primary/80 hover:cursor-pointer px-2 py-1 text-white",
         onClick
       },
       children
