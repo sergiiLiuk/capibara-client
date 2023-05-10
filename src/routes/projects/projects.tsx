@@ -8,6 +8,7 @@ import * as api from "./project.api";
 
 export default function Projects() {
   const { loading, error, data } = api.useProjectsData();
+  const { deleteProject } = api.useDeleteProject();
   if (loading) return <Spinner />;
   if (error) return <div>Somethingwent wrong</div>;
 
@@ -20,16 +21,21 @@ export default function Projects() {
       </TabHeader>
       <div>Projects:</div>
       <div className="flex flex-col">
-        {projects.map((record, idx) => {
+        {projects.map((project, idx) => {
           return (
-            <Link
-              to={`${record.id}`}
-              className="flex flex-col border-2 p-2"
-              key={idx}
-            >
-              <div>{record.id}</div>
-              <div>{record.name}</div>
-            </Link>
+            <div className="flex border-t-2 p-2" key={idx}>
+              <Link to={`${project.id}`} className="flex-1 flex gap-1">
+                <div>{project.id}</div>
+                <div>{project.name}</div>
+              </Link>
+              <button
+                onClick={() => {
+                  deleteProject({ variables: { id: project.id! } });
+                }}
+              >
+                Delete project
+              </button>
+            </div>
           );
         })}
       </div>

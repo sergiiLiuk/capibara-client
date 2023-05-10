@@ -42693,6 +42693,7 @@ const client = new ApolloClient({
     const [createProject] = useMutation(
       CREATE_PROJECT,
       {
+        onError: (error) => console.error(error.message),
         update: (cache2, { data: { createProject: createProject2 } }) => {
           const { projects } = cache2.readQuery({
             query: GET_PROJECTS_QUERY
@@ -42707,6 +42708,35 @@ const client = new ApolloClient({
       }
     );
     return { createProject };
+  }
+  var DELETE_PROJECT = (
+    /* GraphQL */
+    gql`
+  mutation deleteProject($id: ID!) {
+    deleteProject(id: $id) {
+      id
+    }
+  }
+`
+  );
+  function useDeleteProject() {
+    const [deleteProject] = useMutation(DELETE_PROJECT, {
+      onError: (error) => console.error(error.message),
+      update: (cache2, { data: { deleteProject: deleteProject2 } }) => {
+        const { projects } = cache2.readQuery({
+          query: GET_PROJECTS_QUERY
+        });
+        cache2.writeQuery({
+          query: GET_PROJECTS_QUERY,
+          data: {
+            projects: projects.filter(
+              (project) => project.id !== deleteProject2.id
+            )
+          }
+        });
+      }
+    });
+    return { deleteProject };
   }
 
   // src/routes/projects/create-project.tsx
@@ -42757,22 +42787,22 @@ const client = new ApolloClient({
   // src/routes/projects/projects.tsx
   function Projects() {
     const { loading, error, data } = useProjectsData();
+    const { deleteProject } = useDeleteProject();
     if (loading)
       return /* @__PURE__ */ import_react71.default.createElement(Spinner, null);
     if (error)
       return /* @__PURE__ */ import_react71.default.createElement("div", null, "Somethingwent wrong");
     const { projects } = data;
-    return /* @__PURE__ */ import_react71.default.createElement("div", null, /* @__PURE__ */ import_react71.default.createElement(TabHeader, null, /* @__PURE__ */ import_react71.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react71.default.createElement("div", null, "Projects:"), /* @__PURE__ */ import_react71.default.createElement("div", { className: "flex flex-col" }, projects.map((record, idx) => {
-      return /* @__PURE__ */ import_react71.default.createElement(
-        Link,
+    return /* @__PURE__ */ import_react71.default.createElement("div", null, /* @__PURE__ */ import_react71.default.createElement(TabHeader, null, /* @__PURE__ */ import_react71.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react71.default.createElement("div", null, "Projects:"), /* @__PURE__ */ import_react71.default.createElement("div", { className: "flex flex-col" }, projects.map((project, idx) => {
+      return /* @__PURE__ */ import_react71.default.createElement("div", { className: "flex border-t-2 p-2", key: idx }, /* @__PURE__ */ import_react71.default.createElement(Link, { to: `${project.id}`, className: "flex-1 flex gap-1" }, /* @__PURE__ */ import_react71.default.createElement("div", null, project.id), /* @__PURE__ */ import_react71.default.createElement("div", null, project.name)), /* @__PURE__ */ import_react71.default.createElement(
+        "button",
         {
-          to: `${record.id}`,
-          className: "flex flex-col border-2 p-2",
-          key: idx
+          onClick: () => {
+            deleteProject({ variables: { id: project.id } });
+          }
         },
-        /* @__PURE__ */ import_react71.default.createElement("div", null, record.id),
-        /* @__PURE__ */ import_react71.default.createElement("div", null, record.name)
-      );
+        "Delete project"
+      ));
     })));
   }
 
@@ -42838,7 +42868,19 @@ const client = new ApolloClient({
   // src/utils/apollo-client.ts
   var client = new ApolloClient({
     uri: "http://localhost:5000/graphql",
-    cache: new InMemoryCache()
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            projects: {
+              merge(existing, incoming) {
+                return incoming;
+              }
+            }
+          }
+        }
+      }
+    })
   });
   var apollo_client_default = client;
 

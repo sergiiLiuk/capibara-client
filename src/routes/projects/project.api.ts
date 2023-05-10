@@ -1,5 +1,6 @@
 import { useQuery, gql, useMutation, QueryResult } from "@apollo/client";
 import { Project } from "../../gql/graphql";
+import { log } from "console";
 
 const GET_PROJECTS_QUERY = /* GraphQL */ gql`
   query getProjects {
@@ -60,6 +61,7 @@ export function useCreateProject() {
   const [createProject] = useMutation<Project, CreateProjectVariables>(
     CREATE_PROJECT,
     {
+      onError: (error) => console.error(error.message),
       update: (cache, { data: { createProject } }) => {
         const { projects } = cache.readQuery<Project[]>({
           query: GET_PROJECTS_QUERY,
@@ -74,4 +76,33 @@ export function useCreateProject() {
     }
   );
   return { createProject };
+}
+
+const DELETE_PROJECT = /* GraphQL */ gql`
+  mutation deleteProject($id: ID!) {
+    deleteProject(id: $id) {
+      id
+    }
+  }
+`;
+
+export function useDeleteProject() {
+  const [deleteProject] = useMutation<Project, { id: string }>(DELETE_PROJECT, {
+    onError: (error) => console.error(error.message),
+    update: (cache, { data: { deleteProject } }) => {
+      const { projects } = cache.readQuery<Project[]>({
+        query: GET_PROJECTS_QUERY,
+      });
+
+      cache.writeQuery({
+        query: GET_PROJECTS_QUERY,
+        data: {
+          projects: projects.filter(
+            (project: Project) => project.id !== deleteProject.id
+          ),
+        },
+      });
+    },
+  });
+  return { deleteProject };
 }

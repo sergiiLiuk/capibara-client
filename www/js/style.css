@@ -1,4 +1,4 @@
-/* temp_stylePlugin:ni:sha-256;TkKpLykEGqV8s1b6o-hAd-c0eMuf3NfA6N9vOIvfoyQ */
+/* temp_stylePlugin:ni:sha-256;tuOlaJfe3JpNzWbjNIH2eCp7t3lLVSM4HWfw9aihBYo */
 *,
 ::before,
 ::after {
@@ -468,6 +468,9 @@ video {
 .gap-2 {
   gap: 0.5rem;
 }
+.gap-1 {
+  gap: 0.25rem;
+}
 .gap-x-1 {
   -moz-column-gap: 0.25rem;
   column-gap: 0.25rem;
@@ -674,6 +677,9 @@ video {
 }
 .ring-opacity-5 {
   --tw-ring-opacity: 0.05;
+}
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .transition {
   transition-property:
