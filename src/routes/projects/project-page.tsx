@@ -1,16 +1,29 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { TabHeader } from "../../components/details-header";
-import { ProjectNavigationTabs } from "./project-navigation-tabs";
 import { Spinner } from "../../components/spinner";
+import { ProjectNavigationTabs } from "./project-navigation-tabs";
+import { Project } from "../../gql/graphql";
+import { EditProject } from "./edit-project";
+import { DeleteProject } from "./delete-project";
 
-export default function ProjectPage() {
+type Props = {
+  project: Project;
+};
+
+export default function ProjectPage({ project }: Props) {
   return (
     <div>
-      <TabHeader />
-      <div className="border-b border-cyan-800">
+      <div className="border-b pt-2 border-cyan-800">
         {<ProjectNavigationTabs />}
       </div>
+      <TabHeader>
+        <div className="flex-1"> </div>
+        <div className="flex gap-2">
+          <EditProject project={project} />
+          <DeleteProject project={project} />
+        </div>
+      </TabHeader>
       <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
     </div>
   );

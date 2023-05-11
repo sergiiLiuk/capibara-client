@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog } from "../../components/dialog";
 import { Button } from "../../components/button";
 import { Form } from "../../components/form";
@@ -10,14 +10,24 @@ type FormValues = {
   description?: string;
 };
 
+const defaultVaues = {
+  name: "",
+  description: "",
+};
+
 export const CreateProject = () => {
   const [dialog, setDialog] = useState<boolean>(false);
   const { createProject } = useCreateProject();
   const {
     handleSubmit,
     register,
+    reset,
     formState: { isSubmitting, errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ defaultValues: defaultVaues });
+
+  useEffect(() => {
+    if (!dialog) reset(defaultVaues);
+  }, [dialog]);
 
   const onSubmit = ({ name, description }: FormValues) => {
     createProject({
@@ -26,7 +36,6 @@ export const CreateProject = () => {
         description: description,
       },
     });
-
     setDialog(false);
   };
   //TODO: create input & label components

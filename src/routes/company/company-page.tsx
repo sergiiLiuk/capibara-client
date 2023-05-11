@@ -7,10 +7,10 @@ import { Spinner } from "../../components/spinner";
 export default function CompanyPage() {
   return (
     <div>
-      <TabHeader />
-      <div className="border-b border-cyan-800">
+      <div className="border-b pt-2 border-cyan-800">
         {<CompanyNavigationTabs />}
       </div>
+      {/* <TabHeader /> */}
       <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
     </div>
   );

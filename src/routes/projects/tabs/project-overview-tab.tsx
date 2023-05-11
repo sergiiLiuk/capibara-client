@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Project } from "../../../gql/graphql";
 
 type Props = {
@@ -7,8 +7,7 @@ type Props = {
 
 export default function ProjectOverviewTab({ project }: Props) {
   return (
-    <div>
-      Project overview tab:
+    <div className="p-2">
       <div>Name: {project.name}</div>
       <div>Description: {project.description}</div>
       <div>Company: {project.company?.name}</div>

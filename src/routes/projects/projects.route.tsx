@@ -31,7 +31,7 @@ function Container(props: {
 export const projectsRoutes = [
   {
     path: "projects/:id",
-    element: <ProjectPage />,
+    element: <Container component={ProjectPage} />,
     children: [
       {
         path: "",

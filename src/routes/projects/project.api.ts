@@ -106,3 +106,29 @@ export function useDeleteProject() {
   });
   return { deleteProject };
 }
+
+const UPDATE_PROJECT = /* GraphQL */ gql`
+  mutation updateProject($id: ID!, $name: String!, $description: String!) {
+    updateProject(id: $id, name: $name, description: $description) {
+      id
+      name
+      description
+    }
+  }
+`;
+
+interface UpdateProjectVariables {
+  id: string;
+  name: string;
+  description?: string | null;
+}
+
+export function useUpdateProject() {
+  const [updateProject] = useMutation<Project, UpdateProjectVariables>(
+    UPDATE_PROJECT,
+    {
+      onError: (error) => console.error(error.message),
+    }
+  );
+  return { updateProject };
+}

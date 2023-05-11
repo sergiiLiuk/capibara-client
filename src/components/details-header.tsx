@@ -7,5 +7,5 @@ type Props = {
 
 export const TabHeader = ({ children }: Props) => {
   const { id } = useParams();
-  return <div className="bg-slate-200 py-2 px-6">{children}</div>;
+  return <div className="flex bg-slate-200 py-2 px-6">{children}</div>;
 };
