@@ -43991,7 +43991,7 @@ const client = new ApolloClient({
     const onSubmit = ({ email, password }) => {
       console.log("entered login info: ", email, password);
     };
-    return /* @__PURE__ */ import_react83.default.createElement("section", { className: "bg-gray-50" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react83.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react83.default.createElement(
+    return /* @__PURE__ */ import_react83.default.createElement("section", { className: "bg-cyan-800" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react83.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react83.default.createElement(
       "form",
       {
         onSubmit: handleSubmit(onSubmit),
