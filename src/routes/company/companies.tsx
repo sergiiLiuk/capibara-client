@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as api from "./company.api";
 import { Company } from "../../gql/graphql";
 import { Spinner } from "../../components/spinner";
+import { Table, TableBody, TableHead } from "../../components/table/table";
 
 export default function Companies() {
+  const navigate = useNavigate();
   const { loading, error, data } = api.useCompaniesData();
   if (loading) return <Spinner />;
   if (error) return <div>Somethingwent wrong</div>;
@@ -13,22 +15,32 @@ export default function Companies() {
 
   return (
     <div>
-      <div>Companies:</div>
-      <div className="flex flex-col">
-        {companies.map((record, idx) => {
-          return (
-            <Link
-              to={`${record.id}`}
-              className="flex flex-col border-2 p-2"
-              key={idx}
-            >
-              <div>{record.id}</div>
-              <div>{record.name}</div>
-              <div>{record.cvr}</div>
-            </Link>
-          );
-        })}
-      </div>
+      <Table>
+        <TableHead>
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              Name
+            </th>
+            <th scope="col" className="px-6 py-3">
+              CVR
+            </th>
+          </tr>
+        </TableHead>
+        <TableBody>
+          {(companies || []).map((company) => {
+            return (
+              <tr
+                key={company.id}
+                className="bg-white border-b hover:bg-gray-100 cursor-pointer"
+                onClick={() => navigate(`/projects/${company.id}`)}
+              >
+                <td className="px-4 py-2">{company.name}</td>
+                <td className="px-4 py-2">{company.cvr}</td>
+              </tr>
+            );
+          })}
+        </TableBody>
+      </Table>
     </div>
   );
 }
