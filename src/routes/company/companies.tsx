@@ -32,7 +32,7 @@ export default function Companies() {
               <tr
                 key={company.id}
                 className="bg-white border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => navigate(`/projects/${company.id}`)}
+                onClick={() => navigate(`/companies/${company.id}`)}
               >
                 <td className="px-4 py-2">{company.name}</td>
                 <td className="px-4 py-2">{company.cvr}</td>

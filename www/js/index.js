@@ -43773,7 +43773,7 @@ const client = new ApolloClient({
         {
           key: company.id,
           className: "bg-white border-b hover:bg-gray-100 cursor-pointer",
-          onClick: () => navigate(`/projects/${company.id}`)
+          onClick: () => navigate(`/companies/${company.id}`)
         },
         /* @__PURE__ */ import_react60.default.createElement("td", { className: "px-4 py-2" }, company.name),
         /* @__PURE__ */ import_react60.default.createElement("td", { className: "px-4 py-2" }, company.cvr)
