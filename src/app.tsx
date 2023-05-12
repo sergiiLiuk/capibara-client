@@ -8,6 +8,7 @@ import { notFoundRoute } from "./routes/not-found/not-found.route";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import { Spinner } from "./components/spinner";
+import LoginForm from "./components/login-form";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -25,6 +26,10 @@ export default function App() {
 }
 
 export const routes = [
+  {
+    path: "login",
+    element: <LoginForm />,
+  },
   {
     element: <Layout />,
     children: [

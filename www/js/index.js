@@ -15138,9 +15138,9 @@ const client = new ApolloClient({
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React39 = require_react();
+          var React40 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React39.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React40.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -16745,7 +16745,7 @@ const client = new ApolloClient({
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React39.Children.forEach(props.children, function(child) {
+                  React40.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -25192,7 +25192,7 @@ const client = new ApolloClient({
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React39.Component().refs;
+          var emptyRefsObject = new React40.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -43441,12 +43441,12 @@ const client = new ApolloClient({
 
   // src/index.tsx
   init_client();
-  var import_react84 = __toESM(require_react(), 1);
+  var import_react85 = __toESM(require_react(), 1);
   var import_client5 = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react83 = __toESM(require_react(), 1);
+  var import_react84 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -43887,7 +43887,7 @@ const client = new ApolloClient({
         closeOnClickOutside: true,
         closeOnEsc: true
       },
-      /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react75.default.createElement(
+      /* @__PURE__ */ import_react75.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react75.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("name")), {
           type: "text",
@@ -43902,7 +43902,7 @@ const client = new ApolloClient({
           className: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
           placeholder: "Project description"
         })
-      ))), /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react75.default.createElement(Button, { type: "submit" }, "Create project"))))
+      ))), /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react75.default.createElement(Button, { type: "submit" }, "Create project")))
     ));
   };
 
@@ -43967,23 +43967,90 @@ const client = new ApolloClient({
 
   // src/app.tsx
   init_spinner();
+
+  // src/components/login-form.tsx
+  var import_react83 = __toESM(require_react(), 1);
+  init_index_esm();
+
+  // src/utils/email-regex.ts
+  var EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  // src/components/login-form.tsx
+  init_button();
+  var defaultVaues2 = {
+    login: "",
+    password: ""
+  };
+  function LoginForm() {
+    const {
+      handleSubmit,
+      register,
+      reset,
+      formState: { isSubmitting, errors }
+    } = useForm({ defaultValues: defaultVaues2 });
+    const onSubmit = ({ email, password }) => {
+      console.log("entered login info: ", email, password);
+    };
+    return /* @__PURE__ */ import_react83.default.createElement("section", { className: "bg-gray-50" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react83.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react83.default.createElement(
+      "form",
+      {
+        onSubmit: handleSubmit(onSubmit),
+        className: "space-y-4 md:space-y-6"
+      },
+      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900  " }, "Your email"), errors.email && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.email.message)), /* @__PURE__ */ import_react83.default.createElement(
+        "input",
+        __spreadProps(__spreadValues({}, register("email", {
+          required: "Please enter your email",
+          pattern: {
+            value: EMAIL_REGEX,
+            message: "Please enter a valid email address"
+          }
+        })), {
+          type: "email",
+          name: "email",
+          autoFocus: true,
+          className: "bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 placeholder-gray-400",
+          placeholder: "name@company.com"
+        })
+      )),
+      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Password"), errors.password && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.password.message)), /* @__PURE__ */ import_react83.default.createElement(
+        "input",
+        __spreadProps(__spreadValues({}, register("password", {
+          required: "Please enter your password"
+        })), {
+          type: "password",
+          name: "password",
+          placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+          className: "bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 placeholder-gray-400",
+          autoFocus: true
+        })
+      )),
+      /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react83.default.createElement(Button, { type: "submit" }, "Login"))
+    )))));
+  }
+
+  // src/app.tsx
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react83.default.createElement(import_react83.Suspense, { fallback: /* @__PURE__ */ import_react83.default.createElement(Spinner, null) }, router);
+    return /* @__PURE__ */ import_react84.default.createElement(import_react84.Suspense, { fallback: /* @__PURE__ */ import_react84.default.createElement(Spinner, null) }, router);
   }
   var routes = [
     {
-      element: /* @__PURE__ */ import_react83.default.createElement(Layout, null),
+      path: "login",
+      element: /* @__PURE__ */ import_react84.default.createElement(LoginForm, null)
+    },
+    {
+      element: /* @__PURE__ */ import_react84.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react83.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react84.default.createElement(Dashboard, null) },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react83.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react84.default.createElement(Companies, null)
         },
         ...companyRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react83.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react84.default.createElement(Projects, null)
         },
         ...projectsRoutes,
         ...notFoundRoute
@@ -44023,7 +44090,7 @@ const client = new ApolloClient({
     );
   }
   root2.render(
-    /* @__PURE__ */ import_react84.default.createElement(import_react84.default.StrictMode, null, /* @__PURE__ */ import_react84.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react84.default.createElement(HashRouter, null, /* @__PURE__ */ import_react84.default.createElement(App, null))))
+    /* @__PURE__ */ import_react85.default.createElement(import_react85.default.StrictMode, null, /* @__PURE__ */ import_react85.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react85.default.createElement(HashRouter, null, /* @__PURE__ */ import_react85.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:
