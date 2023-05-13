@@ -5,11 +5,11 @@ import React, { Fragment } from "react";
 export default function Header() {
   return (
     <div className="bg-cyan-800 py-4 pr-4 flex justify-between items-center">
-      <div className="relative">
+      <div className="relative mr-2">
         <input
           type="text"
           placeholder="Search"
-          className="text-sm focus:outline-none active-none h-10 w-[24rem] border border-grey-300 rounded-sm px-4"
+          className="text-sm focus:outline-none active-none h-10 border border-grey-300 px-4"
         />
       </div>
       <div className="flex items-center mr-2">
@@ -33,7 +33,7 @@ export default function Header() {
                 leaveTo="opacity-0 translate-y-1"
               >
                 <Popover.Panel className={"absolute right-0 z-10 mt-2.5 w-80"}>
-                  <div className="bg-white rounded-sm shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5">
+                  <div className="bg-white shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5">
                     Notifications panel
                   </div>
                 </Popover.Panel>

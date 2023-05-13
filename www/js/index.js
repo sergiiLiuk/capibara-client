@@ -15138,9 +15138,9 @@ const client = new ApolloClient({
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React40 = require_react();
+          var React39 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React40.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React39.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -16745,7 +16745,7 @@ const client = new ApolloClient({
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React40.Children.forEach(props.children, function(child) {
+                  React39.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -25192,7 +25192,7 @@ const client = new ApolloClient({
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React40.Component().refs;
+          var emptyRefsObject = new React39.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -41710,25 +41710,25 @@ const client = new ApolloClient({
   });
 
   // src/components/details-header.tsx
-  var import_react70, TabHeader;
+  var import_react69, TabHeader;
   var init_details_header = __esm({
     "src/components/details-header.tsx"() {
       "use strict";
-      import_react70 = __toESM(require_react(), 1);
+      import_react69 = __toESM(require_react(), 1);
       init_dist2();
       TabHeader = ({ children }) => {
         const { id } = useParams();
-        return /* @__PURE__ */ import_react70.default.createElement("div", { className: "flex bg-slate-200 py-2 px-6" }, children);
+        return /* @__PURE__ */ import_react69.default.createElement("div", { className: "flex bg-slate-200 py-2 px-6" }, children);
       };
     }
   });
 
   // src/components/dialog.tsx
-  var import_react71, import_react_dom2, Dialog;
+  var import_react70, import_react_dom2, Dialog;
   var init_dialog2 = __esm({
     "src/components/dialog.tsx"() {
       "use strict";
-      import_react71 = __toESM(require_react(), 1);
+      import_react70 = __toESM(require_react(), 1);
       import_react_dom2 = __toESM(require_react_dom(), 1);
       Dialog = ({
         title,
@@ -41738,15 +41738,15 @@ const client = new ApolloClient({
         closeOnEsc,
         closeOnClickOutside
       }) => {
-        const dialogRef = (0, import_react71.useRef)(null);
-        (0, import_react71.useEffect)(() => {
+        const dialogRef = (0, import_react70.useRef)(null);
+        (0, import_react70.useEffect)(() => {
           if (!dialogRef.current)
             return;
           if (autoFocus)
             dialogRef.current.focus();
         }, []);
         return import_react_dom2.default.createPortal(
-          /* @__PURE__ */ import_react71.default.createElement(
+          /* @__PURE__ */ import_react70.default.createElement(
             "div",
             {
               className: "fixed inset-0 flex flex-col justify-center items-center bg-gray-800 opacity-80 ",
@@ -41755,7 +41755,7 @@ const client = new ApolloClient({
                   onClose();
               } : void 0
             },
-            /* @__PURE__ */ import_react71.default.createElement(
+            /* @__PURE__ */ import_react70.default.createElement(
               "div",
               {
                 className: "w-96 bg-white shadow-md flex flex-col overflow-hidden",
@@ -41766,7 +41766,7 @@ const client = new ApolloClient({
                     onClose();
                 }
               },
-              /* @__PURE__ */ import_react71.default.createElement("div", { className: "flex items-center px-5 py-2.5 border-b-2 border-grey-300" }, title),
+              /* @__PURE__ */ import_react70.default.createElement("div", { className: "flex items-center px-5 py-2.5 border-b-2 border-grey-300" }, title),
               children
             )
           ),
@@ -41777,18 +41777,18 @@ const client = new ApolloClient({
   });
 
   // src/components/button.tsx
-  var import_react72, Button;
+  var import_react71, Button;
   var init_button = __esm({
     "src/components/button.tsx"() {
       "use strict";
-      import_react72 = __toESM(require_react(), 1);
+      import_react71 = __toESM(require_react(), 1);
       Button = ({
         children,
         onClick,
         disabled = false,
         type
       }) => {
-        return /* @__PURE__ */ import_react72.default.createElement(
+        return /* @__PURE__ */ import_react71.default.createElement(
           "button",
           {
             type,
@@ -41803,13 +41803,13 @@ const client = new ApolloClient({
   });
 
   // src/components/form.tsx
-  var import_react73, Form2;
+  var import_react72, Form2;
   var init_form2 = __esm({
     "src/components/form.tsx"() {
       "use strict";
-      import_react73 = __toESM(require_react(), 1);
+      import_react72 = __toESM(require_react(), 1);
       Form2 = ({ onSubmit, children }) => {
-        return /* @__PURE__ */ import_react73.default.createElement("form", { onSubmit }, children, " ");
+        return /* @__PURE__ */ import_react72.default.createElement("form", { onSubmit }, children, " ");
       };
     }
   });
@@ -41837,9 +41837,9 @@ const client = new ApolloClient({
     return copy;
   }
   function useSubscribe(props) {
-    const _props = import_react74.default.useRef(props);
+    const _props = import_react73.default.useRef(props);
     _props.current = props;
-    import_react74.default.useEffect(() => {
+    import_react73.default.useEffect(() => {
       const subscription = !props.disabled && _props.current.subject && _props.current.subject.subscribe({
         next: _props.current.next
       });
@@ -42732,8 +42732,8 @@ const client = new ApolloClient({
     };
   }
   function useForm(props = {}) {
-    const _formControl = import_react74.default.useRef();
-    const [formState, updateFormState] = import_react74.default.useState({
+    const _formControl = import_react73.default.useRef();
+    const [formState, updateFormState] = import_react73.default.useState({
       isDirty: false,
       isValidating: false,
       isLoading: isFunction(props.defaultValues),
@@ -42763,14 +42763,14 @@ const client = new ApolloClient({
         }
       }
     });
-    import_react74.default.useEffect(() => {
+    import_react73.default.useEffect(() => {
       if (props.values && !deepEqual(props.values, control._defaultValues)) {
         control._reset(props.values, control._options.resetOptions);
       } else {
         control._resetDefaultValues();
       }
     }, [props.values, control]);
-    import_react74.default.useEffect(() => {
+    import_react73.default.useEffect(() => {
       if (!control._state.mount) {
         control._updateValid();
         control._state.mount = true;
@@ -42784,10 +42784,10 @@ const client = new ApolloClient({
     _formControl.current.formState = getProxyFormState(formState, control);
     return _formControl.current;
   }
-  var import_react74, isCheckBoxInput, isDateObject, isNullOrUndefined, isObjectType, isObject, getEventValue, getNodeParentName, isNameInFieldArray, isPlainObject, isWeb, compact2, isUndefined, get, EVENTS, VALIDATION_MODE, INPUT_VALIDATION_RULES, HookFormContext, getProxyFormState, isEmptyObject, shouldRenderFormState, convertToArrayPayload, isString, generateWatchOutput, isKey, stringToPath, appendErrors, focusFieldBy, getValidationModes, isWatched, updateFieldArrayRootError, isBoolean, isFileInput, isFunction, isHTMLElement, isMessage, isRadioInput, isRegex, defaultResult, validResult, getCheckboxValue, defaultReturn, getRadioValue, getValueAndMessage, validateField, isPrimitive, isMultipleSelect, isRadioOrCheckbox, live, objectHasFunction, getDirtyFields, getFieldValueAs, getResolverOptions, getRuleValue, hasValidation, skipValidation, unsetEmptyArray, defaultOptions2;
+  var import_react73, isCheckBoxInput, isDateObject, isNullOrUndefined, isObjectType, isObject, getEventValue, getNodeParentName, isNameInFieldArray, isPlainObject, isWeb, compact2, isUndefined, get, EVENTS, VALIDATION_MODE, INPUT_VALIDATION_RULES, HookFormContext, getProxyFormState, isEmptyObject, shouldRenderFormState, convertToArrayPayload, isString, generateWatchOutput, isKey, stringToPath, appendErrors, focusFieldBy, getValidationModes, isWatched, updateFieldArrayRootError, isBoolean, isFileInput, isFunction, isHTMLElement, isMessage, isRadioInput, isRegex, defaultResult, validResult, getCheckboxValue, defaultReturn, getRadioValue, getValueAndMessage, validateField, isPrimitive, isMultipleSelect, isRadioOrCheckbox, live, objectHasFunction, getDirtyFields, getFieldValueAs, getResolverOptions, getRuleValue, hasValidation, skipValidation, unsetEmptyArray, defaultOptions2;
   var init_index_esm = __esm({
     "node_modules/react-hook-form/dist/index.esm.mjs"() {
-      import_react74 = __toESM(require_react(), 1);
+      import_react73 = __toESM(require_react(), 1);
       isCheckBoxInput = (element) => element.type === "checkbox";
       isDateObject = (value) => value instanceof Date;
       isNullOrUndefined = (value) => value == null;
@@ -42831,7 +42831,7 @@ const client = new ApolloClient({
         required: "required",
         validate: "validate"
       };
-      HookFormContext = import_react74.default.createContext(null);
+      HookFormContext = import_react73.default.createContext(null);
       getProxyFormState = (formState, control, localProxyFormState, isRoot = true) => {
         const result2 = {
           defaultValues: control._defaultValues
@@ -43277,14 +43277,14 @@ const client = new ApolloClient({
   });
 
   // src/routes/projects/project-navigation-tabs.tsx
-  var import_react77, ProjectNavigationTabs;
+  var import_react76, ProjectNavigationTabs;
   var init_project_navigation_tabs = __esm({
     "src/routes/projects/project-navigation-tabs.tsx"() {
       "use strict";
-      import_react77 = __toESM(require_react(), 1);
+      import_react76 = __toESM(require_react(), 1);
       init_navigation_tabs();
       ProjectNavigationTabs = () => {
-        const items = (0, import_react77.useMemo)(
+        const items = (0, import_react76.useMemo)(
           () => [
             {
               path: "",
@@ -43293,24 +43293,24 @@ const client = new ApolloClient({
           ],
           []
         );
-        return /* @__PURE__ */ import_react77.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react76.default.createElement(NavigationTabs, { items });
       };
     }
   });
 
   // src/routes/projects/edit-project.tsx
-  var import_react78, EditProject;
+  var import_react77, EditProject;
   var init_edit_project = __esm({
     "src/routes/projects/edit-project.tsx"() {
       "use strict";
-      import_react78 = __toESM(require_react(), 1);
+      import_react77 = __toESM(require_react(), 1);
       init_index_esm();
       init_button();
       init_dialog2();
       init_form2();
       init_project_api();
       EditProject = ({ project }) => {
-        const [dialog, setDialog] = (0, import_react78.useState)(false);
+        const [dialog, setDialog] = (0, import_react77.useState)(false);
         const { updateProject } = useUpdateProject();
         const {
           handleSubmit,
@@ -43323,7 +43323,7 @@ const client = new ApolloClient({
             description: project.description
           }
         });
-        (0, import_react78.useEffect)(() => {
+        (0, import_react77.useEffect)(() => {
           if (!dialog)
             reset({ name: project.name, description: project.description });
         }, [dialog]);
@@ -43337,7 +43337,7 @@ const client = new ApolloClient({
           });
           setDialog(false);
         };
-        return /* @__PURE__ */ import_react78.default.createElement(import_react78.default.Fragment, null, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(true) }, "Edit"), dialog && /* @__PURE__ */ import_react78.default.createElement(
+        return /* @__PURE__ */ import_react77.default.createElement(import_react77.default.Fragment, null, /* @__PURE__ */ import_react77.default.createElement(Button, { onClick: () => setDialog(true) }, "Edit"), dialog && /* @__PURE__ */ import_react77.default.createElement(
           Dialog,
           {
             title: "Edit project",
@@ -43345,7 +43345,7 @@ const client = new ApolloClient({
             closeOnClickOutside: true,
             closeOnEsc: true
           },
-          /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react78.default.createElement(
+          /* @__PURE__ */ import_react77.default.createElement("div", null, /* @__PURE__ */ import_react77.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react77.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react77.default.createElement("div", null, /* @__PURE__ */ import_react77.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react77.default.createElement(
             "input",
             __spreadProps(__spreadValues({}, register("name")), {
               type: "text",
@@ -43353,25 +43353,25 @@ const client = new ApolloClient({
               placeholder: "Project name",
               required: true
             })
-          )), /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react78.default.createElement(
+          )), /* @__PURE__ */ import_react77.default.createElement("div", null, /* @__PURE__ */ import_react77.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react77.default.createElement(
             "input",
             __spreadProps(__spreadValues({}, register("description")), {
               type: "text",
               className: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
               placeholder: "Project description"
             })
-          ))), /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react78.default.createElement(Button, { type: "submit" }, "Save"))))
+          ))), /* @__PURE__ */ import_react77.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react77.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react77.default.createElement(Button, { type: "submit" }, "Save"))))
         ));
       };
     }
   });
 
   // src/routes/projects/delete-project.tsx
-  var import_react79, DeleteProject;
+  var import_react78, DeleteProject;
   var init_delete_project = __esm({
     "src/routes/projects/delete-project.tsx"() {
       "use strict";
-      import_react79 = __toESM(require_react(), 1);
+      import_react78 = __toESM(require_react(), 1);
       init_button();
       init_dialog2();
       init_form2();
@@ -43379,14 +43379,14 @@ const client = new ApolloClient({
       init_dist2();
       DeleteProject = ({ project }) => {
         const navigate = useNavigate();
-        const [dialog, setDialog] = (0, import_react79.useState)(false);
+        const [dialog, setDialog] = (0, import_react78.useState)(false);
         const { deleteProject } = useDeleteProject();
         const onSubmit = () => {
           deleteProject({ variables: { id: project.id } });
           setDialog(false);
           navigate("/projects");
         };
-        return /* @__PURE__ */ import_react79.default.createElement(import_react79.default.Fragment, null, /* @__PURE__ */ import_react79.default.createElement(Button, { onClick: () => setDialog(true) }, "Delete"), dialog && /* @__PURE__ */ import_react79.default.createElement(
+        return /* @__PURE__ */ import_react78.default.createElement(import_react78.default.Fragment, null, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(true) }, "Delete"), dialog && /* @__PURE__ */ import_react78.default.createElement(
           Dialog,
           {
             title: "Delete project",
@@ -43394,7 +43394,7 @@ const client = new ApolloClient({
             closeOnClickOutside: true,
             closeOnEsc: true
           },
-          /* @__PURE__ */ import_react79.default.createElement("div", null, /* @__PURE__ */ import_react79.default.createElement(Form2, { onSubmit }, /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react79.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Are you sure, you want delete project: ", project.name)), /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react79.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react79.default.createElement(Button, { type: "submit" }, "Delete"))))
+          /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement(Form2, { onSubmit }, /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react78.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Are you sure, you want delete project: ", project.name)), /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react78.default.createElement(Button, { type: "submit" }, "Delete"))))
         ));
       };
     }
@@ -43406,13 +43406,13 @@ const client = new ApolloClient({
     default: () => ProjectPage
   });
   function ProjectPage({ project }) {
-    return /* @__PURE__ */ import_react80.default.createElement("div", null, /* @__PURE__ */ import_react80.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react80.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react80.default.createElement(TabHeader, null, /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex-1" }, " "), /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex gap-2" }, /* @__PURE__ */ import_react80.default.createElement(EditProject, { project }), /* @__PURE__ */ import_react80.default.createElement(DeleteProject, { project }))), /* @__PURE__ */ import_react80.default.createElement(import_react80.default.Suspense, { fallback: /* @__PURE__ */ import_react80.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react80.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react79.default.createElement("div", null, /* @__PURE__ */ import_react79.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react79.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react79.default.createElement(TabHeader, null, /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex-1" }, " "), /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex gap-2" }, /* @__PURE__ */ import_react79.default.createElement(EditProject, { project }), /* @__PURE__ */ import_react79.default.createElement(DeleteProject, { project }))), /* @__PURE__ */ import_react79.default.createElement(import_react79.default.Suspense, { fallback: /* @__PURE__ */ import_react79.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react79.default.createElement(Outlet, null)));
   }
-  var import_react80;
+  var import_react79;
   var init_project_page = __esm({
     "src/routes/projects/project-page.tsx"() {
       "use strict";
-      import_react80 = __toESM(require_react(), 1);
+      import_react79 = __toESM(require_react(), 1);
       init_dist2();
       init_details_header();
       init_spinner();
@@ -43429,24 +43429,24 @@ const client = new ApolloClient({
   });
   function ProjectOverviewTab({ project }) {
     var _a5;
-    return /* @__PURE__ */ import_react81.default.createElement("div", { className: "p-2" }, /* @__PURE__ */ import_react81.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react81.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react81.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
+    return /* @__PURE__ */ import_react80.default.createElement("div", { className: "p-2" }, /* @__PURE__ */ import_react80.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react80.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react80.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
   }
-  var import_react81;
+  var import_react80;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react81 = __toESM(require_react(), 1);
+      import_react80 = __toESM(require_react(), 1);
     }
   });
 
   // src/index.tsx
   init_client();
-  var import_react85 = __toESM(require_react(), 1);
+  var import_react84 = __toESM(require_react(), 1);
   var import_client5 = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react84 = __toESM(require_react(), 1);
+  var import_react83 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -43557,12 +43557,12 @@ const client = new ApolloClient({
   // src/components/header.tsx
   var import_react52 = __toESM(require_react(), 1);
   function Header() {
-    return /* @__PURE__ */ import_react52.default.createElement("div", { className: "bg-cyan-800 py-4 pr-4 flex justify-between items-center" }, /* @__PURE__ */ import_react52.default.createElement("div", { className: "relative" }, /* @__PURE__ */ import_react52.default.createElement(
+    return /* @__PURE__ */ import_react52.default.createElement("div", { className: "bg-cyan-800 py-4 pr-4 flex justify-between items-center" }, /* @__PURE__ */ import_react52.default.createElement("div", { className: "relative mr-2" }, /* @__PURE__ */ import_react52.default.createElement(
       "input",
       {
         type: "text",
         placeholder: "Search",
-        className: "text-sm focus:outline-none active-none h-10 w-[24rem] border border-grey-300 rounded-sm px-4"
+        className: "text-sm focus:outline-none active-none h-10 border border-grey-300 px-4"
       }
     )), /* @__PURE__ */ import_react52.default.createElement("div", { className: "flex items-center mr-2" }, /* @__PURE__ */ import_react52.default.createElement(Lt, { className: "relative" }, ({ open }) => /* @__PURE__ */ import_react52.default.createElement(import_react52.default.Fragment, null, /* @__PURE__ */ import_react52.default.createElement(
       Lt.Button,
@@ -43581,7 +43581,7 @@ const client = new ApolloClient({
         leaveFrom: "opacity-100 translate-y-0",
         leaveTo: "opacity-0 translate-y-1"
       },
-      /* @__PURE__ */ import_react52.default.createElement(Lt.Panel, { className: "absolute right-0 z-10 mt-2.5 w-80" }, /* @__PURE__ */ import_react52.default.createElement("div", { className: "bg-white rounded-sm shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5" }, "Notifications panel"))
+      /* @__PURE__ */ import_react52.default.createElement(Lt.Panel, { className: "absolute right-0 z-10 mt-2.5 w-80" }, /* @__PURE__ */ import_react52.default.createElement("div", { className: "bg-white shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5" }, "Notifications panel"))
     )))));
   }
 
@@ -43639,7 +43639,7 @@ const client = new ApolloClient({
   var import_react55 = __toESM(require_react(), 1);
   var import_classnames = __toESM(require_classnames(), 1);
   init_dist2();
-  var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
+  var linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline h-10";
   var SidebarLink = ({ item, open }) => {
     const { pathname } = useLocation();
     return /* @__PURE__ */ import_react55.default.createElement(
@@ -43660,7 +43660,7 @@ const client = new ApolloClient({
   };
 
   // src/components/sidebar/sidebar.tsx
-  var linkClasses2 = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline";
+  var linkClasses2 = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline h-10";
   function Sidebar() {
     const items = NavigationItems();
     const [open, setOpen] = (0, import_react56.useState)(true);
@@ -43818,36 +43818,30 @@ const client = new ApolloClient({
     }
   ];
 
-  // src/routes/dashboard.tsx
-  var import_react67 = __toESM(require_react(), 1);
-  function Dashboard() {
-    return /* @__PURE__ */ import_react67.default.createElement("div", null, /* @__PURE__ */ import_react67.default.createElement("p", null, "Dashboard"));
-  }
-
   // src/routes/not-found/not-found.route.tsx
-  var import_react69 = __toESM(require_react(), 1);
+  var import_react68 = __toESM(require_react(), 1);
 
   // src/routes/not-found/not-found.tsx
-  var import_react68 = __toESM(require_react(), 1);
+  var import_react67 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react68.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react67.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/not-found/not-found.route.tsx
   var notFoundRoute = [
     {
       path: "*",
-      element: /* @__PURE__ */ import_react69.default.createElement(NotFoundPage, null)
+      element: /* @__PURE__ */ import_react68.default.createElement(NotFoundPage, null)
     }
   ];
 
   // src/routes/projects/projects.tsx
-  var import_react76 = __toESM(require_react(), 1);
+  var import_react75 = __toESM(require_react(), 1);
   init_details_header();
   init_spinner();
 
   // src/routes/projects/create-project.tsx
-  var import_react75 = __toESM(require_react(), 1);
+  var import_react74 = __toESM(require_react(), 1);
   init_dialog2();
   init_button();
   init_form2();
@@ -43858,7 +43852,7 @@ const client = new ApolloClient({
     description: ""
   };
   var CreateProject = () => {
-    const [dialog, setDialog] = (0, import_react75.useState)(false);
+    const [dialog, setDialog] = (0, import_react74.useState)(false);
     const { createProject } = useCreateProject();
     const {
       handleSubmit,
@@ -43866,7 +43860,7 @@ const client = new ApolloClient({
       reset,
       formState: { isSubmitting, errors }
     } = useForm({ defaultValues: defaultVaues });
-    (0, import_react75.useEffect)(() => {
+    (0, import_react74.useEffect)(() => {
       if (!dialog)
         reset(defaultVaues);
     }, [dialog]);
@@ -43879,7 +43873,7 @@ const client = new ApolloClient({
       });
       setDialog(false);
     };
-    return /* @__PURE__ */ import_react75.default.createElement(import_react75.default.Fragment, null, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(true) }, "Create project"), dialog && /* @__PURE__ */ import_react75.default.createElement(
+    return /* @__PURE__ */ import_react74.default.createElement(import_react74.default.Fragment, null, /* @__PURE__ */ import_react74.default.createElement(Button, { onClick: () => setDialog(true) }, "Create project"), dialog && /* @__PURE__ */ import_react74.default.createElement(
       Dialog,
       {
         title: "Create project",
@@ -43887,7 +43881,7 @@ const client = new ApolloClient({
         closeOnClickOutside: true,
         closeOnEsc: true
       },
-      /* @__PURE__ */ import_react75.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react75.default.createElement(
+      /* @__PURE__ */ import_react74.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react74.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react74.default.createElement("div", null, /* @__PURE__ */ import_react74.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react74.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("name")), {
           type: "text",
@@ -43895,14 +43889,14 @@ const client = new ApolloClient({
           placeholder: "Project name",
           required: true
         })
-      )), /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react75.default.createElement(
+      )), /* @__PURE__ */ import_react74.default.createElement("div", null, /* @__PURE__ */ import_react74.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react74.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("description")), {
           type: "text",
           className: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
           placeholder: "Project description"
         })
-      ))), /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react75.default.createElement(Button, { type: "submit" }, "Create project")))
+      ))), /* @__PURE__ */ import_react74.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react74.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react74.default.createElement(Button, { type: "submit" }, "Create project")))
     ));
   };
 
@@ -43913,31 +43907,31 @@ const client = new ApolloClient({
     const { loading, error, data } = useProjectsData();
     const navigate = useNavigate();
     if (loading)
-      return /* @__PURE__ */ import_react76.default.createElement(Spinner, null);
+      return /* @__PURE__ */ import_react75.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react76.default.createElement("div", null, "Something went wrong");
+      return /* @__PURE__ */ import_react75.default.createElement("div", null, "Something went wrong");
     const { projects } = data;
-    return /* @__PURE__ */ import_react76.default.createElement("div", null, /* @__PURE__ */ import_react76.default.createElement(TabHeader, null, /* @__PURE__ */ import_react76.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react76.default.createElement(Table, null, /* @__PURE__ */ import_react76.default.createElement(TableHead, null, /* @__PURE__ */ import_react76.default.createElement("tr", null, /* @__PURE__ */ import_react76.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Name"), /* @__PURE__ */ import_react76.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Description"))), /* @__PURE__ */ import_react76.default.createElement(TableBody, null, (projects || []).map((project) => {
-      return /* @__PURE__ */ import_react76.default.createElement(
+    return /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement(TabHeader, null, /* @__PURE__ */ import_react75.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react75.default.createElement(Table, null, /* @__PURE__ */ import_react75.default.createElement(TableHead, null, /* @__PURE__ */ import_react75.default.createElement("tr", null, /* @__PURE__ */ import_react75.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Name"), /* @__PURE__ */ import_react75.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Description"))), /* @__PURE__ */ import_react75.default.createElement(TableBody, null, (projects || []).map((project) => {
+      return /* @__PURE__ */ import_react75.default.createElement(
         "tr",
         {
           key: project.id,
           className: "bg-white border-b hover:bg-gray-100 cursor-pointer",
           onClick: () => navigate(`/projects/${project.id}`)
         },
-        /* @__PURE__ */ import_react76.default.createElement("td", { className: "px-4 py-2" }, project.name),
-        /* @__PURE__ */ import_react76.default.createElement("td", { className: "px-4 py-2" }, project.description ? project.description : "-")
+        /* @__PURE__ */ import_react75.default.createElement("td", { className: "px-4 py-2" }, project.name),
+        /* @__PURE__ */ import_react75.default.createElement("td", { className: "px-4 py-2" }, project.description ? project.description : "-")
       );
     }))));
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react82 = __toESM(require_react(), 1);
+  var import_react81 = __toESM(require_react(), 1);
   init_dist2();
   init_project_api();
   init_spinner();
-  var ProjectPage2 = import_react82.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
-  var ProjectOverviewTab2 = import_react82.default.lazy(
+  var ProjectPage2 = import_react81.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
+  var ProjectOverviewTab2 = import_react81.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   function Container2(props) {
@@ -43946,20 +43940,20 @@ const client = new ApolloClient({
       return null;
     const { loading, error, data } = useProjectData({ id });
     if (loading)
-      return /* @__PURE__ */ import_react82.default.createElement(Spinner, null);
+      return /* @__PURE__ */ import_react81.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react82.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react81.default.createElement("div", null, "Somethingwent wrong");
     const { project } = data;
-    return /* @__PURE__ */ import_react82.default.createElement(props.component, { project });
+    return /* @__PURE__ */ import_react81.default.createElement(props.component, { project });
   }
   var projectsRoutes = [
     {
       path: "projects/:id",
-      element: /* @__PURE__ */ import_react82.default.createElement(Container2, { component: ProjectPage2 }),
+      element: /* @__PURE__ */ import_react81.default.createElement(Container2, { component: ProjectPage2 }),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react82.default.createElement(Container2, { component: ProjectOverviewTab2 })
+          element: /* @__PURE__ */ import_react81.default.createElement(Container2, { component: ProjectOverviewTab2 })
         }
       ]
     }
@@ -43969,7 +43963,7 @@ const client = new ApolloClient({
   init_spinner();
 
   // src/components/login-form.tsx
-  var import_react83 = __toESM(require_react(), 1);
+  var import_react82 = __toESM(require_react(), 1);
   init_index_esm();
 
   // src/utils/email-regex.ts
@@ -43991,13 +43985,13 @@ const client = new ApolloClient({
     const onSubmit = ({ email, password }) => {
       console.log("entered login info: ", email, password);
     };
-    return /* @__PURE__ */ import_react83.default.createElement("section", { className: "bg-cyan-800" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react83.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react83.default.createElement(
+    return /* @__PURE__ */ import_react82.default.createElement("section", { className: "bg-cyan-800" }, /* @__PURE__ */ import_react82.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react82.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react82.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react82.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react82.default.createElement(
       "form",
       {
         onSubmit: handleSubmit(onSubmit),
         className: "space-y-4 md:space-y-6"
       },
-      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900  " }, "Your email"), errors.email && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.email.message)), /* @__PURE__ */ import_react83.default.createElement(
+      /* @__PURE__ */ import_react82.default.createElement("div", null, /* @__PURE__ */ import_react82.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900  " }, "Your email"), errors.email && /* @__PURE__ */ import_react82.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react82.default.createElement("span", { className: "text-red-700 text-sm" }, errors.email.message)), /* @__PURE__ */ import_react82.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("email", {
           required: "Please enter your email",
@@ -44013,7 +44007,7 @@ const client = new ApolloClient({
           placeholder: "name@company.com"
         })
       )),
-      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Password"), errors.password && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.password.message)), /* @__PURE__ */ import_react83.default.createElement(
+      /* @__PURE__ */ import_react82.default.createElement("div", null, /* @__PURE__ */ import_react82.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Password"), errors.password && /* @__PURE__ */ import_react82.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react82.default.createElement("span", { className: "text-red-700 text-sm" }, errors.password.message)), /* @__PURE__ */ import_react82.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("password", {
           required: "Please enter your password"
@@ -44025,32 +44019,33 @@ const client = new ApolloClient({
           autoFocus: true
         })
       )),
-      /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react83.default.createElement(Button, { type: "submit" }, "Login"))
+      /* @__PURE__ */ import_react82.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react82.default.createElement(Button, { type: "submit" }, "Login"))
     )))));
   }
 
   // src/app.tsx
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react84.default.createElement(import_react84.Suspense, { fallback: /* @__PURE__ */ import_react84.default.createElement(Spinner, null) }, router);
+    return /* @__PURE__ */ import_react83.default.createElement(import_react83.Suspense, { fallback: /* @__PURE__ */ import_react83.default.createElement(Spinner, null) }, router);
   }
   var routes = [
     {
       path: "login",
-      element: /* @__PURE__ */ import_react84.default.createElement(LoginForm, null)
+      element: /* @__PURE__ */ import_react83.default.createElement(LoginForm, null)
     },
     {
-      element: /* @__PURE__ */ import_react84.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react83.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react84.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react83.default.createElement("div", null, "IO") },
+        // { path: "/", element: <Dashboard /> },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react84.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react83.default.createElement(Companies, null)
         },
         ...companyRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react84.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react83.default.createElement(Projects, null)
         },
         ...projectsRoutes,
         ...notFoundRoute
@@ -44090,7 +44085,7 @@ const client = new ApolloClient({
     );
   }
   root2.render(
-    /* @__PURE__ */ import_react85.default.createElement(import_react85.default.StrictMode, null, /* @__PURE__ */ import_react85.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react85.default.createElement(HashRouter, null, /* @__PURE__ */ import_react85.default.createElement(App, null))))
+    /* @__PURE__ */ import_react84.default.createElement(import_react84.default.StrictMode, null, /* @__PURE__ */ import_react84.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react84.default.createElement(HashRouter, null, /* @__PURE__ */ import_react84.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:

@@ -33,7 +33,8 @@ export const routes = [
   {
     element: <Layout />,
     children: [
-      { path: "/", element: <Dashboard /> },
+      { path: "/", element: <div>IO</div> },
+      // { path: "/", element: <Dashboard /> },
       {
         path: "companies",
         element: <Companies />,
