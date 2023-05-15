@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { CompanyNavigationTabs } from "./company-navigation-tabs";
 import { TabHeader } from "../../components/details-header";
 import { Spinner } from "../../components/spinner";
+import ErrorBoundary from "../../components/error-boundary";
 
 export default function CompanyPage() {
   return (
@@ -11,7 +12,9 @@ export default function CompanyPage() {
         {<CompanyNavigationTabs />}
       </div>
       {/* <TabHeader /> */}
-      <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
+      <ErrorBoundary>
+        <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

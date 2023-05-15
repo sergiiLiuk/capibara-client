@@ -12317,20 +12317,20 @@ const client = new ApolloClient({
           {
             Object.freeze(emptyObject);
           }
-          function Component2(props, context, updater) {
+          function Component3(props, context, updater) {
             this.props = props;
             this.context = context;
             this.refs = emptyObject;
             this.updater = updater || ReactNoopUpdateQueue;
           }
-          Component2.prototype.isReactComponent = {};
-          Component2.prototype.setState = function(partialState, callback) {
+          Component3.prototype.isReactComponent = {};
+          Component3.prototype.setState = function(partialState, callback) {
             if (typeof partialState !== "object" && typeof partialState !== "function" && partialState != null) {
               throw new Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");
             }
             this.updater.enqueueSetState(this, partialState, callback, "setState");
           };
-          Component2.prototype.forceUpdate = function(callback) {
+          Component3.prototype.forceUpdate = function(callback) {
             this.updater.enqueueForceUpdate(this, callback, "forceUpdate");
           };
           {
@@ -12339,7 +12339,7 @@ const client = new ApolloClient({
               replaceState: ["replaceState", "Refactor your code to use setState instead (see https://github.com/facebook/react/issues/3236)."]
             };
             var defineDeprecationWarning = function(methodName, info) {
-              Object.defineProperty(Component2.prototype, methodName, {
+              Object.defineProperty(Component3.prototype, methodName, {
                 get: function() {
                   warn("%s(...) is deprecated in plain JavaScript React classes. %s", info[0], info[1]);
                   return void 0;
@@ -12354,7 +12354,7 @@ const client = new ApolloClient({
           }
           function ComponentDummy() {
           }
-          ComponentDummy.prototype = Component2.prototype;
+          ComponentDummy.prototype = Component3.prototype;
           function PureComponent(props, context, updater) {
             this.props = props;
             this.context = context;
@@ -12363,7 +12363,7 @@ const client = new ApolloClient({
           }
           var pureComponentPrototype = PureComponent.prototype = new ComponentDummy();
           pureComponentPrototype.constructor = PureComponent;
-          assign2(pureComponentPrototype, Component2.prototype);
+          assign2(pureComponentPrototype, Component3.prototype);
           pureComponentPrototype.isPureReactComponent = true;
           function createRef() {
             var refObject = {
@@ -13163,7 +13163,7 @@ const client = new ApolloClient({
             }
             return dispatcher.useContext(Context);
           }
-          function useState13(initialState) {
+          function useState12(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -13175,7 +13175,7 @@ const client = new ApolloClient({
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect12(create, deps) {
+          function useEffect11(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -13183,7 +13183,7 @@ const client = new ApolloClient({
             var dispatcher = resolveDispatcher();
             return dispatcher.useInsertionEffect(create, deps);
           }
-          function useLayoutEffect5(create, deps) {
+          function useLayoutEffect4(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create, deps);
           }
@@ -13199,7 +13199,7 @@ const client = new ApolloClient({
             var dispatcher = resolveDispatcher();
             return dispatcher.useImperativeHandle(ref, create, deps);
           }
-          function useDebugValue2(value, formatterFn) {
+          function useDebugValue(value, formatterFn) {
             {
               var dispatcher = resolveDispatcher();
               return dispatcher.useDebugValue(value, formatterFn);
@@ -13217,7 +13217,7 @@ const client = new ApolloClient({
             var dispatcher = resolveDispatcher();
             return dispatcher.useId();
           }
-          function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
+          function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
           }
@@ -13428,8 +13428,8 @@ const client = new ApolloClient({
               return describeNativeComponentFrame(fn, false);
             }
           }
-          function shouldConstruct(Component3) {
-            var prototype2 = Component3.prototype;
+          function shouldConstruct(Component4) {
+            var prototype2 = Component4.prototype;
             return !!(prototype2 && prototype2.isReactComponent);
           }
           function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
@@ -13935,7 +13935,7 @@ const client = new ApolloClient({
             only: onlyChild
           };
           exports.Children = Children2;
-          exports.Component = Component2;
+          exports.Component = Component3;
           exports.Fragment = REACT_FRAGMENT_TYPE;
           exports.Profiler = REACT_PROFILER_TYPE;
           exports.PureComponent = PureComponent;
@@ -13955,18 +13955,18 @@ const client = new ApolloClient({
           exports.unstable_act = act;
           exports.useCallback = useCallback6;
           exports.useContext = useContext6;
-          exports.useDebugValue = useDebugValue2;
+          exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect12;
+          exports.useEffect = useEffect11;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
-          exports.useLayoutEffect = useLayoutEffect5;
+          exports.useLayoutEffect = useLayoutEffect4;
           exports.useMemo = useMemo8;
           exports.useReducer = useReducer;
           exports.useRef = useRef10;
-          exports.useState = useState13;
-          exports.useSyncExternalStore = useSyncExternalStore3;
+          exports.useState = useState12;
+          exports.useSyncExternalStore = useSyncExternalStore2;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
@@ -15138,9 +15138,9 @@ const client = new ApolloClient({
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React40 = require_react();
+          var React42 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React40.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React42.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -15243,7 +15243,7 @@ const client = new ApolloClient({
               allNativeEvents.add(dependencies[i11]);
             }
           }
-          var canUseDOM3 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
+          var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var hasOwnProperty8 = Object.prototype.hasOwnProperty;
           function typeName(value) {
             {
@@ -16175,8 +16175,8 @@ const client = new ApolloClient({
               return describeNativeComponentFrame(fn, false);
             }
           }
-          function shouldConstruct(Component2) {
-            var prototype2 = Component2.prototype;
+          function shouldConstruct(Component3) {
+            var prototype2 = Component3.prototype;
             return !!(prototype2 && prototype2.isReactComponent);
           }
           function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
@@ -16745,7 +16745,7 @@ const client = new ApolloClient({
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React40.Children.forEach(props.children, function(child) {
+                  React42.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -18287,7 +18287,7 @@ const client = new ApolloClient({
             return listener;
           }
           var passiveBrowserEventsSupported = false;
-          if (canUseDOM3) {
+          if (canUseDOM2) {
             try {
               var options = {};
               Object.defineProperty(options, "passive", {
@@ -20719,13 +20719,13 @@ const client = new ApolloClient({
           var SyntheticWheelEvent = createSyntheticEvent(WheelEventInterface);
           var END_KEYCODES = [9, 13, 27, 32];
           var START_KEYCODE = 229;
-          var canUseCompositionEvent = canUseDOM3 && "CompositionEvent" in window;
+          var canUseCompositionEvent = canUseDOM2 && "CompositionEvent" in window;
           var documentMode = null;
-          if (canUseDOM3 && "documentMode" in document) {
+          if (canUseDOM2 && "documentMode" in document) {
             documentMode = document.documentMode;
           }
-          var canUseTextInputEvent = canUseDOM3 && "TextEvent" in window && !documentMode;
-          var useFallbackCompositionData = canUseDOM3 && (!canUseCompositionEvent || documentMode && documentMode > 8 && documentMode <= 11);
+          var canUseTextInputEvent = canUseDOM2 && "TextEvent" in window && !documentMode;
+          var useFallbackCompositionData = canUseDOM2 && (!canUseCompositionEvent || documentMode && documentMode > 8 && documentMode <= 11);
           var SPACEBAR_CODE = 32;
           var SPACEBAR_CHAR = String.fromCharCode(SPACEBAR_CODE);
           function registerEvents() {
@@ -20919,7 +20919,7 @@ const client = new ApolloClient({
             return false;
           }
           function isEventSupported(eventNameSuffix) {
-            if (!canUseDOM3) {
+            if (!canUseDOM2) {
               return false;
             }
             var eventName = "on" + eventNameSuffix;
@@ -20971,7 +20971,7 @@ const client = new ApolloClient({
             }
           }
           var isInputEventSupported = false;
-          if (canUseDOM3) {
+          if (canUseDOM2) {
             isInputEventSupported = isEventSupported("input") && (!document.documentMode || document.documentMode > 9);
           }
           function startWatchingForValueChange(target, targetInst) {
@@ -21135,10 +21135,10 @@ const client = new ApolloClient({
             }
             accumulateEnterLeaveTwoPhaseListeners(dispatchQueue, leave, enter, from, to2);
           }
-          function is2(x6, y7) {
+          function is(x6, y7) {
             return x6 === y7 && (x6 !== 0 || 1 / x6 === 1 / y7) || x6 !== x6 && y7 !== y7;
           }
-          var objectIs = typeof Object.is === "function" ? Object.is : is2;
+          var objectIs = typeof Object.is === "function" ? Object.is : is;
           function shallowEqual(objA, objB) {
             if (objectIs(objA, objB)) {
               return true;
@@ -21404,7 +21404,7 @@ const client = new ApolloClient({
               setOffsets(input, offsets);
             }
           }
-          var skipSelectionChangeEvent = canUseDOM3 && "documentMode" in document && document.documentMode <= 11;
+          var skipSelectionChangeEvent = canUseDOM2 && "documentMode" in document && document.documentMode <= 11;
           function registerEvents$3() {
             registerTwoPhaseEvent("onSelect", ["focusout", "contextmenu", "dragend", "focusin", "keydown", "keyup", "mousedown", "mouseup", "selectionchange"]);
           }
@@ -21499,7 +21499,7 @@ const client = new ApolloClient({
           };
           var prefixedEventNames = {};
           var style = {};
-          if (canUseDOM3) {
+          if (canUseDOM2) {
             style = document.createElement("div").style;
             if (!("AnimationEvent" in window)) {
               delete vendorPrefixes.animationend.animation;
@@ -22012,7 +22012,7 @@ const client = new ApolloClient({
                 possibleRegistrationNames
               });
             };
-            canDiffStyleForHydrationWarning = canUseDOM3 && !document.documentMode;
+            canDiffStyleForHydrationWarning = canUseDOM2 && !document.documentMode;
             warnForPropDifference = function(propName, serverValue, clientValue) {
               if (didWarnInvalidHydration) {
                 return;
@@ -23609,9 +23609,9 @@ const client = new ApolloClient({
           var contextStackCursor = createCursor(emptyContextObject);
           var didPerformWorkStackCursor = createCursor(false);
           var previousContext = emptyContextObject;
-          function getUnmaskedContext(workInProgress2, Component2, didPushOwnContextIfProvider) {
+          function getUnmaskedContext(workInProgress2, Component3, didPushOwnContextIfProvider) {
             {
-              if (didPushOwnContextIfProvider && isContextProvider(Component2)) {
+              if (didPushOwnContextIfProvider && isContextProvider(Component3)) {
                 return previousContext;
               }
               return contextStackCursor.current;
@@ -23748,8 +23748,8 @@ const client = new ApolloClient({
                   case HostRoot:
                     return node.stateNode.context;
                   case ClassComponent: {
-                    var Component2 = node.type;
-                    if (isContextProvider(Component2)) {
+                    var Component3 = node.type;
+                    if (isContextProvider(Component3)) {
                       return node.stateNode.__reactInternalMemoizedMergedChildContext;
                     }
                     break;
@@ -24511,10 +24511,10 @@ const client = new ApolloClient({
               pendingLegacyContextWarning = /* @__PURE__ */ new Map();
             };
           }
-          function resolveDefaultProps(Component2, baseProps) {
-            if (Component2 && Component2.defaultProps) {
+          function resolveDefaultProps(Component3, baseProps) {
+            if (Component3 && Component3.defaultProps) {
               var props = assign2({}, baseProps);
-              var defaultProps = Component2.defaultProps;
+              var defaultProps = Component3.defaultProps;
               for (var propName in defaultProps) {
                 if (props[propName] === void 0) {
                   props[propName] = defaultProps[propName];
@@ -25192,7 +25192,7 @@ const client = new ApolloClient({
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React40.Component().refs;
+          var emptyRefsObject = new React42.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26713,7 +26713,7 @@ const client = new ApolloClient({
           }
           var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher, ReactCurrentBatchConfig$2 = ReactSharedInternals.ReactCurrentBatchConfig;
           var didWarnAboutMismatchedHooksForComponent;
-          var didWarnUncachedGetSnapshot3;
+          var didWarnUncachedGetSnapshot2;
           {
             didWarnAboutMismatchedHooksForComponent = /* @__PURE__ */ new Set();
           }
@@ -26809,7 +26809,7 @@ const client = new ApolloClient({
             }
             return true;
           }
-          function renderWithHooks(current2, workInProgress2, Component2, props, secondArg, nextRenderLanes) {
+          function renderWithHooks(current2, workInProgress2, Component3, props, secondArg, nextRenderLanes) {
             renderLanes = nextRenderLanes;
             currentlyRenderingFiber$1 = workInProgress2;
             {
@@ -26829,7 +26829,7 @@ const client = new ApolloClient({
                 ReactCurrentDispatcher$1.current = HooksDispatcherOnMountInDEV;
               }
             }
-            var children = Component2(props, secondArg);
+            var children = Component3(props, secondArg);
             if (didScheduleRenderPhaseUpdateDuringThisPass) {
               var numberOfReRenders = 0;
               do {
@@ -26849,7 +26849,7 @@ const client = new ApolloClient({
                   hookTypesUpdateIndexDev = -1;
                 }
                 ReactCurrentDispatcher$1.current = HooksDispatcherOnRerenderInDEV;
-                children = Component2(props, secondArg);
+                children = Component3(props, secondArg);
               } while (didScheduleRenderPhaseUpdateDuringThisPass);
             }
             ReactCurrentDispatcher$1.current = ContextOnlyDispatcher;
@@ -27159,21 +27159,21 @@ const client = new ApolloClient({
               }
               nextSnapshot = getServerSnapshot();
               {
-                if (!didWarnUncachedGetSnapshot3) {
+                if (!didWarnUncachedGetSnapshot2) {
                   if (nextSnapshot !== getServerSnapshot()) {
                     error("The result of getServerSnapshot should be cached to avoid an infinite loop");
-                    didWarnUncachedGetSnapshot3 = true;
+                    didWarnUncachedGetSnapshot2 = true;
                   }
                 }
               }
             } else {
               nextSnapshot = getSnapshot();
               {
-                if (!didWarnUncachedGetSnapshot3) {
+                if (!didWarnUncachedGetSnapshot2) {
                   var cachedSnapshot = getSnapshot();
                   if (!objectIs(nextSnapshot, cachedSnapshot)) {
                     error("The result of getSnapshot should be cached to avoid an infinite loop");
-                    didWarnUncachedGetSnapshot3 = true;
+                    didWarnUncachedGetSnapshot2 = true;
                   }
                 }
               }
@@ -27201,11 +27201,11 @@ const client = new ApolloClient({
             var hook = updateWorkInProgressHook();
             var nextSnapshot = getSnapshot();
             {
-              if (!didWarnUncachedGetSnapshot3) {
+              if (!didWarnUncachedGetSnapshot2) {
                 var cachedSnapshot = getSnapshot();
                 if (!objectIs(nextSnapshot, cachedSnapshot)) {
                   error("The result of getSnapshot should be cached to avoid an infinite loop");
-                  didWarnUncachedGetSnapshot3 = true;
+                  didWarnUncachedGetSnapshot2 = true;
                 }
               }
             }
@@ -27255,19 +27255,19 @@ const client = new ApolloClient({
           function updateStoreInstance(fiber, inst, nextSnapshot, getSnapshot) {
             inst.value = nextSnapshot;
             inst.getSnapshot = getSnapshot;
-            if (checkIfSnapshotChanged3(inst)) {
+            if (checkIfSnapshotChanged2(inst)) {
               forceStoreRerender(fiber);
             }
           }
           function subscribeToStore(fiber, inst, subscribe) {
             var handleStoreChange = function() {
-              if (checkIfSnapshotChanged3(inst)) {
+              if (checkIfSnapshotChanged2(inst)) {
                 forceStoreRerender(fiber);
               }
             };
             return subscribe(handleStoreChange);
           }
-          function checkIfSnapshotChanged3(inst) {
+          function checkIfSnapshotChanged2(inst) {
             var latestGetSnapshot = inst.getSnapshot;
             var prevValue = inst.value;
             try {
@@ -28959,22 +28959,22 @@ const client = new ApolloClient({
             workInProgress2.child = reconcileChildFibers(workInProgress2, current2.child, null, renderLanes2);
             workInProgress2.child = reconcileChildFibers(workInProgress2, null, nextChildren, renderLanes2);
           }
-          function updateForwardRef(current2, workInProgress2, Component2, nextProps, renderLanes2) {
+          function updateForwardRef(current2, workInProgress2, Component3, nextProps, renderLanes2) {
             {
               if (workInProgress2.type !== workInProgress2.elementType) {
-                var innerPropTypes = Component2.propTypes;
+                var innerPropTypes = Component3.propTypes;
                 if (innerPropTypes) {
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
                     // Resolved props
                     "prop",
-                    getComponentNameFromType(Component2)
+                    getComponentNameFromType(Component3)
                   );
                 }
               }
             }
-            var render2 = Component2.render;
+            var render2 = Component3.render;
             var ref = workInProgress2.ref;
             var nextChildren;
             var hasId;
@@ -29012,11 +29012,11 @@ const client = new ApolloClient({
             reconcileChildren(current2, workInProgress2, nextChildren, renderLanes2);
             return workInProgress2.child;
           }
-          function updateMemoComponent(current2, workInProgress2, Component2, nextProps, renderLanes2) {
+          function updateMemoComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
             if (current2 === null) {
-              var type = Component2.type;
-              if (isSimpleFunctionComponent(type) && Component2.compare === null && // SimpleMemoComponent codepath doesn't resolve outer props either.
-              Component2.defaultProps === void 0) {
+              var type = Component3.type;
+              if (isSimpleFunctionComponent(type) && Component3.compare === null && // SimpleMemoComponent codepath doesn't resolve outer props either.
+              Component3.defaultProps === void 0) {
                 var resolvedType = type;
                 {
                   resolvedType = resolveFunctionForHotReloading(type);
@@ -29040,14 +29040,14 @@ const client = new ApolloClient({
                   );
                 }
               }
-              var child = createFiberFromTypeAndProps(Component2.type, null, nextProps, workInProgress2, workInProgress2.mode, renderLanes2);
+              var child = createFiberFromTypeAndProps(Component3.type, null, nextProps, workInProgress2, workInProgress2.mode, renderLanes2);
               child.ref = workInProgress2.ref;
               child.return = workInProgress2;
               workInProgress2.child = child;
               return child;
             }
             {
-              var _type = Component2.type;
+              var _type = Component3.type;
               var _innerPropTypes = _type.propTypes;
               if (_innerPropTypes) {
                 checkPropTypes(
@@ -29063,7 +29063,7 @@ const client = new ApolloClient({
             var hasScheduledUpdateOrContext = checkScheduledUpdateOrContext(current2, renderLanes2);
             if (!hasScheduledUpdateOrContext) {
               var prevProps = currentChild.memoizedProps;
-              var compare = Component2.compare;
+              var compare = Component3.compare;
               compare = compare !== null ? compare : shallowEqual;
               if (compare(prevProps, nextProps) && current2.ref === workInProgress2.ref) {
                 return bailoutOnAlreadyFinishedWork(current2, workInProgress2, renderLanes2);
@@ -29076,7 +29076,7 @@ const client = new ApolloClient({
             workInProgress2.child = newChild;
             return newChild;
           }
-          function updateSimpleMemoComponent(current2, workInProgress2, Component2, nextProps, renderLanes2) {
+          function updateSimpleMemoComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
             {
               if (workInProgress2.type !== workInProgress2.elementType) {
                 var outerMemoType = workInProgress2.elementType;
@@ -29116,7 +29116,7 @@ const client = new ApolloClient({
                 }
               }
             }
-            return updateFunctionComponent(current2, workInProgress2, Component2, nextProps, renderLanes2);
+            return updateFunctionComponent(current2, workInProgress2, Component3, nextProps, renderLanes2);
           }
           function updateOffscreenComponent(current2, workInProgress2, renderLanes2) {
             var nextProps = workInProgress2.pendingProps;
@@ -29206,24 +29206,24 @@ const client = new ApolloClient({
               }
             }
           }
-          function updateFunctionComponent(current2, workInProgress2, Component2, nextProps, renderLanes2) {
+          function updateFunctionComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
             {
               if (workInProgress2.type !== workInProgress2.elementType) {
-                var innerPropTypes = Component2.propTypes;
+                var innerPropTypes = Component3.propTypes;
                 if (innerPropTypes) {
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
                     // Resolved props
                     "prop",
-                    getComponentNameFromType(Component2)
+                    getComponentNameFromType(Component3)
                   );
                 }
               }
             }
             var context;
             {
-              var unmaskedContext = getUnmaskedContext(workInProgress2, Component2, true);
+              var unmaskedContext = getUnmaskedContext(workInProgress2, Component3, true);
               context = getMaskedContext(workInProgress2, unmaskedContext);
             }
             var nextChildren;
@@ -29235,12 +29235,12 @@ const client = new ApolloClient({
             {
               ReactCurrentOwner$1.current = workInProgress2;
               setIsRendering(true);
-              nextChildren = renderWithHooks(current2, workInProgress2, Component2, nextProps, context, renderLanes2);
+              nextChildren = renderWithHooks(current2, workInProgress2, Component3, nextProps, context, renderLanes2);
               hasId = checkDidRenderIdHook();
               if (workInProgress2.mode & StrictLegacyMode) {
                 setIsStrictModeForDevtools(true);
                 try {
-                  nextChildren = renderWithHooks(current2, workInProgress2, Component2, nextProps, context, renderLanes2);
+                  nextChildren = renderWithHooks(current2, workInProgress2, Component3, nextProps, context, renderLanes2);
                   hasId = checkDidRenderIdHook();
                 } finally {
                   setIsStrictModeForDevtools(false);
@@ -29262,7 +29262,7 @@ const client = new ApolloClient({
             reconcileChildren(current2, workInProgress2, nextChildren, renderLanes2);
             return workInProgress2.child;
           }
-          function updateClassComponent(current2, workInProgress2, Component2, nextProps, renderLanes2) {
+          function updateClassComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
             {
               switch (shouldError(workInProgress2)) {
                 case false: {
@@ -29285,20 +29285,20 @@ const client = new ApolloClient({
                 }
               }
               if (workInProgress2.type !== workInProgress2.elementType) {
-                var innerPropTypes = Component2.propTypes;
+                var innerPropTypes = Component3.propTypes;
                 if (innerPropTypes) {
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
                     // Resolved props
                     "prop",
-                    getComponentNameFromType(Component2)
+                    getComponentNameFromType(Component3)
                   );
                 }
               }
             }
             var hasContext;
-            if (isContextProvider(Component2)) {
+            if (isContextProvider(Component3)) {
               hasContext = true;
               pushContextProvider(workInProgress2);
             } else {
@@ -29309,15 +29309,15 @@ const client = new ApolloClient({
             var shouldUpdate;
             if (instance === null) {
               resetSuspendedCurrentOnMountInLegacyMode(current2, workInProgress2);
-              constructClassInstance(workInProgress2, Component2, nextProps);
-              mountClassInstance(workInProgress2, Component2, nextProps, renderLanes2);
+              constructClassInstance(workInProgress2, Component3, nextProps);
+              mountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
               shouldUpdate = true;
             } else if (current2 === null) {
-              shouldUpdate = resumeMountClassInstance(workInProgress2, Component2, nextProps, renderLanes2);
+              shouldUpdate = resumeMountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
             } else {
-              shouldUpdate = updateClassInstance(current2, workInProgress2, Component2, nextProps, renderLanes2);
+              shouldUpdate = updateClassInstance(current2, workInProgress2, Component3, nextProps, renderLanes2);
             }
-            var nextUnitOfWork = finishClassComponent(current2, workInProgress2, Component2, shouldUpdate, hasContext, renderLanes2);
+            var nextUnitOfWork = finishClassComponent(current2, workInProgress2, Component3, shouldUpdate, hasContext, renderLanes2);
             {
               var inst = workInProgress2.stateNode;
               if (shouldUpdate && inst.props !== nextProps) {
@@ -29329,19 +29329,19 @@ const client = new ApolloClient({
             }
             return nextUnitOfWork;
           }
-          function finishClassComponent(current2, workInProgress2, Component2, shouldUpdate, hasContext, renderLanes2) {
+          function finishClassComponent(current2, workInProgress2, Component3, shouldUpdate, hasContext, renderLanes2) {
             markRef(current2, workInProgress2);
             var didCaptureError = (workInProgress2.flags & DidCapture) !== NoFlags;
             if (!shouldUpdate && !didCaptureError) {
               if (hasContext) {
-                invalidateContextProvider(workInProgress2, Component2, false);
+                invalidateContextProvider(workInProgress2, Component3, false);
               }
               return bailoutOnAlreadyFinishedWork(current2, workInProgress2, renderLanes2);
             }
             var instance = workInProgress2.stateNode;
             ReactCurrentOwner$1.current = workInProgress2;
             var nextChildren;
-            if (didCaptureError && typeof Component2.getDerivedStateFromError !== "function") {
+            if (didCaptureError && typeof Component3.getDerivedStateFromError !== "function") {
               nextChildren = null;
               {
                 stopProfilerTimerIfRunning();
@@ -29375,7 +29375,7 @@ const client = new ApolloClient({
             }
             workInProgress2.memoizedState = instance.state;
             if (hasContext) {
-              invalidateContextProvider(workInProgress2, Component2, true);
+              invalidateContextProvider(workInProgress2, Component3, true);
             }
             return workInProgress2.child;
           }
@@ -29475,45 +29475,45 @@ const client = new ApolloClient({
             var lazyComponent = elementType;
             var payload = lazyComponent._payload;
             var init = lazyComponent._init;
-            var Component2 = init(payload);
-            workInProgress2.type = Component2;
-            var resolvedTag = workInProgress2.tag = resolveLazyComponentTag(Component2);
-            var resolvedProps = resolveDefaultProps(Component2, props);
+            var Component3 = init(payload);
+            workInProgress2.type = Component3;
+            var resolvedTag = workInProgress2.tag = resolveLazyComponentTag(Component3);
+            var resolvedProps = resolveDefaultProps(Component3, props);
             var child;
             switch (resolvedTag) {
               case FunctionComponent: {
                 {
-                  validateFunctionComponentInDev(workInProgress2, Component2);
-                  workInProgress2.type = Component2 = resolveFunctionForHotReloading(Component2);
+                  validateFunctionComponentInDev(workInProgress2, Component3);
+                  workInProgress2.type = Component3 = resolveFunctionForHotReloading(Component3);
                 }
-                child = updateFunctionComponent(null, workInProgress2, Component2, resolvedProps, renderLanes2);
+                child = updateFunctionComponent(null, workInProgress2, Component3, resolvedProps, renderLanes2);
                 return child;
               }
               case ClassComponent: {
                 {
-                  workInProgress2.type = Component2 = resolveClassForHotReloading(Component2);
+                  workInProgress2.type = Component3 = resolveClassForHotReloading(Component3);
                 }
-                child = updateClassComponent(null, workInProgress2, Component2, resolvedProps, renderLanes2);
+                child = updateClassComponent(null, workInProgress2, Component3, resolvedProps, renderLanes2);
                 return child;
               }
               case ForwardRef: {
                 {
-                  workInProgress2.type = Component2 = resolveForwardRefForHotReloading(Component2);
+                  workInProgress2.type = Component3 = resolveForwardRefForHotReloading(Component3);
                 }
-                child = updateForwardRef(null, workInProgress2, Component2, resolvedProps, renderLanes2);
+                child = updateForwardRef(null, workInProgress2, Component3, resolvedProps, renderLanes2);
                 return child;
               }
               case MemoComponent: {
                 {
                   if (workInProgress2.type !== workInProgress2.elementType) {
-                    var outerPropTypes = Component2.propTypes;
+                    var outerPropTypes = Component3.propTypes;
                     if (outerPropTypes) {
                       checkPropTypes(
                         outerPropTypes,
                         resolvedProps,
                         // Resolved for outer only
                         "prop",
-                        getComponentNameFromType(Component2)
+                        getComponentNameFromType(Component3)
                       );
                     }
                   }
@@ -29521,8 +29521,8 @@ const client = new ApolloClient({
                 child = updateMemoComponent(
                   null,
                   workInProgress2,
-                  Component2,
-                  resolveDefaultProps(Component2.type, resolvedProps),
+                  Component3,
+                  resolveDefaultProps(Component3.type, resolvedProps),
                   // The inner type can have defaults too
                   renderLanes2
                 );
@@ -29531,33 +29531,33 @@ const client = new ApolloClient({
             }
             var hint = "";
             {
-              if (Component2 !== null && typeof Component2 === "object" && Component2.$$typeof === REACT_LAZY_TYPE) {
+              if (Component3 !== null && typeof Component3 === "object" && Component3.$$typeof === REACT_LAZY_TYPE) {
                 hint = " Did you wrap a component in React.lazy() more than once?";
               }
             }
-            throw new Error("Element type is invalid. Received a promise that resolves to: " + Component2 + ". " + ("Lazy element type must resolve to a class or function." + hint));
+            throw new Error("Element type is invalid. Received a promise that resolves to: " + Component3 + ". " + ("Lazy element type must resolve to a class or function." + hint));
           }
-          function mountIncompleteClassComponent(_current, workInProgress2, Component2, nextProps, renderLanes2) {
+          function mountIncompleteClassComponent(_current, workInProgress2, Component3, nextProps, renderLanes2) {
             resetSuspendedCurrentOnMountInLegacyMode(_current, workInProgress2);
             workInProgress2.tag = ClassComponent;
             var hasContext;
-            if (isContextProvider(Component2)) {
+            if (isContextProvider(Component3)) {
               hasContext = true;
               pushContextProvider(workInProgress2);
             } else {
               hasContext = false;
             }
             prepareToReadContext(workInProgress2, renderLanes2);
-            constructClassInstance(workInProgress2, Component2, nextProps);
-            mountClassInstance(workInProgress2, Component2, nextProps, renderLanes2);
-            return finishClassComponent(null, workInProgress2, Component2, true, hasContext, renderLanes2);
+            constructClassInstance(workInProgress2, Component3, nextProps);
+            mountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
+            return finishClassComponent(null, workInProgress2, Component3, true, hasContext, renderLanes2);
           }
-          function mountIndeterminateComponent(_current, workInProgress2, Component2, renderLanes2) {
+          function mountIndeterminateComponent(_current, workInProgress2, Component3, renderLanes2) {
             resetSuspendedCurrentOnMountInLegacyMode(_current, workInProgress2);
             var props = workInProgress2.pendingProps;
             var context;
             {
-              var unmaskedContext = getUnmaskedContext(workInProgress2, Component2, false);
+              var unmaskedContext = getUnmaskedContext(workInProgress2, Component3, false);
               context = getMaskedContext(workInProgress2, unmaskedContext);
             }
             prepareToReadContext(workInProgress2, renderLanes2);
@@ -29567,8 +29567,8 @@ const client = new ApolloClient({
               markComponentRenderStarted(workInProgress2);
             }
             {
-              if (Component2.prototype && typeof Component2.prototype.render === "function") {
-                var componentName = getComponentNameFromType(Component2) || "Unknown";
+              if (Component3.prototype && typeof Component3.prototype.render === "function") {
+                var componentName = getComponentNameFromType(Component3) || "Unknown";
                 if (!didWarnAboutBadClass[componentName]) {
                   error("The <%s /> component appears to have a render method, but doesn't extend React.Component. This is likely to cause errors. Change %s to extend React.Component instead.", componentName, componentName);
                   didWarnAboutBadClass[componentName] = true;
@@ -29579,7 +29579,7 @@ const client = new ApolloClient({
               }
               setIsRendering(true);
               ReactCurrentOwner$1.current = workInProgress2;
-              value = renderWithHooks(null, workInProgress2, Component2, props, context, renderLanes2);
+              value = renderWithHooks(null, workInProgress2, Component3, props, context, renderLanes2);
               hasId = checkDidRenderIdHook();
               setIsRendering(false);
             }
@@ -29589,7 +29589,7 @@ const client = new ApolloClient({
             workInProgress2.flags |= PerformedWork;
             {
               if (typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0) {
-                var _componentName = getComponentNameFromType(Component2) || "Unknown";
+                var _componentName = getComponentNameFromType(Component3) || "Unknown";
                 if (!didWarnAboutModulePatternComponent[_componentName]) {
                   error("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName, _componentName, _componentName);
                   didWarnAboutModulePatternComponent[_componentName] = true;
@@ -29602,7 +29602,7 @@ const client = new ApolloClient({
               typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0
             ) {
               {
-                var _componentName2 = getComponentNameFromType(Component2) || "Unknown";
+                var _componentName2 = getComponentNameFromType(Component3) || "Unknown";
                 if (!didWarnAboutModulePatternComponent[_componentName2]) {
                   error("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName2, _componentName2, _componentName2);
                   didWarnAboutModulePatternComponent[_componentName2] = true;
@@ -29612,7 +29612,7 @@ const client = new ApolloClient({
               workInProgress2.memoizedState = null;
               workInProgress2.updateQueue = null;
               var hasContext = false;
-              if (isContextProvider(Component2)) {
+              if (isContextProvider(Component3)) {
                 hasContext = true;
                 pushContextProvider(workInProgress2);
               } else {
@@ -29621,15 +29621,15 @@ const client = new ApolloClient({
               workInProgress2.memoizedState = value.state !== null && value.state !== void 0 ? value.state : null;
               initializeUpdateQueue(workInProgress2);
               adoptClassInstance(workInProgress2, value);
-              mountClassInstance(workInProgress2, Component2, props, renderLanes2);
-              return finishClassComponent(null, workInProgress2, Component2, true, hasContext, renderLanes2);
+              mountClassInstance(workInProgress2, Component3, props, renderLanes2);
+              return finishClassComponent(null, workInProgress2, Component3, true, hasContext, renderLanes2);
             } else {
               workInProgress2.tag = FunctionComponent;
               {
                 if (workInProgress2.mode & StrictLegacyMode) {
                   setIsStrictModeForDevtools(true);
                   try {
-                    value = renderWithHooks(null, workInProgress2, Component2, props, context, renderLanes2);
+                    value = renderWithHooks(null, workInProgress2, Component3, props, context, renderLanes2);
                     hasId = checkDidRenderIdHook();
                   } finally {
                     setIsStrictModeForDevtools(false);
@@ -29641,16 +29641,16 @@ const client = new ApolloClient({
               }
               reconcileChildren(null, workInProgress2, value, renderLanes2);
               {
-                validateFunctionComponentInDev(workInProgress2, Component2);
+                validateFunctionComponentInDev(workInProgress2, Component3);
               }
               return workInProgress2.child;
             }
           }
-          function validateFunctionComponentInDev(workInProgress2, Component2) {
+          function validateFunctionComponentInDev(workInProgress2, Component3) {
             {
-              if (Component2) {
-                if (Component2.childContextTypes) {
-                  error("%s(...): childContextTypes cannot be defined on a function component.", Component2.displayName || Component2.name || "Component");
+              if (Component3) {
+                if (Component3.childContextTypes) {
+                  error("%s(...): childContextTypes cannot be defined on a function component.", Component3.displayName || Component3.name || "Component");
                 }
               }
               if (workInProgress2.ref !== null) {
@@ -29669,15 +29669,15 @@ const client = new ApolloClient({
                   error("Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?%s", info);
                 }
               }
-              if (typeof Component2.getDerivedStateFromProps === "function") {
-                var _componentName3 = getComponentNameFromType(Component2) || "Unknown";
+              if (typeof Component3.getDerivedStateFromProps === "function") {
+                var _componentName3 = getComponentNameFromType(Component3) || "Unknown";
                 if (!didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3]) {
                   error("%s: Function components do not support getDerivedStateFromProps.", _componentName3);
                   didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3] = true;
                 }
               }
-              if (typeof Component2.contextType === "object" && Component2.contextType !== null) {
-                var _componentName4 = getComponentNameFromType(Component2) || "Unknown";
+              if (typeof Component3.contextType === "object" && Component3.contextType !== null) {
+                var _componentName4 = getComponentNameFromType(Component3) || "Unknown";
                 if (!didWarnAboutContextTypeOnFunctionComponent[_componentName4]) {
                   error("%s: Function components do not support contextType.", _componentName4);
                   didWarnAboutContextTypeOnFunctionComponent[_componentName4] = true;
@@ -30439,8 +30439,8 @@ const client = new ApolloClient({
                 pushHostContext(workInProgress2);
                 break;
               case ClassComponent: {
-                var Component2 = workInProgress2.type;
-                if (isContextProvider(Component2)) {
+                var Component3 = workInProgress2.type;
+                if (isContextProvider(Component3)) {
                   pushContextProvider(workInProgress2);
                 }
                 break;
@@ -30567,10 +30567,10 @@ const client = new ApolloClient({
                 return mountLazyComponent(current2, workInProgress2, elementType, renderLanes2);
               }
               case FunctionComponent: {
-                var Component2 = workInProgress2.type;
+                var Component3 = workInProgress2.type;
                 var unresolvedProps = workInProgress2.pendingProps;
-                var resolvedProps = workInProgress2.elementType === Component2 ? unresolvedProps : resolveDefaultProps(Component2, unresolvedProps);
-                return updateFunctionComponent(current2, workInProgress2, Component2, resolvedProps, renderLanes2);
+                var resolvedProps = workInProgress2.elementType === Component3 ? unresolvedProps : resolveDefaultProps(Component3, unresolvedProps);
+                return updateFunctionComponent(current2, workInProgress2, Component3, resolvedProps, renderLanes2);
               }
               case ClassComponent: {
                 var _Component = workInProgress2.type;
@@ -30875,8 +30875,8 @@ const client = new ApolloClient({
                 bubbleProperties(workInProgress2);
                 return null;
               case ClassComponent: {
-                var Component2 = workInProgress2.type;
-                if (isContextProvider(Component2)) {
+                var Component3 = workInProgress2.type;
+                if (isContextProvider(Component3)) {
                   popContext(workInProgress2);
                 }
                 bubbleProperties(workInProgress2);
@@ -31194,8 +31194,8 @@ const client = new ApolloClient({
             popTreeContext(workInProgress2);
             switch (workInProgress2.tag) {
               case ClassComponent: {
-                var Component2 = workInProgress2.type;
-                if (isContextProvider(Component2)) {
+                var Component3 = workInProgress2.type;
+                if (isContextProvider(Component3)) {
                   popContext(workInProgress2);
                 }
                 var flags = workInProgress2.flags;
@@ -34882,18 +34882,18 @@ const client = new ApolloClient({
           var createFiber = function(tag, pendingProps, key, mode) {
             return new FiberNode(tag, pendingProps, key, mode);
           };
-          function shouldConstruct$1(Component2) {
-            var prototype2 = Component2.prototype;
+          function shouldConstruct$1(Component3) {
+            var prototype2 = Component3.prototype;
             return !!(prototype2 && prototype2.isReactComponent);
           }
           function isSimpleFunctionComponent(type) {
             return typeof type === "function" && !shouldConstruct$1(type) && type.defaultProps === void 0;
           }
-          function resolveLazyComponentTag(Component2) {
-            if (typeof Component2 === "function") {
-              return shouldConstruct$1(Component2) ? ClassComponent : FunctionComponent;
-            } else if (Component2 !== void 0 && Component2 !== null) {
-              var $$typeof = Component2.$$typeof;
+          function resolveLazyComponentTag(Component3) {
+            if (typeof Component3 === "function") {
+              return shouldConstruct$1(Component3) ? ClassComponent : FunctionComponent;
+            } else if (Component3 !== void 0 && Component3 !== null) {
+              var $$typeof = Component3.$$typeof;
               if ($$typeof === REACT_FORWARD_REF_TYPE) {
                 return ForwardRef;
               }
@@ -35330,9 +35330,9 @@ const client = new ApolloClient({
             var fiber = get2(parentComponent);
             var parentContext = findCurrentUnmaskedContext(fiber);
             if (fiber.tag === ClassComponent) {
-              var Component2 = fiber.type;
-              if (isContextProvider(Component2)) {
-                return processChildContext(fiber, Component2, parentContext);
+              var Component3 = fiber.type;
+              if (isContextProvider(Component3)) {
+                return processChildContext(fiber, Component3, parentContext);
               }
             }
             return parentContext;
@@ -36190,7 +36190,7 @@ const client = new ApolloClient({
             rendererPackageName: "react-dom"
           });
           {
-            if (!foundDevTools && canUseDOM3 && window.top === window.self) {
+            if (!foundDevTools && canUseDOM2 && window.top === window.self) {
               if (navigator.userAgent.indexOf("Chrome") > -1 && navigator.userAgent.indexOf("Edge") === -1 || navigator.userAgent.indexOf("Firefox") > -1) {
                 var protocol = window.location.protocol;
                 if (/^(https?|file):$/.test(protocol)) {
@@ -36862,76 +36862,6 @@ const client = new ApolloClient({
   });
 
   // node_modules/react-router/dist/index.js
-  function isPolyfill(x6, y7) {
-    return x6 === y7 && (x6 !== 0 || 1 / x6 === 1 / y7) || x6 !== x6 && y7 !== y7;
-  }
-  function useSyncExternalStore$2(subscribe, getSnapshot, getServerSnapshot) {
-    if (true) {
-      if (!didWarnOld18Alpha) {
-        if ("startTransition" in React4) {
-          didWarnOld18Alpha = true;
-          console.error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
-        }
-      }
-    }
-    const value = getSnapshot();
-    if (true) {
-      if (!didWarnUncachedGetSnapshot2) {
-        const cachedValue = getSnapshot();
-        if (!is(value, cachedValue)) {
-          console.error("The result of getSnapshot should be cached to avoid an infinite loop");
-          didWarnUncachedGetSnapshot2 = true;
-        }
-      }
-    }
-    const [{
-      inst
-    }, forceUpdate] = useState7({
-      inst: {
-        value,
-        getSnapshot
-      }
-    });
-    useLayoutEffect3(() => {
-      inst.value = value;
-      inst.getSnapshot = getSnapshot;
-      if (checkIfSnapshotChanged2(inst)) {
-        forceUpdate({
-          inst
-        });
-      }
-    }, [subscribe, value, getSnapshot]);
-    useEffect6(() => {
-      if (checkIfSnapshotChanged2(inst)) {
-        forceUpdate({
-          inst
-        });
-      }
-      const handleStoreChange = () => {
-        if (checkIfSnapshotChanged2(inst)) {
-          forceUpdate({
-            inst
-          });
-        }
-      };
-      return subscribe(handleStoreChange);
-    }, [subscribe]);
-    useDebugValue(value);
-    return value;
-  }
-  function checkIfSnapshotChanged2(inst) {
-    const latestGetSnapshot = inst.getSnapshot;
-    const prevValue = inst.value;
-    try {
-      const nextValue = latestGetSnapshot();
-      return !is(prevValue, nextValue);
-    } catch (error) {
-      return true;
-    }
-  }
-  function useSyncExternalStore$1(subscribe, getSnapshot, getServerSnapshot) {
-    return getSnapshot();
-  }
   function _extends2() {
     _extends2 = Object.assign ? Object.assign.bind() : function(target) {
       for (var i11 = 1; i11 < arguments.length; i11++) {
@@ -36989,7 +36919,19 @@ const client = new ApolloClient({
     ) : invariant3(false) : void 0;
     return React4.useContext(LocationContext).location;
   }
+  function useIsomorphicLayoutEffect(cb) {
+    let isStatic = React4.useContext(NavigationContext).static;
+    if (!isStatic) {
+      React4.useLayoutEffect(cb);
+    }
+  }
   function useNavigate() {
+    let {
+      isDataRoute
+    } = React4.useContext(RouteContext);
+    return isDataRoute ? useNavigateStable() : useNavigateUnstable();
+  }
+  function useNavigateUnstable() {
     !useInRouterContext() ? true ? invariant3(
       false,
       // TODO: This error is probably because they somehow have 2 versions of the
@@ -37008,14 +36950,14 @@ const client = new ApolloClient({
     } = useLocation();
     let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match) => match.pathnameBase));
     let activeRef = React4.useRef(false);
-    React4.useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       activeRef.current = true;
     });
     let navigate = React4.useCallback(function(to2, options) {
       if (options === void 0) {
         options = {};
       }
-      true ? warning(activeRef.current, "You should call navigate() in a React.useEffect(), not when your component is first rendered.") : void 0;
+      true ? warning(activeRef.current, navigateEffectWarning) : void 0;
       if (!activeRef.current)
         return;
       if (typeof to2 === "number") {
@@ -37060,6 +37002,9 @@ const client = new ApolloClient({
     return React4.useMemo(() => resolveTo(to2, JSON.parse(routePathnamesJson), locationPathname, relative === "path"), [to2, routePathnamesJson, locationPathname, relative]);
   }
   function useRoutes(routes2, locationArg) {
+    return useRoutesImpl(routes2, locationArg);
+  }
+  function useRoutesImpl(routes2, locationArg, dataRouterState) {
     !useInRouterContext() ? true ? invariant3(
       false,
       // TODO: This error is probably because they somehow have 2 versions of the
@@ -37069,7 +37014,6 @@ const client = new ApolloClient({
     let {
       navigator: navigator2
     } = React4.useContext(NavigationContext);
-    let dataRouterStateContext = React4.useContext(DataRouterStateContext);
     let {
       matches: parentMatches
     } = React4.useContext(RouteContext);
@@ -37115,7 +37059,7 @@ const client = new ApolloClient({
         // Re-encode pathnames that were decoded inside matchRoutes
         navigator2.encodeLocation ? navigator2.encodeLocation(match.pathnameBase).pathname : match.pathnameBase
       ])
-    })), parentMatches, dataRouterStateContext || void 0);
+    })), parentMatches, dataRouterState);
     if (locationArg && renderedMatches) {
       return /* @__PURE__ */ React4.createElement(LocationContext.Provider, {
         value: {
@@ -37147,11 +37091,12 @@ const client = new ApolloClient({
     };
     let devInfo = null;
     if (true) {
-      devInfo = /* @__PURE__ */ React4.createElement(React4.Fragment, null, /* @__PURE__ */ React4.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React4.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own\xA0", /* @__PURE__ */ React4.createElement("code", {
+      console.error("Error handled by React Router default ErrorBoundary:", error);
+      devInfo = /* @__PURE__ */ React4.createElement(React4.Fragment, null, /* @__PURE__ */ React4.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React4.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own ", /* @__PURE__ */ React4.createElement("code", {
         style: codeStyles
-      }, "ErrorBoundary"), " prop on\xA0", /* @__PURE__ */ React4.createElement("code", {
+      }, "ErrorBoundary"), " or", " ", /* @__PURE__ */ React4.createElement("code", {
         style: codeStyles
-      }, "<Route>")));
+      }, "errorElement"), " prop on your route."));
     }
     return /* @__PURE__ */ React4.createElement(React4.Fragment, null, /* @__PURE__ */ React4.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ React4.createElement("h3", {
       style: {
@@ -37176,68 +37121,77 @@ const client = new ApolloClient({
     }, children);
   }
   function _renderMatches(matches, parentMatches, dataRouterState) {
+    var _dataRouterState2;
     if (parentMatches === void 0) {
       parentMatches = [];
     }
+    if (dataRouterState === void 0) {
+      dataRouterState = null;
+    }
     if (matches == null) {
-      if (dataRouterState != null && dataRouterState.errors) {
+      var _dataRouterState;
+      if ((_dataRouterState = dataRouterState) != null && _dataRouterState.errors) {
         matches = dataRouterState.matches;
       } else {
         return null;
       }
     }
     let renderedMatches = matches;
-    let errors = dataRouterState == null ? void 0 : dataRouterState.errors;
+    let errors = (_dataRouterState2 = dataRouterState) == null ? void 0 : _dataRouterState2.errors;
     if (errors != null) {
       let errorIndex = renderedMatches.findIndex((m9) => m9.route.id && (errors == null ? void 0 : errors[m9.route.id]));
-      !(errorIndex >= 0) ? true ? invariant3(false, "Could not find a matching route for the current errors: " + errors) : invariant3(false) : void 0;
+      !(errorIndex >= 0) ? true ? invariant3(false, "Could not find a matching route for errors on route IDs: " + Object.keys(errors).join(",")) : invariant3(false) : void 0;
       renderedMatches = renderedMatches.slice(0, Math.min(renderedMatches.length, errorIndex + 1));
     }
     return renderedMatches.reduceRight((outlet, match, index) => {
       let error = match.route.id ? errors == null ? void 0 : errors[match.route.id] : null;
       let errorElement = null;
       if (dataRouterState) {
-        if (match.route.ErrorBoundary) {
-          errorElement = /* @__PURE__ */ React4.createElement(match.route.ErrorBoundary, null);
-        } else if (match.route.errorElement) {
-          errorElement = match.route.errorElement;
-        } else {
-          errorElement = /* @__PURE__ */ React4.createElement(DefaultErrorComponent, null);
-        }
+        errorElement = match.route.errorElement || defaultErrorElement;
       }
       let matches2 = parentMatches.concat(renderedMatches.slice(0, index + 1));
       let getChildren = () => {
-        let children = outlet;
+        let children;
         if (error) {
           children = errorElement;
         } else if (match.route.Component) {
           children = /* @__PURE__ */ React4.createElement(match.route.Component, null);
         } else if (match.route.element) {
           children = match.route.element;
+        } else {
+          children = outlet;
         }
         return /* @__PURE__ */ React4.createElement(RenderedRoute, {
           match,
           routeContext: {
             outlet,
-            matches: matches2
+            matches: matches2,
+            isDataRoute: dataRouterState != null
           },
           children
         });
       };
       return dataRouterState && (match.route.ErrorBoundary || match.route.errorElement || index === 0) ? /* @__PURE__ */ React4.createElement(RenderErrorBoundary, {
         location: dataRouterState.location,
+        revalidation: dataRouterState.revalidation,
         component: errorElement,
         error,
         children: getChildren(),
         routeContext: {
           outlet: null,
-          matches: matches2
+          matches: matches2,
+          isDataRoute: true
         }
       }) : getChildren();
     }, null);
   }
   function getDataRouterConsoleError(hookName) {
     return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
+  }
+  function useDataRouterContext(hookName) {
+    let ctx = React4.useContext(DataRouterContext);
+    !ctx ? true ? invariant3(false, getDataRouterConsoleError(hookName)) : invariant3(false) : void 0;
+    return ctx;
   }
   function useDataRouterState(hookName) {
     let state = React4.useContext(DataRouterStateContext);
@@ -37254,6 +37208,9 @@ const client = new ApolloClient({
     let thisRoute = route.matches[route.matches.length - 1];
     !thisRoute.route.id ? true ? invariant3(false, hookName + ' can only be used on routes that contain a unique "id"') : invariant3(false) : void 0;
     return thisRoute.route.id;
+  }
+  function useRouteId() {
+    return useCurrentRouteId(DataRouterStateHook.UseRouteId);
   }
   function useNavigation() {
     let state = useDataRouterState(DataRouterStateHook.UseNavigation);
@@ -37288,6 +37245,32 @@ const client = new ApolloClient({
     }
     return (_state$errors = state.errors) == null ? void 0 : _state$errors[routeId];
   }
+  function useNavigateStable() {
+    let {
+      router
+    } = useDataRouterContext(DataRouterHook.UseNavigateStable);
+    let id = useCurrentRouteId(DataRouterStateHook.UseNavigateStable);
+    let activeRef = React4.useRef(false);
+    useIsomorphicLayoutEffect(() => {
+      activeRef.current = true;
+    });
+    let navigate = React4.useCallback(function(to2, options) {
+      if (options === void 0) {
+        options = {};
+      }
+      true ? warning(activeRef.current, navigateEffectWarning) : void 0;
+      if (!activeRef.current)
+        return;
+      if (typeof to2 === "number") {
+        router.navigate(to2);
+      } else {
+        router.navigate(to2, _extends2({
+          fromRouteId: id
+        }, options));
+      }
+    }, [router, id]);
+    return navigate;
+  }
   function warningOnce(key, cond, message) {
     if (!cond && !alreadyWarned[key]) {
       alreadyWarned[key] = true;
@@ -37297,7 +37280,7 @@ const client = new ApolloClient({
   function Outlet(props) {
     return useOutlet(props.context);
   }
-  function Router(_ref4) {
+  function Router(_ref5) {
     let {
       basename: basenameProp = "/",
       children = null,
@@ -37305,7 +37288,7 @@ const client = new ApolloClient({
       navigationType = Action.Pop,
       navigator: navigator2,
       static: staticProp = false
-    } = _ref4;
+    } = _ref5;
     !!useInRouterContext() ? true ? invariant3(false, "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.") : invariant3(false) : void 0;
     let basename = basenameProp.replace(/^\/*/, "/");
     let navigationContext = React4.useMemo(() => ({
@@ -37350,25 +37333,12 @@ const client = new ApolloClient({
       value: locationContext
     }));
   }
-  var React4, is, useState7, useEffect6, useLayoutEffect3, useDebugValue, didWarnOld18Alpha, didWarnUncachedGetSnapshot2, canUseDOM2, isServerEnvironment, shim, useSyncExternalStore2, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, OutletContext, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
+  var React4, DataRouterContext, DataRouterStateContext, AwaitContext, NavigationContext, LocationContext, RouteContext, RouteErrorContext, navigateEffectWarning, OutletContext, defaultErrorElement, RenderErrorBoundary, DataRouterHook, DataRouterStateHook, alreadyWarned, AwaitRenderStatus, neverSettledPromise;
   var init_dist = __esm({
     "node_modules/react-router/dist/index.js"() {
-      init_router();
-      init_router();
       React4 = __toESM(require_react());
-      is = typeof Object.is === "function" ? Object.is : isPolyfill;
-      ({
-        useState: useState7,
-        useEffect: useEffect6,
-        useLayoutEffect: useLayoutEffect3,
-        useDebugValue
-      } = React4);
-      didWarnOld18Alpha = false;
-      didWarnUncachedGetSnapshot2 = false;
-      canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
-      isServerEnvironment = !canUseDOM2;
-      shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore$2;
-      useSyncExternalStore2 = "useSyncExternalStore" in React4 ? ((module2) => module2.useSyncExternalStore)(React4) : shim;
+      init_router();
+      init_router();
       DataRouterContext = /* @__PURE__ */ React4.createContext(null);
       if (true) {
         DataRouterContext.displayName = "DataRouter";
@@ -37391,7 +37361,8 @@ const client = new ApolloClient({
       }
       RouteContext = /* @__PURE__ */ React4.createContext({
         outlet: null,
-        matches: []
+        matches: [],
+        isDataRoute: false
       });
       if (true) {
         RouteContext.displayName = "Route";
@@ -37400,12 +37371,15 @@ const client = new ApolloClient({
       if (true) {
         RouteErrorContext.displayName = "RouteError";
       }
+      navigateEffectWarning = "You should call navigate() in a React.useEffect(), not when your component is first rendered.";
       OutletContext = /* @__PURE__ */ React4.createContext(null);
+      defaultErrorElement = /* @__PURE__ */ React4.createElement(DefaultErrorComponent, null);
       RenderErrorBoundary = class extends React4.Component {
         constructor(props) {
           super(props);
           this.state = {
             location: props.location,
+            revalidation: props.revalidation,
             error: props.error
           };
         }
@@ -37415,15 +37389,17 @@ const client = new ApolloClient({
           };
         }
         static getDerivedStateFromProps(props, state) {
-          if (state.location !== props.location) {
+          if (state.location !== props.location || state.revalidation !== "idle" && props.revalidation === "idle") {
             return {
               error: props.error,
-              location: props.location
+              location: props.location,
+              revalidation: props.revalidation
             };
           }
           return {
             error: props.error || state.error,
-            location: state.location
+            location: state.location,
+            revalidation: props.revalidation || state.revalidation
           };
         }
         componentDidCatch(error, errorInfo) {
@@ -37441,6 +37417,7 @@ const client = new ApolloClient({
       (function(DataRouterHook3) {
         DataRouterHook3["UseBlocker"] = "useBlocker";
         DataRouterHook3["UseRevalidator"] = "useRevalidator";
+        DataRouterHook3["UseNavigateStable"] = "useNavigate";
       })(DataRouterHook || (DataRouterHook = {}));
       (function(DataRouterStateHook3) {
         DataRouterStateHook3["UseBlocker"] = "useBlocker";
@@ -37451,6 +37428,8 @@ const client = new ApolloClient({
         DataRouterStateHook3["UseRouteLoaderData"] = "useRouteLoaderData";
         DataRouterStateHook3["UseMatches"] = "useMatches";
         DataRouterStateHook3["UseRevalidator"] = "useRevalidator";
+        DataRouterStateHook3["UseNavigateStable"] = "useNavigate";
+        DataRouterStateHook3["UseRouteId"] = "useRouteId";
       })(DataRouterStateHook || (DataRouterStateHook = {}));
       alreadyWarned = {};
       (function(AwaitRenderStatus2) {
@@ -37512,15 +37491,20 @@ const client = new ApolloClient({
     (!target || target === "_self") && // Let browser handle "target=_blank" etc.
     !isModifiedEvent(event);
   }
-  function getFormSubmissionInfo(target, defaultAction, options) {
+  function getFormSubmissionInfo(target, options, basename) {
     let method;
-    let action;
+    let action = null;
     let encType;
     let formData;
     if (isFormElement(target)) {
       let submissionTrigger = options.submissionTrigger;
+      if (options.action) {
+        action = options.action;
+      } else {
+        let attr = target.getAttribute("action");
+        action = attr ? stripBasename(attr, basename) : null;
+      }
       method = options.method || target.getAttribute("method") || defaultMethod;
-      action = options.action || target.getAttribute("action") || defaultAction;
       encType = options.encType || target.getAttribute("enctype") || defaultEncType;
       formData = new FormData(target);
       if (submissionTrigger && submissionTrigger.name) {
@@ -37531,8 +37515,13 @@ const client = new ApolloClient({
       if (form == null) {
         throw new Error('Cannot submit a <button> or <input type="submit"> without a <form>');
       }
+      if (options.action) {
+        action = options.action;
+      } else {
+        let attr = target.getAttribute("formaction") || form.getAttribute("action");
+        action = attr ? stripBasename(attr, basename) : null;
+      }
       method = options.method || target.getAttribute("formmethod") || form.getAttribute("method") || defaultMethod;
-      action = options.action || target.getAttribute("formaction") || form.getAttribute("action") || defaultAction;
       encType = options.encType || target.getAttribute("formenctype") || form.getAttribute("enctype") || defaultEncType;
       formData = new FormData(form);
       if (target.name) {
@@ -37542,7 +37531,7 @@ const client = new ApolloClient({
       throw new Error('Cannot submit element that is not <form>, <button>, or <input type="submit|image">');
     } else {
       method = options.method || defaultMethod;
-      action = options.action || defaultAction;
+      action = options.action || null;
       encType = options.encType || defaultEncType;
       if (target instanceof FormData) {
         formData = target;
@@ -37559,13 +37548,8 @@ const client = new ApolloClient({
         }
       }
     }
-    let {
-      protocol,
-      host: host2
-    } = window.location;
-    let url = new URL(action, protocol + "//" + host2);
     return {
-      url,
+      action,
       method: method.toLowerCase(),
       encType,
       formData
@@ -37631,7 +37615,7 @@ const client = new ApolloClient({
   function getDataRouterConsoleError2(hookName) {
     return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
   }
-  function useDataRouterContext(hookName) {
+  function useDataRouterContext2(hookName) {
     let ctx = React5.useContext(DataRouterContext);
     !ctx ? true ? invariant3(false, getDataRouterConsoleError2(hookName)) : invariant3(false) : void 0;
     return ctx;
@@ -37667,11 +37651,14 @@ const client = new ApolloClient({
       }
     }, [location2, navigate, path, replaceProp, state, target, to2, preventScrollReset, relative]);
   }
-  function useSubmitImpl(fetcherKey, routeId) {
+  function useSubmitImpl(fetcherKey, fetcherRouteId) {
     let {
       router
-    } = useDataRouterContext(DataRouterHook2.UseSubmitImpl);
-    let defaultAction = useFormAction();
+    } = useDataRouterContext2(DataRouterHook2.UseSubmitImpl);
+    let {
+      basename
+    } = React5.useContext(NavigationContext);
+    let currentRouteId = useRouteId();
     return React5.useCallback(function(target, options) {
       if (options === void 0) {
         options = {};
@@ -37680,26 +37667,27 @@ const client = new ApolloClient({
         throw new Error("You are calling submit during the server render. Try calling submit within a `useEffect` or callback instead.");
       }
       let {
+        action,
         method,
         encType,
-        formData,
-        url
-      } = getFormSubmissionInfo(target, defaultAction, options);
-      let href = url.pathname + url.search;
+        formData
+      } = getFormSubmissionInfo(target, options, basename);
       let opts = {
-        replace: options.replace,
         preventScrollReset: options.preventScrollReset,
         formData,
         formMethod: method,
         formEncType: encType
       };
       if (fetcherKey) {
-        !(routeId != null) ? true ? invariant3(false, "No routeId available for useFetcher()") : invariant3(false) : void 0;
-        router.fetch(fetcherKey, routeId, href, opts);
+        !(fetcherRouteId != null) ? true ? invariant3(false, "No routeId available for useFetcher()") : invariant3(false) : void 0;
+        router.fetch(fetcherKey, fetcherRouteId, action, opts);
       } else {
-        router.navigate(href, opts);
+        router.navigate(action, _extends3({}, opts, {
+          replace: options.replace,
+          fromRouteId: currentRouteId
+        }));
       }
-    }, [defaultAction, router, fetcherKey, routeId]);
+    }, [router, basename, fetcherKey, fetcherRouteId, currentRouteId]);
   }
   function useFormAction(action, _temp2) {
     let {
@@ -37739,7 +37727,7 @@ const client = new ApolloClient({
     } = _temp3 === void 0 ? {} : _temp3;
     let {
       router
-    } = useDataRouterContext(DataRouterHook2.UseScrollRestoration);
+    } = useDataRouterContext2(DataRouterHook2.UseScrollRestoration);
     let {
       restoreScrollPosition,
       preventScrollReset
@@ -37847,13 +37835,17 @@ const client = new ApolloClient({
         if (typeof to2 === "string" && ABSOLUTE_URL_REGEX.test(to2)) {
           absoluteHref = to2;
           if (isBrowser2) {
-            let currentUrl = new URL(window.location.href);
-            let targetUrl = to2.startsWith("//") ? new URL(currentUrl.protocol + to2) : new URL(to2);
-            let path = stripBasename(targetUrl.pathname, basename);
-            if (targetUrl.origin === currentUrl.origin && path != null) {
-              to2 = path + targetUrl.search + targetUrl.hash;
-            } else {
-              isExternal = true;
+            try {
+              let currentUrl = new URL(window.location.href);
+              let targetUrl = to2.startsWith("//") ? new URL(currentUrl.protocol + to2) : new URL(to2);
+              let path = stripBasename(targetUrl.pathname, basename);
+              if (targetUrl.origin === currentUrl.origin && path != null) {
+                to2 = path + targetUrl.search + targetUrl.hash;
+              } else {
+                isExternal = true;
+              }
+            } catch (e6) {
+              true ? warning(false, '<Link to="' + to2 + '"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.') : void 0;
             }
           }
         }
@@ -41674,22 +41666,66 @@ const client = new ApolloClient({
     }
   });
 
+  // src/components/error-message.tsx
+  function ErrorMessage({ children }) {
+    return /* @__PURE__ */ import_react64.default.createElement("h1", { className: "px-2 py-1 text-red-700 border border-red-500" }, "Something went wrong.");
+  }
+  var import_react64;
+  var init_error_message = __esm({
+    "src/components/error-message.tsx"() {
+      "use strict";
+      import_react64 = __toESM(require_react(), 1);
+    }
+  });
+
+  // src/components/error-boundary.tsx
+  var import_react65, ErrorBoundary, error_boundary_default;
+  var init_error_boundary = __esm({
+    "src/components/error-boundary.tsx"() {
+      "use strict";
+      import_react65 = __toESM(require_react(), 1);
+      init_error_message();
+      ErrorBoundary = class extends import_react65.Component {
+        constructor() {
+          super(...arguments);
+          this.state = {
+            hasError: false
+          };
+        }
+        static getDerivedStateFromError(_6) {
+          return { hasError: true };
+        }
+        componentDidCatch(error, errorInfo) {
+          console.error("Uncaught error:", error, errorInfo);
+        }
+        render() {
+          if (this.state.hasError) {
+            return /* @__PURE__ */ import_react65.default.createElement(ErrorMessage, null);
+          }
+          return this.props.children;
+        }
+      };
+      error_boundary_default = ErrorBoundary;
+    }
+  });
+
   // src/routes/company/company-page.tsx
   var company_page_exports = {};
   __export(company_page_exports, {
     default: () => CompanyPage
   });
   function CompanyPage() {
-    return /* @__PURE__ */ import_react64.default.createElement("div", null, /* @__PURE__ */ import_react64.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react64.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react64.default.createElement(import_react64.default.Suspense, { fallback: /* @__PURE__ */ import_react64.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react64.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react66.default.createElement("div", null, /* @__PURE__ */ import_react66.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react66.default.createElement(CompanyNavigationTabs, null)), /* @__PURE__ */ import_react66.default.createElement(error_boundary_default, null, /* @__PURE__ */ import_react66.default.createElement(import_react66.default.Suspense, { fallback: /* @__PURE__ */ import_react66.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react66.default.createElement(Outlet, null))));
   }
-  var import_react64;
+  var import_react66;
   var init_company_page = __esm({
     "src/routes/company/company-page.tsx"() {
       "use strict";
-      import_react64 = __toESM(require_react(), 1);
+      import_react66 = __toESM(require_react(), 1);
       init_dist2();
       init_company_navigation_tabs();
       init_spinner();
+      init_error_boundary();
     }
   });
 
@@ -41699,36 +41735,36 @@ const client = new ApolloClient({
     default: () => CompanyOverviewTab
   });
   function CompanyOverviewTab({ company }) {
-    return /* @__PURE__ */ import_react65.default.createElement("div", null, " Company overview tab: name - ", company == null ? void 0 : company.name, " ");
+    return /* @__PURE__ */ import_react67.default.createElement("div", null, " Company overview tab: name - ", company == null ? void 0 : company.name, " ");
   }
-  var import_react65;
+  var import_react67;
   var init_company_overview_tab = __esm({
     "src/routes/company/tabs/company-overview-tab.tsx"() {
       "use strict";
-      import_react65 = __toESM(require_react(), 1);
+      import_react67 = __toESM(require_react(), 1);
     }
   });
 
   // src/components/details-header.tsx
-  var import_react70, TabHeader;
+  var import_react72, TabHeader;
   var init_details_header = __esm({
     "src/components/details-header.tsx"() {
       "use strict";
-      import_react70 = __toESM(require_react(), 1);
+      import_react72 = __toESM(require_react(), 1);
       init_dist2();
       TabHeader = ({ children }) => {
         const { id } = useParams();
-        return /* @__PURE__ */ import_react70.default.createElement("div", { className: "flex bg-slate-200 py-2 px-6" }, children);
+        return /* @__PURE__ */ import_react72.default.createElement("div", { className: "flex bg-slate-200 py-2 px-6" }, children);
       };
     }
   });
 
   // src/components/dialog.tsx
-  var import_react71, import_react_dom2, Dialog;
+  var import_react73, import_react_dom2, Dialog;
   var init_dialog2 = __esm({
     "src/components/dialog.tsx"() {
       "use strict";
-      import_react71 = __toESM(require_react(), 1);
+      import_react73 = __toESM(require_react(), 1);
       import_react_dom2 = __toESM(require_react_dom(), 1);
       Dialog = ({
         title,
@@ -41738,15 +41774,15 @@ const client = new ApolloClient({
         closeOnEsc,
         closeOnClickOutside
       }) => {
-        const dialogRef = (0, import_react71.useRef)(null);
-        (0, import_react71.useEffect)(() => {
+        const dialogRef = (0, import_react73.useRef)(null);
+        (0, import_react73.useEffect)(() => {
           if (!dialogRef.current)
             return;
           if (autoFocus)
             dialogRef.current.focus();
         }, []);
         return import_react_dom2.default.createPortal(
-          /* @__PURE__ */ import_react71.default.createElement(
+          /* @__PURE__ */ import_react73.default.createElement(
             "div",
             {
               className: "fixed inset-0 flex flex-col justify-center items-center bg-gray-800 opacity-80 ",
@@ -41755,7 +41791,7 @@ const client = new ApolloClient({
                   onClose();
               } : void 0
             },
-            /* @__PURE__ */ import_react71.default.createElement(
+            /* @__PURE__ */ import_react73.default.createElement(
               "div",
               {
                 className: "w-96 bg-white shadow-md flex flex-col overflow-hidden",
@@ -41766,7 +41802,7 @@ const client = new ApolloClient({
                     onClose();
                 }
               },
-              /* @__PURE__ */ import_react71.default.createElement("div", { className: "flex items-center px-5 py-2.5 border-b-2 border-grey-300" }, title),
+              /* @__PURE__ */ import_react73.default.createElement("div", { className: "flex items-center px-5 py-2.5 border-b-2 border-grey-300" }, title),
               children
             )
           ),
@@ -41777,18 +41813,18 @@ const client = new ApolloClient({
   });
 
   // src/components/button.tsx
-  var import_react72, Button;
+  var import_react74, Button;
   var init_button = __esm({
     "src/components/button.tsx"() {
       "use strict";
-      import_react72 = __toESM(require_react(), 1);
+      import_react74 = __toESM(require_react(), 1);
       Button = ({
         children,
         onClick,
         disabled = false,
         type
       }) => {
-        return /* @__PURE__ */ import_react72.default.createElement(
+        return /* @__PURE__ */ import_react74.default.createElement(
           "button",
           {
             type,
@@ -41803,13 +41839,13 @@ const client = new ApolloClient({
   });
 
   // src/components/form.tsx
-  var import_react73, Form2;
+  var import_react75, Form2;
   var init_form2 = __esm({
     "src/components/form.tsx"() {
       "use strict";
-      import_react73 = __toESM(require_react(), 1);
+      import_react75 = __toESM(require_react(), 1);
       Form2 = ({ onSubmit, children }) => {
-        return /* @__PURE__ */ import_react73.default.createElement("form", { onSubmit }, children, " ");
+        return /* @__PURE__ */ import_react75.default.createElement("form", { onSubmit }, children, " ");
       };
     }
   });
@@ -41837,9 +41873,9 @@ const client = new ApolloClient({
     return copy;
   }
   function useSubscribe(props) {
-    const _props = import_react74.default.useRef(props);
+    const _props = import_react76.default.useRef(props);
     _props.current = props;
-    import_react74.default.useEffect(() => {
+    import_react76.default.useEffect(() => {
       const subscription = !props.disabled && _props.current.subject && _props.current.subject.subscribe({
         next: _props.current.next
       });
@@ -42732,8 +42768,8 @@ const client = new ApolloClient({
     };
   }
   function useForm(props = {}) {
-    const _formControl = import_react74.default.useRef();
-    const [formState, updateFormState] = import_react74.default.useState({
+    const _formControl = import_react76.default.useRef();
+    const [formState, updateFormState] = import_react76.default.useState({
       isDirty: false,
       isValidating: false,
       isLoading: isFunction(props.defaultValues),
@@ -42763,14 +42799,14 @@ const client = new ApolloClient({
         }
       }
     });
-    import_react74.default.useEffect(() => {
+    import_react76.default.useEffect(() => {
       if (props.values && !deepEqual(props.values, control._defaultValues)) {
         control._reset(props.values, control._options.resetOptions);
       } else {
         control._resetDefaultValues();
       }
     }, [props.values, control]);
-    import_react74.default.useEffect(() => {
+    import_react76.default.useEffect(() => {
       if (!control._state.mount) {
         control._updateValid();
         control._state.mount = true;
@@ -42784,10 +42820,10 @@ const client = new ApolloClient({
     _formControl.current.formState = getProxyFormState(formState, control);
     return _formControl.current;
   }
-  var import_react74, isCheckBoxInput, isDateObject, isNullOrUndefined, isObjectType, isObject, getEventValue, getNodeParentName, isNameInFieldArray, isPlainObject, isWeb, compact2, isUndefined, get, EVENTS, VALIDATION_MODE, INPUT_VALIDATION_RULES, HookFormContext, getProxyFormState, isEmptyObject, shouldRenderFormState, convertToArrayPayload, isString, generateWatchOutput, isKey, stringToPath, appendErrors, focusFieldBy, getValidationModes, isWatched, updateFieldArrayRootError, isBoolean, isFileInput, isFunction, isHTMLElement, isMessage, isRadioInput, isRegex, defaultResult, validResult, getCheckboxValue, defaultReturn, getRadioValue, getValueAndMessage, validateField, isPrimitive, isMultipleSelect, isRadioOrCheckbox, live, objectHasFunction, getDirtyFields, getFieldValueAs, getResolverOptions, getRuleValue, hasValidation, skipValidation, unsetEmptyArray, defaultOptions2;
+  var import_react76, isCheckBoxInput, isDateObject, isNullOrUndefined, isObjectType, isObject, getEventValue, getNodeParentName, isNameInFieldArray, isPlainObject, isWeb, compact2, isUndefined, get, EVENTS, VALIDATION_MODE, INPUT_VALIDATION_RULES, HookFormContext, getProxyFormState, isEmptyObject, shouldRenderFormState, convertToArrayPayload, isString, generateWatchOutput, isKey, stringToPath, appendErrors, focusFieldBy, getValidationModes, isWatched, updateFieldArrayRootError, isBoolean, isFileInput, isFunction, isHTMLElement, isMessage, isRadioInput, isRegex, defaultResult, validResult, getCheckboxValue, defaultReturn, getRadioValue, getValueAndMessage, validateField, isPrimitive, isMultipleSelect, isRadioOrCheckbox, live, objectHasFunction, getDirtyFields, getFieldValueAs, getResolverOptions, getRuleValue, hasValidation, skipValidation, unsetEmptyArray, defaultOptions2;
   var init_index_esm = __esm({
     "node_modules/react-hook-form/dist/index.esm.mjs"() {
-      import_react74 = __toESM(require_react(), 1);
+      import_react76 = __toESM(require_react(), 1);
       isCheckBoxInput = (element) => element.type === "checkbox";
       isDateObject = (value) => value instanceof Date;
       isNullOrUndefined = (value) => value == null;
@@ -42831,7 +42867,7 @@ const client = new ApolloClient({
         required: "required",
         validate: "validate"
       };
-      HookFormContext = import_react74.default.createContext(null);
+      HookFormContext = import_react76.default.createContext(null);
       getProxyFormState = (formState, control, localProxyFormState, isRoot = true) => {
         const result2 = {
           defaultValues: control._defaultValues
@@ -43277,14 +43313,14 @@ const client = new ApolloClient({
   });
 
   // src/routes/projects/project-navigation-tabs.tsx
-  var import_react77, ProjectNavigationTabs;
+  var import_react79, ProjectNavigationTabs;
   var init_project_navigation_tabs = __esm({
     "src/routes/projects/project-navigation-tabs.tsx"() {
       "use strict";
-      import_react77 = __toESM(require_react(), 1);
+      import_react79 = __toESM(require_react(), 1);
       init_navigation_tabs();
       ProjectNavigationTabs = () => {
-        const items = (0, import_react77.useMemo)(
+        const items = (0, import_react79.useMemo)(
           () => [
             {
               path: "",
@@ -43293,24 +43329,24 @@ const client = new ApolloClient({
           ],
           []
         );
-        return /* @__PURE__ */ import_react77.default.createElement(NavigationTabs, { items });
+        return /* @__PURE__ */ import_react79.default.createElement(NavigationTabs, { items });
       };
     }
   });
 
   // src/routes/projects/edit-project.tsx
-  var import_react78, EditProject;
+  var import_react80, EditProject;
   var init_edit_project = __esm({
     "src/routes/projects/edit-project.tsx"() {
       "use strict";
-      import_react78 = __toESM(require_react(), 1);
+      import_react80 = __toESM(require_react(), 1);
       init_index_esm();
       init_button();
       init_dialog2();
       init_form2();
       init_project_api();
       EditProject = ({ project }) => {
-        const [dialog, setDialog] = (0, import_react78.useState)(false);
+        const [dialog, setDialog] = (0, import_react80.useState)(false);
         const { updateProject } = useUpdateProject();
         const {
           handleSubmit,
@@ -43323,7 +43359,7 @@ const client = new ApolloClient({
             description: project.description
           }
         });
-        (0, import_react78.useEffect)(() => {
+        (0, import_react80.useEffect)(() => {
           if (!dialog)
             reset({ name: project.name, description: project.description });
         }, [dialog]);
@@ -43337,7 +43373,7 @@ const client = new ApolloClient({
           });
           setDialog(false);
         };
-        return /* @__PURE__ */ import_react78.default.createElement(import_react78.default.Fragment, null, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(true) }, "Edit"), dialog && /* @__PURE__ */ import_react78.default.createElement(
+        return /* @__PURE__ */ import_react80.default.createElement(import_react80.default.Fragment, null, /* @__PURE__ */ import_react80.default.createElement(Button, { onClick: () => setDialog(true) }, "Edit"), dialog && /* @__PURE__ */ import_react80.default.createElement(
           Dialog,
           {
             title: "Edit project",
@@ -43345,7 +43381,7 @@ const client = new ApolloClient({
             closeOnClickOutside: true,
             closeOnEsc: true
           },
-          /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react78.default.createElement(
+          /* @__PURE__ */ import_react80.default.createElement("div", null, /* @__PURE__ */ import_react80.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react80.default.createElement("div", null, /* @__PURE__ */ import_react80.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react80.default.createElement(
             "input",
             __spreadProps(__spreadValues({}, register("name")), {
               type: "text",
@@ -43353,25 +43389,25 @@ const client = new ApolloClient({
               placeholder: "Project name",
               required: true
             })
-          )), /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react78.default.createElement(
+          )), /* @__PURE__ */ import_react80.default.createElement("div", null, /* @__PURE__ */ import_react80.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react80.default.createElement(
             "input",
             __spreadProps(__spreadValues({}, register("description")), {
               type: "text",
               className: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
               placeholder: "Project description"
             })
-          ))), /* @__PURE__ */ import_react78.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react78.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react78.default.createElement(Button, { type: "submit" }, "Save"))))
+          ))), /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react80.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react80.default.createElement(Button, { type: "submit" }, "Save"))))
         ));
       };
     }
   });
 
   // src/routes/projects/delete-project.tsx
-  var import_react79, DeleteProject;
+  var import_react81, DeleteProject;
   var init_delete_project = __esm({
     "src/routes/projects/delete-project.tsx"() {
       "use strict";
-      import_react79 = __toESM(require_react(), 1);
+      import_react81 = __toESM(require_react(), 1);
       init_button();
       init_dialog2();
       init_form2();
@@ -43379,14 +43415,14 @@ const client = new ApolloClient({
       init_dist2();
       DeleteProject = ({ project }) => {
         const navigate = useNavigate();
-        const [dialog, setDialog] = (0, import_react79.useState)(false);
+        const [dialog, setDialog] = (0, import_react81.useState)(false);
         const { deleteProject } = useDeleteProject();
         const onSubmit = () => {
           deleteProject({ variables: { id: project.id } });
           setDialog(false);
           navigate("/projects");
         };
-        return /* @__PURE__ */ import_react79.default.createElement(import_react79.default.Fragment, null, /* @__PURE__ */ import_react79.default.createElement(Button, { onClick: () => setDialog(true) }, "Delete"), dialog && /* @__PURE__ */ import_react79.default.createElement(
+        return /* @__PURE__ */ import_react81.default.createElement(import_react81.default.Fragment, null, /* @__PURE__ */ import_react81.default.createElement(Button, { onClick: () => setDialog(true) }, "Delete"), dialog && /* @__PURE__ */ import_react81.default.createElement(
           Dialog,
           {
             title: "Delete project",
@@ -43394,7 +43430,7 @@ const client = new ApolloClient({
             closeOnClickOutside: true,
             closeOnEsc: true
           },
-          /* @__PURE__ */ import_react79.default.createElement("div", null, /* @__PURE__ */ import_react79.default.createElement(Form2, { onSubmit }, /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react79.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Are you sure, you want delete project: ", project.name)), /* @__PURE__ */ import_react79.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react79.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react79.default.createElement(Button, { type: "submit" }, "Delete"))))
+          /* @__PURE__ */ import_react81.default.createElement("div", null, /* @__PURE__ */ import_react81.default.createElement(Form2, { onSubmit }, /* @__PURE__ */ import_react81.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react81.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Are you sure, you want delete project: ", project.name)), /* @__PURE__ */ import_react81.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react81.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react81.default.createElement(Button, { type: "submit" }, "Delete"))))
         ));
       };
     }
@@ -43406,19 +43442,20 @@ const client = new ApolloClient({
     default: () => ProjectPage
   });
   function ProjectPage({ project }) {
-    return /* @__PURE__ */ import_react80.default.createElement("div", null, /* @__PURE__ */ import_react80.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react80.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react80.default.createElement(TabHeader, null, /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex-1" }, " "), /* @__PURE__ */ import_react80.default.createElement("div", { className: "flex gap-2" }, /* @__PURE__ */ import_react80.default.createElement(EditProject, { project }), /* @__PURE__ */ import_react80.default.createElement(DeleteProject, { project }))), /* @__PURE__ */ import_react80.default.createElement(import_react80.default.Suspense, { fallback: /* @__PURE__ */ import_react80.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react80.default.createElement(Outlet, null)));
+    return /* @__PURE__ */ import_react82.default.createElement("div", null, /* @__PURE__ */ import_react82.default.createElement("div", { className: "border-b pt-2 border-cyan-800" }, /* @__PURE__ */ import_react82.default.createElement(ProjectNavigationTabs, null)), /* @__PURE__ */ import_react82.default.createElement(TabHeader, null, /* @__PURE__ */ import_react82.default.createElement("div", { className: "flex-1" }, " "), /* @__PURE__ */ import_react82.default.createElement("div", { className: "flex gap-2" }, /* @__PURE__ */ import_react82.default.createElement(EditProject, { project }), /* @__PURE__ */ import_react82.default.createElement(DeleteProject, { project }))), /* @__PURE__ */ import_react82.default.createElement(error_boundary_default, null, /* @__PURE__ */ import_react82.default.createElement(import_react82.default.Suspense, { fallback: /* @__PURE__ */ import_react82.default.createElement(Spinner, null) }, /* @__PURE__ */ import_react82.default.createElement(Outlet, null))));
   }
-  var import_react80;
+  var import_react82;
   var init_project_page = __esm({
     "src/routes/projects/project-page.tsx"() {
       "use strict";
-      import_react80 = __toESM(require_react(), 1);
+      import_react82 = __toESM(require_react(), 1);
       init_dist2();
       init_details_header();
       init_spinner();
       init_project_navigation_tabs();
       init_edit_project();
       init_delete_project();
+      init_error_boundary();
     }
   });
 
@@ -43429,24 +43466,24 @@ const client = new ApolloClient({
   });
   function ProjectOverviewTab({ project }) {
     var _a5;
-    return /* @__PURE__ */ import_react81.default.createElement("div", { className: "p-2" }, /* @__PURE__ */ import_react81.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react81.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react81.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
+    return /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-2" }, /* @__PURE__ */ import_react83.default.createElement("div", null, "Name: ", project.name), /* @__PURE__ */ import_react83.default.createElement("div", null, "Description: ", project.description), /* @__PURE__ */ import_react83.default.createElement("div", null, "Company: ", (_a5 = project.company) == null ? void 0 : _a5.name));
   }
-  var import_react81;
+  var import_react83;
   var init_project_overview_tab = __esm({
     "src/routes/projects/tabs/project-overview-tab.tsx"() {
       "use strict";
-      import_react81 = __toESM(require_react(), 1);
+      import_react83 = __toESM(require_react(), 1);
     }
   });
 
   // src/index.tsx
   init_client();
-  var import_react85 = __toESM(require_react(), 1);
+  var import_react87 = __toESM(require_react(), 1);
   var import_client5 = __toESM(require_client(), 1);
   init_dist2();
 
   // src/app.tsx
-  var import_react84 = __toESM(require_react(), 1);
+  var import_react86 = __toESM(require_react(), 1);
   init_dist2();
 
   // src/components/layout.tsx
@@ -43782,11 +43819,11 @@ const client = new ApolloClient({
   }
 
   // src/routes/company/company.route.tsx
-  var import_react66 = __toESM(require_react(), 1);
+  var import_react68 = __toESM(require_react(), 1);
   init_dist2();
   init_spinner();
-  var CompanyPage2 = import_react66.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
-  var CompanyOverviewTab2 = import_react66.default.lazy(
+  var CompanyPage2 = import_react68.default.lazy(() => Promise.resolve().then(() => (init_company_page(), company_page_exports)));
+  var CompanyOverviewTab2 = import_react68.default.lazy(
     () => Promise.resolve().then(() => (init_company_overview_tab(), company_overview_tab_exports))
   );
   function Container(props) {
@@ -43795,59 +43832,59 @@ const client = new ApolloClient({
       return null;
     const { loading, error, data } = useCompanyData({ id });
     if (loading)
-      return /* @__PURE__ */ import_react66.default.createElement(Spinner, null);
+      return /* @__PURE__ */ import_react68.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react66.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react68.default.createElement("div", null, "Somethingwent wrong");
     const { company } = data;
-    return /* @__PURE__ */ import_react66.default.createElement(props.component, { company });
+    return /* @__PURE__ */ import_react68.default.createElement(props.component, { company });
   }
   var companyRoutes = [
     {
       path: "companies/:id",
-      element: /* @__PURE__ */ import_react66.default.createElement(CompanyPage2, null),
+      element: /* @__PURE__ */ import_react68.default.createElement(CompanyPage2, null),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react66.default.createElement(Container, { component: CompanyOverviewTab2 })
+          element: /* @__PURE__ */ import_react68.default.createElement(Container, { component: CompanyOverviewTab2 })
         },
         {
           path: "test",
-          element: /* @__PURE__ */ import_react66.default.createElement("div", null, "Test ")
+          element: /* @__PURE__ */ import_react68.default.createElement("div", null, "Test ")
         }
       ]
     }
   ];
 
   // src/routes/dashboard.tsx
-  var import_react67 = __toESM(require_react(), 1);
+  var import_react69 = __toESM(require_react(), 1);
   function Dashboard() {
-    return /* @__PURE__ */ import_react67.default.createElement("div", null, /* @__PURE__ */ import_react67.default.createElement("p", null, "Dashboard"));
+    return /* @__PURE__ */ import_react69.default.createElement("div", null, /* @__PURE__ */ import_react69.default.createElement("p", null, "Dashboard"));
   }
 
   // src/routes/not-found/not-found.route.tsx
-  var import_react69 = __toESM(require_react(), 1);
+  var import_react71 = __toESM(require_react(), 1);
 
   // src/routes/not-found/not-found.tsx
-  var import_react68 = __toESM(require_react(), 1);
+  var import_react70 = __toESM(require_react(), 1);
   function NotFoundPage() {
-    return /* @__PURE__ */ import_react68.default.createElement("div", null, "Page not found");
+    return /* @__PURE__ */ import_react70.default.createElement("div", null, "Page not found");
   }
 
   // src/routes/not-found/not-found.route.tsx
   var notFoundRoute = [
     {
       path: "*",
-      element: /* @__PURE__ */ import_react69.default.createElement(NotFoundPage, null)
+      element: /* @__PURE__ */ import_react71.default.createElement(NotFoundPage, null)
     }
   ];
 
   // src/routes/projects/projects.tsx
-  var import_react76 = __toESM(require_react(), 1);
+  var import_react78 = __toESM(require_react(), 1);
   init_details_header();
   init_spinner();
 
   // src/routes/projects/create-project.tsx
-  var import_react75 = __toESM(require_react(), 1);
+  var import_react77 = __toESM(require_react(), 1);
   init_dialog2();
   init_button();
   init_form2();
@@ -43858,7 +43895,7 @@ const client = new ApolloClient({
     description: ""
   };
   var CreateProject = () => {
-    const [dialog, setDialog] = (0, import_react75.useState)(false);
+    const [dialog, setDialog] = (0, import_react77.useState)(false);
     const { createProject } = useCreateProject();
     const {
       handleSubmit,
@@ -43866,7 +43903,7 @@ const client = new ApolloClient({
       reset,
       formState: { isSubmitting, errors }
     } = useForm({ defaultValues: defaultVaues });
-    (0, import_react75.useEffect)(() => {
+    (0, import_react77.useEffect)(() => {
       if (!dialog)
         reset(defaultVaues);
     }, [dialog]);
@@ -43879,7 +43916,7 @@ const client = new ApolloClient({
       });
       setDialog(false);
     };
-    return /* @__PURE__ */ import_react75.default.createElement(import_react75.default.Fragment, null, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(true) }, "Create project"), dialog && /* @__PURE__ */ import_react75.default.createElement(
+    return /* @__PURE__ */ import_react77.default.createElement(import_react77.default.Fragment, null, /* @__PURE__ */ import_react77.default.createElement(Button, { onClick: () => setDialog(true) }, "Create project"), dialog && /* @__PURE__ */ import_react77.default.createElement(
       Dialog,
       {
         title: "Create project",
@@ -43887,7 +43924,7 @@ const client = new ApolloClient({
         closeOnClickOutside: true,
         closeOnEsc: true
       },
-      /* @__PURE__ */ import_react75.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react75.default.createElement(
+      /* @__PURE__ */ import_react77.default.createElement(Form2, { onSubmit: handleSubmit(onSubmit) }, /* @__PURE__ */ import_react77.default.createElement("div", { className: "flex flex-col gap-2 px-5 py-2.5" }, /* @__PURE__ */ import_react77.default.createElement("div", null, /* @__PURE__ */ import_react77.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project name"), /* @__PURE__ */ import_react77.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("name")), {
           type: "text",
@@ -43895,14 +43932,14 @@ const client = new ApolloClient({
           placeholder: "Project name",
           required: true
         })
-      )), /* @__PURE__ */ import_react75.default.createElement("div", null, /* @__PURE__ */ import_react75.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react75.default.createElement(
+      )), /* @__PURE__ */ import_react77.default.createElement("div", null, /* @__PURE__ */ import_react77.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Project description"), /* @__PURE__ */ import_react77.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("description")), {
           type: "text",
           className: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
           placeholder: "Project description"
         })
-      ))), /* @__PURE__ */ import_react75.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react75.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react75.default.createElement(Button, { type: "submit" }, "Create project")))
+      ))), /* @__PURE__ */ import_react77.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react77.default.createElement(Button, { onClick: () => setDialog(false) }, "Cancel"), /* @__PURE__ */ import_react77.default.createElement(Button, { type: "submit" }, "Create project")))
     ));
   };
 
@@ -43913,31 +43950,31 @@ const client = new ApolloClient({
     const { loading, error, data } = useProjectsData();
     const navigate = useNavigate();
     if (loading)
-      return /* @__PURE__ */ import_react76.default.createElement(Spinner, null);
+      return /* @__PURE__ */ import_react78.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react76.default.createElement("div", null, "Something went wrong");
+      return /* @__PURE__ */ import_react78.default.createElement("div", null, "Something went wrong");
     const { projects } = data;
-    return /* @__PURE__ */ import_react76.default.createElement("div", null, /* @__PURE__ */ import_react76.default.createElement(TabHeader, null, /* @__PURE__ */ import_react76.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react76.default.createElement(Table, null, /* @__PURE__ */ import_react76.default.createElement(TableHead, null, /* @__PURE__ */ import_react76.default.createElement("tr", null, /* @__PURE__ */ import_react76.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Name"), /* @__PURE__ */ import_react76.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Description"))), /* @__PURE__ */ import_react76.default.createElement(TableBody, null, (projects || []).map((project) => {
-      return /* @__PURE__ */ import_react76.default.createElement(
+    return /* @__PURE__ */ import_react78.default.createElement("div", null, /* @__PURE__ */ import_react78.default.createElement(TabHeader, null, /* @__PURE__ */ import_react78.default.createElement(CreateProject, null)), /* @__PURE__ */ import_react78.default.createElement(Table, null, /* @__PURE__ */ import_react78.default.createElement(TableHead, null, /* @__PURE__ */ import_react78.default.createElement("tr", null, /* @__PURE__ */ import_react78.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Name"), /* @__PURE__ */ import_react78.default.createElement("th", { scope: "col", className: "px-6 py-3" }, "Description"))), /* @__PURE__ */ import_react78.default.createElement(TableBody, null, (projects || []).map((project) => {
+      return /* @__PURE__ */ import_react78.default.createElement(
         "tr",
         {
           key: project.id,
           className: "bg-white border-b hover:bg-gray-100 cursor-pointer",
           onClick: () => navigate(`/projects/${project.id}`)
         },
-        /* @__PURE__ */ import_react76.default.createElement("td", { className: "px-4 py-2" }, project.name),
-        /* @__PURE__ */ import_react76.default.createElement("td", { className: "px-4 py-2" }, project.description ? project.description : "-")
+        /* @__PURE__ */ import_react78.default.createElement("td", { className: "px-4 py-2" }, project.name),
+        /* @__PURE__ */ import_react78.default.createElement("td", { className: "px-4 py-2" }, project.description ? project.description : "-")
       );
     }))));
   }
 
   // src/routes/projects/projects.route.tsx
-  var import_react82 = __toESM(require_react(), 1);
+  var import_react84 = __toESM(require_react(), 1);
   init_dist2();
   init_project_api();
   init_spinner();
-  var ProjectPage2 = import_react82.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
-  var ProjectOverviewTab2 = import_react82.default.lazy(
+  var ProjectPage2 = import_react84.default.lazy(() => Promise.resolve().then(() => (init_project_page(), project_page_exports)));
+  var ProjectOverviewTab2 = import_react84.default.lazy(
     () => Promise.resolve().then(() => (init_project_overview_tab(), project_overview_tab_exports))
   );
   function Container2(props) {
@@ -43946,20 +43983,20 @@ const client = new ApolloClient({
       return null;
     const { loading, error, data } = useProjectData({ id });
     if (loading)
-      return /* @__PURE__ */ import_react82.default.createElement(Spinner, null);
+      return /* @__PURE__ */ import_react84.default.createElement(Spinner, null);
     if (error)
-      return /* @__PURE__ */ import_react82.default.createElement("div", null, "Somethingwent wrong");
+      return /* @__PURE__ */ import_react84.default.createElement("div", null, "Somethingwent wrong");
     const { project } = data;
-    return /* @__PURE__ */ import_react82.default.createElement(props.component, { project });
+    return /* @__PURE__ */ import_react84.default.createElement(props.component, { project });
   }
   var projectsRoutes = [
     {
       path: "projects/:id",
-      element: /* @__PURE__ */ import_react82.default.createElement(Container2, { component: ProjectPage2 }),
+      element: /* @__PURE__ */ import_react84.default.createElement(Container2, { component: ProjectPage2 }),
       children: [
         {
           path: "",
-          element: /* @__PURE__ */ import_react82.default.createElement(Container2, { component: ProjectOverviewTab2 })
+          element: /* @__PURE__ */ import_react84.default.createElement(Container2, { component: ProjectOverviewTab2 })
         }
       ]
     }
@@ -43969,7 +44006,7 @@ const client = new ApolloClient({
   init_spinner();
 
   // src/components/login-form.tsx
-  var import_react83 = __toESM(require_react(), 1);
+  var import_react85 = __toESM(require_react(), 1);
   init_index_esm();
 
   // src/utils/email-regex.ts
@@ -43991,13 +44028,13 @@ const client = new ApolloClient({
     const onSubmit = ({ email, password }) => {
       console.log("entered login info: ", email, password);
     };
-    return /* @__PURE__ */ import_react83.default.createElement("section", { className: "bg-cyan-800" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react83.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react83.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react83.default.createElement(
+    return /* @__PURE__ */ import_react85.default.createElement("section", { className: "bg-cyan-800" }, /* @__PURE__ */ import_react85.default.createElement("div", { className: "flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" }, /* @__PURE__ */ import_react85.default.createElement("div", { className: "w-full bg-white shadow md:mt-0 sm:max-w-md xl:p-0" }, /* @__PURE__ */ import_react85.default.createElement("div", { className: "p-6 space-y-4 md:space-y-6 sm:p-8" }, /* @__PURE__ */ import_react85.default.createElement("h1", { className: "text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  " }, "Sign in to your account"), /* @__PURE__ */ import_react85.default.createElement(
       "form",
       {
         onSubmit: handleSubmit(onSubmit),
         className: "space-y-4 md:space-y-6"
       },
-      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900  " }, "Your email"), errors.email && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.email.message)), /* @__PURE__ */ import_react83.default.createElement(
+      /* @__PURE__ */ import_react85.default.createElement("div", null, /* @__PURE__ */ import_react85.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900  " }, "Your email"), errors.email && /* @__PURE__ */ import_react85.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react85.default.createElement("span", { className: "text-red-700 text-sm" }, errors.email.message)), /* @__PURE__ */ import_react85.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("email", {
           required: "Please enter your email",
@@ -44013,7 +44050,7 @@ const client = new ApolloClient({
           placeholder: "name@company.com"
         })
       )),
-      /* @__PURE__ */ import_react83.default.createElement("div", null, /* @__PURE__ */ import_react83.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Password"), errors.password && /* @__PURE__ */ import_react83.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react83.default.createElement("span", { className: "text-red-700 text-sm" }, errors.password.message)), /* @__PURE__ */ import_react83.default.createElement(
+      /* @__PURE__ */ import_react85.default.createElement("div", null, /* @__PURE__ */ import_react85.default.createElement("label", { className: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" }, "Password"), errors.password && /* @__PURE__ */ import_react85.default.createElement("div", { className: "pb-2" }, /* @__PURE__ */ import_react85.default.createElement("span", { className: "text-red-700 text-sm" }, errors.password.message)), /* @__PURE__ */ import_react85.default.createElement(
         "input",
         __spreadProps(__spreadValues({}, register("password", {
           required: "Please enter your password"
@@ -44025,32 +44062,32 @@ const client = new ApolloClient({
           autoFocus: true
         })
       )),
-      /* @__PURE__ */ import_react83.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react83.default.createElement(Button, { type: "submit" }, "Login"))
+      /* @__PURE__ */ import_react85.default.createElement("div", { className: "flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300" }, /* @__PURE__ */ import_react85.default.createElement(Button, { type: "submit" }, "Login"))
     )))));
   }
 
   // src/app.tsx
   function App() {
     const router = useRoutes(routes);
-    return /* @__PURE__ */ import_react84.default.createElement(import_react84.Suspense, { fallback: /* @__PURE__ */ import_react84.default.createElement(Spinner, null) }, router);
+    return /* @__PURE__ */ import_react86.default.createElement(import_react86.Suspense, { fallback: /* @__PURE__ */ import_react86.default.createElement(Spinner, null) }, router);
   }
   var routes = [
     {
       path: "login",
-      element: /* @__PURE__ */ import_react84.default.createElement(LoginForm, null)
+      element: /* @__PURE__ */ import_react86.default.createElement(LoginForm, null)
     },
     {
-      element: /* @__PURE__ */ import_react84.default.createElement(Layout, null),
+      element: /* @__PURE__ */ import_react86.default.createElement(Layout, null),
       children: [
-        { path: "/", element: /* @__PURE__ */ import_react84.default.createElement(Dashboard, null) },
+        { path: "/", element: /* @__PURE__ */ import_react86.default.createElement(Dashboard, null) },
         {
           path: "companies",
-          element: /* @__PURE__ */ import_react84.default.createElement(Companies, null)
+          element: /* @__PURE__ */ import_react86.default.createElement(Companies, null)
         },
         ...companyRoutes,
         {
           path: "projects",
-          element: /* @__PURE__ */ import_react84.default.createElement(Projects, null)
+          element: /* @__PURE__ */ import_react86.default.createElement(Projects, null)
         },
         ...projectsRoutes,
         ...notFoundRoute
@@ -44090,7 +44127,7 @@ const client = new ApolloClient({
     );
   }
   root2.render(
-    /* @__PURE__ */ import_react85.default.createElement(import_react85.default.StrictMode, null, /* @__PURE__ */ import_react85.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react85.default.createElement(HashRouter, null, /* @__PURE__ */ import_react85.default.createElement(App, null))))
+    /* @__PURE__ */ import_react87.default.createElement(import_react87.default.StrictMode, null, /* @__PURE__ */ import_react87.default.createElement(ApolloProvider, { client: apollo_client_default }, /* @__PURE__ */ import_react87.default.createElement(HashRouter, null, /* @__PURE__ */ import_react87.default.createElement(App, null))))
   );
 })();
 /*! Bundled license information:
@@ -44143,7 +44180,7 @@ react-dom/cjs/react-dom.development.js:
 
 @remix-run/router/dist/router.js:
   (**
-   * @remix-run/router v1.4.0
+   * @remix-run/router v1.6.1
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -44155,7 +44192,7 @@ react-dom/cjs/react-dom.development.js:
 
 react-router/dist/index.js:
   (**
-   * React Router v6.9.0
+   * React Router v6.11.1
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -44167,7 +44204,7 @@ react-router/dist/index.js:
 
 react-router-dom/dist/index.js:
   (**
-   * React Router DOM v6.9.0
+   * React Router DOM v6.11.1
    *
    * Copyright (c) Remix Software Inc.
    *

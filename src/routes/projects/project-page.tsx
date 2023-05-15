@@ -6,6 +6,7 @@ import { ProjectNavigationTabs } from "./project-navigation-tabs";
 import { Project } from "../../gql/graphql";
 import { EditProject } from "./edit-project";
 import { DeleteProject } from "./delete-project";
+import ErrorBoundary from "../../components/error-boundary";
 
 type Props = {
   project: Project;
@@ -24,7 +25,10 @@ export default function ProjectPage({ project }: Props) {
           <DeleteProject project={project} />
         </div>
       </TabHeader>
-      <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
+
+      <ErrorBoundary>
+        <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
