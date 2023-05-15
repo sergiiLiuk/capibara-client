@@ -6,6 +6,7 @@ type Props = {
 };
 
 export default function ProjectOverviewTab({ project }: Props) {
+  console.log();
   return (
     <div className="p-2">
       <div>Name: {project.name}</div>

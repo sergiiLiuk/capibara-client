@@ -7,7 +7,7 @@ let ctx = await ESBuild.context({
   entryPoints: ["./src/index.tsx", "./src/style.css"],
   bundle: true,
   minify: false,
-  outdir: "www/js",
+  outdir: "build/dev-server/js",
   sourcemap: true,
   loader: {
     ".js": "jsx",
@@ -25,5 +25,5 @@ await ctx.watch();
 console.log("watching...");
 
 const { host, port } = await ctx.serve({
-  servedir: "www",
+  servedir: "build/dev-server",
 });
