@@ -5,6 +5,7 @@ import { Form } from "../../components/form";
 import { useForm } from "react-hook-form";
 import { useCreateProject } from "./project.api";
 import { Input } from "../../components/input";
+import { Label } from "../../components/label";
 
 type FormValues = {
   name: string;
@@ -39,7 +40,7 @@ export const CreateProject = () => {
     });
     setDialog(false);
   };
-  //TODO: create input & label components
+
   return (
     <>
       <Button variant="primary" onClick={() => setDialog(true)}>
@@ -55,9 +56,7 @@ export const CreateProject = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-2 px-5 py-2.5">
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Project name
-                </label>
+                <Label>Project name</Label>
                 <Input
                   {...register("name", {
                     required: "Please enter project name",
@@ -68,9 +67,7 @@ export const CreateProject = () => {
                 />
               </div>
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Project description
-                </label>
+                <Label>Project description</Label>
                 <Input
                   {...register("description")}
                   type="text"

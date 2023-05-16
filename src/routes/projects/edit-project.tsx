@@ -6,6 +6,7 @@ import { Form } from "../../components/form";
 import { Input } from "../../components/input";
 import { Project } from "../../gql/graphql";
 import { useUpdateProject } from "./project.api";
+import { Label } from "../../components/label";
 
 type FormValues = {
   name: string;
@@ -65,9 +66,7 @@ export const EditProject = ({ project }: Props) => {
             <Form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-2 px-5 py-2.5">
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Project name
-                  </label>
+                  <Label>Project name</Label>
                   <Input
                     {...register("name")}
                     type="text"
@@ -75,9 +74,7 @@ export const EditProject = ({ project }: Props) => {
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Project description
-                  </label>
+                  <Label>Project description</Label>
                   <Input
                     {...register("description")}
                     type="text"

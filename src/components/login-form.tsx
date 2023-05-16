@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { EMAIL_REGEX } from "../utils/email-regex";
 import { Button } from "./button";
 import { Input } from "./input";
+import { Label } from "./label";
 
 type FormValues = {
   email: string;
@@ -40,9 +41,7 @@ export default function LoginForm() {
               className="space-y-4 md:space-y-6"
             >
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900  ">
-                  Your email
-                </label>
+                <Label>Your email</Label>
                 {errors.email && (
                   <div className="pb-2">
                     <span className="text-red-700 text-sm">
@@ -64,9 +63,7 @@ export default function LoginForm() {
                 />
               </div>
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Password
-                </label>
+                <Label>Password</Label>
                 {errors.password && (
                   <div className="pb-2">
                     <span className="text-red-700 text-sm">
