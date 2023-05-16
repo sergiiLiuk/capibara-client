@@ -1,14 +1,14 @@
 import React, { Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
+import { Spinner } from "./components/spinner";
 import Companies from "./routes/company/companies";
 import { companyRoutes } from "./routes/company/company.route";
 import Dashboard from "./routes/dashboard";
+import LoginPage from "./routes/login/login-page";
 import { notFoundRoute } from "./routes/not-found/not-found.route";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
-import { Spinner } from "./components/spinner";
-import LoginForm from "./components/login-form";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -28,7 +28,7 @@ export default function App() {
 export const routes = [
   {
     path: "login",
-    element: <LoginForm />,
+    element: <LoginPage />,
   },
   {
     element: <Layout />,

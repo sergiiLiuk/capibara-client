@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { EMAIL_REGEX } from "../utils/email-regex";
-import { Button } from "./button";
-import { Input } from "./input";
-import { Label } from "./label";
+import { Button } from "../../components/button";
+import { Input } from "../../components/input";
+import { Label } from "../../components/label";
+import { EMAIL_REGEX } from "../../utils/email-regex";
 
 type FormValues = {
   email: string;
@@ -15,7 +15,7 @@ const defaultVaues = {
   password: "",
 };
 
-export default function LoginForm() {
+export default function LoginPage() {
   const {
     handleSubmit,
     register,
