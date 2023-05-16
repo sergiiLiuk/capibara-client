@@ -50,7 +50,9 @@ export const EditProject = ({ project }: Props) => {
   //TODO: create input & label components
   return (
     <>
-      <Button onClick={() => setDialog(true)}>Edit</Button>
+      <Button variant="primary" onClick={() => setDialog(true)}>
+        Edit
+      </Button>
       {dialog && (
         <Dialog
           title="Edit project"
@@ -86,8 +88,12 @@ export const EditProject = ({ project }: Props) => {
                 </div>
               </div>
               <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
-                <Button onClick={() => setDialog(false)}>Cancel</Button>
-                <Button type="submit">Save</Button>
+                <Button variant="secondary" onClick={() => setDialog(false)}>
+                  Cancel
+                </Button>
+                <Button variant="success" type="submit">
+                  Save
+                </Button>
               </div>
             </Form>
           </div>

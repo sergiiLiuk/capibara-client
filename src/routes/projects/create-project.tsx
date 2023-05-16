@@ -41,7 +41,9 @@ export const CreateProject = () => {
   //TODO: create input & label components
   return (
     <>
-      <Button onClick={() => setDialog(true)}>Create project</Button>
+      <Button variant="success" onClick={() => setDialog(true)}>
+        Create project
+      </Button>
       {dialog && (
         <Dialog
           title="Create project"
@@ -76,8 +78,12 @@ export const CreateProject = () => {
               </div>
             </div>
             <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
-              <Button onClick={() => setDialog(false)}>Cancel</Button>
-              <Button type="submit">Create project</Button>
+              <Button variant="secondary" onClick={() => setDialog(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit">
+                Create project
+              </Button>
             </div>
           </Form>
         </Dialog>

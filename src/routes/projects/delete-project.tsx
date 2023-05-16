@@ -23,7 +23,9 @@ export const DeleteProject = ({ project }: Props) => {
   //TODO: create input & label components
   return (
     <>
-      <Button onClick={() => setDialog(true)}>Delete</Button>
+      <Button variant="danger" onClick={() => setDialog(true)}>
+        Delete
+      </Button>
       {dialog && (
         <Dialog
           title="Delete project"
@@ -39,8 +41,12 @@ export const DeleteProject = ({ project }: Props) => {
                 </label>
               </div>
               <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
-                <Button onClick={() => setDialog(false)}>Cancel</Button>
-                <Button type="submit">Delete</Button>
+                <Button variant="secondary" onClick={() => setDialog(false)}>
+                  Cancel
+                </Button>
+                <Button variant="danger" type="submit">
+                  Delete
+                </Button>
               </div>
             </Form>
           </div>

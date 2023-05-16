@@ -87,7 +87,9 @@ export default function LoginForm() {
                 />
               </div>
               <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
-                <Button type="submit">Login</Button>
+                <Button variant="primary" type="submit">
+                  Login
+                </Button>
               </div>
             </form>
           </div>
