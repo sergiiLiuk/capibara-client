@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { EMAIL_REGEX } from "../utils/email-regex";
 import { Button } from "./button";
+import { Input } from "./input";
 
 type FormValues = {
   email: string;
@@ -49,7 +50,7 @@ export default function LoginForm() {
                     </span>
                   </div>
                 )}
-                <input
+                <Input
                   {...register("email", {
                     required: "Please enter your email",
                     pattern: {
@@ -58,10 +59,8 @@ export default function LoginForm() {
                     },
                   })}
                   type="email"
-                  name="email"
-                  autoFocus
-                  className="bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 placeholder-gray-400"
                   placeholder="name@company.com"
+                  error={errors.email ? true : false}
                 />
               </div>
               <div>
@@ -75,15 +74,14 @@ export default function LoginForm() {
                     </span>
                   </div>
                 )}
-                <input
+
+                <Input
                   {...register("password", {
                     required: "Please enter your password",
                   })}
                   type="password"
-                  name="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 placeholder-gray-400"
-                  autoFocus
+                  error={errors.password ? true : false}
                 />
               </div>
               <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">

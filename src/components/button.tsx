@@ -42,7 +42,7 @@ export const Button = ({
   <button
     onClick={onClick}
     className={classNames(
-      "px-2 py-1 cursor-pointer select-none [outline:none] shadow-md focus:ring-[1px] disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-100 disabled:shadow-inner",
+      "px-4 py-1 cursor-pointer select-none [outline:none] shadow-md focus:ring-[1px] disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-100 disabled:shadow-inner",
       // rounded ? 'rounded': '',
       variant === "primary"
         ? "bg-blue-500 hover:bg-blue-400 focus:ring-blue-300 text-white"

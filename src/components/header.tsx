@@ -1,16 +1,13 @@
 import { Popover, Transition } from "@headlessui/react";
 import { BsBell } from "react-icons/bs";
 import React, { Fragment } from "react";
+import { Input } from "./input";
 
 export default function Header() {
   return (
     <div className="bg-cyan-800 py-4 pr-4 flex justify-between items-center">
       <div className="relative mr-2">
-        <input
-          type="text"
-          placeholder="Search"
-          className="text-sm focus:outline-none active-none h-10 border border-grey-300 px-4"
-        />
+        <Input placeholder="Search" />
       </div>
       <div className="flex items-center mr-2">
         <Popover className="relative">

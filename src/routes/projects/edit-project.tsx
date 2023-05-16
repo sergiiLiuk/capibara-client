@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/button";
 import { Dialog } from "../../components/dialog";
 import { Form } from "../../components/form";
+import { Input } from "../../components/input";
 import { Project } from "../../gql/graphql";
 import { useUpdateProject } from "./project.api";
 
@@ -47,7 +48,7 @@ export const EditProject = ({ project }: Props) => {
 
     setDialog(false);
   };
-  //TODO: create input & label components
+
   return (
     <>
       <Button variant="primary" onClick={() => setDialog(true)}>
@@ -67,22 +68,19 @@ export const EditProject = ({ project }: Props) => {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Project name
                   </label>
-                  <input
+                  <Input
                     {...register("name")}
                     type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Project name"
-                    required
                   />
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Project description
                   </label>
-                  <input
+                  <Input
                     {...register("description")}
                     type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Project description"
                   />
                 </div>
