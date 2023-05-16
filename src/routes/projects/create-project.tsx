@@ -59,9 +59,12 @@ export const CreateProject = () => {
                   Project name
                 </label>
                 <Input
-                  {...register("name")}
+                  {...register("name", {
+                    required: "Please enter project name",
+                  })}
                   type="text"
                   placeholder="Project name"
+                  error={errors.name ? true : false}
                 />
               </div>
               <div>
