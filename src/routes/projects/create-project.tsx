@@ -41,7 +41,7 @@ export const CreateProject = () => {
   //TODO: create input & label components
   return (
     <>
-      <Button variant="success" onClick={() => setDialog(true)}>
+      <Button variant="primary" onClick={() => setDialog(true)}>
         Create project
       </Button>
       {dialog && (
@@ -81,7 +81,7 @@ export const CreateProject = () => {
               <Button variant="secondary" onClick={() => setDialog(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" type="submit">
+              <Button variant="success" type="submit">
                 Create project
               </Button>
             </div>
