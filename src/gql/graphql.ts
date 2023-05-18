@@ -16,58 +16,102 @@ export type Scalars = {
 export type Company = {
   __typename?: 'Company';
   cvr?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+export type LoginInput = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createProject?: Maybe<Project>;
   deleteProject?: Maybe<Project>;
+  loginUser?: Maybe<User>;
+  registerUser?: Maybe<User>;
   updateProject?: Maybe<Project>;
 };
 
 
 export type MutationCreateProjectArgs = {
-  companyId?: InputMaybe<Scalars['ID']>;
-  description: Scalars['String'];
-  name: Scalars['String'];
+  projectInput?: InputMaybe<ProjectInput>;
 };
 
 
 export type MutationDeleteProjectArgs = {
-  id: Scalars['ID'];
+  ID: Scalars['ID'];
+};
+
+
+export type MutationLoginUserArgs = {
+  loginInput?: InputMaybe<LoginInput>;
+};
+
+
+export type MutationRegisterUserArgs = {
+  RegisterInput?: InputMaybe<RegisterInput>;
 };
 
 
 export type MutationUpdateProjectArgs = {
-  description?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  name?: InputMaybe<Scalars['String']>;
+  ID: Scalars['ID'];
+  projectInput?: InputMaybe<ProjectInput>;
 };
 
 export type Project = {
   __typename?: 'Project';
-  company?: Maybe<Company>;
+  company?: Maybe<Array<Company>>;
+  createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
 };
 
-export type RootQueryType = {
-  __typename?: 'RootQueryType';
+export type ProjectInput = {
+  description?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type Query = {
+  __typename?: 'Query';
   companies?: Maybe<Array<Maybe<Company>>>;
-  company?: Maybe<Company>;
-  project?: Maybe<Project>;
+  company: Company;
+  project: Project;
   projects?: Maybe<Array<Maybe<Project>>>;
+  user: User;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
-export type RootQueryTypeCompanyArgs = {
-  id?: InputMaybe<Scalars['ID']>;
+export type QueryCompanyArgs = {
+  ID: Scalars['ID'];
 };
 
 
-export type RootQueryTypeProjectArgs = {
-  id?: InputMaybe<Scalars['ID']>;
+export type QueryProjectArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type QueryUserArgs = {
+  ID: Scalars['ID'];
+};
+
+export type RegisterInput = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  createdAt?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };

@@ -1,6 +1,5 @@
-import { useQuery, gql, useMutation, QueryResult } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Project } from "../../gql/graphql";
-import { log } from "console";
 
 const GET_PROJECTS_QUERY = /* GraphQL */ gql`
   query getProjects {
@@ -8,6 +7,7 @@ const GET_PROJECTS_QUERY = /* GraphQL */ gql`
       id
       name
       description
+      createdAt
       company {
         id
         name
@@ -22,10 +22,11 @@ export const useProjectsData = () => {
 
 const GET_PROJECT_QUERY = /* GraphQL */ gql`
   query ($id: ID!) {
-    project(id: $id) {
+    project(ID: $id) {
       id
       name
       description
+      createdAt
       company {
         id
         name
@@ -40,7 +41,7 @@ export const useProjectData = (variables: { id: string }) => {
 
 const CREATE_PROJECT = /* GraphQL */ gql`
   mutation createProject($name: String!, $description: String!) {
-    createProject(name: $name, description: $description) {
+    createProject(projectInput: { name: $name, description: $description }) {
       id
       name
       description
@@ -80,7 +81,7 @@ export function useCreateProject() {
 
 const DELETE_PROJECT = /* GraphQL */ gql`
   mutation deleteProject($id: ID!) {
-    deleteProject(id: $id) {
+    deleteProject(ID: $id) {
       id
     }
   }
@@ -109,7 +110,10 @@ export function useDeleteProject() {
 
 const UPDATE_PROJECT = /* GraphQL */ gql`
   mutation updateProject($id: ID!, $name: String!, $description: String!) {
-    updateProject(id: $id, name: $name, description: $description) {
+    updateProject(
+      ID: $id
+      projectInput: { name: $name, description: $description }
+    ) {
       id
       name
       description
@@ -123,6 +127,7 @@ interface UpdateProjectVariables {
   description?: string | null;
 }
 
+// TODO: IMplement cache update
 export function useUpdateProject() {
   const [updateProject] = useMutation<Project, UpdateProjectVariables>(
     UPDATE_PROJECT,

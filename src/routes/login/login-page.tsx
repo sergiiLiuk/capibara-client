@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
 import { EMAIL_REGEX } from "../../utils/email-regex";
+import { useLogin } from "./login.api";
+import { AUTH_TOKEN } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 type FormValues = {
   email: string;
@@ -22,10 +25,24 @@ export default function LoginPage() {
     reset,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
+  const navigate = useNavigate();
+  const { login, data } = useLogin();
 
-  const onSubmit = ({ email, password }: FormValues) => {
-    //TODO: Implement login to the system
-    console.log("entered login info: ", email, password);
+  const [loginState, setLoginState] = useState({
+    login: true,
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const onSubmit = async ({ email, password }: FormValues) => {
+    const { data } = await login({
+      variables: { email: email, password: password },
+    });
+    if (data) {
+      localStorage.setItem(AUTH_TOKEN, data.loginUser.token);
+      navigate("/");
+    }
   };
 
   return (

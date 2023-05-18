@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import { BiLogOutCircle } from "react-icons/bi";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { Fa500Px } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NavigationItems } from "../../routing/navigation-items";
 import { SidebarLink } from "./sidebar-link";
+import { AUTH_TOKEN } from "../../constants";
 
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline h-10";
 
 export default function Sidebar() {
   const items = NavigationItems();
+  const navigate = useNavigate();
+  const authToken = localStorage.getItem(AUTH_TOKEN);
   const [open, setOpen] = useState(true);
 
   return (
@@ -49,17 +52,23 @@ export default function Sidebar() {
           {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((link) => (
             <SidebarLink key={link.key} item={link} />
           ))} */}
-          <div
-            className={classNames(
-              `cursor-pointer ${!open && "justify-center"}`,
-              linkClasses
-            )}
-          >
-            <div>
-              <BiLogOutCircle />
+          {authToken && (
+            <div
+              onClick={() => {
+                localStorage.removeItem(AUTH_TOKEN);
+                navigate(`/`);
+              }}
+              className={classNames(
+                `cursor-pointer ${!open && "justify-center"}`,
+                linkClasses
+              )}
+            >
+              <div>
+                <BiLogOutCircle />
+              </div>
+              {open && <span>Logout</span>}
             </div>
-            {open && <span>Logout</span>}
-          </div>
+          )}
         </div>
       </div>
     </div>

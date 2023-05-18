@@ -16,7 +16,7 @@ export const useCompaniesData = () => {
 
 const GET_COMPANY_QUERY = /* GraphQL */ gql`
   query ($id: ID!) {
-    company(id: $id) {
+    company(ID: $id) {
       id
       name
       cvr
