@@ -9,6 +9,8 @@ import LoginPage from "./routes/login/login-page";
 import { notFoundRoute } from "./routes/not-found/not-found.route";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
+import Settings from "./routes/settings";
+import { Account } from "./routes/account/account";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -45,6 +47,9 @@ export const routes = [
         element: <Projects />,
       },
       ...projectsRoutes,
+
+      { path: "/settings", element: <Settings /> },
+      { path: "/account", element: <Account /> },
 
       ...notFoundRoute,
     ],

@@ -5,6 +5,7 @@ import React from "react";
 type ButtonType = "button" | "submit";
 
 type ButtonVariant =
+  | "transparent"
   | "primary"
   | "secondary"
   | "success"
