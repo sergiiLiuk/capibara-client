@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { User } from "../../gql/graphql";
 
 const LOG_IN_QUERY = /* GraphQL */ gql`
   mutation loginUser($email: String!, $password: String!) {
@@ -15,10 +16,14 @@ interface LoginVariables {
 }
 
 export function useLogin() {
-  const [login, { data }] = useMutation<any, LoginVariables>(LOG_IN_QUERY, {
-    // onCompleted: ({ login }) => {
-    //   console.log("IO: ", login);
-    // },
-  });
-  return { login, data };
+  const [login] = useMutation<{ loginUser: User }, LoginVariables>(
+    LOG_IN_QUERY,
+    {
+      // onCompleted: ({ login }) => {
+      //   console.log("IO: ", login);
+      // },
+    }
+  );
+
+  return { login };
 }

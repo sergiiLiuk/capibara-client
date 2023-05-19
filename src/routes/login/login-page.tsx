@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
+import { AuthContext } from "../../context/auth-context";
 import { EMAIL_REGEX } from "../../utils/email-regex";
 import { useLogin } from "./login.api";
-import { AUTH_TOKEN } from "../../constants";
-import { useNavigate } from "react-router-dom";
 
 type FormValues = {
   email: string;
@@ -26,7 +26,8 @@ export default function LoginPage() {
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
   const navigate = useNavigate();
-  const { login, data } = useLogin();
+  const context = useContext(AuthContext);
+  const { login } = useLogin();
 
   const [loginState, setLoginState] = useState({
     login: true,
@@ -39,8 +40,9 @@ export default function LoginPage() {
     const { data } = await login({
       variables: { email: email, password: password },
     });
+
     if (data) {
-      localStorage.setItem(AUTH_TOKEN, data.loginUser.token);
+      context.login(data.loginUser);
       navigate("/");
     }
   };
