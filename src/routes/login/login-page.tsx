@@ -6,7 +6,9 @@ import { Input } from "../../components/input";
 import { Label } from "../../components/label";
 import { AuthContext } from "../../context/auth-context";
 import { EMAIL_REGEX } from "../../utils/email-regex";
-import { useLogin } from "./login.api";
+import { useMutation } from "@apollo/client";
+import { User } from "../../gql/graphql";
+import { LOG_IN_QUERY } from "../../graphql/queries";
 
 type FormValues = {
   email: string;
@@ -18,6 +20,11 @@ const defaultVaues = {
   password: "",
 };
 
+interface LoginVariables {
+  email: string;
+  password: string;
+}
+
 export default function LoginPage() {
   const {
     handleSubmit,
@@ -25,9 +32,20 @@ export default function LoginPage() {
     reset,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
+
   const navigate = useNavigate();
+
   const context = useContext(AuthContext);
-  const { login } = useLogin();
+
+  const [login, { loading, error }] = useMutation<
+    { loginUser: User },
+    LoginVariables
+  >(LOG_IN_QUERY, {
+    onCompleted: ({ loginUser }) => {
+      context.login(loginUser);
+      navigate("/");
+    },
+  });
 
   const [loginState, setLoginState] = useState({
     login: true,
@@ -37,14 +55,9 @@ export default function LoginPage() {
   });
 
   const onSubmit = async ({ email, password }: FormValues) => {
-    const { data } = await login({
+    login({
       variables: { email: email, password: password },
     });
-
-    if (data) {
-      context.login(data.loginUser);
-      navigate("/");
-    }
   };
 
   return (
@@ -55,6 +68,7 @@ export default function LoginPage() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  ">
               Sign in to your account
             </h1>
+
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-4 md:space-y-6"
@@ -101,6 +115,14 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
+                {error && (
+                  <div className="flex-1 pb-2">
+                    <span className="text-red-700 text-sm">
+                      {error.message}
+                    </span>
+                  </div>
+                )}
+
                 <Button variant="primary" type="submit">
                   Login
                 </Button>
