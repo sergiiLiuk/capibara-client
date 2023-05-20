@@ -1,7 +1,8 @@
-import jwtDecode from "jwt-decode";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 import React, { Reducer, createContext, useReducer } from "react";
 import { AUTH_TOKEN } from "../constants";
 import { User } from "../gql/graphql";
+import { useAuthToken } from "../hooks/useAuthToken ";
 
 type AuthContextType = {
   user: User | null;
@@ -13,13 +14,17 @@ const initialState: AuthContextType = {
   user: null,
 };
 
-if (localStorage.getItem(AUTH_TOKEN)) {
-  const decodedToken: string | undefined = jwtDecode(
-    localStorage.getItem(AUTH_TOKEN)
-  );
+const { authToken } = useAuthToken();
+
+//TODO: implement jwt token payload type
+
+if (authToken) {
+  const decodedToken = jwtDecode(authToken);
   if (decodedToken.exp * 1000 < Date.now()) {
     localStorage.removeItem(AUTH_TOKEN);
   } else {
+    console.log(decodedToken);
+
     initialState.user = decodedToken;
   }
 }
@@ -49,9 +54,11 @@ const authReducer: Reducer<AuthContextType, AuthAction> = (state, action) => {
 
 function AuthProvider(props) {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const { setAuthToken, removeAuthToken } = useAuthToken();
 
   const login = (user: User) => {
-    localStorage.setItem(AUTH_TOKEN, user.token!);
+    setAuthToken(user.token);
+
     dispatch({
       type: "LOGIN",
       payload: user,
@@ -59,7 +66,8 @@ function AuthProvider(props) {
   };
 
   const logout = () => {
-    localStorage.removeItem(AUTH_TOKEN);
+    removeAuthToken();
+
     dispatch({
       type: "LOGOUT",
     });
