@@ -10,7 +10,7 @@ import { notFoundRoute } from "./routes/not-found/not-found.route";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import Settings from "./routes/settings";
-import { Account } from "./routes/account/account";
+import { Profile } from "./routes/profile/profile";
 
 // export default function App() {
 //   // const { status } = auth.state;
@@ -49,7 +49,7 @@ export const routes = [
       ...projectsRoutes,
 
       { path: "/settings", element: <Settings /> },
-      { path: "/account", element: <Account /> },
+      { path: "/profile", element: <Profile /> },
 
       ...notFoundRoute,
     ],
