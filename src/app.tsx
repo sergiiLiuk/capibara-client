@@ -1,7 +1,8 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useContext } from "react";
 import { useRoutes } from "react-router-dom";
 import Layout from "./components/layout";
 import { Spinner } from "./components/spinner";
+import { AuthContext } from "./context/auth-context";
 import Companies from "./routes/company/companies";
 import { companyRoutes } from "./routes/company/company.route";
 import Dashboard from "./routes/dashboard";
@@ -13,15 +14,14 @@ import { projectsRoutes } from "./routes/projects/projects.route";
 import Settings from "./routes/settings";
 
 export default function App() {
+  const { isAuthenticated } = useContext(AuthContext);
   const router = useRoutes(routes);
+
+  if (!isAuthenticated) return <LoginPage />;
   return <Suspense fallback={<Spinner />}>{router}</Suspense>;
 }
 
 export const routes = [
-  {
-    path: "login",
-    element: <LoginPage />,
-  },
   {
     element: <Layout />,
     children: [
