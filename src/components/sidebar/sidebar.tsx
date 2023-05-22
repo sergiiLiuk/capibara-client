@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { BiLogOutCircle } from "react-icons/bi";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { Fa500Px } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { NavigationItems } from "../../routing/navigation-items";
 import { SidebarLink } from "./sidebar-link";
@@ -13,8 +13,8 @@ const linkClasses =
 
 export default function Sidebar() {
   const items = NavigationItems();
-  const navigate = useNavigate();
-  const { user, logout } = useContext(AuthContext);
+
+  const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
 
   return (
@@ -52,23 +52,21 @@ export default function Sidebar() {
           {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((link) => (
             <SidebarLink key={link.key} item={link} />
           ))} */}
-          {user && (
-            <div
-              onClick={() => {
-                logout();
-                navigate(`/`);
-              }}
-              className={classNames(
-                `cursor-pointer ${!open && "justify-center"}`,
-                linkClasses
-              )}
-            >
-              <div>
-                <BiLogOutCircle />
-              </div>
-              {open && <span>Logout</span>}
+
+          <div
+            onClick={() => {
+              logout();
+            }}
+            className={classNames(
+              `cursor-pointer ${!open && "justify-center"}`,
+              linkClasses
+            )}
+          >
+            <div>
+              <BiLogOutCircle />
             </div>
-          )}
+            {open && <span>Logout</span>}
+          </div>
         </div>
       </div>
     </div>

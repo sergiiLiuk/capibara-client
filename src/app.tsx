@@ -7,21 +7,11 @@ import { companyRoutes } from "./routes/company/company.route";
 import Dashboard from "./routes/dashboard";
 import LoginPage from "./routes/login/login-page";
 import { notFoundRoute } from "./routes/not-found/not-found.route";
+import { Profile } from "./routes/profile/profile";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import Settings from "./routes/settings";
-import { Profile } from "./routes/profile/profile";
 
-// export default function App() {
-//   // const { status } = auth.state;
-//   const { status } = { status: "LOGGED_IN" };
-//   return (
-//     <>
-//       {status === "LOGGED_IN" && <Layout />}
-//       {status === "LOGGED_OUT" && <LoginForm />}
-//     </>
-//   );
-// }
 export default function App() {
   const router = useRoutes(routes);
   return <Suspense fallback={<Spinner />}>{router}</Suspense>;
@@ -48,8 +38,8 @@ export const routes = [
       },
       ...projectsRoutes,
 
-      { path: "/settings", element: <Settings /> },
-      { path: "/profile", element: <Profile /> },
+      { path: "settings", element: <Settings /> },
+      { path: "profile", element: <Profile /> },
 
       ...notFoundRoute,
     ],
