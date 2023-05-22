@@ -9,6 +9,7 @@ let ctx = await ESBuild.context({
   minify: false,
   outdir: "build/dev-server/js",
   sourcemap: true,
+  sourceRoot: "https://raw.githubusercontent.com/some/repo/v1.2.3/",
   loader: {
     ".js": "jsx",
   },
@@ -27,3 +28,5 @@ console.log("watching...");
 const { host, port } = await ctx.serve({
   servedir: "build/dev-server",
 });
+
+console.log(`host: ${host}, port: ${port}`);

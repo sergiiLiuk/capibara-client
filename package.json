@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "codegen": "graphql-codegen",
-    "build": "node ./config/esbuild-build.js",
-    "serve": "cross-env MODE_ENV=development node ./config/esbuild-serve.js"
+    "build": "node ./config/esbuild-prod.js",
+    "serve": "node ./config/esbuild-dev.js"
   },
   "author": "sergiiliuk@yahoo.dk",
   "license": "ISC",
@@ -32,7 +32,7 @@
     "@nhost/nhost-js": "^2.2.1",
     "@nhost/react": "^2.0.15",
     "classnames": "^2.3.2",
-    "esbuild": "0.17.12",
+    "esbuild": "^0.17.19",
     "graphql": "^16.6.0",
     "jwt-decode": "^3.1.2",
     "prop-types": "^15.8.1",
