@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/auth-context";
 import { EMAIL_REGEX } from "../../utils/email-regex";
 import { useMutation } from "@apollo/client";
 import { User } from "../../gql/graphql";
-import { LOG_IN_QUERY } from "../../graphql/queries";
+import { LOG_IN_QUERY } from "../../graphql/mutations";
 
 type FormValues = {
   email: string;
@@ -47,12 +47,12 @@ export default function LoginPage() {
     },
   });
 
-  const [loginState, setLoginState] = useState({
-    login: true,
-    email: "",
-    password: "",
-    name: "",
-  });
+  // const [loginState, setLoginState] = useState({
+  //   login: true,
+  //   email: "",
+  //   password: "",
+  //   name: "",
+  // });
 
   const onSubmit = async ({ email, password }: FormValues) => {
     login({
