@@ -1,11 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardTitle } from "../../components/card";
 import { TabHeader } from "../../components/details-header";
+import { Grid } from "../../components/grid";
+import { PageContainer } from "../../components/page-container";
 import { Spinner } from "../../components/spinner";
 import { Project } from "../../gql/graphql";
 import { CreateProject } from "./create-project";
 import * as api from "./project.api";
-import { useNavigate } from "react-router-dom";
-import { Table, TableBody, TableHead } from "../../components/table/table";
 
 export default function Projects() {
   const { loading, error, data } = api.useProjectsData();
@@ -21,35 +23,24 @@ export default function Projects() {
       <TabHeader>
         <CreateProject />
       </TabHeader>
-
-      <Table>
-        <TableHead>
-          <tr>
-            <th scope="col" className="px-6 py-3">
-              Name
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Description
-            </th>
-          </tr>
-        </TableHead>
-        <TableBody>
+      <PageContainer>
+        <Grid>
           {(projects || []).map((project) => {
             return (
-              <tr
+              <Card
                 key={project.id}
-                className="bg-white border-b hover:bg-gray-100 cursor-pointer"
                 onClick={() => navigate(`/projects/${project.id}`)}
               >
-                <td className="px-4 py-2">{project.name}</td>
-                <td className="px-4 py-2">
-                  {project.description ? project.description : "-"}
-                </td>
-              </tr>
+                <CardTitle>{project.name}</CardTitle>
+                <CardContent>
+                  <div> {project.description ? project.description : "-"}</div>
+                  <div>{project.createdAt}</div>
+                </CardContent>
+              </Card>
             );
           })}
-        </TableBody>
-      </Table>
+        </Grid>
+      </PageContainer>
     </div>
   );
 }
