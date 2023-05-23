@@ -3,10 +3,10 @@ import React from "react";
 import { PageContainer } from "../../components/page-container";
 
 import { Spinner } from "../../components/spinner";
-import { CURRENT_USER_QUERY } from "../../graphql/queries";
+import { GET_CURRENT_USER_QUERY } from "../../graphql/queries";
 
 export const Profile = () => {
-  const { loading: isLoading, error, data } = useQuery(CURRENT_USER_QUERY);
+  const { loading: isLoading, error, data } = useQuery(GET_CURRENT_USER_QUERY);
 
   if (isLoading) return <Spinner />;
   if (error) return <div>${error.message}</div>;

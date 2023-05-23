@@ -14,13 +14,14 @@ function Container(props: {
   showError?: boolean;
 }) {
   const { id } = useParams();
-  //TODO: implement error message
+
   if (!id) return null;
 
   const { loading, error, data } = api.useCompanyData({ id });
 
-  //TODO: implement loading spinner
   if (loading) return <Spinner />;
+
+  //TODO: implement error message component
   if (error) return <div>Somethingwent wrong</div>;
 
   const { company } = data;
