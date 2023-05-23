@@ -10,17 +10,13 @@ export const SidebarLink = ({ item, open }: { item: any; open: boolean }) => {
 
   return (
     <Link
-      className={classNames(
-        pathname === item.path ? "bg-neutral-700 text-blue-400" : "text-white",
-        !open && "justify-center",
-        linkClasses
-      )}
+      className={classNames(!open && "justify-center", linkClasses)}
       {...{
         to: item.route,
         params: item.params,
       }}
     >
-      <div className={"flex items-center"}>{item.icon}</div>
+      <div className={"flex items-center text-white"}>{item.icon}</div>
       {open && <div> {item.name}</div>}
     </Link>
   );

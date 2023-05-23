@@ -7,3 +7,24 @@ export const LOG_IN_QUERY = /* GraphQL */ gql`
     }
   }
 `;
+
+export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
+  mutation RegisterUser(
+    $email: String!
+    $password: String!
+    $username: String!
+    $role: Role!
+  ) {
+    registerUser(
+      registerInput: {
+        email: $email
+        password: $password
+        username: $username
+        role: $role
+      }
+    ) {
+      id
+      username
+    }
+  }
+`;

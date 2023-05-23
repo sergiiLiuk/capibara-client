@@ -9,8 +9,7 @@ export const Profile = () => {
   const { loading: isLoading, error, data } = useQuery(CURRENT_USER_QUERY);
 
   if (isLoading) return <Spinner />;
-  if (error) return `Error! ${error.message}`;
-  console.log(data);
+  if (error) return <div>${error.message}</div>;
 
   return <PageContainer>IO</PageContainer>;
 };

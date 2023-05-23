@@ -51,7 +51,7 @@ export type MutationLoginUserArgs = {
 
 
 export type MutationRegisterUserArgs = {
-  RegisterInput?: InputMaybe<RegisterInput>;
+  registerInput?: InputMaybe<RegisterInput>;
 };
 
 
@@ -78,6 +78,7 @@ export type Query = {
   __typename?: 'Query';
   companies?: Maybe<Array<Maybe<Company>>>;
   company: Company;
+  currentUser: User;
   project: Project;
   projects?: Maybe<Array<Maybe<Project>>>;
   user: User;
@@ -102,16 +103,21 @@ export type QueryUserArgs = {
 export type RegisterInput = {
   email?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
-  role?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<RoleType>;
   username?: InputMaybe<Scalars['String']>;
 };
+
+export enum RoleType {
+  SuperAdmin = 'SUPER_ADMIN',
+  User = 'USER'
+}
 
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
-  role?: Maybe<Scalars['String']>;
+  role?: Maybe<RoleType>;
   token?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
 };

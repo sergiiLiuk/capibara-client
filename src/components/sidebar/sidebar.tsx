@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { NavigationItems } from "../../routing/navigation-items";
 import { SidebarLink } from "./sidebar-link";
+import { BottomNavigationItems } from "../../routing/bottom-navigation-items";
 
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline h-10";
 
 export default function Sidebar() {
-  const items = NavigationItems();
+  const navLinks = NavigationItems();
+  const bottomNavLinks = BottomNavigationItems();
 
   const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
@@ -44,14 +46,14 @@ export default function Sidebar() {
           }`}
         />
         <div className="flex-1 flex flex-col py-8 gap-0.5 overflow-auto min-h-0">
-          {items.map((link) => (
+          {navLinks.map((link) => (
             <SidebarLink key={link.key} item={link} open={open} />
           ))}
         </div>
         <div className="flex flex-col gap-0.5 pt-2 border-t border-nautral-700">
-          {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((link) => (
-            <SidebarLink key={link.key} item={link} />
-          ))} */}
+          {bottomNavLinks.map((link) => (
+            <SidebarLink key={link.key} item={link} open={open} />
+          ))}
 
           <div
             onClick={() => {

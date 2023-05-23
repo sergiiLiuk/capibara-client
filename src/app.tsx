@@ -12,6 +12,7 @@ import { Profile } from "./routes/profile/profile";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import Settings from "./routes/settings";
+import { SuperAdminPanel } from "./routes/super-admin/super-admin-panel";
 
 export default function App() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -40,6 +41,8 @@ export const routes = [
 
       { path: "settings", element: <Settings /> },
       { path: "profile", element: <Profile /> },
+
+      { path: "super-admin-panel", element: <SuperAdminPanel /> },
 
       ...notFoundRoute,
     ],

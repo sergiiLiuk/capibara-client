@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import React from "react";
 import { BsBriefcase, BsBuilding, BsGrid1X2 } from "react-icons/bs";
 export function NavigationItems() {
-  //   const { scope, solution } = useAuth();
   const scope = {};
 
   return useMemo(
