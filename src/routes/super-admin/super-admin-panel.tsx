@@ -5,7 +5,7 @@ import ErrorBoundary from "../../components/error-boundary";
 import { PageContainer } from "../../components/page-container";
 import { Spinner } from "../../components/spinner";
 import { AdminNavigationTabs } from "./admin-navigation-tabs";
-import { RegisterUser } from "./register-user";
+import { RegisterUser } from "./tabs/register-user";
 
 export default function SuperAdminPanel() {
   return (

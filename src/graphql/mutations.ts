@@ -23,7 +23,19 @@ export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
         role: $role
       }
     ) {
+      id
       username
+      role
+      createdAt
+      email
+    }
+  }
+`;
+
+export const DELETE_USER = /* GraphQL */ gql`
+  mutation deleteUser($id: ID!) {
+    deleteUser(ID: $id) {
+      id
     }
   }
 `;

@@ -15,28 +15,29 @@ export type Scalars = {
 
 export type Company = {
   __typename?: 'Company';
-  cvr?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  cvr: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type LoginInput = {
-  email?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createProject?: Maybe<Project>;
-  deleteProject?: Maybe<Project>;
-  loginUser?: Maybe<User>;
-  registerUser?: Maybe<User>;
-  updateProject?: Maybe<Project>;
+  createProject: Project;
+  deleteProject: Project;
+  deleteUser: User;
+  loginUser: User;
+  registerUser: User;
+  updateProject: Project;
 };
 
 
 export type MutationCreateProjectArgs = {
-  projectInput?: InputMaybe<ProjectInput>;
+  projectInput: ProjectInput;
 };
 
 
@@ -45,44 +46,49 @@ export type MutationDeleteProjectArgs = {
 };
 
 
+export type MutationDeleteUserArgs = {
+  ID: Scalars['ID'];
+};
+
+
 export type MutationLoginUserArgs = {
-  loginInput?: InputMaybe<LoginInput>;
+  loginInput: LoginInput;
 };
 
 
 export type MutationRegisterUserArgs = {
-  registerInput?: InputMaybe<RegisterInput>;
+  registerInput: RegisterInput;
 };
 
 
 export type MutationUpdateProjectArgs = {
   ID: Scalars['ID'];
-  projectInput?: InputMaybe<ProjectInput>;
+  projectInput: ProjectInput;
 };
 
 export type Project = {
   __typename?: 'Project';
-  company?: Maybe<Array<Company>>;
-  createdAt?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  company?: Maybe<Array<Maybe<Company>>>;
+  createdAt: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type ProjectInput = {
-  description?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
+  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  companies?: Maybe<Array<Maybe<Company>>>;
+  companies: Array<Company>;
   company: Company;
   currentUser: User;
   project: Project;
-  projects?: Maybe<Array<Maybe<Project>>>;
+  projects: Array<Project>;
   user: User;
-  users?: Maybe<Array<Maybe<User>>>;
+  users: Array<User>;
 };
 
 
@@ -101,10 +107,10 @@ export type QueryUserArgs = {
 };
 
 export type RegisterInput = {
-  email?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  role?: InputMaybe<RoleType>;
-  username?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  role: RoleType;
+  username: Scalars['String'];
 };
 
 export enum RoleType {
@@ -115,9 +121,10 @@ export enum RoleType {
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  role?: Maybe<RoleType>;
-  token?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  id: Scalars['String'];
+  password: Scalars['String'];
+  role: RoleType;
+  token: Scalars['String'];
+  username: Scalars['String'];
 };

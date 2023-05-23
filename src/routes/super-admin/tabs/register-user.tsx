@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Dialog } from "../../components/dialog";
-import { Button } from "../../components/button";
-import { Form } from "../../components/form";
+import { Dialog } from "../../../components/dialog";
+import { Button } from "../../../components/button";
+import { Form } from "../../../components/form";
 import { useForm } from "react-hook-form";
 
-import { Input } from "../../components/input";
-import { Label } from "../../components/label";
+import { Input } from "../../../components/input";
+import { Label } from "../../../components/label";
 import { useMutation } from "@apollo/client";
-import { RoleType, User } from "../../gql/graphql";
-import { REGISTER_USER_MUTATION } from "../../graphql/mutations";
-import { EMAIL_REGEX } from "../../utils/email-regex";
-import { ListBox } from "../../components/list-box";
+import { RoleType, User } from "../../../gql/graphql";
+import { REGISTER_USER_MUTATION } from "../../../graphql/mutations";
+import { EMAIL_REGEX } from "../../../utils/email-regex";
+import { ListBox } from "../../../components/list-box";
+import { GET_USERS_QUERY } from "../../../graphql/queries";
 
 type FormValues = {
   email: string;
@@ -56,9 +57,18 @@ export const RegisterUser = () => {
     { registerUser: User },
     RegisterVariables
   >(REGISTER_USER_MUTATION, {
-    onCompleted: ({ registerUser }) => {
-      //TODO: update cache
-      console.log("reg: ", registerUser);
+    onError: (error) => console.error(error.message),
+    update: (cache, { data }) => {
+      const currentUsers = cache.readQuery<{ users: User[] }>({
+        query: GET_USERS_QUERY,
+      });
+
+      cache.writeQuery({
+        query: GET_USERS_QUERY,
+        data: {
+          users: [...currentUsers?.users!, { ...data?.registerUser }],
+        },
+      });
       setDialog(false);
     },
   });
