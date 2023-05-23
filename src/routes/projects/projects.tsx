@@ -8,6 +8,7 @@ import { Spinner } from "../../components/spinner";
 import { Project } from "../../gql/graphql";
 import { CreateProject } from "./create-project";
 import * as api from "./project.api";
+import moment from "moment";
 
 export default function Projects() {
   const { loading, error, data } = api.useProjectsData();
@@ -33,8 +34,14 @@ export default function Projects() {
               >
                 <CardTitle>{project.name}</CardTitle>
                 <CardContent>
-                  <div> {project.description ? project.description : "-"}</div>
-                  <div>{project.createdAt}</div>
+                  <div>
+                    <span>Description: </span>
+                    {project.description ? project.description : "-"}
+                  </div>
+                  <div>
+                    <span>Created: </span>
+                    {moment(project.createdAt).format("MM/DD/YYYY")}
+                  </div>
                 </CardContent>
               </Card>
             );
