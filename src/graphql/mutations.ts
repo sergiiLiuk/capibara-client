@@ -13,7 +13,7 @@ export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
     $email: String!
     $password: String!
     $username: String!
-    $role: Role!
+    $role: RoleType!
   ) {
     registerUser(
       registerInput: {
@@ -23,7 +23,6 @@ export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
         role: $role
       }
     ) {
-      id
       username
     }
   }

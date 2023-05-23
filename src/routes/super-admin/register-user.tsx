@@ -29,8 +29,8 @@ interface RegisterVariables {
 }
 
 const roles = [
-  { value: "superadmin", name: "Super admin" },
-  { value: "user", name: "User" },
+  { value: "SUPER_ADMIN", name: "Super admin" },
+  { value: "USER", name: "User" },
 ];
 
 export default function RegisterUser() {
@@ -38,6 +38,7 @@ export default function RegisterUser() {
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
 
@@ -56,7 +57,7 @@ export default function RegisterUser() {
         email: email,
         password: password,
         username: username,
-        role: role,
+        role: role as RoleType,
       },
     });
   };
@@ -132,7 +133,13 @@ export default function RegisterUser() {
             />
           </div>
 
-          <ListBox label="Role" items={roles} />
+          <ListBox
+            label="Role"
+            items={roles}
+            onSelectCallback={(value) => {
+              setValue("role", value as RoleType);
+            }}
+          />
 
           <div className="flex justify-end gap-x-1 px-5 py-2.5 border-t-2 border-grey-300">
             {error && (

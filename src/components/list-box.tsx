@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
 type Props = {
   label: string;
   items: Array<{ value: string; name: string }>;
+  onSelectCallback: (item: string) => void;
 };
 
-export const ListBox = ({ label, items }: Props) => {
+export const ListBox = ({ label, items, onSelectCallback }: Props) => {
   const [selectedItem, setSelectedItem] = useState(items[0]);
+  useEffect(() => {
+    onSelectCallback(selectedItem.value);
+  }, [selectedItem]);
 
   return (
     <div className="w-full mx-auto">
