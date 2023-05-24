@@ -10,20 +10,18 @@ import { RegisterUser } from "./tabs/register-user";
 export default function SuperAdminPanel() {
   return (
     <PageContainer>
-      <div>
-        <div className="border-b pt-2 border-cyan-800">
-          {<AdminNavigationTabs />}
-        </div>
-        <TabHeader>
-          <div className="flex-1"> </div>
-          <div className="flex gap-2">
-            <RegisterUser />
-          </div>
-        </TabHeader>
-        <ErrorBoundary>
-          <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
-        </ErrorBoundary>
+      <div className="border-b pt-2 border-cyan-800">
+        {<AdminNavigationTabs />}
       </div>
+      <TabHeader>
+        <div className="flex-1"> </div>
+        <div className="flex gap-2">
+          <RegisterUser />
+        </div>
+      </TabHeader>
+      <ErrorBoundary>
+        <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
+      </ErrorBoundary>
     </PageContainer>
   );
 }

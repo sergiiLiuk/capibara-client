@@ -8,9 +8,9 @@ export default function Layout() {
   return (
     <div className="flex flex-row bg-neutral-100 h-screen w-screen">
       <Sidebar />
-      <div className="flex-1 h-screen flex flex-col">
+      <div className="flex-1 h-screen flex flex-col overflow-x-hidden">
         <Header />
-        <main className="min-h-0 overflow-auto">
+        <main className="min-h-0">
           <React.Suspense fallback={<Spinner />}>{<Outlet />}</React.Suspense>
         </main>
       </div>

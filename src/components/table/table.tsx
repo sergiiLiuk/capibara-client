@@ -6,7 +6,9 @@ type Props = {
 
 export const Table = ({ children }: Props) => {
   return (
-    <table className="w-full text-sm text-left text-gray-500">{children}</table>
+    <table className="table-auto overflow-scroll w-full text-sm text-left text-gray-500">
+      {children}
+    </table>
   );
 };
 
