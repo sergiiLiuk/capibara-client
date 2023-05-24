@@ -33,6 +33,7 @@ export type Mutation = {
   loginUser: User;
   registerUser: User;
   updateProject: Project;
+  updateUser: User;
 };
 
 
@@ -57,13 +58,19 @@ export type MutationLoginUserArgs = {
 
 
 export type MutationRegisterUserArgs = {
-  registerInput: RegisterInput;
+  userInput: UserInput;
 };
 
 
 export type MutationUpdateProjectArgs = {
   ID: Scalars['ID'];
   projectInput: ProjectInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  ID: Scalars['ID'];
+  userInput: UserInput;
 };
 
 export type Project = {
@@ -106,13 +113,6 @@ export type QueryUserArgs = {
   ID: Scalars['ID'];
 };
 
-export type RegisterInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  role: RoleType;
-  username: Scalars['String'];
-};
-
 export enum RoleType {
   SuperAdmin = 'SUPER_ADMIN',
   User = 'USER'
@@ -126,5 +126,12 @@ export type User = {
   password: Scalars['String'];
   role: RoleType;
   token: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type UserInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  role: RoleType;
   username: Scalars['String'];
 };

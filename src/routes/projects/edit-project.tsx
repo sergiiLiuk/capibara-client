@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/button";
 import { Dialog } from "../../components/dialog";
 import { Form } from "../../components/form";
 import { Input } from "../../components/input";
 import { Project } from "../../gql/graphql";
-import { useUpdateProject } from "./project.api";
+import { useMutation } from "@apollo/client";
 import { Label } from "../../components/label";
+import { UPDATE_PROJECT_MUTATION } from "../../graphql/mutations";
+import { GET_PROJECTS_QUERY } from "../../graphql/queries";
+
+interface UpdateVariables {
+  id: string;
+  name: string;
+  description?: string | null;
+}
 
 type FormValues = {
   name: string;
@@ -19,24 +27,25 @@ type Props = {
 
 export const EditProject = ({ project }: Props) => {
   const [dialog, setDialog] = useState<boolean>(false);
-  const { updateProject } = useUpdateProject();
 
   const {
     handleSubmit,
     register,
-    reset,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({
-    defaultValues: {
-      name: project.name!,
-      description: project.description,
-    },
+    defaultValues: project,
   });
 
-  useEffect(() => {
-    if (!dialog)
-      reset({ name: project.name!, description: project.description });
-  }, [dialog]);
+  const [updateProject] = useMutation<Project, UpdateVariables>(
+    UPDATE_PROJECT_MUTATION,
+    {
+      onError: (error) => console.error(error.message),
+      refetchQueries: [{ query: GET_PROJECTS_QUERY }],
+      onCompleted: () => {
+        setDialog(false);
+      },
+    }
+  );
 
   const onSubmit = ({ name, description }: FormValues) => {
     updateProject({
@@ -46,8 +55,6 @@ export const EditProject = ({ project }: Props) => {
         description: description,
       },
     });
-
-    setDialog(false);
   };
 
   return (

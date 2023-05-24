@@ -7,6 +7,7 @@ import { Table, TableBody, TableHead } from "../../../components/table/table";
 import { User } from "../../../gql/graphql";
 import { GET_USERS_QUERY } from "../../../graphql/queries";
 import { DeleteUser } from "./delete-user";
+import { EditUser } from "./edit-user";
 
 export default function UserOverviewTab() {
   const { loading: isLoading, error, data } = useQuery(GET_USERS_QUERY);
@@ -53,7 +54,7 @@ export default function UserOverviewTab() {
                   : "-"}
               </td>
               <td className="px-4 py-2 flex justify-end gap-2">
-                <Button variant="success">Edit</Button>
+                <EditUser user={user} />
                 <DeleteUser user={user} />
               </td>
             </tr>

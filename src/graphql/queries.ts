@@ -33,3 +33,33 @@ export const GET_USER_QUERY = /* GraphQL */ gql`
     }
   }
 `;
+
+export const GET_PROJECTS_QUERY = /* GraphQL */ gql`
+  query getProjects {
+    projects {
+      id
+      name
+      description
+      createdAt
+      company {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_PROJECT_QUERY = /* GraphQL */ gql`
+  query ($id: ID!) {
+    project(ID: $id) {
+      id
+      name
+      description
+      createdAt
+      company {
+        id
+        name
+      }
+    }
+  }
+`;

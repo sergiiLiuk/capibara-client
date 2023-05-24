@@ -16,7 +16,7 @@ export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
     $role: RoleType!
   ) {
     registerUser(
-      registerInput: {
+      userInput: {
         email: $email
         password: $password
         username: $username
@@ -32,10 +32,32 @@ export const REGISTER_USER_MUTATION = /* GraphQL */ gql`
   }
 `;
 
+export const UPDATE_USER_MUTATION = /* GraphQL */ gql`
+  mutation UpdateUser($id: ID!, $email: String!, $username: String!) {
+    updateUser(ID: $id, userInput: { username: $username, email: $email }) {
+      username
+      email
+    }
+  }
+`;
+
 export const DELETE_USER = /* GraphQL */ gql`
   mutation deleteUser($id: ID!) {
     deleteUser(ID: $id) {
       id
+    }
+  }
+`;
+
+export const UPDATE_PROJECT_MUTATION = /* GraphQL */ gql`
+  mutation updateProject($id: ID!, $name: String!, $description: String!) {
+    updateProject(
+      ID: $id
+      projectInput: { name: $name, description: $description }
+    ) {
+      id
+      name
+      description
     }
   }
 `;
