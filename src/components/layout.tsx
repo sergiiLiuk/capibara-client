@@ -6,7 +6,7 @@ import { Spinner } from "./spinner";
 import MobileMenu from "./navigation/mobile-menu";
 
 export default function Layout() {
-  const [nav, setNav] = useState(true);
+  const [nav, setNav] = useState(false);
 
   return (
     <div className="relative flex flex-row bg-neutral-100 h-screen w-screen">
