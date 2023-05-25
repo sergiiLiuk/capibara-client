@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/client";
 import moment from "moment";
 import React from "react";
-import { Button } from "../../../components/button";
 import { Spinner } from "../../../components/spinner";
 import { Table, TableBody, TableHead } from "../../../components/table/table";
 import { User } from "../../../gql/graphql";

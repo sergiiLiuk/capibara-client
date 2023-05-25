@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Dialog } from "../../components/dialog";
+import { AuthContext } from "../../context/auth-context";
 import { Button } from "../../components/button";
 import { Form } from "../../components/form";
 import { useForm } from "react-hook-form";
 import { useCreateProject } from "./project.api";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
+import { useQuery } from "@apollo/client";
+import { User } from "../../gql/graphql";
+import { GET_CURRENT_USER_QUERY } from "../../graphql/queries";
 
 type FormValues = {
   name: string;
@@ -27,6 +31,8 @@ export const CreateProject = () => {
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
 
+  const { data } = useQuery<{ currentUser: User }>(GET_CURRENT_USER_QUERY);
+
   useEffect(() => {
     if (!dialog) reset(defaultVaues);
   }, [dialog]);
@@ -34,6 +40,7 @@ export const CreateProject = () => {
   const onSubmit = ({ name, description }: FormValues) => {
     createProject({
       variables: {
+        userId: data?.currentUser.id!,
         name: name,
         description: description,
       },

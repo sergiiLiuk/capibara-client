@@ -1,4 +1,5 @@
-import React from "react";
+import moment from "moment";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardTitle } from "../../components/card";
 import { TabHeader } from "../../components/details-header";
@@ -8,10 +9,16 @@ import { Spinner } from "../../components/spinner";
 import { Project } from "../../gql/graphql";
 import { CreateProject } from "./create-project";
 import * as api from "./project.api";
-import moment from "moment";
+import { AuthContext } from "../../context/auth-context";
 
 export default function Projects() {
-  const { loading, error, data } = api.useProjectsData();
+  const { userId } = useContext(AuthContext);
+
+  if (!userId) return;
+
+  const { loading, error, data } = api.useProjectsData({
+    userId: userId,
+  });
   const navigate = useNavigate();
 
   if (loading) return <Spinner />;

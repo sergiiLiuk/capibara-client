@@ -47,13 +47,6 @@ export default function LoginPage() {
     },
   });
 
-  // const [loginState, setLoginState] = useState({
-  //   login: true,
-  //   email: "",
-  //   password: "",
-  //   name: "",
-  // });
-
   const onSubmit = async ({ email, password }: FormValues) => {
     login({
       variables: { email: email, password: password },

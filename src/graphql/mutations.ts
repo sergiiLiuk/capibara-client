@@ -4,6 +4,11 @@ export const LOG_IN_QUERY = /* GraphQL */ gql`
   mutation loginUser($email: String!, $password: String!) {
     loginUser(loginInput: { email: $email, password: $password }) {
       token
+      id
+      username
+      role
+      createdAt
+      email
     }
   }
 `;

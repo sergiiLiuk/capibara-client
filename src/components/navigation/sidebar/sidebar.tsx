@@ -4,10 +4,10 @@ import { BiLogOutCircle } from "react-icons/bi";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { Fa500Px } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../context/auth-context";
-import { NavigationItems } from "../../routing/navigation-items";
+import { AuthContext } from "../../../context/auth-context";
+import { NavigationItems } from "../../../routing/navigation-items";
 import { SidebarLink } from "./sidebar-link";
-import { BottomNavigationItems } from "../../routing/bottom-navigation-items";
+import { BottomNavigationItems } from "../../../routing/bottom-navigation-items";
 
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-ubderline h-10";
@@ -21,7 +21,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`relative flex flex-col ${
+      className={`hidden relative md:flex flex-col ${
         open ? "w-60" : "w-20"
       }  p-3 text-white bg-cyan-800`}
     >

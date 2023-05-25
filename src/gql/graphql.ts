@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
 };
 
 export type Company = {
@@ -75,27 +76,29 @@ export type MutationUpdateUserArgs = {
 
 export type Project = {
   __typename?: 'Project';
-  company?: Maybe<Array<Maybe<Company>>>;
-  createdAt: Scalars['String'];
+  createdAt?: Maybe<Scalars['Date']>;
   description: Scalars['String'];
-  id: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
+  updatedAt?: Maybe<Scalars['Date']>;
+  userId: Scalars['ID'];
 };
 
 export type ProjectInput = {
   description: Scalars['String'];
   name: Scalars['String'];
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  companies: Array<Company>;
-  company: Company;
+  companies?: Maybe<Array<Company>>;
+  company?: Maybe<Company>;
   currentUser: User;
-  project: Project;
-  projects: Array<Project>;
-  user: User;
-  users: Array<User>;
+  project?: Maybe<Project>;
+  projects?: Maybe<Array<Project>>;
+  user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -106,6 +109,11 @@ export type QueryCompanyArgs = {
 
 export type QueryProjectArgs = {
   ID: Scalars['ID'];
+};
+
+
+export type QueryProjectsArgs = {
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -120,18 +128,20 @@ export enum RoleType {
 
 export type User = {
   __typename?: 'User';
-  createdAt?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
   email: Scalars['String'];
-  id: Scalars['String'];
+  id: Scalars['ID'];
   password: Scalars['String'];
+  projects?: Maybe<Array<Maybe<Project>>>;
   role: RoleType;
   token: Scalars['String'];
+  updatedAt?: Maybe<Scalars['Date']>;
   username: Scalars['String'];
 };
 
 export type UserInput = {
   email: Scalars['String'];
-  password: Scalars['String'];
-  role: RoleType;
+  password?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<RoleType>;
   username: Scalars['String'];
 };

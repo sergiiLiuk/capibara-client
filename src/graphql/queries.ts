@@ -11,13 +11,13 @@ export const GET_CURRENT_USER_QUERY = /* GraphQL */ gql`
 `;
 
 export const GET_USERS_QUERY = /* GraphQL */ gql`
-  query Users {
+  query Query {
     users {
       id
       username
       role
-      createdAt
       email
+      createdAt
     }
   }
 `;
@@ -35,16 +35,14 @@ export const GET_USER_QUERY = /* GraphQL */ gql`
 `;
 
 export const GET_PROJECTS_QUERY = /* GraphQL */ gql`
-  query getProjects {
-    projects {
+  query getProjects($userId: ID) {
+    projects(userId: $userId) {
       id
       name
       description
       createdAt
-      company {
-        id
-        name
-      }
+      updatedAt
+      userId
     }
   }
 `;
@@ -55,11 +53,9 @@ export const GET_PROJECT_QUERY = /* GraphQL */ gql`
       id
       name
       description
+      userId
       createdAt
-      company {
-        id
-        name
-      }
+      updatedAt
     }
   }
 `;

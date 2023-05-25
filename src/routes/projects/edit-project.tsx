@@ -50,7 +50,7 @@ export const EditProject = ({ project }: Props) => {
   const onSubmit = ({ name, description }: FormValues) => {
     updateProject({
       variables: {
-        id: project.id!,
+        id: project.id,
         name: name,
         description: description,
       },
