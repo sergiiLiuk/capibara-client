@@ -14,7 +14,7 @@ import { AuthContext } from "../../context/auth-context";
 export default function Projects() {
   const { userId } = useContext(AuthContext);
 
-  if (!userId) return;
+  if (!userId) return <div>No user id</div>;
 
   const { loading, error, data } = api.useProjectsData({
     userId: userId,

@@ -7,11 +7,11 @@ const linkClasses =
 
 type Props = {
   item: any;
-  open?: boolean;
+
   onClick?: () => void;
 };
 
-export const SidebarLink = ({ item, open = true, onClick }: Props) => {
+export const SidebarLink = ({ item, onClick }: Props) => {
   const { pathname } = useLocation();
 
   return (
@@ -24,7 +24,7 @@ export const SidebarLink = ({ item, open = true, onClick }: Props) => {
       }}
     >
       <div className={"flex items-center text-white"}>{item.icon}</div>
-      {open && <div> {item.name}</div>}
+      <div> {item.name}</div>
     </Link>
   );
 };
