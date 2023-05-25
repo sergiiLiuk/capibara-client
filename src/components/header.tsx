@@ -1,15 +1,26 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { BiUser } from "react-icons/bi";
 import { BsBell } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { Input } from "./input";
 import { Link } from "./link";
 import { Popover } from "./popover";
 
-export default function Header() {
+type Props = {
+  nav: boolean;
+  setNav: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function Header({ nav, setNav }: Props) {
   return (
-    <div className="bg-cyan-800 py-4 pr-4 flex justify-between items-center">
+    <div className="bg-cyan-800 py-4 px-4 md:pl-0 flex justify-between items-center">
       <div className="relative mr-2">
-        <Input placeholder="Search" />
+        <GiHamburgerMenu
+          className="block md:hidden"
+          onClick={() => setNav(!nav)}
+          color="white"
+        />
+        <Input className="hidden md:block" />
       </div>
       <div className="flex gap-2 items-center mr-2">
         <Popover icon={<BsBell className="text-white" />}>

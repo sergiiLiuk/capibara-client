@@ -10,7 +10,7 @@ export function BottomNavigationItems() {
       {
         key: "superAdminPanel",
         type: "route" as const,
-        name: "Super admin panel",
+        name: "Admin panel",
         icon: <MdOutlineAdminPanelSettings />,
         route: "/super-admin-panel",
       },
