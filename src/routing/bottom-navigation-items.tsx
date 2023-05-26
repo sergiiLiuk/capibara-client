@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import React from "react";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { RoleType } from "../gql/graphql";
 
 export function BottomNavigationItems() {
   const scope = {};
@@ -12,7 +13,8 @@ export function BottomNavigationItems() {
         type: "route" as const,
         name: "Admin panel",
         icon: <MdOutlineAdminPanelSettings />,
-        route: "/super-admin-panel",
+        route: "/admin-panel",
+        access: RoleType.SuperAdmin,
       },
     ],
     [scope]

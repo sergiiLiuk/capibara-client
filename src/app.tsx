@@ -12,40 +12,41 @@ import { Profile } from "./routes/profile/profile";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
 import Settings from "./routes/settings";
-
-import { superAdminRoutes } from "./routes/super-admin/super-admin.route";
+import { RoleType } from "./gql/graphql";
+import { spreadIf } from "./utils/spreadIf";
+import { adminRoutes } from "./routes/admin/admin.route";
 
 export default function App() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, role } = useContext(AuthContext);
+
+  const routes = [
+    {
+      element: <Layout />,
+      children: [
+        { path: "/", element: <Dashboard /> },
+        {
+          path: "companies",
+          element: <Companies />,
+        },
+        ...companyRoutes,
+
+        {
+          path: "projects",
+          element: <Projects />,
+        },
+        ...projectsRoutes,
+
+        { path: "settings", element: <Settings /> },
+        { path: "profile", element: <Profile /> },
+
+        ...spreadIf(role === RoleType.SuperAdmin, { ...adminRoutes }),
+
+        ...notFoundRoute,
+      ],
+    },
+  ];
   const router = useRoutes(routes);
 
   if (!isAuthenticated) return <LoginPage />;
   return <Suspense fallback={<Spinner />}>{router}</Suspense>;
 }
-
-export const routes = [
-  {
-    element: <Layout />,
-    children: [
-      { path: "/", element: <Dashboard /> },
-      {
-        path: "companies",
-        element: <Companies />,
-      },
-      ...companyRoutes,
-
-      {
-        path: "projects",
-        element: <Projects />,
-      },
-      ...projectsRoutes,
-
-      { path: "settings", element: <Settings /> },
-      { path: "profile", element: <Profile /> },
-
-      ...superAdminRoutes,
-
-      ...notFoundRoute,
-    ],
-  },
-];

@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import React, { Reducer, createContext, useReducer } from "react";
 import { AUTH_TOKEN } from "../constants";
-import { User } from "../gql/graphql";
+import { RoleType, User } from "../gql/graphql";
 import { useAuthToken } from "../hooks/useAuthToken ";
 
 type AuthUserType = {
@@ -9,20 +9,25 @@ type AuthUserType = {
   email: string;
   iat: number;
   exp: number;
+  role: RoleType;
   token?: string;
 };
 
 type AuthContextType = {
   isAuthenticated: boolean;
   userId: string | null;
+  role: RoleType | null;
   login: (user: User) => void;
   logout: () => void;
 };
 
-type AuthAction = { type: "LOGIN"; userId: string } | { type: "LOGOUT" };
+type AuthAction =
+  | { type: "LOGIN"; userId: string; role: RoleType }
+  | { type: "LOGOUT" };
 
 const initialState: AuthContextType = {
   userId: null,
+  role: null,
   isAuthenticated: false,
   login: () => {},
   logout: () => {},
@@ -37,6 +42,7 @@ if (authToken) {
     localStorage.removeItem(AUTH_TOKEN);
   } else {
     initialState.userId = decodedToken.user_id;
+    initialState.role = decodedToken.role;
     initialState.isAuthenticated = true;
   }
 }
@@ -44,7 +50,7 @@ if (authToken) {
 const AuthContext = createContext<AuthContextType>(initialState);
 
 const authReducer: Reducer<
-  { isAuthenticated: boolean; userId: string | null },
+  { isAuthenticated: boolean; userId: string | null; role: RoleType | null },
   AuthAction
 > = (state, action) => {
   switch (action.type) {
@@ -52,12 +58,14 @@ const authReducer: Reducer<
       return {
         ...state,
         userId: action.userId,
+        role: action.role,
         isAuthenticated: true,
       };
     case "LOGOUT":
       return {
         ...state,
         userId: null,
+        role: null,
         isAuthenticated: false,
       };
     default:
@@ -74,6 +82,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     dispatch({
       type: "LOGIN",
       userId: user.id,
+      role: user.role,
     });
   };
 
@@ -88,6 +97,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         userId: state.userId,
+        role: state.role as RoleType,
         isAuthenticated: state.isAuthenticated,
         login,
         logout,

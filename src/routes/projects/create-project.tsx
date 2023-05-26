@@ -24,14 +24,13 @@ const defaultVaues = {
 export const CreateProject = () => {
   const [dialog, setDialog] = useState<boolean>(false);
   const { createProject } = useCreateProject();
+  const { userId } = useContext(AuthContext);
   const {
     handleSubmit,
     register,
     reset,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>({ defaultValues: defaultVaues });
-
-  const { data } = useQuery<{ currentUser: User }>(GET_CURRENT_USER_QUERY);
 
   useEffect(() => {
     if (!dialog) reset(defaultVaues);
@@ -40,7 +39,7 @@ export const CreateProject = () => {
   const onSubmit = ({ name, description }: FormValues) => {
     createProject({
       variables: {
-        userId: data?.currentUser.id!,
+        userId: userId!,
         name: name,
         description: description,
       },

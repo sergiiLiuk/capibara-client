@@ -14,8 +14,10 @@ const linkClasses =
 export default function Sidebar() {
   const navLinks = NavigationItems();
   const bottomNavLinks = BottomNavigationItems();
-
-  const { logout } = useContext(AuthContext);
+  const { logout, role } = useContext(AuthContext);
+  const filteredBottomNavLinks = bottomNavLinks.filter(
+    (link) => link.access === role
+  );
 
   return (
     <div
@@ -41,7 +43,7 @@ export default function Sidebar() {
           ))}
         </div>
         <div className="flex flex-col gap-0.5 pt-2 border-t border-nautral-700">
-          {bottomNavLinks.map((link) => (
+          {filteredBottomNavLinks.map((link) => (
             <SidebarLink key={link.key} item={link} />
           ))}
 
