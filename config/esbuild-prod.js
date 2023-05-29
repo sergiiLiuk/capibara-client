@@ -8,7 +8,7 @@ import autoprefixer from "autoprefixer";
 await esbuild.build({
   entryPoints: ["./src/index.tsx", "./src/style.css"],
   bundle: true,
-  minify: false,
+  minify: true,
   outdir: "./build/prod",
   allowOverwrite: true,
   metafile: true,
