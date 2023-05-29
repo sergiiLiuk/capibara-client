@@ -47,6 +47,6 @@ export default function App() {
   ];
   const router = useRoutes(routes);
 
-  // if (!isAuthenticated) return <LoginPage />;
+  if (!isAuthenticated) return <LoginPage />;
   return <Suspense fallback={<Spinner />}>{router}</Suspense>;
 }
