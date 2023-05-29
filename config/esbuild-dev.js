@@ -9,6 +9,7 @@ let ctx = await ESBuild.context({
   minify: false,
   outdir: "build/dev-server/js",
   sourcemap: true,
+  metafile: true,
   sourceRoot: "https://raw.githubusercontent.com/some/repo/v1.2.3/",
   loader: {
     ".js": "jsx",

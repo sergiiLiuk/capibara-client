@@ -6,7 +6,6 @@ export const CleanPlugin = {
     build.onStart(async () => {
       try {
         const outdir = build.initialOptions.outdir;
-        console.log("IO", outdir);
         if (outdir) {
           await rm(outdir, { recursive: true });
         }
