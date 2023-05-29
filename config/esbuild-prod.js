@@ -1,9 +1,12 @@
 import * as esbuild from "esbuild";
 import { CleanPlugin } from "./plugins/clean-plugin.js";
 import { HTMLPlugin } from "./plugins/html-plugin.js";
+import postCssPlugin from "esbuild-style-plugin";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
 
 await esbuild.build({
-  entryPoints: ["./src/index.tsx"],
+  entryPoints: ["./src/index.tsx", "./src/style.css"],
   bundle: true,
   minify: true,
   outdir: "./build/prod",
@@ -13,7 +16,11 @@ await esbuild.build({
     CleanPlugin,
     HTMLPlugin({
       title: "Capibara",
-      jsPath: ["index.js"],
+    }),
+    postCssPlugin({
+      postcss: {
+        plugins: [tailwindcss, autoprefixer],
+      },
     }),
   ],
   entryNames: "[dir]/bundle.[name]-[hash]",
