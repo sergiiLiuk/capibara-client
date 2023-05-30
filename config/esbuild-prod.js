@@ -9,7 +9,7 @@ await esbuild.build({
   entryPoints: ["./src/index.tsx", "./src/style.css"],
   bundle: true,
   minify: true,
-  outdir: "./build/prod",
+  outdir: "build/prod",
   allowOverwrite: true,
   metafile: true,
   plugins: [
