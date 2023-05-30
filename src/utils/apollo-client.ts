@@ -4,7 +4,7 @@ import { useAuthToken } from "../hooks/useAuthToken ";
 
 const httpLink = createHttpLink({
   // uri: "http://localhost:5000/graphql",
-  uri: "/graphql",
+  uri: "https://capibara-server.herokuapp.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
