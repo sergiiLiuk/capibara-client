@@ -1,7 +1,7 @@
 import * as esbuild from "esbuild";
 import { CleanPlugin } from "./plugins/clean-plugin.js";
 import { HTMLPlugin } from "./plugins/html-plugin.js";
-import { postCssPlugin } from "esbuild-style-plugin";
+import stylePlugin from "esbuild-style-plugin";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 
@@ -17,7 +17,7 @@ await esbuild.build({
     HTMLPlugin({
       title: "Capibara",
     }),
-    postCssPlugin({
+    stylePlugin({
       postcss: {
         plugins: [tailwindcss, autoprefixer],
       },
