@@ -24,7 +24,7 @@ let ctx = await ESBuild.context({
 });
 
 await ctx.watch();
-console.log("watching...");
+console.log("watching..");
 
 const { host, port } = await ctx.serve({
   servedir: "build/dev-server",
