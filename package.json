@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "codegen": "graphql-codegen",
-    "build": "node ./config/esbuild-prod.js",
+    "build": "ts-node ./config/esbuild-prod.js",
     "serve": "node ./config/esbuild-dev.js"
   },
   "author": "sergiiliuk@yahoo.dk",
