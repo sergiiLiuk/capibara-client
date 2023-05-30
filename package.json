@@ -9,7 +9,7 @@
     "build": "node ./config/esbuild-prod.js",
     "serve": "node ./config/esbuild-dev.js"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://0.0.0.0:5000",
   "author": "sergiiliuk@yahoo.dk",
   "license": "ISC",
   "devDependencies": {
