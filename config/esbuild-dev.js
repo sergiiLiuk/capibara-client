@@ -1,6 +1,6 @@
 import autoprefixer from "autoprefixer";
 import * as ESBuild from "esbuild";
-import postCssPlugin from "esbuild-style-plugin";
+import { postCssPlugin } from "esbuild-style-plugin";
 import tailwindcss from "tailwindcss";
 
 let ctx = await ESBuild.context({
