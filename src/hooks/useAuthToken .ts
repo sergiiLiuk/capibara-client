@@ -1,4 +1,4 @@
-import { AUTH_TOKEN } from "../constants";
+import { AUTH_TOKEN } from "../utils/constants";
 
 export const useAuthToken = () => {
   const authToken = localStorage.getItem(AUTH_TOKEN);

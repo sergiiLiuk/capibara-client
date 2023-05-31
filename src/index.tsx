@@ -3,7 +3,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import App from "./app";
-import client from "./utils/apollo-client";
+import client from "./services/apollo-client";
 import { AuthProvider } from "./context/auth-context";
 
 const rootElement = document.getElementById("root");

@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import React, { Reducer, createContext, useReducer } from "react";
-import { AUTH_TOKEN } from "../constants";
+import { AUTH_TOKEN } from "../utils/constants";
 import { RoleType, User } from "../gql/graphql";
 import { useAuthToken } from "../hooks/useAuthToken ";
 
