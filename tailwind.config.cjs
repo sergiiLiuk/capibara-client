@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         primary: "#115e99",
+        modal: "rgba(0,0,0, 0.2)",
       },
     },
   },

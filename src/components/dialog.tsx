@@ -28,7 +28,7 @@ export const Dialog = ({
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 flex flex-col justify-center items-center bg-gray-800 p-4"
+      className="fixed inset-0 flex flex-col justify-center items-center bg-modal p-4"
       onClick={
         closeOnClickOutside && onClose
           ? (e) => {
