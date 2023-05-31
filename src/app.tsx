@@ -14,6 +14,7 @@ import { projectsRoutes } from "./routes/projects/projects.route";
 import { RoleType } from "./gql/graphql";
 import { spreadIf } from "./utils/spreadIf";
 import { adminRoutes } from "./routes/admin/admin.route";
+import { Map } from "./routes/map/map";
 
 export default function App() {
   const { isAuthenticated, role } = useContext(AuthContext);
@@ -23,6 +24,10 @@ export default function App() {
       element: <Layout />,
       children: [
         { path: "/", element: <Dashboard /> },
+        {
+          path: "map",
+          element: <Map />,
+        },
         {
           path: "companies",
           element: <Companies />,
