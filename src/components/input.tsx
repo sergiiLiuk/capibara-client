@@ -34,6 +34,7 @@ export const Input = forwardRef<Ref, Props>((props, ref) => {
       )}
       placeholder={placeholder}
       disabled={readonly}
+      type={type}
       {...rest}
     />
   );
