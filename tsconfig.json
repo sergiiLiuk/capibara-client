@@ -1,16 +1,23 @@
 {
   "compilerOptions": {
-    "outDir": "./build/",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "outDir": "build/",
+    "lib": ["dom", "dom.iterable", "ESNext"],
     "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "ES6",
+    "module": "ESNext",
+    "target": "ESNext",
     "jsx": "react",
     "allowJs": true,
     "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

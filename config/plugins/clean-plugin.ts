@@ -1,6 +1,7 @@
+import { Plugin } from "esbuild";
 import { rm } from "fs/promises";
 
-export const CleanPlugin = {
+export const CleanPlugin: Plugin = {
   name: "CleanPlugin",
   setup(build) {
     build.onStart(async () => {

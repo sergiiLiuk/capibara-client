@@ -1,8 +1,15 @@
+import { BuildResult, Plugin } from "esbuild";
 import { rm, writeFile } from "fs/promises";
 import path from "path";
 
-const preparePath = (outputs) => {
-  return outputs.reduce(
+interface HTMLPluginOptions {
+  title?: string;
+  jsPath?: string[];
+  cssPath?: string[];
+}
+
+const preparePath = (outputs: string[]) => {
+  return outputs.reduce<Array<string[]>>(
     (acc, path) => {
       const [js, css] = acc;
       const slittedFileName = path.split("/").pop();
@@ -18,7 +25,7 @@ const preparePath = (outputs) => {
   );
 };
 
-const renderHTML = (options) => {
+const renderHTML = (options: HTMLPluginOptions): string => {
   return `<!DOCTYPE html> 
   <html lang="en">
     <head>
@@ -28,18 +35,20 @@ const renderHTML = (options) => {
       <title>${options.title}</title>
       <!--<link rel="icon" href="./favicon.ico" type="image/x-icon" /> -->
       ${options.cssPath
-        .map((path) => `<link href=${path} rel="stylesheet"/>`)
+        ?.map((path) => `<link href=${path} rel="stylesheet"/>`)
         .join(" ")}
     </head>
     <body>
       <div id="root"></div>
-      ${options.jsPath.map((path) => `<script src=${path}></script>`).join(" ")}
+      ${options.jsPath
+        ?.map((path) => `<script src=${path}></script>`)
+        .join(" ")}
     </body>
   </html>
 `;
 };
 
-export const HTMLPlugin = (options) => {
+export const HTMLPlugin = (options: HTMLPluginOptions): Plugin => {
   return {
     name: "HTMLPlugin",
     setup(build) {
@@ -53,7 +62,7 @@ export const HTMLPlugin = (options) => {
           console.log("error cleaning the folder");
         }
       });
-      build.onEnd(async (result) => {
+      build.onEnd(async (result: BuildResult) => {
         const outputs = result.metafile?.outputs;
         const [jsPath, cssPath] = preparePath(Object.keys(outputs || {}));
 
