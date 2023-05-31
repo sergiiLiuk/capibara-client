@@ -11,7 +11,6 @@ import { notFoundRoute } from "./routes/not-found/not-found.route";
 import { Profile } from "./routes/profile/profile";
 import Projects from "./routes/projects/projects";
 import { projectsRoutes } from "./routes/projects/projects.route";
-import Settings from "./routes/settings";
 import { RoleType } from "./gql/graphql";
 import { spreadIf } from "./utils/spreadIf";
 import { adminRoutes } from "./routes/admin/admin.route";
@@ -36,7 +35,6 @@ export default function App() {
         },
         ...projectsRoutes,
 
-        { path: "settings", element: <Settings /> },
         { path: "profile", element: <Profile /> },
 
         ...spreadIf(role === RoleType.SuperAdmin, { ...adminRoutes }),

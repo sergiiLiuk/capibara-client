@@ -31,7 +31,6 @@ export default function Header({ nav, setNav }: Props) {
         <Popover icon={<BiUser className="text-white" />}>
           <div className=" flex flex-col bg-white shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5">
             <Link to={"/profile"}>Profile</Link>
-            <Link to={"/settings"}>Settings</Link>
           </div>
         </Popover>
       </div>
