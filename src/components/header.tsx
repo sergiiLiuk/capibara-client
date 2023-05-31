@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { BiUser } from "react-icons/bi";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Input } from "./input";
 import { Link } from "./link";
 import { Popover } from "./popover";
 
@@ -19,7 +18,6 @@ export default function Header({ nav, setNav }: Props) {
           onClick={() => setNav(!nav)}
           color="white"
         />
-        <Input className="hidden md:block" />
       </div>
       <div className="flex gap-2 items-center mr-2">
         <Popover icon={<BiUser className="text-white" />}>
