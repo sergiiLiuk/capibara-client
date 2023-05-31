@@ -28,7 +28,7 @@ export const Dialog = ({
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 flex flex-col justify-center items-center bg-gray-800 opacity-80 "
+      className="fixed inset-0 flex flex-col justify-center items-center bg-gray-800 p-4"
       onClick={
         closeOnClickOutside && onClose
           ? (e) => {
@@ -38,7 +38,7 @@ export const Dialog = ({
       }
     >
       <div
-        className="w-96 bg-white shadow-md flex flex-col overflow-hidden"
+        className="w-full bg-white shadow-md flex flex-col overflow-hidden"
         ref={dialogRef}
         tabIndex={-1}
         onKeyDown={
