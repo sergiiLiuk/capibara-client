@@ -1,9 +1,10 @@
 import React from "react";
+import { PageContainer } from "../components/page-container";
 
 export default function Dashboard() {
   return (
-    <div>
+    <PageContainer>
       <p>Dashboard</p>
-    </div>
+    </PageContainer>
   );
 }

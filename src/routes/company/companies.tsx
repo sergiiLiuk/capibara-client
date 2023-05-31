@@ -4,6 +4,7 @@ import * as api from "./company.api";
 import { Company } from "../../gql/graphql";
 import { Spinner } from "../../components/spinner";
 import { Table, TableBody, TableHead } from "../../components/table/table";
+import { PageContainer } from "../../components/page-container";
 
 export default function Companies() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Companies() {
   const { companies }: { companies: Company[] } = data;
 
   return (
-    <div>
+    <PageContainer>
       <Table>
         <TableHead>
           <tr>
@@ -41,6 +42,6 @@ export default function Companies() {
           })}
         </TableBody>
       </Table>
-    </div>
+    </PageContainer>
   );
 }
