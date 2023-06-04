@@ -38,7 +38,7 @@ export const Dialog = ({
       }
     >
       <div
-        className="w-full bg-white shadow-md flex flex-col overflow-hidden"
+        className="w-full md:max-w-lg bg-white shadow-md flex flex-col overflow-hidden"
         ref={dialogRef}
         tabIndex={-1}
         onKeyDown={

@@ -1,53 +1,12 @@
+//TODO: finish splitting hooks
+
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Project } from "../../gql/graphql";
 import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY } from "../../graphql/queries";
 
-export const useProjectsData = (variables: { userId: string }) => {
-  return useQuery(GET_PROJECTS_QUERY, { variables });
-};
-
 export const useProjectData = (variables: { id: string }) => {
   return useQuery(GET_PROJECT_QUERY, { variables });
 };
-
-const CREATE_PROJECT = /* GraphQL */ gql`
-  mutation createProject($userId: ID!, $name: String!, $description: String!) {
-    createProject(
-      projectInput: { userId: $userId, name: $name, description: $description }
-    ) {
-      id
-      name
-      description
-    }
-  }
-`;
-
-interface CreateProjectVariables {
-  name: string;
-  description?: string;
-  userId: string;
-}
-
-export function useCreateProject() {
-  const [createProject] = useMutation<
-    { createProject: Project },
-    CreateProjectVariables
-  >(CREATE_PROJECT, {
-    onError: (error) => console.error(error.message),
-    update: (cache, { data }) => {
-      const currentProjects = cache.readQuery<{ projects: Project[] }>({
-        query: GET_PROJECTS_QUERY,
-      });
-      cache.writeQuery({
-        query: GET_PROJECTS_QUERY,
-        data: {
-          projects: [...currentProjects?.projects!, { ...data?.createProject }],
-        },
-      });
-    },
-  });
-  return { createProject };
-}
 
 const DELETE_PROJECT = /* GraphQL */ gql`
   mutation deleteProject($id: ID!) {

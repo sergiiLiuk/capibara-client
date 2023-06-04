@@ -66,3 +66,18 @@ export const UPDATE_PROJECT_MUTATION = /* GraphQL */ gql`
     }
   }
 `;
+
+export const CREATE_PROJECT = /* GraphQL */ gql`
+  mutation createProject($userId: ID!, $name: String!, $description: String!) {
+    createProject(
+      projectInput: { userId: $userId, name: $name, description: $description }
+    ) {
+      id
+      name
+      description
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;

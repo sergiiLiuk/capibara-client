@@ -1,20 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Dialog } from "../../components/dialog";
-import { AuthContext } from "../../context/auth-context";
-import { Button } from "../../components/button";
-import { Form } from "../../components/form";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useCreateProject } from "./project.api";
+import { Button } from "../../components/button";
+import { Dialog } from "../../components/dialog";
+import { Form } from "../../components/form";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
-import { useQuery } from "@apollo/client";
-import { User } from "../../gql/graphql";
-import { GET_CURRENT_USER_QUERY } from "../../graphql/queries";
+import { AuthContext } from "../../context/auth-context";
+import { useMutation } from "@apollo/client";
+import { Project } from "../../gql/graphql";
+import { CREATE_PROJECT } from "../../graphql/mutations";
+import { GET_PROJECTS_QUERY } from "../../graphql/queries";
 
 type FormValues = {
   name: string;
   description?: string;
 };
+
+interface CreateProjectVariables {
+  name: string;
+  description?: string;
+  userId: string;
+}
 
 const defaultVaues = {
   name: "",
@@ -23,7 +29,7 @@ const defaultVaues = {
 
 export const CreateProject = () => {
   const [dialog, setDialog] = useState<boolean>(false);
-  const { createProject } = useCreateProject();
+
   const { userId } = useContext(AuthContext);
   const {
     handleSubmit,
@@ -35,6 +41,25 @@ export const CreateProject = () => {
   useEffect(() => {
     if (!dialog) reset(defaultVaues);
   }, [dialog]);
+
+  const [createProject] = useMutation<
+    { createProject: Project },
+    CreateProjectVariables
+  >(CREATE_PROJECT, {
+    onError: (error) => console.error(error.message),
+    update: (cache, { data }) => {
+      const currentProjects = cache.readQuery<{ projects: Project[] }>({
+        query: GET_PROJECTS_QUERY,
+      });
+
+      cache.writeQuery({
+        query: GET_PROJECTS_QUERY,
+        data: {
+          projects: [...currentProjects?.projects!, { ...data?.createProject }],
+        },
+      });
+    },
+  });
 
   const onSubmit = ({ name, description }: FormValues) => {
     createProject({

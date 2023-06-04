@@ -35,8 +35,8 @@ export const GET_USER_QUERY = /* GraphQL */ gql`
 `;
 
 export const GET_PROJECTS_QUERY = /* GraphQL */ gql`
-  query getProjects($userId: ID) {
-    projects(userId: $userId) {
+  query getProjects {
+    projects {
       id
       name
       description
