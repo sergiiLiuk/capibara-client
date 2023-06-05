@@ -1,13 +1,13 @@
 import { Popover as STPopover, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
+import { Link } from "./link";
 
 type Props = {
   icon: JSX.Element;
-  children: React.ReactNode;
-  // close: () => void;
+  items: any;
 };
 
-export const Popover = ({ icon, children }: Props) => {
+export const Popover = ({ icon, items }: Props) => {
   return (
     <STPopover className="relative">
       {({ close }) => (
@@ -33,7 +33,15 @@ export const Popover = ({ icon, children }: Props) => {
                 "absolute right-0 z-10 mt-2.5 w-80 bg-white border border-gray-200 shadow-sm"
               }
             >
-              {children}
+              <div className="flex flex-col bg-white shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5">
+                {items.map((link: any, idx: number) => {
+                  return (
+                    <Link key={idx} to={link.href} onClick={() => close()}>
+                      {link.name}
+                    </Link>
+                  );
+                })}
+              </div>
             </STPopover.Panel>
           </Transition>
         </>

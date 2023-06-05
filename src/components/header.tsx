@@ -1,13 +1,25 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { BiUser } from "react-icons/bi";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link } from "./link";
+
 import { Popover } from "./popover";
 
 type Props = {
   nav: boolean;
   setNav: Dispatch<SetStateAction<boolean>>;
 };
+
+interface headerLink {
+  href: string;
+  name: string;
+}
+
+const headerLinks: Array<headerLink> = [
+  {
+    href: "/profile",
+    name: "Settings",
+  },
+];
 
 export default function Header({ nav, setNav }: Props) {
   return (
@@ -20,11 +32,10 @@ export default function Header({ nav, setNav }: Props) {
         />
       </div>
       <div className="flex gap-2 items-center mr-2">
-        <Popover icon={<BiUser className="text-white" />}>
-          <div className="flex flex-col bg-white shadow-mdring-1 ring-black ring-opacity-5 px-2 py-2.5">
-            <Link to={"/profile"}>Profile</Link>
-          </div>
-        </Popover>
+        <Popover
+          items={headerLinks}
+          icon={<BiUser className="text-white" />}
+        ></Popover>
       </div>
     </div>
   );
