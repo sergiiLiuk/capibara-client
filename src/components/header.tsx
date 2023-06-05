@@ -17,7 +17,7 @@ interface headerLink {
 const headerLinks: Array<headerLink> = [
   {
     href: "/profile",
-    name: "Settings",
+    name: "Profile",
   },
 ];
 
