@@ -2,16 +2,19 @@ import maplibregl from "maplibre-gl";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import {
+  AttributionControl,
   Layer,
   LayerProps,
   Map as MapGL,
   MapLayerMouseEvent,
   Marker,
+  NavigationControl,
   Popup,
   Source,
 } from "react-map-gl";
 import { PageContainer } from "../../components/page-container";
 import { fieldData } from "./field-test";
+import { ControlPanel } from "../../components/map/control-panel";
 
 const polygonStyle: LayerProps = {
   id: "maine",
@@ -38,6 +41,7 @@ const borderStyle: LayerProps = {
 export const Map = () => {
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
+  const [cursor, setCursor] = useState<string>("auto");
 
   const [clickInfo, setClickInfo] = useState<{
     longitude: number;
@@ -48,6 +52,9 @@ export const Map = () => {
     setClickInfo({ longitude: event.lngLat.lng, latitude: event.lngLat.lat });
   }, []);
 
+  const onMouseEnter = useCallback(() => setCursor("pointer"), []);
+  const onMouseLeave = useCallback(() => setCursor("auto"), []);
+
   useLayoutEffect(() => {
     if (!ref.current) return;
     setWidth(ref.current.offsetWidth);
@@ -57,6 +64,7 @@ export const Map = () => {
     <PageContainer>
       <div ref={ref}>
         <MapGL
+          interactiveLayerIds={["fields"]}
           mapLib={maplibregl}
           initialViewState={{
             longitude: 9.914400733409513,
@@ -66,7 +74,11 @@ export const Map = () => {
           style={{ width: width, height: 400 }}
           mapStyle={`https://api.maptiler.com/maps/basic-v2/style.json?key=P5R8144Hukr6UEEJm5NV`}
           onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          cursor={cursor}
         >
+          <NavigationControl />
           <Source id="my-data" type="geojson" data={fieldData as any}>
             <Layer {...polygonStyle} />
             <Layer {...borderStyle} />
