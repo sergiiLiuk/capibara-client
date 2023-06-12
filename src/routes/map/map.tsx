@@ -1,7 +1,15 @@
 import maplibregl from "maplibre-gl";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { Layer, LayerProps, Map as MapGL, Marker, Source } from "react-map-gl";
+import {
+  Layer,
+  LayerProps,
+  Map as MapGL,
+  MapLayerMouseEvent,
+  Marker,
+  Popup,
+  Source,
+} from "react-map-gl";
 import { PageContainer } from "../../components/page-container";
 import { fieldData } from "./field-test";
 
@@ -31,6 +39,15 @@ export const Map = () => {
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
+  const [clickInfo, setClickInfo] = useState<{
+    longitude: number;
+    latitude: number;
+  } | null>(null);
+
+  const onClick = useCallback((event: MapLayerMouseEvent) => {
+    setClickInfo({ longitude: event.lngLat.lng, latitude: event.lngLat.lat });
+  }, []);
+
   useLayoutEffect(() => {
     if (!ref.current) return;
     setWidth(ref.current.offsetWidth);
@@ -48,6 +65,7 @@ export const Map = () => {
           }}
           style={{ width: width, height: 400 }}
           mapStyle={`https://api.maptiler.com/maps/basic-v2/style.json?key=P5R8144Hukr6UEEJm5NV`}
+          onClick={onClick}
         >
           <Source id="my-data" type="geojson" data={fieldData as any}>
             <Layer {...polygonStyle} />
@@ -60,6 +78,17 @@ export const Map = () => {
           >
             <FaMapMarkerAlt width={25} className="text-blue-600" />
           </Marker>
+          {clickInfo && (
+            <Popup
+              longitude={clickInfo.longitude}
+              latitude={clickInfo.latitude}
+              offset={[0, -10]}
+              closeButton={false}
+              onClose={() => setClickInfo(null)}
+            >
+              {clickInfo.longitude} - {clickInfo.latitude}
+            </Popup>
+          )}
         </MapGL>
       </div>
     </PageContainer>
