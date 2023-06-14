@@ -73,7 +73,6 @@ export const Map = () => {
           }}
           style={{ width: width, height: 400 }}
           mapStyle={`https://api.maptiler.com/maps/basic-v2/style.json?key=P5R8144Hukr6UEEJm5NV`}
-          onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           cursor={cursor}

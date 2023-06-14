@@ -7,6 +7,7 @@ import { useAuthToken } from "../hooks/useAuthToken ";
 type AuthUserType = {
   user_id: string;
   email: string;
+  username: string;
   iat: number;
   exp: number;
   role: RoleType;
@@ -15,6 +16,7 @@ type AuthUserType = {
 
 type AuthContextType = {
   isAuthenticated: boolean;
+  username: string | null;
   userId: string | null;
   role: RoleType | null;
   login: (user: User) => void;
@@ -22,12 +24,13 @@ type AuthContextType = {
 };
 
 type AuthAction =
-  | { type: "LOGIN"; userId: string; role: RoleType }
+  | { type: "LOGIN"; userId: string; role: RoleType; username: string }
   | { type: "LOGOUT" };
 
 const initialState: AuthContextType = {
   userId: null,
   role: null,
+  username: null,
   isAuthenticated: false,
   login: () => {},
   logout: () => {},
@@ -43,6 +46,7 @@ if (authToken) {
   } else {
     initialState.userId = decodedToken.user_id;
     initialState.role = decodedToken.role;
+    initialState.username = decodedToken.username;
     initialState.isAuthenticated = true;
   }
 }
@@ -50,7 +54,12 @@ if (authToken) {
 const AuthContext = createContext<AuthContextType>(initialState);
 
 const authReducer: Reducer<
-  { isAuthenticated: boolean; userId: string | null; role: RoleType | null },
+  {
+    isAuthenticated: boolean;
+    userId: string | null;
+    role: RoleType | null;
+    username: string | null;
+  },
   AuthAction
 > = (state, action) => {
   switch (action.type) {
@@ -59,6 +68,7 @@ const authReducer: Reducer<
         ...state,
         userId: action.userId,
         role: action.role,
+        username: action.username,
         isAuthenticated: true,
       };
     case "LOGOUT":
@@ -66,6 +76,7 @@ const authReducer: Reducer<
         ...state,
         userId: null,
         role: null,
+        username: null,
         isAuthenticated: false,
       };
     default:
@@ -79,10 +90,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = (user: User) => {
     setAuthToken(user.token!);
+
     dispatch({
       type: "LOGIN",
       userId: user.id,
       role: user.role,
+      username: user.username,
     });
   };
 
@@ -99,6 +112,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         userId: state.userId,
         role: state.role as RoleType,
         isAuthenticated: state.isAuthenticated,
+        username: state.username,
         login,
         logout,
       }}
